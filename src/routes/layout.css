@@ -7,6 +7,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --catalog-sidebar-hover: #f5f6fa;
   --bg-header: #ffffff;
   --radius: 0.65rem;
   --background: #f5f6fa;
@@ -43,6 +44,7 @@
 }
 
 .dark {
+  --catalog-sidebar-hover: #282930;
   --bg-header: #1f2025;
   --background: #121317;
   --foreground: oklch(0.985 0 0);
@@ -132,11 +134,11 @@
 
   /* ← Добавь это ↓ */
   html {
-    scrollbar-width: none;          /* Firefox */
-    -ms-overflow-style: none;       /* IE и Edge */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE и Edge */
   }
 
   html::-webkit-scrollbar {
-    display: none;                  /* Chrome, Safari, Opera, Edge */
+    display: none; /* Chrome, Safari, Opera, Edge */
   }
 }

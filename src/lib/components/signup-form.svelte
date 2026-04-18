@@ -54,7 +54,7 @@
           <Field.Field>
             <Button type="submit">Створити акаунт</Button>
             <Field.Description class="text-center">
-              Вже маєте обліковий запис? <a href="user/login">Увійти</a>
+              Вже маєте обліковий запис? <a href="/user/login">Увійти</a>
             </Field.Description>
           </Field.Field>
         </Field.Group>

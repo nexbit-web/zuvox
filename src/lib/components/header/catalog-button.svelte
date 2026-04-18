@@ -1,4 +1,3 @@
-<!-- catalog-button.svelte -->
 <script lang="ts">
   import { LayoutGrid, X } from 'lucide-svelte'
 
@@ -12,8 +11,10 @@
       e.stopPropagation()
       open = !open
     }}
-    class="w-10 h-10 flex items-center justify-center rounded-xl cursor-pointer text-primary  hover:bg-primary/50
-      {open ? 'text-white bg-primary/100  hover:bg-primary/90' : 'bg-primary/20'}"
+    class="w-11 h-11 flex items-center justify-center rounded-xl cursor-pointer text-primary -my-2 transition-all duration-200
+      {open
+        ? 'text-white bg-primary hover:bg-primary/90'
+        : 'bg-primary/20 hover:bg-primary/40'}"
   >
     {#if open}
       <X class="w-5 h-5" />

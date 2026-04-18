@@ -76,7 +76,7 @@
           <Field>
             <Button type="submit">Логін</Button>
             <FieldDescription class="text-center">
-              Немає облікового запису? <a href="user/register">Зареєструватися</a>
+              Немає облікового запису? <a href="/user/register">Зареєструватися</a>
             </FieldDescription>
           </Field>
         </FieldGroup>

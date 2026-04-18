@@ -33,7 +33,7 @@
   const isLoggedIn = $derived(role === 'client' || role === 'freelancer')
 </script>
 
-<div class="flex items-center gap-1 shrink-0">
+<div class="flex items-center gap-2 shrink-0">
   {#if isGuest}
     <Button
       variant="ghost"
@@ -56,14 +56,14 @@
   {#if isLoggedIn}
     <button
       onclick={() => onnavigate('/messages')}
-      class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary/20 hover:bg-primary/50  hover:text-foreground transition-colors cursor-pointer"
+      class="w-11 h-11 flex items-center justify-center rounded-xl bg-primary/20 hover:bg-primary/50  hover:text-foreground transition-colors cursor-pointer"
     >
       <MessageCircle class="w-5 h-5" />
     </button>
 
     <div class="relative">
       <button
-        class="w-10 h-10 flex items-center justify-center rounded-xl hover:text-foreground bg-primary/20 hover:bg-primary/50  transition-colors cursor-pointer"
+        class="w-11 h-11 flex items-center justify-center rounded-xl hover:text-foreground bg-primary/20 hover:bg-primary/50  transition-colors cursor-pointer"
       >
         <Bell class="w-5 h-5" />
       </button>
@@ -79,7 +79,7 @@
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <button
-          class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary/20 hover:bg-primary/50  transition-colors cursor-pointer"
+          class="w-11 h-11 flex items-center justify-center rounded-xl bg-primary/20 hover:bg-primary/50  transition-colors cursor-pointer"
         >
           <Avatar class="h-7 w-7">
             <AvatarImage src={user.avatar} alt={user.name} />

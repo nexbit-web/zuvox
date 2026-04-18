@@ -152,7 +152,7 @@
   })
 </script>
 
-<div class="bg-background min-h-screen">
+<div class="min-h-screen" style="background-color: var( --background)">
   <!-- Банер -->
   <div class="px-4 pt-4 sm:px-6 sm:pt-6">
     <div class="w-full h-36 sm:h-44 rounded-2xl overflow-hidden">
@@ -169,12 +169,15 @@
         >
           <AvatarImage src={user.avatar} alt={user.name} />
           <AvatarFallback
-            class="bg-secondary text-secondary-foreground text-xl sm:text-2xl font-semibold cursor-default"
+            class="text-xl sm:text-2xl font-semibold cursor-default"
+            style="background-color: var(--primary); color: white"
           >
             {user.name[0]}
           </AvatarFallback>
         </Avatar>
       </div>
+
+       
     </div>
 
     <!-- Ім'я + мета -->
@@ -183,12 +186,12 @@
         <div class="flex items-center gap-1.5">
           <h1 class="text-[17px] font-semibold text-foreground">{user.name}</h1>
           {#if user.isVerified}
-            <BadgeCheck class="w-[18px] h-[18px] text-primary" />
+            <BadgeCheck class="w-[18px] h-[18px] text-emerald-500" />
           {/if}
         </div>
         {#if user.isVerified}
           <div
-            class="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/30 dark:border-emerald-900 dark:text-emerald-400 px-2.5 py-1 rounded-full cursor-default"
+            class="flex items-center gap-1 text-[11px] font-semibold text-emerald-400 border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 rounded-full cursor-default"
           >
             <BadgeCheck class="w-3 h-3" />
             VERIFIED
@@ -210,7 +213,7 @@
         <span class="flex items-center gap-1 text-xs text-muted-foreground">
           <Calendar class="w-3 h-3" /> З {memberSince}
         </span>
-        <span class="text-muted-foreground/30">·</span>
+        <span class="text-white/10">·</span>
         <span class="flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin class="w-3 h-3" />
           {user.location}
@@ -228,7 +231,7 @@
           onclick={toggleFollow}
           class="text-xs px-4 py-1.5 rounded-full font-medium transition-all cursor-pointer
             {isFollowing
-            ? 'bg-muted text-muted-foreground hover:bg-muted/70'
+            ? 'bg-white/10 text-muted-foreground hover:bg-white/20'
             : 'bg-red-600 text-white hover:bg-red-700 active:scale-95'}"
         >
           {isFollowing ? 'Підписаний' : 'Підписатись'}
@@ -236,7 +239,7 @@
       </div>
     </div>
 
-    <div class="border-t border-border/40" />
+    <div class="border-t border-white/5" />
 
     <!-- Про себе -->
     <div class="py-5 space-y-4">
@@ -253,7 +256,7 @@
           {#each user.categories as cat}
             {@const IconComponent = iconMap[cat.icon]}
             <div
-              class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 cursor-default whitespace-nowrap"
+              class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary border border-primary/30 cursor-default whitespace-nowrap"
             >
               <IconComponent class="w-3 h-3" />
               {cat.name}
@@ -264,7 +267,7 @@
 
       <div class="flex items-center justify-between">
         <span class="text-sm text-muted-foreground">Досвід</span>
-        <span class="text-sm">{user.experience}</span>
+        <span class="text-sm text-foreground">{user.experience}</span>
       </div>
 
       <div class="flex items-start justify-between gap-4">
@@ -277,7 +280,7 @@
       </div>
     </div>
 
-    <div class="border-t border-border/40" />
+    <div class="border-t border-white/5" />
 
     <!-- Статистика -->
     <div class="py-5">
@@ -287,48 +290,60 @@
         <Zap class="w-3.5 h-3.5" /> Статистика
       </p>
       <div class="grid grid-cols-2 gap-2 sm:gap-3 mb-2 sm:mb-3">
-        <div class="rounded-lg bg-muted/50 px-4 py-3">
+        <div
+          class="rounded-lg px-4 py-3 border border-white/5"
+          style="background-color: rgba(255,255,255,0.05)"
+        >
           <p
             class="text-xs text-muted-foreground mb-1 flex items-center gap-1.5"
           >
             <Star class="w-3 h-3" /> Рейтинг
           </p>
-          <p class="text-xl font-semibold">
+          <p class="text-xl font-semibold text-foreground">
             {user.avgRating}
             <span class="text-sm font-normal text-muted-foreground">/ 5.0</span>
           </p>
         </div>
-        <div class="rounded-lg bg-muted/50 px-4 py-3">
+        <div
+          class="rounded-lg px-4 py-3 border border-white/5"
+          style="background-color: rgba(255,255,255,0.05)"
+        >
           <p
             class="text-xs text-muted-foreground mb-1 flex items-center gap-1.5"
           >
             <BadgeCheck class="w-3 h-3" /> Виконано
           </p>
-          <p class="text-xl font-semibold">
+          <p class="text-xl font-semibold text-foreground">
             {user.totalOrders}
             <span class="text-sm font-normal text-muted-foreground"
               >замовлень</span
             >
           </p>
         </div>
-        <div class="rounded-lg bg-muted/50 px-4 py-3">
+        <div
+          class="rounded-lg px-4 py-3 border border-white/5"
+          style="background-color: rgba(255,255,255,0.05)"
+        >
           <p
             class="text-xs text-muted-foreground mb-1 flex items-center gap-1.5"
           >
             <Clock class="w-3 h-3" /> Відповідь
           </p>
-          <p class="text-xl font-semibold">
+          <p class="text-xl font-semibold text-foreground">
             ~{user.responseTime}
             <span class="text-sm font-normal text-muted-foreground">год</span>
           </p>
         </div>
-        <div class="rounded-lg bg-muted/50 px-4 py-3">
+        <div
+          class="rounded-lg px-4 py-3 border border-white/5"
+          style="background-color: rgba(255,255,255,0.05)"
+        >
           <p
             class="text-xs text-muted-foreground mb-1 flex items-center gap-1.5"
           >
             <RefreshCw class="w-3 h-3" /> Повторні
           </p>
-          <p class="text-xl font-semibold">
+          <p class="text-xl font-semibold text-foreground">
             {user.repeatClients}%
             <span class="text-sm font-normal text-muted-foreground"
               >клієнтів</span
@@ -337,20 +352,19 @@
         </div>
       </div>
       <div
-        class="flex items-center justify-between px-4 py-3 rounded-lg bg-emerald-50/60 dark:bg-emerald-950/20"
+        class="flex items-center justify-between px-4 py-3 rounded-lg border border-emerald-500/20"
+        style="background-color: rgba(16,185,129,0.08)"
       >
         <span class="text-sm text-muted-foreground flex items-center gap-1.5">
           <BadgeCheck class="w-3.5 h-3.5 text-emerald-500" /> Успішних замовлень
         </span>
-        <span
-          class="text-sm font-semibold text-emerald-600 dark:text-emerald-400"
+        <span class="text-sm font-semibold text-emerald-400"
+          >{user.successRate}%</span
         >
-          {user.successRate}%
-        </span>
       </div>
     </div>
 
-    <div class="border-t border-border/40" />
+    <div class="border-t border-white/5" />
 
     <!-- Послуги -->
     <div class="py-5">
@@ -359,7 +373,7 @@
       >
         <Briefcase class="w-3.5 h-3.5" /> Послуги
       </p>
-      <div class="divide-y divide-border/40">
+      <div class="divide-y divide-white/5">
         {#each user.gigs as gig}
           {@const IconComponent = iconMap[gig.icon]}
           <a
@@ -367,12 +381,15 @@
             class="flex items-center gap-4 py-3.5 hover:opacity-70 transition-opacity cursor-pointer group"
           >
             <div
-              class="w-8 h-8 flex items-center justify-center rounded-lg bg-muted shrink-0"
+              class="w-8 h-8 flex items-center justify-center rounded-lg shrink-0 border border-white/10"
+              style="background-color: rgba(255,255,255,0.05)"
             >
               <IconComponent class="w-3.5 h-3.5 text-muted-foreground" />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium truncate">{gig.title}</p>
+              <p class="text-sm font-medium truncate text-foreground">
+                {gig.title}
+              </p>
               <p
                 class="text-xs text-muted-foreground mt-0.5 flex items-center gap-1"
               >
@@ -381,7 +398,7 @@
               </p>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <span class="text-sm font-medium whitespace-nowrap">
+              <span class="text-sm font-medium whitespace-nowrap text-primary">
                 від {gig.price.toLocaleString('uk-UA')} грн
               </span>
               <ArrowUpRight
@@ -393,7 +410,7 @@
       </div>
     </div>
 
-    <div class="border-t border-border/40" />
+    <div class="border-t border-white/5" />
 
     <!-- Портфоліо -->
     <div class="py-5">
@@ -423,7 +440,7 @@
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             <div
-              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2"
+              class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2"
             >
               <span class="text-white text-xs font-medium">{item.title}</span>
             </div>
@@ -432,10 +449,10 @@
       </div>
     </div>
 
-    <div class="border-t border-border/40" />
+    <div class="border-t border-white/5" />
 
     <!-- Відгуки -->
-    <div class="py-5 pb-24 sm:pb-16">
+    <div class="py-5 pb-32 sm:pb-10">
       <div class="flex items-center justify-between mb-6">
         <p
           class="text-[11px] font-medium text-muted-foreground tracking-widest uppercase flex items-center gap-1.5"
@@ -447,16 +464,19 @@
           {user.avgRating} · {user.reviewsCount} відгуків
         </span>
       </div>
-      <div class="divide-y divide-border/40">
+      <div class="divide-y divide-white/5">
         {#each user.reviews as review}
           <div class="py-5 first:pt-0">
             <div class="flex items-center gap-2 mb-2">
               <div
-                class="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-semibold shrink-0 text-muted-foreground"
+                class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 text-primary border border-white/10"
+                style="background-color: rgba(255,255,255,0.05)"
               >
                 {review.initials}
               </div>
-              <span class="text-sm font-medium">{review.name}</span>
+              <span class="text-sm font-medium text-foreground"
+                >{review.name}</span
+              >
               <div class="flex ml-auto gap-0.5">
                 {#each Array(review.rating) as _}
                   <Star class="w-3 h-3 fill-amber-400 text-amber-400" />
@@ -477,17 +497,5 @@
         {/each}
       </div>
     </div>
-  </div>
-
-  <!-- Sticky CTA — тільки мобіль -->
-  <div
-    class="sm:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border/40 px-4 py-3 flex gap-2 z-50"
-  >
-    <Button variant="outline" class="flex-1 h-10 text-sm cursor-pointer gap-2">
-      <Send class="w-4 h-4" /> Написати
-    </Button>
-    <Button class="flex-1 h-10 text-sm cursor-pointer gap-2">
-      <ShoppingBag class="w-4 h-4" /> Замовити
-    </Button>
   </div>
 </div>
