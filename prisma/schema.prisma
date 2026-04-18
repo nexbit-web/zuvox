@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  role      Role     @default(CLIENT)
+  bio       String?
+  createdAt DateTime @default(now())
+
+  gigs      Gig[]
+  orders    Order[]  @relation("ClientOrders")
+  tasks     Task[]
+  reviews   Review[]
+
+  // better-auth tables
+  sessions  Session[]
+  accounts  Account[]
+}
+
+model Gig {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Int      // в копійках/центах
+  category    String
+  tags        String[]
+  images      String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  sellerId    String
+  seller      User     @relation(fields: [sellerId], references: [id])
+  orders      Order[]
+  reviews     Review[]
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  budget      Int?
+  category    String
+  status      TaskStatus @default(OPEN)
+  createdAt   DateTime   @default(now())
+
+  clientId    String
+  client      User       @relation(fields: [clientId], references: [id])
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  status    OrderStatus @default(PENDING)
+  message   String?     // повідомлення від клієнта
+  createdAt DateTime    @default(now())
+
+  gigId     String
+  gig       Gig         @relation(fields: [gigId], references: [id])
+  clientId  String
+  client    User        @relation("ClientOrders", fields: [clientId], references: [id])
+  review    Review?
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5
+  comment   String?
+  createdAt DateTime @default(now())
+
+  gigId     String
+  gig       Gig      @relation(fields: [gigId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  orderId   String   @unique
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+
+// better-auth required tables
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+}
+
+model Account {
+  id           String  @id @default(cuid())
+  userId       String
+  user         User    @relation(fields: [userId], references: [id])
+  providerId   String
+  accountId    String
+  accessToken  String?
+  refreshToken String?
+  idToken      String?
+  expiresAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  password     String?
+}
+
+enum Role {
+  CLIENT
+  FREELANCER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING      // оплата вручну — чекаємо підтвердження
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum TaskStatus {
+  OPEN
+  CLOSED
+}
