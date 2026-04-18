@@ -22,6 +22,7 @@
 		"@tailwindcss/vite": "^4.2.2",
 		"bits-ui": "^2.17.3",
 		"clsx": "^2.1.1",
+		"paneforge": "^1.0.2",
 		"prettier": "^3.8.3",
 		"prettier-plugin-svelte": "^3.5.1",
 		"shadcn-svelte": "^1.2.7",

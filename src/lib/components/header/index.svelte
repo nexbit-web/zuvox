@@ -96,11 +96,11 @@
     {visible ? 'translate-y-0' : '-translate-y-full'}"
 >
   <div class="relative">
-    <header
-      class="transition-colors duration-300 mb-8
-        {scrolled ? 'backdrop-blur-md shadow-sm' : ''}"
-      style="background-color: var(--bg-header)"
-    >
+   <header
+  class="transition-colors duration-300
+    {scrolled ? 'backdrop-blur-md shadow-sm' : ''}"
+  style="background-color: var(--bg-header)"
+>
       <div
         class="max-w-7xl mx-auto h-16 px-4 sm:px-6 flex md:grid md:grid-cols-[auto_1fr_auto] items-center gap-4"
       >
