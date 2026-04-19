@@ -49,7 +49,7 @@
 </script>
 
 <div data-search class="flex justify-center w-full">
-  <div class="relative w-full max-w-2xl z-50">
+  <div class="relative w-full max-w-2xl">
 
     <!-- Інпут -->
     <div
