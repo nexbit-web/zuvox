@@ -8,17 +8,12 @@
   import UserMenu from './user-menu.svelte'
   import MobileNav from './mobile-nav.svelte'
 
-  type Role = 'guest' | 'client' | 'freelancer'
-
   let scrolled = $state(false)
   let visible = $state(true)
   let catalogOpen = $state(false)
   let searchOpen = $state(false)
   let lastScrollY = 0
   let scrollTimer: ReturnType<typeof setTimeout> | null = null
-
-  const user = { name: 'Олексій Коваль', username: '@alexkoval', avatar: '' }
-  const role: Role = 'freelancer'
 
   $effect(() => {
     document.body.style.overflow = catalogOpen ? 'hidden' : ''
@@ -96,11 +91,11 @@
     {visible ? 'translate-y-0' : '-translate-y-full'}"
 >
   <div class="relative">
-   <header
-  class="transition-colors duration-300
+    <header
+      class="transition-colors duration-300
     {scrolled ? 'backdrop-blur-md shadow-sm' : ''}"
-  style="background-color: var(--bg-header)"
->
+      style="background-color: var(--bg-header)"
+    >
       <div
         class="max-w-7xl mx-auto h-16 px-4 sm:px-6 flex md:grid md:grid-cols-[auto_1fr_auto] items-center gap-4"
       >
@@ -131,12 +126,7 @@
 
         <!-- UserMenu — ховається на мобілі -->
         <div class="hidden md:flex items-center shrink-0">
-          <UserMenu
-            {role}
-            {user}
-            hasNotifications={true}
-            onnavigate={navigate}
-          />
+          <UserMenu onnavigate={navigate} />
         </div>
       </div>
     </header>
@@ -161,7 +151,6 @@
 <div class="hidden md:block h-8"></div>
 
 <!-- Відступ під хедер на десктопі -->
- 
 
 <!-- <svg
   width="120"

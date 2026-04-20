@@ -4,90 +4,248 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
+
+// # 1. Створити міграцію і запушити в БД
+// npx prisma migrate dev --name init
+
+// # 2. Згенерувати клієнт
+// npx prisma generate
+
+// ═══════════════════════════════
+// КОРИСТУВАЧІ
+// ═══════════════════════════════
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  avatar    String?
-  role      Role     @default(CLIENT)
-  bio       String?
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)  // ← додай це
+  name          String?
+  avatar        String?
+  role          Role     @default(CLIENT)
+  bio           String?
+  phone         String?
+  city          String?
+  isOnline      Boolean  @default(false)
+  lastSeen      DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  gigs      Gig[]
-  orders    Order[]  @relation("ClientOrders")
-  tasks     Task[]
-  reviews   Review[]
-
-  // better-auth tables
-  sessions  Session[]
-  accounts  Account[]
+  gigs         Gig[]
+  orders       Order[]      @relation("ClientOrders")
+  tasks        Task[]
+  reviews      Review[]     @relation("AuthorReviews")
+  sentMessages Message[]    @relation("SentMessages")
+  chats        ChatMember[]
+  sessions     Session[]
+  accounts     Account[]
 }
+
+// ═══════════════════════════════
+// ГІГИ (послуги фрілансера)
+// ═══════════════════════════════
 
 model Gig {
   id          String   @id @default(cuid())
   title       String
   description String
-  price       Int      // в копійках/центах
-  category    String
+  price       Int      // мінімальна ціна в гривнях
+  category    String   // "Розробка сайтів"
+  subcategory String?  // "Landing page"
   tags        String[]
   images      String[]
   isActive    Boolean  @default(true)
+  viewCount   Int      @default(0)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
+  // Пакети (базовий / стандартний / преміум)
+  packages    GigPackage[]
+
+  // Зв'язки
   sellerId    String
-  seller      User     @relation(fields: [sellerId], references: [id])
+  seller      User         @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   orders      Order[]
   reviews     Review[]
+
+  @@index([category])
+  @@index([sellerId])
+  @@index([isActive])
+  @@index([price])
 }
 
-model Task {
-  id          String     @id @default(cuid())
-  title       String
-  description String
-  budget      Int?
-  category    String
-  status      TaskStatus @default(OPEN)
-  createdAt   DateTime   @default(now())
+model GigPackage {
+  id           String   @id @default(cuid())
+  gigId        String
+  gig          Gig      @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  name         String   // "Базовий", "Стандартний", "Преміум"
+  description  String?
+  price        Int      // ціна пакету в гривнях
+  deliveryDays Int      // днів на виконання
+  revisions    Int      @default(1)
+  features     String[] // список що входить
 
-  clientId    String
-  client      User       @relation(fields: [clientId], references: [id])
+  @@index([gigId])
 }
+
+// ═══════════════════════════════
+// ЗАМОВЛЕННЯ
+// ═══════════════════════════════
 
 model Order {
-  id        String      @id @default(cuid())
-  status    OrderStatus @default(PENDING)
-  message   String?     // повідомлення від клієнта
-  createdAt DateTime    @default(now())
+  id          String      @id @default(cuid())
+  status      OrderStatus @default(PENDING)
+  message     String?     // повідомлення від клієнта
+  price       Int         // фінальна ціна в гривнях
+  deliveryDays Int?
+  deadline    DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+  cancelReason String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  gigId     String
-  gig       Gig         @relation(fields: [gigId], references: [id])
-  clientId  String
-  client    User        @relation("ClientOrders", fields: [clientId], references: [id])
-  review    Review?
+  // Зв'язки
+  gigId       String
+  gig         Gig         @relation(fields: [gigId], references: [id])
+  clientId    String
+  client      User        @relation("ClientOrders", fields: [clientId], references: [id])
+  review      Review?
+
+  @@index([status])
+  @@index([clientId])
+  @@index([gigId])
 }
+
+// ═══════════════════════════════
+// ВІДГУКИ
+// ═══════════════════════════════
 
 model Review {
   id        String   @id @default(cuid())
   rating    Int      // 1-5
   comment   String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  // Зв'язки
   gigId     String
   gig       Gig      @relation(fields: [gigId], references: [id])
   authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation("AuthorReviews", fields: [authorId], references: [id])
   orderId   String   @unique
   order     Order    @relation(fields: [orderId], references: [id])
+
+  @@index([gigId])
+  @@index([authorId])
+  @@index([rating])
 }
 
-// better-auth required tables
+// ═══════════════════════════════
+// ЗАВДАННЯ (клієнт шукає виконавця)
+// ═══════════════════════════════
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  budget      Int?       // бюджет в гривнях
+  category    String
+  subcategory String?
+  city        String?    // місто або "Онлайн"
+  type        ServiceType @default(ANY)
+  status      TaskStatus  @default(OPEN)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Зв'язки
+  clientId    String
+  client      User        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([category])
+  @@index([clientId])
+}
+
+// ═══════════════════════════════
+// ЧАТИ І ПОВІДОМЛЕННЯ
+// ═══════════════════════════════
+
+model Chat {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Зв'язки
+  members   ChatMember[]
+  messages  Message[]
+
+  @@index([updatedAt])
+}
+
+model ChatMember {
+  id        String   @id @default(cuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastReadAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@unique([chatId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  text      String
+  isRead    Boolean     @default(false)
+  createdAt DateTime    @default(now())
+
+  // Зв'язки
+  chatId    String
+  chat      Chat        @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User        @relation("SentMessages", fields: [senderId], references: [id])
+
+  @@index([chatId])
+  @@index([senderId])
+  @@index([createdAt])
+}
+
+// ═══════════════════════════════
+// КАТЕГОРІЇ (для сторінки /services)
+// ═══════════════════════════════
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  icon        String?
+  count       Int        @default(0)
+  subcategories Subcategory[]
+
+  @@index([name])
+}
+
+model Subcategory {
+  id          String   @id @default(cuid())
+  name        String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([name, categoryId])
+  @@index([categoryId])
+}
+
+// ═══════════════════════════════
+// BETTER-AUTH
+// ═══════════════════════════════
+
 model Session {
   id        String   @id
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   token     String   @unique
   createdAt DateTime @default(now())
@@ -97,19 +255,35 @@ model Session {
 }
 
 model Account {
-  id           String  @id @default(cuid())
+  id           String    @id @default(cuid())
   userId       String
-  user         User    @relation(fields: [userId], references: [id])
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   providerId   String
   accountId    String
   accessToken  String?
   refreshToken String?
   idToken      String?
   expiresAt    DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   password     String?
+
+  @@unique([providerId, accountId])
 }
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+// ═══════════════════════════════
+// ENUM
+// ═══════════════════════════════
 
 enum Role {
   CLIENT
@@ -118,14 +292,23 @@ enum Role {
 }
 
 enum OrderStatus {
-  PENDING      // оплата вручну — чекаємо підтвердження
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-  DISPUTED
+  PENDING       // очікує підтвердження
+  IN_PROGRESS   // в роботі
+  REVIEW        // на перевірці у клієнта
+  COMPLETED     // завершено
+  CANCELLED     // скасовано
+  DISPUTED      // спір
 }
 
 enum TaskStatus {
   OPEN
+  IN_PROGRESS
   CLOSED
+}
+
+enum ServiceType {
+  ONLINE        // онлайн
+  OFFLINE       // офлайн
+  VISIT         // виїзд до клієнта
+  ANY           // будь-який
 }

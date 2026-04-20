@@ -24,8 +24,8 @@
       id: 'catalog',
       icon: LayoutGrid,
       label: 'Каталог',
-      href: null,
-      action: () => oncatalog(),
+      href: '/services',
+      action: () => onnavigate('/services'),
     },
     {
       id: 'messages',
