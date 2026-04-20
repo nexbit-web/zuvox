@@ -1,19 +1,46 @@
+<!-- src/routes/(auth)/profile/setup/freelancer/+page.svelte -->
 <script lang="ts">
   import { Button } from '$lib/components/ui/button'
-  import * as Card from '$lib/components/ui/card'
-  import * as Field from '$lib/components/ui/field'
   import { Input } from '$lib/components/ui/input'
+  import { Textarea } from '$lib/components/ui/textarea'
+  import * as Field from '$lib/components/ui/field'
+  import * as Select from '$lib/components/ui/select'
   import { goto, invalidateAll } from '$app/navigation'
-  import { page } from '$app/stores'
-  import { MapPin, Phone, FileText, Globe, Briefcase } from 'lucide-svelte'
+  import { fly } from 'svelte/transition'
+  import { categories } from '$lib/data/categories'
+  import ProfilePreviewCard from '$lib/components/profile-preview-card.svelte'
+  import AvatarUploader from '$lib/components/avatar-uploader.svelte'
+  import { ArrowLeft, ArrowRight, Check, X, Plus } from 'lucide-svelte'
 
-  const session = $derived($page.data.session)
+  let { data } = $props<{
+    data: {
+      prefill: {
+        name: string
+        phone: string
+        city: string
+        bio: string
+        avatar: string
+        banner: string
+      }
+    }
+  }>()
 
-  let bio = $state('')
-  let phone = $state(session?.user?.phone ?? '')
-  let city = $state(session?.user?.city ?? '')
-  let portfolioUrl = $state('')
+  // ─── state
+  let step = $state(1)
+  const totalSteps = 3
+
+  let avatar = $state(data.prefill.avatar)
+  let phone = $state(data.prefill.phone)
+  let city = $state(data.prefill.city)
   let experience = $state('')
+
+  let selectedCategories = $state<string[]>([])
+  let selectedSkills = $state<string[]>([])
+  let hourlyRate = $state('')
+
+  let bio = $state(data.prefill.bio)
+  let portfolioUrl = $state('')
+
   let loading = $state(false)
   let error = $state('')
 
@@ -35,163 +62,554 @@
   ]
 
   const experienceOptions = [
-    'Менше 1 року',
-    '1-2 роки',
-    '3-5 років',
-    '5-10 років',
-    '10+ років',
+    { value: 'LT_1', label: 'Початківець', hint: 'менше 1 року' },
+    { value: '1_2', label: 'Середній', hint: '1–2 роки' },
+    { value: '3_5', label: 'Досвідчений', hint: '3–5 років' },
+    { value: '5_10', label: 'Експерт', hint: '5–10 років' },
+    { value: '10_PLUS', label: 'Майстер', hint: '10+ років' },
   ]
 
-  async function handleSubmit(e: SubmitEvent) {
-    e.preventDefault()
-    error = ''
-    if (!bio.trim()) {
-      error = 'Заповніть опис'
-      return
-    }
-    loading = true
+  // ─── derived
+  const availableSkills = $derived(
+    categories
+      .filter((c) => selectedCategories.includes(c.name))
+      .flatMap((c) => c.subs.flatMap((s) => s.items))
+      .filter((v, i, a) => a.indexOf(v) === i),
+  )
 
+  const step1Valid = $derived(!!phone.trim() && !!city && !!experience)
+  const step2Valid = $derived(
+    selectedCategories.length > 0 &&
+      selectedSkills.length > 0 &&
+      !!hourlyRate &&
+      Number(hourlyRate) > 0,
+  )
+  const step3Valid = $derived(bio.trim().length >= 40)
+  const canNext = $derived(
+    step === 1 ? step1Valid : step === 2 ? step2Valid : step3Valid,
+  )
+
+  const previewExperience = $derived(
+    experienceOptions.find((e) => e.value === experience)?.hint ?? '',
+  )
+  const previewCategories = $derived(
+    selectedCategories.map((name) => ({ name })),
+  )
+  const previewRate = $derived(
+    hourlyRate && Number(hourlyRate) > 0 ? Number(hourlyRate) : null,
+  )
+  const username = $derived(
+    data.prefill.name
+      ? data.prefill.name.toLowerCase().replace(/\s+/g, '').slice(0, 20)
+      : '',
+  )
+  const firstInitial = $derived(
+    data.prefill.name?.charAt(0).toUpperCase() || '?',
+  )
+
+  // ─── actions
+  function toggleCategory(name: string) {
+    if (selectedCategories.includes(name)) {
+      selectedCategories = selectedCategories.filter((c) => c !== name)
+      const remaining = categories
+        .filter((c) => selectedCategories.includes(c.name))
+        .flatMap((c) => c.subs.flatMap((s) => s.items))
+      selectedSkills = selectedSkills.filter((s) => remaining.includes(s))
+    } else {
+      if (selectedCategories.length >= 3) return
+      selectedCategories = [...selectedCategories, name]
+    }
+  }
+
+  function toggleSkill(s: string) {
+    if (selectedSkills.includes(s)) {
+      selectedSkills = selectedSkills.filter((x) => x !== s)
+    } else {
+      if (selectedSkills.length >= 10) return
+      selectedSkills = [...selectedSkills, s]
+    }
+  }
+
+  function next() {
+    error = ''
+    if (!canNext) return
+    if (step < totalSteps) step += 1
+    else submit()
+  }
+
+  function back() {
+    error = ''
+    if (step > 1) step -= 1
+  }
+
+  async function submit() {
+    error = ''
+    loading = true
     try {
       const res = await fetch('/api/user/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bio, phone, city, portfolioUrl, experience }),
+        body: JSON.stringify({
+          role: 'FREELANCER',
+          phone,
+          city,
+          bio,
+          portfolioUrl,
+          experience,
+          categories: selectedCategories,
+          skills: selectedSkills,
+          hourlyRate: Number(hourlyRate),
+        }),
       })
-
       if (!res.ok) {
-        error = 'Помилка збереження'
+        error = 'Помилка збереження. Спробуйте ще раз.'
         return
       }
-
       await invalidateAll()
       goto('/dashboard')
+    } catch {
+      error = 'Немає з’єднання з сервером'
     } finally {
       loading = false
     }
   }
+
+  const selectedCityLabel = $derived(city || 'Оберіть місто')
 </script>
 
 <div
-  class="min-h-screen flex items-center justify-center px-4 py-12"
+  class="min-h-screen px-4 pt-6 pb-28 md:py-14"
   style="background-color: var(--background)"
 >
-  <div class="w-full max-w-md">
-    <div class="text-center mb-8">
-      <div
-        class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4"
-        style="background-color: color-mix(in oklch, var(--primary) 10%, transparent)"
+  <div class="max-w-6xl mx-auto">
+    <!-- ───── HEADER ───── -->
+    <div class="flex items-center justify-between mb-10">
+      <button
+        type="button"
+        onclick={() => goto('/dashboard')}
+        class="inline-flex items-center gap-2 text-sm cursor-pointer transition-opacity hover:opacity-60"
+        style="color: var(--muted-foreground)"
       >
-        💼
-      </div>
-      <h1 class="text-2xl font-bold" style="color: var(--foreground)">
-        Налаштуйте профіль
-      </h1>
-      <p class="text-sm mt-1" style="color: var(--muted-foreground)">
-        Це допоможе клієнтам знайти вас
-      </p>
+        <X class="size-4" />
+        Пропустити
+      </button>
+
+      <span class="text-xs tabular-nums" style="color: var(--muted-foreground)">
+        {step} / {totalSteps}
+      </span>
     </div>
 
-    <Card.Root>
-      <Card.Content class="pt-6">
-        <form onsubmit={handleSubmit}>
-          <Field.Group>
-            <Field.Field>
-              <Field.Label for="phone">
-                <Phone class="w-3.5 h-3.5 inline mr-1" />
-                Телефон
-              </Field.Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+38(0__)__-__-__"
-                bind:value={phone}
-              />
-            </Field.Field>
+    <!-- ───── PROGRESS ───── -->
+    <div class="flex gap-1.5 mb-14 max-w-md mx-auto">
+      {#each Array(totalSteps) as _, i}
+        <div
+          class="h-[3px] flex-1 rounded-full transition-all duration-500"
+          style="background-color: {i < step
+            ? 'var(--primary)'
+            : 'color-mix(in oklch, var(--foreground) 8%, transparent)'}"
+        ></div>
+      {/each}
+    </div>
 
-            <Field.Field>
-              <Field.Label for="city">
-                <MapPin class="w-3.5 h-3.5 inline mr-1" />
-                Місто
-              </Field.Label>
-              <select
-                id="city"
-                bind:value={city}
-                class="w-full h-9 px-3 text-sm rounded-lg border outline-none"
-                style="background-color: var(--background); border-color: color-mix(in oklch, var(--foreground) 20%, transparent); color: var(--foreground)"
+    <div
+      class="grid lg:grid-cols-[minmax(0,1fr)_400px] gap-12 lg:gap-16 items-start"
+    >
+      <!-- ═══════ FORM COLUMN ═══════ -->
+      <div>
+        {#key step}
+          <div in:fly={{ y: 6, duration: 200 }}>
+            <!-- ───── STEP 1 ───── -->
+            {#if step === 1}
+              <header class="mb-10">
+                <p
+                  class="text-xs uppercase tracking-[0.14em] font-medium mb-4"
+                  style="color: var(--primary)"
+                >
+                  Крок 1 — Основне
+                </p>
+                <h1
+                  class="text-[32px] md:text-[44px] font-semibold tracking-tight leading-[1.1] mb-3"
+                  style="color: var(--foreground)"
+                >
+                  Розкажіть про себе
+                </h1>
+                <p class="text-base" style="color: var(--muted-foreground)">
+                  Фото, контакти та досвід — щоб клієнти могли вас знайти.
+                </p>
+              </header>
+
+              <!-- ───── AVATAR UPLOAD ───── -->
+              <div
+                class="flex items-center gap-5 mb-10 p-5 rounded-2xl border"
+                style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
               >
-                <option value="" disabled>Оберіть місто</option>
-                {#each cities as c}
-                  <option value={c}>{c}</option>
-                {/each}
-              </select>
-            </Field.Field>
+                <AvatarUploader
+                  bind:value={avatar}
+                  fallback={firstInitial}
+                  size="lg"
+                />
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="text-sm font-medium"
+                    style="color: var(--foreground)"
+                  >
+                    Фото профілю
+                  </p>
+                  <p
+                    class="text-xs mt-1 leading-relaxed"
+                    style="color: var(--muted-foreground)"
+                  >
+                    Натисніть на коло щоб завантажити. JPG або PNG, до 5 МБ.
+                  </p>
+                </div>
+              </div>
 
-            <Field.Field>
-              <Field.Label for="experience">
-                <Briefcase class="w-3.5 h-3.5 inline mr-1" />
-                Досвід роботи
-              </Field.Label>
-              <select
-                id="experience"
-                bind:value={experience}
-                class="w-full h-9 px-3 text-sm rounded-lg border outline-none"
-                style="background-color: var(--background); border-color: color-mix(in oklch, var(--foreground) 20%, transparent); color: var(--foreground)"
-              >
-                <option value="" disabled>Оберіть досвід</option>
-                {#each experienceOptions as exp}
-                  <option value={exp}>{exp}</option>
-                {/each}
-              </select>
-            </Field.Field>
+              <Field.Group class="gap-7">
+                <Field.Field>
+                  <Field.Label for="phone">Телефон</Field.Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+38 (0__) ___-__-__"
+                    bind:value={phone}
+                    class="h-11"
+                  />
+                  {#if data.prefill.phone}
+                    <Field.Description>
+                      Заповнено автоматично з реєстрації. Можна змінити.
+                    </Field.Description>
+                  {/if}
+                </Field.Field>
 
-            <Field.Field>
-              <Field.Label for="portfolio">
-                <Globe class="w-3.5 h-3.5 inline mr-1" />
-                Портфоліо / сайт
-              </Field.Label>
-              <Input
-                id="portfolio"
-                type="url"
-                placeholder="https://yoursite.com"
-                bind:value={portfolioUrl}
-              />
-            </Field.Field>
+                <Field.Field>
+                  <Field.Label for="city">Місто</Field.Label>
+                  <Select.Root type="single" bind:value={city}>
+                    <Select.Trigger class="h-11 w-full">
+                      {selectedCityLabel}
+                    </Select.Trigger>
+                    <Select.Content>
+                      {#each cities as c}
+                        <Select.Item value={c}>{c}</Select.Item>
+                      {/each}
+                    </Select.Content>
+                  </Select.Root>
+                </Field.Field>
 
-            <Field.Field>
-              <Field.Label for="bio">
-                <FileText class="w-3.5 h-3.5 inline mr-1" />
-                Про себе <span class="text-destructive">*</span>
-              </Field.Label>
-              <textarea
-                id="bio"
-                bind:value={bio}
-                placeholder="Розкажіть про свій досвід, навички та підхід до роботи..."
-                rows="4"
-                class="w-full px-3 py-2 text-sm rounded-lg border outline-none resize-none"
-                style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent); border-color: color-mix(in oklch, var(--foreground) 10%, transparent); color: var(--foreground)"
-              ></textarea>
-            </Field.Field>
+                <Field.Field>
+                  <Field.Label>Досвід роботи</Field.Label>
+                  <div
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1"
+                    role="radiogroup"
+                  >
+                    {#each experienceOptions as opt}
+                      {@const active = experience === opt.value}
+                      <button
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onclick={() => (experience = opt.value)}
+                        class="flex items-center justify-between px-4 py-3.5 rounded-xl border text-left transition-all cursor-pointer"
+                        style="background-color: {active
+                          ? 'var(--foreground)'
+                          : 'var(--card)'};
+                               border-color: {active
+                          ? 'var(--foreground)'
+                          : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
+                               color: {active
+                          ? 'var(--background)'
+                          : 'var(--foreground)'}"
+                      >
+                        <div>
+                          <div class="text-sm font-medium">
+                            {opt.label}
+                          </div>
+                          <div
+                            class="text-xs mt-0.5"
+                            style="color: {active
+                              ? 'color-mix(in oklch, var(--background) 70%, var(--foreground))'
+                              : 'var(--muted-foreground)'}"
+                          >
+                            {opt.hint}
+                          </div>
+                        </div>
+                        {#if active}
+                          <Check class="size-4 shrink-0" />
+                        {/if}
+                      </button>
+                    {/each}
+                  </div>
+                </Field.Field>
+              </Field.Group>
 
-            {#if error}
-              <p class="text-sm text-destructive text-center">{error}</p>
+              <!-- ───── STEP 2 ───── -->
+            {:else if step === 2}
+              <header class="mb-10">
+                <p
+                  class="text-xs uppercase tracking-[0.14em] font-medium mb-4"
+                  style="color: var(--primary)"
+                >
+                  Крок 2 — Експертиза
+                </p>
+                <h1
+                  class="text-[32px] md:text-[44px] font-semibold tracking-tight leading-[1.1] mb-3"
+                  style="color: var(--foreground)"
+                >
+                  Ваша спеціалізація
+                </h1>
+                <p class="text-base" style="color: var(--muted-foreground)">
+                  Оберіть категорії та навички. Перша категорія задає вигляд
+                  банера вашого профілю.
+                </p>
+              </header>
+
+              <Field.Group class="gap-8">
+                <Field.Field>
+                  <div class="flex items-center justify-between mb-2">
+                    <Field.Label>Категорії</Field.Label>
+                    <span
+                      class="text-xs tabular-nums"
+                      style="color: var(--muted-foreground)"
+                    >
+                      {selectedCategories.length} / 3
+                    </span>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    {#each categories as cat}
+                      {@const active = selectedCategories.includes(cat.name)}
+                      {@const disabled =
+                        !active && selectedCategories.length >= 3}
+                      <button
+                        type="button"
+                        {disabled}
+                        onclick={() => toggleCategory(cat.name)}
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-medium transition-all"
+                        class:cursor-pointer={!disabled}
+                        class:opacity-40={disabled}
+                        style="background-color: {active
+                          ? 'var(--foreground)'
+                          : 'var(--card)'};
+                               border-color: {active
+                          ? 'var(--foreground)'
+                          : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
+                               color: {active
+                          ? 'var(--background)'
+                          : 'var(--foreground)'}"
+                      >
+                        {#if active}
+                          <Check class="size-3.5" />
+                        {:else}
+                          <Plus class="size-3.5 opacity-60" />
+                        {/if}
+                        {cat.name}
+                      </button>
+                    {/each}
+                  </div>
+                </Field.Field>
+
+                {#if availableSkills.length > 0}
+                  <Field.Field>
+                    <div class="flex items-center justify-between mb-2">
+                      <Field.Label>Навички</Field.Label>
+                      <span
+                        class="text-xs tabular-nums"
+                        style="color: var(--muted-foreground)"
+                      >
+                        {selectedSkills.length} / 10
+                      </span>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                      {#each availableSkills as skill}
+                        {@const active = selectedSkills.includes(skill)}
+                        {@const disabled =
+                          !active && selectedSkills.length >= 10}
+                        <button
+                          type="button"
+                          {disabled}
+                          onclick={() => toggleSkill(skill)}
+                          class="text-xs px-3 py-1.5 rounded-full border transition-all"
+                          class:cursor-pointer={!disabled}
+                          class:opacity-40={disabled}
+                          style="background-color: {active
+                            ? 'var(--foreground)'
+                            : 'transparent'};
+                                 border-color: {active
+                            ? 'var(--foreground)'
+                            : 'color-mix(in oklch, var(--foreground) 14%, transparent)'};
+                                 color: {active
+                            ? 'var(--background)'
+                            : 'var(--muted-foreground)'}"
+                        >
+                          {skill}
+                        </button>
+                      {/each}
+                    </div>
+                  </Field.Field>
+                {/if}
+
+                <Field.Field>
+                  <Field.Label for="rate">
+                    Мінімальна ставка за годину
+                  </Field.Label>
+                  <div class="relative">
+                    <Input
+                      id="rate"
+                      type="number"
+                      min="0"
+                      placeholder="500"
+                      bind:value={hourlyRate}
+                      class="h-11 pr-20 tabular-nums"
+                    />
+                    <span
+                      class="absolute right-4 top-1/2 -translate-y-1/2 text-sm pointer-events-none"
+                      style="color: var(--muted-foreground)"
+                    >
+                      грн/год
+                    </span>
+                  </div>
+                  <Field.Description>
+                    Типова ставка у вашій категорії — 300–800 грн/год.
+                  </Field.Description>
+                </Field.Field>
+              </Field.Group>
+
+              <!-- ───── STEP 3 ───── -->
+            {:else}
+              <header class="mb-10">
+                <p
+                  class="text-xs uppercase tracking-[0.14em] font-medium mb-4"
+                  style="color: var(--primary)"
+                >
+                  Крок 3 — Презентація
+                </p>
+                <h1
+                  class="text-[32px] md:text-[44px] font-semibold tracking-tight leading-[1.1] mb-3"
+                  style="color: var(--foreground)"
+                >
+                  Ваша візитка
+                </h1>
+                <p class="text-base" style="color: var(--muted-foreground)">
+                  Хороший опис збільшує конверсію у замовлення до трьох разів.
+                </p>
+              </header>
+
+              <Field.Group class="gap-7">
+                <Field.Field>
+                  <div class="flex items-center justify-between mb-2">
+                    <Field.Label for="bio">Про себе</Field.Label>
+                    <span
+                      class="text-xs tabular-nums"
+                      style="color: {bio.length < 40
+                        ? 'var(--muted-foreground)'
+                        : 'var(--primary)'}"
+                    >
+                      {bio.length} / 500
+                    </span>
+                  </div>
+                  <Textarea
+                    id="bio"
+                    bind:value={bio}
+                    maxlength={500}
+                    rows={6}
+                    placeholder="Наприклад: Full-stack розробник з 5 роками досвіду. Спеціалізуюсь на SvelteKit та Node.js. Роблю швидко, якісно і завжди в термін."
+                    class="resize-none"
+                  />
+                  <Field.Description>
+                    Мінімум 40 символів. Розкажіть про досвід, підхід і сильні
+                    сторони.
+                  </Field.Description>
+                </Field.Field>
+
+                <Field.Field>
+                  <Field.Label for="portfolio">Портфоліо або сайт</Field.Label>
+                  <Input
+                    id="portfolio"
+                    type="url"
+                    placeholder="https://yoursite.com"
+                    bind:value={portfolioUrl}
+                    class="h-11"
+                  />
+                  <Field.Description>
+                    Необов’язково. Посилання на роботи підвищує довіру.
+                  </Field.Description>
+                </Field.Field>
+              </Field.Group>
             {/if}
 
-            <Field.Field>
-              <Button type="submit" disabled={loading} class="w-full">
-                {loading ? 'Зберігаємо...' : 'Зберегти і продовжити'}
-              </Button>
-              <button
-                type="button"
-                onclick={() => goto('/dashboard')}
-                class="text-xs text-center cursor-pointer hover:opacity-70 w-full mt-1"
-                style="color: var(--muted-foreground)"
+            {#if error}
+              <div
+                class="mt-6 px-4 py-3 rounded-xl text-sm"
+                style="background-color: color-mix(in oklch, var(--destructive) 10%, transparent);
+                       color: var(--destructive)"
               >
-                Пропустити
-              </button>
-            </Field.Field>
-          </Field.Group>
-        </form>
-      </Card.Content>
-    </Card.Root>
+                {error}
+              </div>
+            {/if}
+          </div>
+        {/key}
+
+        <!-- ───── NAV ───── -->
+        <div
+          class="flex items-center justify-between gap-3 mt-12 pt-7 border-t"
+          style="border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
+        >
+          <Button
+            variant="ghost"
+            onclick={back}
+            disabled={step === 1}
+            class="gap-2 h-11"
+          >
+            <ArrowLeft class="size-4" />
+            Назад
+          </Button>
+
+          <Button
+            onclick={next}
+            disabled={!canNext || loading}
+            class="gap-2 h-11 min-w-36 rounded-full px-6"
+          >
+            {#if loading}
+              Зберігаємо…
+            {:else if step === totalSteps}
+              Завершити
+              <Check class="size-4" />
+            {:else}
+              Далі
+              <ArrowRight class="size-4" />
+            {/if}
+          </Button>
+        </div>
+      </div>
+
+      <!-- ═══════ PREVIEW COLUMN ═══════ -->
+      <aside class="hidden lg:block sticky top-14">
+        <p
+          class="text-xs uppercase tracking-[0.14em] font-medium mb-4"
+          style="color: var(--muted-foreground)"
+        >
+          Прев’ю профілю
+        </p>
+
+        <ProfilePreviewCard
+          name={data.prefill.name}
+          {username}
+          {bio}
+          avatarUrl={avatar}
+          city={city || undefined}
+          experience={previewExperience}
+          hourlyRate={previewRate}
+          categories={previewCategories}
+          verified
+          preview
+        />
+
+        <p
+          class="text-xs mt-4 leading-relaxed"
+          style="color: var(--muted-foreground)"
+        >
+          Так ваш профіль бачитимуть клієнти в пошуку та на сторінці послуг.
+          Банер підбирається автоматично за першою категорією.
+        </p>
+      </aside>
+    </div>
   </div>
 </div>

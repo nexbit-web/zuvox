@@ -1502,6 +1502,7 @@ export const UserScalarFieldEnum = {
   bio: 'bio',
   phone: 'phone',
   city: 'city',
+  banner: 'banner',
   isOnline: 'isOnline',
   lastSeen: 'lastSeen',
   createdAt: 'createdAt',

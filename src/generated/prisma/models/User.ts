@@ -34,6 +34,7 @@ export type UserMinAggregateOutputType = {
   bio: string | null
   phone: string | null
   city: string | null
+  banner: string | null
   isOnline: boolean | null
   lastSeen: Date | null
   createdAt: Date | null
@@ -50,6 +51,7 @@ export type UserMaxAggregateOutputType = {
   bio: string | null
   phone: string | null
   city: string | null
+  banner: string | null
   isOnline: boolean | null
   lastSeen: Date | null
   createdAt: Date | null
@@ -66,6 +68,7 @@ export type UserCountAggregateOutputType = {
   bio: number
   phone: number
   city: number
+  banner: number
   isOnline: number
   lastSeen: number
   createdAt: number
@@ -84,6 +87,7 @@ export type UserMinAggregateInputType = {
   bio?: true
   phone?: true
   city?: true
+  banner?: true
   isOnline?: true
   lastSeen?: true
   createdAt?: true
@@ -100,6 +104,7 @@ export type UserMaxAggregateInputType = {
   bio?: true
   phone?: true
   city?: true
+  banner?: true
   isOnline?: true
   lastSeen?: true
   createdAt?: true
@@ -116,6 +121,7 @@ export type UserCountAggregateInputType = {
   bio?: true
   phone?: true
   city?: true
+  banner?: true
   isOnline?: true
   lastSeen?: true
   createdAt?: true
@@ -205,6 +211,7 @@ export type UserGroupByOutputType = {
   bio: string | null
   phone: string | null
   city: string | null
+  banner: string | null
   isOnline: boolean
   lastSeen: Date
   createdAt: Date
@@ -242,6 +249,7 @@ export type UserWhereInput = {
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
+  banner?: Prisma.StringNullableFilter<"User"> | string | null
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -266,6 +274,7 @@ export type UserOrderByWithRelationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  banner?: Prisma.SortOrderInput | Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -293,6 +302,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
+  banner?: Prisma.StringNullableFilter<"User"> | string | null
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -317,6 +327,7 @@ export type UserOrderByWithAggregationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  banner?: Prisma.SortOrderInput | Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -339,6 +350,7 @@ export type UserScalarWhereWithAggregatesInput = {
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  banner?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isOnline?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastSeen?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -355,6 +367,7 @@ export type UserCreateInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -379,6 +392,7 @@ export type UserUncheckedCreateInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -403,6 +417,7 @@ export type UserUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -427,6 +442,7 @@ export type UserUncheckedUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -451,6 +467,7 @@ export type UserCreateManyInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -467,6 +484,7 @@ export type UserUpdateManyMutationInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -483,6 +501,7 @@ export type UserUncheckedUpdateManyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -499,6 +518,7 @@ export type UserCountOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  banner?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -515,6 +535,7 @@ export type UserMaxOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  banner?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -531,6 +552,7 @@ export type UserMinOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  banner?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -684,6 +706,7 @@ export type UserCreateWithoutGigsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -707,6 +730,7 @@ export type UserUncheckedCreateWithoutGigsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -746,6 +770,7 @@ export type UserUpdateWithoutGigsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -769,6 +794,7 @@ export type UserUncheckedUpdateWithoutGigsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -792,6 +818,7 @@ export type UserCreateWithoutOrdersInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -815,6 +842,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -854,6 +882,7 @@ export type UserUpdateWithoutOrdersInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -877,6 +906,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -900,6 +930,7 @@ export type UserCreateWithoutReviewsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -923,6 +954,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -962,6 +994,7 @@ export type UserUpdateWithoutReviewsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -985,6 +1018,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1008,6 +1042,7 @@ export type UserCreateWithoutTasksInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1031,6 +1066,7 @@ export type UserUncheckedCreateWithoutTasksInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1070,6 +1106,7 @@ export type UserUpdateWithoutTasksInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1093,6 +1130,7 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1116,6 +1154,7 @@ export type UserCreateWithoutChatsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1139,6 +1178,7 @@ export type UserUncheckedCreateWithoutChatsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1178,6 +1218,7 @@ export type UserUpdateWithoutChatsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1201,6 +1242,7 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1224,6 +1266,7 @@ export type UserCreateWithoutSentMessagesInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1247,6 +1290,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1286,6 +1330,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1309,6 +1354,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1332,6 +1378,7 @@ export type UserCreateWithoutSessionsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1355,6 +1402,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1394,6 +1442,7 @@ export type UserUpdateWithoutSessionsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1417,6 +1466,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1440,6 +1490,7 @@ export type UserCreateWithoutAccountsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1463,6 +1514,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   bio?: string | null
   phone?: string | null
   city?: string | null
+  banner?: string | null
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1502,6 +1554,7 @@ export type UserUpdateWithoutAccountsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1525,6 +1578,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1642,6 +1696,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   bio?: boolean
   phone?: boolean
   city?: boolean
+  banner?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
@@ -1667,6 +1722,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bio?: boolean
   phone?: boolean
   city?: boolean
+  banner?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
@@ -1683,6 +1739,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bio?: boolean
   phone?: boolean
   city?: boolean
+  banner?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
@@ -1699,13 +1756,14 @@ export type UserSelectScalar = {
   bio?: boolean
   phone?: boolean
   city?: boolean
+  banner?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "avatar" | "role" | "bio" | "phone" | "city" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "avatar" | "role" | "bio" | "phone" | "city" | "banner" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gigs?: boolean | Prisma.User$gigsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
@@ -1742,6 +1800,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     bio: string | null
     phone: string | null
     city: string | null
+    banner: string | null
     isOnline: boolean
     lastSeen: Date
     createdAt: Date
@@ -2186,6 +2245,7 @@ export interface UserFieldRefs {
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly city: Prisma.FieldRef<"User", 'String'>
+  readonly banner: Prisma.FieldRef<"User", 'String'>
   readonly isOnline: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastSeen: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
