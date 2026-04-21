@@ -47,3 +47,24 @@ export const ServiceType = {
 } as const
 
 export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
+
+
+export const VerificationStatus = {
+  NONE: 'NONE',
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
+
+
+export const ExperienceLevel = {
+  LT_1: 'LT_1',
+  Y_1_2: 'Y_1_2',
+  Y_3_5: 'Y_3_5',
+  Y_5_10: 'Y_5_10',
+  Y_10_PLUS: 'Y_10_PLUS'
+} as const
+
+export type ExperienceLevel = (typeof ExperienceLevel)[keyof typeof ExperienceLevel]

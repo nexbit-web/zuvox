@@ -29,12 +29,18 @@ export type UserMinAggregateOutputType = {
   email: string | null
   emailVerified: boolean | null
   name: string | null
-  avatar: string | null
-  role: $Enums.Role | null
+  username: string | null
   bio: string | null
   phone: string | null
   city: string | null
+  avatar: string | null
+  avatarPublicId: string | null
   banner: string | null
+  bannerPublicId: string | null
+  verificationStatus: $Enums.VerificationStatus | null
+  verificationRejectReason: string | null
+  verifiedAt: Date | null
+  role: $Enums.Role | null
   isOnline: boolean | null
   lastSeen: Date | null
   createdAt: Date | null
@@ -46,12 +52,18 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   emailVerified: boolean | null
   name: string | null
-  avatar: string | null
-  role: $Enums.Role | null
+  username: string | null
   bio: string | null
   phone: string | null
   city: string | null
+  avatar: string | null
+  avatarPublicId: string | null
   banner: string | null
+  bannerPublicId: string | null
+  verificationStatus: $Enums.VerificationStatus | null
+  verificationRejectReason: string | null
+  verifiedAt: Date | null
+  role: $Enums.Role | null
   isOnline: boolean | null
   lastSeen: Date | null
   createdAt: Date | null
@@ -63,12 +75,20 @@ export type UserCountAggregateOutputType = {
   email: number
   emailVerified: number
   name: number
-  avatar: number
-  role: number
+  username: number
   bio: number
   phone: number
   city: number
+  avatar: number
+  avatarPublicId: number
   banner: number
+  bannerPublicId: number
+  portfolioImages: number
+  portfolioImagesPublicIds: number
+  verificationStatus: number
+  verificationRejectReason: number
+  verifiedAt: number
+  role: number
   isOnline: number
   lastSeen: number
   createdAt: number
@@ -82,12 +102,18 @@ export type UserMinAggregateInputType = {
   email?: true
   emailVerified?: true
   name?: true
-  avatar?: true
-  role?: true
+  username?: true
   bio?: true
   phone?: true
   city?: true
+  avatar?: true
+  avatarPublicId?: true
   banner?: true
+  bannerPublicId?: true
+  verificationStatus?: true
+  verificationRejectReason?: true
+  verifiedAt?: true
+  role?: true
   isOnline?: true
   lastSeen?: true
   createdAt?: true
@@ -99,12 +125,18 @@ export type UserMaxAggregateInputType = {
   email?: true
   emailVerified?: true
   name?: true
-  avatar?: true
-  role?: true
+  username?: true
   bio?: true
   phone?: true
   city?: true
+  avatar?: true
+  avatarPublicId?: true
   banner?: true
+  bannerPublicId?: true
+  verificationStatus?: true
+  verificationRejectReason?: true
+  verifiedAt?: true
+  role?: true
   isOnline?: true
   lastSeen?: true
   createdAt?: true
@@ -116,12 +148,20 @@ export type UserCountAggregateInputType = {
   email?: true
   emailVerified?: true
   name?: true
-  avatar?: true
-  role?: true
+  username?: true
   bio?: true
   phone?: true
   city?: true
+  avatar?: true
+  avatarPublicId?: true
   banner?: true
+  bannerPublicId?: true
+  portfolioImages?: true
+  portfolioImagesPublicIds?: true
+  verificationStatus?: true
+  verificationRejectReason?: true
+  verifiedAt?: true
+  role?: true
   isOnline?: true
   lastSeen?: true
   createdAt?: true
@@ -206,12 +246,20 @@ export type UserGroupByOutputType = {
   email: string
   emailVerified: boolean
   name: string | null
-  avatar: string | null
-  role: $Enums.Role
+  username: string | null
   bio: string | null
   phone: string | null
   city: string | null
+  avatar: string | null
+  avatarPublicId: string | null
   banner: string | null
+  bannerPublicId: string | null
+  portfolioImages: string[]
+  portfolioImagesPublicIds: string[]
+  verificationStatus: $Enums.VerificationStatus
+  verificationRejectReason: string | null
+  verifiedAt: Date | null
+  role: $Enums.Role
   isOnline: boolean
   lastSeen: Date
   createdAt: Date
@@ -244,12 +292,20 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   name?: Prisma.StringNullableFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  username?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarPublicId?: Prisma.StringNullableFilter<"User"> | string | null
   banner?: Prisma.StringNullableFilter<"User"> | string | null
+  bannerPublicId?: Prisma.StringNullableFilter<"User"> | string | null
+  portfolioImages?: Prisma.StringNullableListFilter<"User">
+  portfolioImagesPublicIds?: Prisma.StringNullableListFilter<"User">
+  verificationStatus?: Prisma.EnumVerificationStatusFilter<"User"> | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.StringNullableFilter<"User"> | string | null
+  verifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -262,6 +318,7 @@ export type UserWhereInput = {
   chats?: Prisma.ChatMemberListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  freelancerProfile?: Prisma.XOR<Prisma.FreelancerProfileNullableScalarRelationFilter, Prisma.FreelancerProfileWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -269,12 +326,20 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
-  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
   banner?: Prisma.SortOrderInput | Prisma.SortOrder
+  bannerPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
+  portfolioImages?: Prisma.SortOrder
+  portfolioImagesPublicIds?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
+  verificationRejectReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -287,22 +352,31 @@ export type UserOrderByWithRelationInput = {
   chats?: Prisma.ChatMemberOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
+  freelancerProfile?: Prisma.FreelancerProfileOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  username?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   name?: Prisma.StringNullableFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarPublicId?: Prisma.StringNullableFilter<"User"> | string | null
   banner?: Prisma.StringNullableFilter<"User"> | string | null
+  bannerPublicId?: Prisma.StringNullableFilter<"User"> | string | null
+  portfolioImages?: Prisma.StringNullableListFilter<"User">
+  portfolioImagesPublicIds?: Prisma.StringNullableListFilter<"User">
+  verificationStatus?: Prisma.EnumVerificationStatusFilter<"User"> | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.StringNullableFilter<"User"> | string | null
+  verifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -315,19 +389,28 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   chats?: Prisma.ChatMemberListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
-}, "id" | "email">
+  freelancerProfile?: Prisma.XOR<Prisma.FreelancerProfileNullableScalarRelationFilter, Prisma.FreelancerProfileWhereInput> | null
+}, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
-  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
   banner?: Prisma.SortOrderInput | Prisma.SortOrder
+  bannerPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
+  portfolioImages?: Prisma.SortOrder
+  portfolioImagesPublicIds?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
+  verificationRejectReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -345,12 +428,20 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+  username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  avatar?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  avatarPublicId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   banner?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bannerPublicId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  portfolioImages?: Prisma.StringNullableListFilter<"User">
+  portfolioImagesPublicIds?: Prisma.StringNullableListFilter<"User">
+  verificationStatus?: Prisma.EnumVerificationStatusWithAggregatesFilter<"User"> | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  verifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   isOnline?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastSeen?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -362,12 +453,20 @@ export type UserCreateInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -380,6 +479,7 @@ export type UserCreateInput = {
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -387,12 +487,20 @@ export type UserUncheckedCreateInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -405,6 +513,7 @@ export type UserUncheckedCreateInput = {
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -412,12 +521,20 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +547,7 @@ export type UserUpdateInput = {
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -437,12 +555,20 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -455,6 +581,7 @@ export type UserUncheckedUpdateInput = {
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -462,12 +589,20 @@ export type UserCreateManyInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -479,12 +614,20 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -496,16 +639,32 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -513,12 +672,20 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  avatar?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
+  avatarPublicId?: Prisma.SortOrder
   banner?: Prisma.SortOrder
+  bannerPublicId?: Prisma.SortOrder
+  portfolioImages?: Prisma.SortOrder
+  portfolioImagesPublicIds?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
+  verificationRejectReason?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -530,12 +697,18 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  avatar?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
+  avatarPublicId?: Prisma.SortOrder
   banner?: Prisma.SortOrder
+  bannerPublicId?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
+  verificationRejectReason?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -547,12 +720,18 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  avatar?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
+  avatarPublicId?: Prisma.SortOrder
   banner?: Prisma.SortOrder
+  bannerPublicId?: Prisma.SortOrder
+  verificationStatus?: Prisma.SortOrder
+  verificationRejectReason?: Prisma.SortOrder
+  verifiedAt?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -562,6 +741,14 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserCreateportfolioImagesInput = {
+  set: string[]
+}
+
+export type UserCreateportfolioImagesPublicIdsInput = {
+  set: string[]
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -576,12 +763,44 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type UserUpdateportfolioImagesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type UserUpdateportfolioImagesPublicIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type EnumVerificationStatusFieldUpdateOperationsInput = {
+  set?: $Enums.VerificationStatus
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutFreelancerProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFreelancerProfileInput, Prisma.UserUncheckedCreateWithoutFreelancerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFreelancerProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFreelancerProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFreelancerProfileInput, Prisma.UserUncheckedCreateWithoutFreelancerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFreelancerProfileInput
+  upsert?: Prisma.UserUpsertWithoutFreelancerProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFreelancerProfileInput, Prisma.UserUpdateWithoutFreelancerProfileInput>, Prisma.UserUncheckedUpdateWithoutFreelancerProfileInput>
 }
 
 export type UserCreateNestedOneWithoutGigsInput = {
@@ -696,17 +915,173 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
+export type UserCreateWithoutFreelancerProfileInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFreelancerProfileInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFreelancerProfileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFreelancerProfileInput, Prisma.UserUncheckedCreateWithoutFreelancerProfileInput>
+}
+
+export type UserUpsertWithoutFreelancerProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFreelancerProfileInput, Prisma.UserUncheckedUpdateWithoutFreelancerProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFreelancerProfileInput, Prisma.UserUncheckedCreateWithoutFreelancerProfileInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFreelancerProfileInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFreelancerProfileInput, Prisma.UserUncheckedUpdateWithoutFreelancerProfileInput>
+}
+
+export type UserUpdateWithoutFreelancerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutGigsInput = {
   id?: string
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -718,6 +1093,7 @@ export type UserCreateWithoutGigsInput = {
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGigsInput = {
@@ -725,12 +1101,20 @@ export type UserUncheckedCreateWithoutGigsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -742,6 +1126,7 @@ export type UserUncheckedCreateWithoutGigsInput = {
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGigsInput = {
@@ -765,12 +1150,20 @@ export type UserUpdateWithoutGigsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -782,6 +1175,7 @@ export type UserUpdateWithoutGigsInput = {
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGigsInput = {
@@ -789,12 +1183,20 @@ export type UserUncheckedUpdateWithoutGigsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -806,6 +1208,7 @@ export type UserUncheckedUpdateWithoutGigsInput = {
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -813,12 +1216,20 @@ export type UserCreateWithoutOrdersInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -830,6 +1241,7 @@ export type UserCreateWithoutOrdersInput = {
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -837,12 +1249,20 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -854,6 +1274,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -877,12 +1298,20 @@ export type UserUpdateWithoutOrdersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -894,6 +1323,7 @@ export type UserUpdateWithoutOrdersInput = {
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -901,12 +1331,20 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -918,6 +1356,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewsInput = {
@@ -925,12 +1364,20 @@ export type UserCreateWithoutReviewsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -942,6 +1389,7 @@ export type UserCreateWithoutReviewsInput = {
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewsInput = {
@@ -949,12 +1397,20 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -966,6 +1422,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewsInput = {
@@ -989,12 +1446,20 @@ export type UserUpdateWithoutReviewsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1006,6 +1471,7 @@ export type UserUpdateWithoutReviewsInput = {
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -1013,12 +1479,20 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1030,6 +1504,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTasksInput = {
@@ -1037,12 +1512,20 @@ export type UserCreateWithoutTasksInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1054,6 +1537,7 @@ export type UserCreateWithoutTasksInput = {
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTasksInput = {
@@ -1061,12 +1545,20 @@ export type UserUncheckedCreateWithoutTasksInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1078,6 +1570,7 @@ export type UserUncheckedCreateWithoutTasksInput = {
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTasksInput = {
@@ -1101,12 +1594,20 @@ export type UserUpdateWithoutTasksInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1118,6 +1619,7 @@ export type UserUpdateWithoutTasksInput = {
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTasksInput = {
@@ -1125,12 +1627,20 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1142,6 +1652,7 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChatsInput = {
@@ -1149,12 +1660,20 @@ export type UserCreateWithoutChatsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1166,6 +1685,7 @@ export type UserCreateWithoutChatsInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChatsInput = {
@@ -1173,12 +1693,20 @@ export type UserUncheckedCreateWithoutChatsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1190,6 +1718,7 @@ export type UserUncheckedCreateWithoutChatsInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChatsInput = {
@@ -1213,12 +1742,20 @@ export type UserUpdateWithoutChatsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1230,6 +1767,7 @@ export type UserUpdateWithoutChatsInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatsInput = {
@@ -1237,12 +1775,20 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1254,6 +1800,7 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -1261,12 +1808,20 @@ export type UserCreateWithoutSentMessagesInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1278,6 +1833,7 @@ export type UserCreateWithoutSentMessagesInput = {
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -1285,12 +1841,20 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1302,6 +1866,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -1325,12 +1890,20 @@ export type UserUpdateWithoutSentMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1342,6 +1915,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -1349,12 +1923,20 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1366,6 +1948,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1373,12 +1956,20 @@ export type UserCreateWithoutSessionsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1390,6 +1981,7 @@ export type UserCreateWithoutSessionsInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1397,12 +1989,20 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1414,6 +2014,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1437,12 +2038,20 @@ export type UserUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1454,6 +2063,7 @@ export type UserUpdateWithoutSessionsInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1461,12 +2071,20 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1478,6 +2096,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1485,12 +2104,20 @@ export type UserCreateWithoutAccountsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1502,6 +2129,7 @@ export type UserCreateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1509,12 +2137,20 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   email: string
   emailVerified?: boolean
   name?: string | null
-  avatar?: string | null
-  role?: $Enums.Role
+  username?: string | null
   bio?: string | null
   phone?: string | null
   city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
   banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
   isOnline?: boolean
   lastSeen?: Date | string
   createdAt?: Date | string
@@ -1526,6 +2162,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1549,12 +2186,20 @@ export type UserUpdateWithoutAccountsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1566,6 +2211,7 @@ export type UserUpdateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1573,12 +2219,20 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1590,6 +2244,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1691,12 +2346,20 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   emailVerified?: boolean
   name?: boolean
-  avatar?: boolean
-  role?: boolean
+  username?: boolean
   bio?: boolean
   phone?: boolean
   city?: boolean
+  avatar?: boolean
+  avatarPublicId?: boolean
   banner?: boolean
+  bannerPublicId?: boolean
+  portfolioImages?: boolean
+  portfolioImagesPublicIds?: boolean
+  verificationStatus?: boolean
+  verificationRejectReason?: boolean
+  verifiedAt?: boolean
+  role?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
@@ -1709,6 +2372,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   chats?: boolean | Prisma.User$chatsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1717,12 +2381,20 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   emailVerified?: boolean
   name?: boolean
-  avatar?: boolean
-  role?: boolean
+  username?: boolean
   bio?: boolean
   phone?: boolean
   city?: boolean
+  avatar?: boolean
+  avatarPublicId?: boolean
   banner?: boolean
+  bannerPublicId?: boolean
+  portfolioImages?: boolean
+  portfolioImagesPublicIds?: boolean
+  verificationStatus?: boolean
+  verificationRejectReason?: boolean
+  verifiedAt?: boolean
+  role?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
@@ -1734,12 +2406,20 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   emailVerified?: boolean
   name?: boolean
-  avatar?: boolean
-  role?: boolean
+  username?: boolean
   bio?: boolean
   phone?: boolean
   city?: boolean
+  avatar?: boolean
+  avatarPublicId?: boolean
   banner?: boolean
+  bannerPublicId?: boolean
+  portfolioImages?: boolean
+  portfolioImagesPublicIds?: boolean
+  verificationStatus?: boolean
+  verificationRejectReason?: boolean
+  verifiedAt?: boolean
+  role?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
@@ -1751,19 +2431,27 @@ export type UserSelectScalar = {
   email?: boolean
   emailVerified?: boolean
   name?: boolean
-  avatar?: boolean
-  role?: boolean
+  username?: boolean
   bio?: boolean
   phone?: boolean
   city?: boolean
+  avatar?: boolean
+  avatarPublicId?: boolean
   banner?: boolean
+  bannerPublicId?: boolean
+  portfolioImages?: boolean
+  portfolioImagesPublicIds?: boolean
+  verificationStatus?: boolean
+  verificationRejectReason?: boolean
+  verifiedAt?: boolean
+  role?: boolean
   isOnline?: boolean
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "avatar" | "role" | "bio" | "phone" | "city" | "banner" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "username" | "bio" | "phone" | "city" | "avatar" | "avatarPublicId" | "banner" | "bannerPublicId" | "portfolioImages" | "portfolioImagesPublicIds" | "verificationStatus" | "verificationRejectReason" | "verifiedAt" | "role" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gigs?: boolean | Prisma.User$gigsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
@@ -1773,6 +2461,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   chats?: boolean | Prisma.User$chatsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1789,18 +2478,27 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     chats: Prisma.$ChatMemberPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
+    freelancerProfile: Prisma.$FreelancerProfilePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
     emailVerified: boolean
     name: string | null
-    avatar: string | null
-    role: $Enums.Role
+    username: string | null
     bio: string | null
     phone: string | null
     city: string | null
+    avatar: string | null
+    avatarPublicId: string | null
     banner: string | null
+    bannerPublicId: string | null
+    portfolioImages: string[]
+    portfolioImagesPublicIds: string[]
+    verificationStatus: $Enums.VerificationStatus
+    verificationRejectReason: string | null
+    verifiedAt: Date | null
+    role: $Enums.Role
     isOnline: boolean
     lastSeen: Date
     createdAt: Date
@@ -2207,6 +2905,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   chats<T extends Prisma.User$chatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  freelancerProfile<T extends Prisma.User$freelancerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$freelancerProfileArgs<ExtArgs>>): Prisma.Prisma__FreelancerProfileClient<runtime.Types.Result.GetResult<Prisma.$FreelancerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2240,12 +2939,20 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly name: Prisma.FieldRef<"User", 'String'>
-  readonly avatar: Prisma.FieldRef<"User", 'String'>
-  readonly role: Prisma.FieldRef<"User", 'Role'>
+  readonly username: Prisma.FieldRef<"User", 'String'>
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly city: Prisma.FieldRef<"User", 'String'>
+  readonly avatar: Prisma.FieldRef<"User", 'String'>
+  readonly avatarPublicId: Prisma.FieldRef<"User", 'String'>
   readonly banner: Prisma.FieldRef<"User", 'String'>
+  readonly bannerPublicId: Prisma.FieldRef<"User", 'String'>
+  readonly portfolioImages: Prisma.FieldRef<"User", 'String[]'>
+  readonly portfolioImagesPublicIds: Prisma.FieldRef<"User", 'String[]'>
+  readonly verificationStatus: Prisma.FieldRef<"User", 'VerificationStatus'>
+  readonly verificationRejectReason: Prisma.FieldRef<"User", 'String'>
+  readonly verifiedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly isOnline: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastSeen: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -2832,6 +3539,25 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * User.freelancerProfile
+ */
+export type User$freelancerProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FreelancerProfile
+   */
+  select?: Prisma.FreelancerProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FreelancerProfile
+   */
+  omit?: Prisma.FreelancerProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FreelancerProfileInclude<ExtArgs> | null
+  where?: Prisma.FreelancerProfileWhereInput
 }
 
 /**

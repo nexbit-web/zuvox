@@ -176,8 +176,6 @@
           </AvatarFallback>
         </Avatar>
       </div>
-
-       
     </div>
 
     <!-- Ім'я + мета -->

@@ -23,6 +23,11 @@ export * from './enums.ts';
  */
 export type User = Prisma.UserModel
 /**
+ * Model FreelancerProfile
+ * 
+ */
+export type FreelancerProfile = Prisma.FreelancerProfileModel
+/**
  * Model Gig
  * 
  */

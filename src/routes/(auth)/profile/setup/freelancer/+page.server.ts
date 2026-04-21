@@ -16,9 +16,35 @@ export const load: PageServerLoad = async ({ request }) => {
       city: true,
       bio: true,
       avatar: true,
-      banner: true,
+      portfolioImages: true,
+      portfolioImagesPublicIds: true,
+      verificationStatus: true,
+      freelancerProfile: {
+        select: {
+          categories: true,
+          skills: true,
+          experience: true,
+          languages: true,
+          hourlyRate: true,
+          portfolioUrl: true,
+        },
+      },
     },
   })
+
+  const portfolio = (user?.portfolioImages ?? []).map((url, i) => ({
+    url,
+    publicId: user?.portfolioImagesPublicIds?.[i] ?? '',
+  }))
+
+  // Мапінг enum з БД у UI-значення
+  const experienceReverse: Record<string, string> = {
+    LT_1: 'LT_1',
+    Y_1_2: '1_2',
+    Y_3_5: '3_5',
+    Y_5_10: '5_10',
+    Y_10_PLUS: '10_PLUS',
+  }
 
   return {
     prefill: {
@@ -27,7 +53,16 @@ export const load: PageServerLoad = async ({ request }) => {
       city: user?.city ?? '',
       bio: user?.bio ?? '',
       avatar: user?.avatar ?? '',
-      banner: user?.banner ?? '',
+      portfolio,
+      verificationStatus: user?.verificationStatus ?? 'NONE',
+      categories: user?.freelancerProfile?.categories ?? [],
+      skills: user?.freelancerProfile?.skills ?? [],
+      experience: user?.freelancerProfile?.experience
+        ? experienceReverse[user.freelancerProfile.experience] ?? ''
+        : '',
+      languages: user?.freelancerProfile?.languages ?? [],
+      hourlyRate: user?.freelancerProfile?.hourlyRate?.toString() ?? '',
+      portfolioUrl: user?.freelancerProfile?.portfolioUrl ?? '',
     },
   }
 }

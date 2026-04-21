@@ -20,27 +20,88 @@ datasource db {
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
-  emailVerified Boolean  @default(false)   
+  emailVerified Boolean  @default(false)
   name          String?
-  avatar        String?
-  role          Role     @default(CLIENT)
+  username      String?  @unique                         // ← НОВЕ: @alexkoval
   bio           String?
   phone         String?
   city          String?
-  banner        String? 
+ 
+  // ─── Медіа ───
+  avatar                    String?
+  avatarPublicId            String?                      // ← НОВЕ
+  banner                    String?                      // ← НОВЕ (фото-обкладинка)
+  bannerPublicId            String?                      // ← НОВЕ
+  portfolioImages           String[]  @default([])       // ← НОВЕ
+  portfolioImagesPublicIds  String[]  @default([])       // ← НОВЕ
+ 
+  // ─── Модерація ───
+  verificationStatus        VerificationStatus @default(NONE)  // ← НОВЕ
+  verificationRejectReason  String?                             // ← НОВЕ
+  verifiedAt                DateTime?                           // ← НОВЕ
+ 
+  // ─── Роль ───
+  role          Role     @default(CLIENT)
+ 
+  // ─── Присутність ───
   isOnline      Boolean  @default(false)
   lastSeen      DateTime @default(now())
+ 
+  // ─── Часові ───
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+ 
+  // ─── Зв'язки (без змін) ───
+  gigs            Gig[]
+  orders          Order[]       @relation("ClientOrders")
+  tasks           Task[]
+  reviews         Review[]      @relation("AuthorReviews")
+  sentMessages    Message[]     @relation("SentMessages")
+  chats           ChatMember[]
+  sessions        Session[]
+  accounts        Account[]
+ 
+  // ─── НОВЕ: профіль фрілансера (1-to-1) ───
+  freelancerProfile  FreelancerProfile?
+ 
+  @@index([username])
+  @@index([verificationStatus])
+}
 
-  gigs         Gig[]
-  orders       Order[]      @relation("ClientOrders")
-  tasks        Task[]
-  reviews      Review[]     @relation("AuthorReviews")
-  sentMessages Message[]    @relation("SentMessages")
-  chats        ChatMember[]
-  sessions     Session[]
-  accounts     Account[]
+model FreelancerProfile {
+  id              String          @id @default(cuid())
+  userId          String          @unique
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  // ─── Спеціалізація ───
+  categories      String[]        @default([])   // напр. ["Веб-розробка", "UI/UX Дизайн"]
+  skills          String[]        @default([])   // напр. ["React", "Figma"]
+ 
+  // ─── Досвід і мови ───
+  experience      ExperienceLevel?
+  languages       String[]        @default([])   // напр. ["Українська", "English"]
+ 
+  // ─── Ставка ───
+  hourlyRate      Int?                            // у гривнях
+ 
+  // ─── Зовнішні посилання ───
+  portfolioUrl    String?                         // https://alexkoval.dev
+ 
+  // ─── Денормалізовані показники (оновлюються тригерами/джобами) ───
+  avgRating       Float           @default(0)     // 4.9
+  reviewsCount    Int             @default(0)
+  totalOrders     Int             @default(0)
+  completedOrders Int             @default(0)     // для successRate
+  responseTimeHrs Int?                            // у годинах — ~2
+  repeatClientsPct Int            @default(0)     // 0-100
+  followers       Int             @default(0)
+ 
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+ 
+  @@index([userId])
+  @@index([avgRating])
+  @@index([hourlyRate])
 }
 
 // ═══════════════════════════════
@@ -312,4 +373,19 @@ enum ServiceType {
   OFFLINE       // офлайн
   VISIT         // виїзд до клієнта
   ANY           // будь-який
+}
+
+enum VerificationStatus {
+  NONE        // щойно зареєстровані клієнти
+  PENDING     // фрілансер завершив онбординг, чекає модерації
+  VERIFIED    // модерація пройдена — синя галочка
+  REJECTED    // модерація не пройдена — червоний бейдж
+}
+
+enum ExperienceLevel {
+  LT_1        // менше 1 року
+  Y_1_2       // 1–2 роки
+  Y_3_5       // 3–5 років
+  Y_5_10      // 5–10 років
+  Y_10_PLUS   // 10+ років
 }

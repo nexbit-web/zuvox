@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  FreelancerProfile: 'FreelancerProfile',
   Gig: 'Gig',
   GigPackage: 'GigPackage',
   Order: 'Order',
@@ -88,12 +89,20 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   name: 'name',
-  avatar: 'avatar',
-  role: 'role',
+  username: 'username',
   bio: 'bio',
   phone: 'phone',
   city: 'city',
+  avatar: 'avatar',
+  avatarPublicId: 'avatarPublicId',
   banner: 'banner',
+  bannerPublicId: 'bannerPublicId',
+  portfolioImages: 'portfolioImages',
+  portfolioImagesPublicIds: 'portfolioImagesPublicIds',
+  verificationStatus: 'verificationStatus',
+  verificationRejectReason: 'verificationRejectReason',
+  verifiedAt: 'verifiedAt',
+  role: 'role',
   isOnline: 'isOnline',
   lastSeen: 'lastSeen',
   createdAt: 'createdAt',
@@ -101,6 +110,29 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const FreelancerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  categories: 'categories',
+  skills: 'skills',
+  experience: 'experience',
+  languages: 'languages',
+  hourlyRate: 'hourlyRate',
+  portfolioUrl: 'portfolioUrl',
+  avgRating: 'avgRating',
+  reviewsCount: 'reviewsCount',
+  totalOrders: 'totalOrders',
+  completedOrders: 'completedOrders',
+  responseTimeHrs: 'responseTimeHrs',
+  repeatClientsPct: 'repeatClientsPct',
+  followers: 'followers',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FreelancerProfileScalarFieldEnum = (typeof FreelancerProfileScalarFieldEnum)[keyof typeof FreelancerProfileScalarFieldEnum]
 
 
 export const GigScalarFieldEnum = {

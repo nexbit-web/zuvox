@@ -10,7 +10,19 @@
   import { categories } from '$lib/data/categories'
   import ProfilePreviewCard from '$lib/components/profile-preview-card.svelte'
   import AvatarUploader from '$lib/components/avatar-uploader.svelte'
-  import { ArrowLeft, ArrowRight, Check, X, Plus } from 'lucide-svelte'
+  import PortfolioUploader from '$lib/components/portfolio-uploader.svelte'
+  import {
+    ArrowLeft,
+    ArrowRight,
+    Check,
+    X,
+    Plus,
+  } from 'lucide-svelte'
+
+  interface PortfolioItem {
+    url: string
+    publicId: string
+  }
 
   let { data } = $props<{
     data: {
@@ -20,45 +32,47 @@
         city: string
         bio: string
         avatar: string
-        banner: string
+        portfolio: PortfolioItem[]
+        verificationStatus: 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
+        categories: string[]
+        skills: string[]
+        experience: string
+        languages: string[]
+        hourlyRate: string
+        portfolioUrl: string
       }
     }
   }>()
 
-  // ─── state
+  // ─── state (ініціалізуємо з prefill, щоб після "Назад" на дашборд і знову сюди — дані збереглись)
   let step = $state(1)
   const totalSteps = 3
 
   let avatar = $state(data.prefill.avatar)
   let phone = $state(data.prefill.phone)
   let city = $state(data.prefill.city)
-  let experience = $state('')
+  let experience = $state(data.prefill.experience)
 
-  let selectedCategories = $state<string[]>([])
-  let selectedSkills = $state<string[]>([])
-  let hourlyRate = $state('')
+  let selectedCategories = $state<string[]>([...data.prefill.categories])
+  let selectedSkills = $state<string[]>([...data.prefill.skills])
+  let selectedLanguages = $state<string[]>(
+    data.prefill.languages.length ? [...data.prefill.languages] : ['Українська'],
+  )
+  let hourlyRate = $state(data.prefill.hourlyRate)
 
   let bio = $state(data.prefill.bio)
-  let portfolioUrl = $state('')
+  let portfolioUrl = $state(data.prefill.portfolioUrl)
+  let portfolio = $state<PortfolioItem[]>(data.prefill.portfolio)
 
   let loading = $state(false)
   let error = $state('')
 
   const cities = [
-    'Київ',
-    'Харків',
-    'Одеса',
-    'Дніпро',
-    'Запоріжжя',
-    'Львів',
-    'Кривий Ріг',
-    'Миколаїв',
-    'Вінниця',
-    'Полтава',
-    'Черкаси',
-    'Житомир',
-    'Суми',
-    'Інше',
+    'Київ', 'Харків', 'Одеса', 'Дніпро', 'Запоріжжя', 'Львів',
+    'Кривий Ріг', 'Миколаїв', 'Вінниця', 'Полтава', 'Черкаси',
+    'Житомир', 'Суми', 'Хмельницький', 'Чернівці', 'Рівне',
+    'Кропивницький', 'Івано-Франківськ', 'Тернопіль', 'Луцьк',
+    'Ужгород', 'Інше',
   ]
 
   const experienceOptions = [
@@ -67,6 +81,16 @@
     { value: '3_5', label: 'Досвідчений', hint: '3–5 років' },
     { value: '5_10', label: 'Експерт', hint: '5–10 років' },
     { value: '10_PLUS', label: 'Майстер', hint: '10+ років' },
+  ]
+
+  const languageOptions = [
+    'Українська',
+    'English',
+    'Polski',
+    'Русский',
+    'Deutsch',
+    'Français',
+    'Español',
   ]
 
   // ─── derived
@@ -81,6 +105,7 @@
   const step2Valid = $derived(
     selectedCategories.length > 0 &&
       selectedSkills.length > 0 &&
+      selectedLanguages.length > 0 &&
       !!hourlyRate &&
       Number(hourlyRate) > 0,
   )
@@ -89,23 +114,13 @@
     step === 1 ? step1Valid : step === 2 ? step2Valid : step3Valid,
   )
 
-  const previewExperience = $derived(
-    experienceOptions.find((e) => e.value === experience)?.hint ?? '',
-  )
-  const previewCategories = $derived(
-    selectedCategories.map((name) => ({ name })),
-  )
   const previewRate = $derived(
     hourlyRate && Number(hourlyRate) > 0 ? Number(hourlyRate) : null,
   )
-  const username = $derived(
-    data.prefill.name
-      ? data.prefill.name.toLowerCase().replace(/\s+/g, '').slice(0, 20)
-      : '',
+  const previewExpHint = $derived(
+    experienceOptions.find((e) => e.value === experience)?.hint ?? '',
   )
-  const firstInitial = $derived(
-    data.prefill.name?.charAt(0).toUpperCase() || '?',
-  )
+  const previewCategories = $derived(selectedCategories.slice(0, 3))
 
   // ─── actions
   function toggleCategory(name: string) {
@@ -127,6 +142,14 @@
     } else {
       if (selectedSkills.length >= 10) return
       selectedSkills = [...selectedSkills, s]
+    }
+  }
+
+  function toggleLanguage(l: string) {
+    if (selectedLanguages.includes(l)) {
+      selectedLanguages = selectedLanguages.filter((x) => x !== l)
+    } else {
+      selectedLanguages = [...selectedLanguages, l]
     }
   }
 
@@ -158,7 +181,9 @@
           experience,
           categories: selectedCategories,
           skills: selectedSkills,
+          languages: selectedLanguages,
           hourlyRate: Number(hourlyRate),
+          submitForReview: true, // ← надсилає профіль на модерацію
         }),
       })
       if (!res.ok) {
@@ -166,7 +191,7 @@
         return
       }
       await invalidateAll()
-      goto('/dashboard')
+      goto('/profile')
     } catch {
       error = 'Немає з’єднання з сервером'
     } finally {
@@ -175,6 +200,9 @@
   }
 
   const selectedCityLabel = $derived(city || 'Оберіть місто')
+  const firstInitial = $derived(
+    data.prefill.name?.charAt(0).toUpperCase() || '?',
+  )
 </script>
 
 <div
@@ -212,7 +240,7 @@
     </div>
 
     <div
-      class="grid lg:grid-cols-[minmax(0,1fr)_400px] gap-12 lg:gap-16 items-start"
+      class="grid lg:grid-cols-[minmax(0,1fr)_340px] gap-12 lg:gap-16 items-start"
     >
       <!-- ═══════ FORM COLUMN ═══════ -->
       <div>
@@ -234,11 +262,11 @@
                   Розкажіть про себе
                 </h1>
                 <p class="text-base" style="color: var(--muted-foreground)">
-                  Фото, контакти та досвід — щоб клієнти могли вас знайти.
+                  Фото профілю, контакти та досвід роботи.
                 </p>
               </header>
 
-              <!-- ───── AVATAR UPLOAD ───── -->
+              <!-- ───── AVATAR BLOCK ───── -->
               <div
                 class="flex items-center gap-5 mb-10 p-5 rounded-2xl border"
                 style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
@@ -246,6 +274,7 @@
                 <AvatarUploader
                   bind:value={avatar}
                   fallback={firstInitial}
+                  variant="circle"
                   size="lg"
                 />
                 <div class="flex-1 min-w-0">
@@ -259,7 +288,8 @@
                     class="text-xs mt-1 leading-relaxed"
                     style="color: var(--muted-foreground)"
                   >
-                    Натисніть на коло щоб завантажити. JPG або PNG, до 5 МБ.
+                    Клікніть на коло щоб завантажити.
+                    Якщо замінити — попереднє видалиться автоматично.
                   </p>
                 </div>
               </div>
@@ -276,7 +306,7 @@
                   />
                   {#if data.prefill.phone}
                     <Field.Description>
-                      Заповнено автоматично з реєстрації. Можна змінити.
+                      Заповнено автоматично з реєстрації.
                     </Field.Description>
                   {/if}
                 </Field.Field>
@@ -287,7 +317,7 @@
                     <Select.Trigger class="h-11 w-full">
                       {selectedCityLabel}
                     </Select.Trigger>
-                    <Select.Content>
+                    <Select.Content class="max-h-72 overflow-y-auto">
                       {#each cities as c}
                         <Select.Item value={c}>{c}</Select.Item>
                       {/each}
@@ -341,7 +371,7 @@
                 </Field.Field>
               </Field.Group>
 
-              <!-- ───── STEP 2 ───── -->
+            <!-- ───── STEP 2 ───── -->
             {:else if step === 2}
               <header class="mb-10">
                 <p
@@ -357,8 +387,7 @@
                   Ваша спеціалізація
                 </h1>
                 <p class="text-base" style="color: var(--muted-foreground)">
-                  Оберіть категорії та навички. Перша категорія задає вигляд
-                  банера вашого профілю.
+                  Категорії, навички, мови та ставка.
                 </p>
               </header>
 
@@ -380,7 +409,7 @@
                         !active && selectedCategories.length >= 3}
                       <button
                         type="button"
-                        {disabled}
+                        disabled={disabled}
                         onclick={() => toggleCategory(cat.name)}
                         class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-medium transition-all"
                         class:cursor-pointer={!disabled}
@@ -404,6 +433,9 @@
                       </button>
                     {/each}
                   </div>
+                  <Field.Description>
+                    Усі обрані категорії будуть показані в картці профілю.
+                  </Field.Description>
                 </Field.Field>
 
                 {#if availableSkills.length > 0}
@@ -424,7 +456,7 @@
                           !active && selectedSkills.length >= 10}
                         <button
                           type="button"
-                          {disabled}
+                          disabled={disabled}
                           onclick={() => toggleSkill(skill)}
                           class="text-xs px-3 py-1.5 rounded-full border transition-all"
                           class:cursor-pointer={!disabled}
@@ -445,6 +477,32 @@
                     </div>
                   </Field.Field>
                 {/if}
+
+                <!-- ─── Мови ─── -->
+                <Field.Field>
+                  <Field.Label>Мови спілкування</Field.Label>
+                  <div class="flex flex-wrap gap-1.5">
+                    {#each languageOptions as lang}
+                      {@const active = selectedLanguages.includes(lang)}
+                      <button
+                        type="button"
+                        onclick={() => toggleLanguage(lang)}
+                        class="text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer"
+                        style="background-color: {active
+                          ? 'var(--foreground)'
+                          : 'transparent'};
+                               border-color: {active
+                          ? 'var(--foreground)'
+                          : 'color-mix(in oklch, var(--foreground) 14%, transparent)'};
+                               color: {active
+                          ? 'var(--background)'
+                          : 'var(--muted-foreground)'}"
+                      >
+                        {lang}
+                      </button>
+                    {/each}
+                  </div>
+                </Field.Field>
 
                 <Field.Field>
                   <Field.Label for="rate">
@@ -467,12 +525,12 @@
                     </span>
                   </div>
                   <Field.Description>
-                    Типова ставка у вашій категорії — 300–800 грн/год.
+                    Типова ставка — 300–800 грн/год.
                   </Field.Description>
                 </Field.Field>
               </Field.Group>
 
-              <!-- ───── STEP 3 ───── -->
+            <!-- ───── STEP 3 ───── -->
             {:else}
               <header class="mb-10">
                 <p
@@ -488,11 +546,11 @@
                   Ваша візитка
                 </h1>
                 <p class="text-base" style="color: var(--muted-foreground)">
-                  Хороший опис збільшує конверсію у замовлення до трьох разів.
+                  Опис, приклади робіт і посилання на портфоліо.
                 </p>
               </header>
 
-              <Field.Group class="gap-7">
+              <Field.Group class="gap-8">
                 <Field.Field>
                   <div class="flex items-center justify-between mb-2">
                     <Field.Label for="bio">Про себе</Field.Label>
@@ -510,28 +568,56 @@
                     bind:value={bio}
                     maxlength={500}
                     rows={6}
-                    placeholder="Наприклад: Full-stack розробник з 5 роками досвіду. Спеціалізуюсь на SvelteKit та Node.js. Роблю швидко, якісно і завжди в термін."
+                    placeholder="Наприклад: Full-stack розробник з 5 роками досвіду. Спеціалізуюсь на SvelteKit та Node.js."
                     class="resize-none"
                   />
                   <Field.Description>
-                    Мінімум 40 символів. Розкажіть про досвід, підхід і сильні
-                    сторони.
+                    Мінімум 40 символів. В картці показуються перші 2 рядки.
                   </Field.Description>
                 </Field.Field>
 
                 <Field.Field>
-                  <Field.Label for="portfolio">Портфоліо або сайт</Field.Label>
+                  <Field.Label>Приклади робіт</Field.Label>
+                  <PortfolioUploader bind:items={portfolio} maxItems={5} />
+                  <Field.Description>
+                    До 5 фото. JPG, PNG, WebP, до 10 МБ кожне.
+                  </Field.Description>
+                </Field.Field>
+
+                <Field.Field>
+                  <Field.Label for="portfolio-url">
+                    Портфоліо або сайт
+                  </Field.Label>
                   <Input
-                    id="portfolio"
+                    id="portfolio-url"
                     type="url"
                     placeholder="https://yoursite.com"
                     bind:value={portfolioUrl}
                     class="h-11"
                   />
                   <Field.Description>
-                    Необов’язково. Посилання на роботи підвищує довіру.
+                    Необов’язково. Посилання на зовнішнє портфоліо.
                   </Field.Description>
                 </Field.Field>
+
+                <!-- Інфо про модерацію -->
+                <div
+                  class="p-4 rounded-xl text-sm leading-relaxed"
+                  style="background-color: color-mix(in oklch, var(--primary) 6%, transparent);
+                         border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent)"
+                >
+                  <p
+                    class="font-medium mb-1"
+                    style="color: var(--foreground)"
+                  >
+                    Після завершення — перевірка модератором
+                  </p>
+                  <p style="color: var(--muted-foreground)">
+                    Ваш профіль отримає статус «На модерації». Зазвичай
+                    перевірка займає до 24 годин. Після схвалення у картці
+                    з’явиться синя галочка верифікації.
+                  </p>
+                </div>
               </Field.Group>
             {/if}
 
@@ -565,12 +651,12 @@
           <Button
             onclick={next}
             disabled={!canNext || loading}
-            class="gap-2 h-11 min-w-36 rounded-full px-6"
+            class="gap-2 h-11 min-w-40 rounded-full px-6"
           >
             {#if loading}
               Зберігаємо…
             {:else if step === totalSteps}
-              Завершити
+              Надіслати на перевірку
               <Check class="size-4" />
             {:else}
               Далі
@@ -586,19 +672,18 @@
           class="text-xs uppercase tracking-[0.14em] font-medium mb-4"
           style="color: var(--muted-foreground)"
         >
-          Прев’ю профілю
+          Прев’ю картки
         </p>
 
         <ProfilePreviewCard
           name={data.prefill.name}
-          {username}
           {bio}
-          avatarUrl={avatar}
-          city={city || undefined}
-          experience={previewExperience}
-          hourlyRate={previewRate}
+          photoUrl={avatar}
           categories={previewCategories}
-          verified
+          city={city || undefined}
+          experience={previewExpHint}
+          hourlyRate={previewRate}
+          verificationStatus="PENDING"
           preview
         />
 
@@ -606,8 +691,8 @@
           class="text-xs mt-4 leading-relaxed"
           style="color: var(--muted-foreground)"
         >
-          Так ваш профіль бачитимуть клієнти в пошуку та на сторінці послуг.
-          Банер підбирається автоматично за першою категорією.
+          Так ваша картка з’явиться у пошуку та рекомендаціях після
+          проходження модерації.
         </p>
       </aside>
     </div>

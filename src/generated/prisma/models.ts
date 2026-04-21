@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.ts'
+export type * from './models/FreelancerProfile.ts'
 export type * from './models/Gig.ts'
 export type * from './models/GigPackage.ts'
 export type * from './models/Order.ts'
