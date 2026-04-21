@@ -4,10 +4,10 @@
  * Мапа: назва категорії → шлях до банера в /static/banners/
  *
  * Покладіть картинки у папку static/banners/ з цими іменами.
- * Рекомендований розмір: 1200×400, формат .jpg або .webp.
+ * Рекомендований розмір: 1600×400 (4:1), формат .webp або .jpg, до 200 КБ.
  */
 export const categoryBanners: Record<string, string> = {
-  'Веб-розробка': '/banners/web-development.jpg',
+  'Веб-розробка': '/banners/web-development.gif',
   'UI/UX Дизайн': '/banners/ui-ux-design.jpg',
   'Мобільні застосунки': '/banners/mobile-apps.jpg',
   'SEO та маркетинг': '/banners/seo-marketing.jpg',
@@ -19,18 +19,11 @@ export const categoryBanners: Record<string, string> = {
   'Аудіо та музика': '/banners/audio-music.jpg',
 }
 
-/** Дефолтний банер якщо немає відповідності */
 export const defaultBanner = '/banners/default.jpg'
 
-/**
- * Повертає URL банера для заданого списку категорій.
- * Використовується перша категорія зі списку.
- * Якщо категорій немає або файл відсутній — повертає null.
- */
 export function getBannerForCategories(
-  categories: string[] | undefined,
-): string | null {
-  if (!categories?.length) return null
-  const first = categories[0]
-  return categoryBanners[first] ?? null
+  categories: string[] | undefined | null,
+): string {
+  if (!categories?.length) return defaultBanner
+  return categoryBanners[categories[0]] ?? defaultBanner
 }

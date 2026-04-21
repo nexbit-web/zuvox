@@ -11,6 +11,7 @@
   import ProfilePreviewCard from '$lib/components/profile-preview-card.svelte'
   import AvatarUploader from '$lib/components/avatar-uploader.svelte'
   import PortfolioUploader from '$lib/components/portfolio-uploader.svelte'
+  import UsernameInput from '$lib/components/username-input.svelte'
   import {
     ArrowLeft,
     ArrowRight,
@@ -28,6 +29,7 @@
     data: {
       prefill: {
         name: string
+        username: string
         phone: string
         city: string
         bio: string
@@ -49,6 +51,10 @@
   const totalSteps = 3
 
   let avatar = $state(data.prefill.avatar)
+  let username = $state(data.prefill.username)
+  /** Валідний та доступний username — встановлюється з UsernameInput.onvalidchange.
+   *  Якщо prefill має username — вважаємо його валідним (свій). */
+  let usernameValid = $state(!!data.prefill.username)
   let phone = $state(data.prefill.phone)
   let city = $state(data.prefill.city)
   let experience = $state(data.prefill.experience)
@@ -101,7 +107,9 @@
       .filter((v, i, a) => a.indexOf(v) === i),
   )
 
-  const step1Valid = $derived(!!phone.trim() && !!city && !!experience)
+  const step1Valid = $derived(
+    !!phone.trim() && !!city && !!experience && usernameValid,
+  )
   const step2Valid = $derived(
     selectedCategories.length > 0 &&
       selectedSkills.length > 0 &&
@@ -174,6 +182,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           role: 'FREELANCER',
+          username,
           phone,
           city,
           bio,
@@ -265,6 +274,31 @@
                   Фото профілю, контакти та досвід роботи.
                 </p>
               </header>
+
+              <!-- ───── USERNAME ───── -->
+              <div
+                class="mb-6 p-5 rounded-2xl border"
+                style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
+              >
+                <div class="mb-3">
+                  <p
+                    class="text-sm font-medium"
+                    style="color: var(--foreground)"
+                  >
+                    Нікнейм на платформі
+                  </p>
+                  <p
+                    class="text-xs mt-0.5"
+                    style="color: var(--muted-foreground)"
+                  >
+                    Унікальне імʼя. Використовується у посиланні: /@nickname
+                  </p>
+                </div>
+                <UsernameInput
+                  bind:value={username}
+                  onvalidchange={(v) => (usernameValid = v !== null)}
+                />
+              </div>
 
               <!-- ───── AVATAR BLOCK ───── -->
               <div

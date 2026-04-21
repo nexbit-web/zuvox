@@ -140,3 +140,8 @@
     pointer-events: none;
   }
 }
+
+html #nprogress .bar {
+  background: var(--primary) !important;
+  height: 3px !important;
+}

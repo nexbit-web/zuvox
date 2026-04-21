@@ -22,36 +22,32 @@ model User {
   email         String   @unique
   emailVerified Boolean  @default(false)
   name          String?
-  username      String?  @unique                         // ← НОВЕ: @alexkoval
+  username      String?  @unique                    
+ 
   bio           String?
   phone         String?
   city          String?
  
-  // ─── Медіа ───
+  // Медіа
   avatar                    String?
-  avatarPublicId            String?                      // ← НОВЕ
-  banner                    String?                      // ← НОВЕ (фото-обкладинка)
-  bannerPublicId            String?                      // ← НОВЕ
-  portfolioImages           String[]  @default([])       // ← НОВЕ
-  portfolioImagesPublicIds  String[]  @default([])       // ← НОВЕ
+  avatarPublicId            String?
+  banner                    String?
+  bannerPublicId            String?
+  portfolioImages           String[] @default([])
+  portfolioImagesPublicIds  String[] @default([])
  
-  // ─── Модерація ───
-  verificationStatus        VerificationStatus @default(NONE)  // ← НОВЕ
-  verificationRejectReason  String?                             // ← НОВЕ
-  verifiedAt                DateTime?                           // ← НОВЕ
+  // Модерація
+  verificationStatus        VerificationStatus @default(NONE)
+  verificationRejectReason  String?
+  verifiedAt                DateTime?
  
-  // ─── Роль ───
   role          Role     @default(CLIENT)
- 
-  // ─── Присутність ───
   isOnline      Boolean  @default(false)
   lastSeen      DateTime @default(now())
  
-  // ─── Часові ───
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
  
-  // ─── Зв'язки (без змін) ───
   gigs            Gig[]
   orders          Order[]       @relation("ClientOrders")
   tasks           Task[]
@@ -61,7 +57,6 @@ model User {
   sessions        Session[]
   accounts        Account[]
  
-  // ─── НОВЕ: профіль фрілансера (1-to-1) ───
   freelancerProfile  FreelancerProfile?
  
   @@index([username])
@@ -73,31 +68,26 @@ model FreelancerProfile {
   userId          String          @unique
   user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
  
-  // ─── Спеціалізація ───
-  categories      String[]        @default([])   // напр. ["Веб-розробка", "UI/UX Дизайн"]
-  skills          String[]        @default([])   // напр. ["React", "Figma"]
+  categories      String[]        @default([])
+  skills          String[]        @default([])
  
-  // ─── Досвід і мови ───
   experience      ExperienceLevel?
-  languages       String[]        @default([])   // напр. ["Українська", "English"]
+  languages       String[]        @default([])
  
-  // ─── Ставка ───
-  hourlyRate      Int?                            // у гривнях
+  hourlyRate      Int?
+  portfolioUrl    String?
  
-  // ─── Зовнішні посилання ───
-  portfolioUrl    String?                         // https://alexkoval.dev
+  // Денормалізовані (оновлюються джобами/тригерами)
+  avgRating        Float   @default(0)
+  reviewsCount     Int     @default(0)
+  totalOrders      Int     @default(0)
+  completedOrders  Int     @default(0)
+  responseTimeHrs  Int?
+  repeatClientsPct Int     @default(0)
+  followers        Int     @default(0)
  
-  // ─── Денормалізовані показники (оновлюються тригерами/джобами) ───
-  avgRating       Float           @default(0)     // 4.9
-  reviewsCount    Int             @default(0)
-  totalOrders     Int             @default(0)
-  completedOrders Int             @default(0)     // для successRate
-  responseTimeHrs Int?                            // у годинах — ~2
-  repeatClientsPct Int            @default(0)     // 0-100
-  followers       Int             @default(0)
- 
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
  
   @@index([userId])
   @@index([avgRating])
@@ -381,6 +371,7 @@ enum VerificationStatus {
   VERIFIED    // модерація пройдена — синя галочка
   REJECTED    // модерація не пройдена — червоний бейдж
 }
+
 
 enum ExperienceLevel {
   LT_1        // менше 1 року
