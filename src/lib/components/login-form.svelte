@@ -13,6 +13,7 @@
   import type { HTMLAttributes } from 'svelte/elements'
   import { signIn } from '$lib/auth-client'
   import { goto, invalidateAll } from '$app/navigation'
+  import { Spinner } from './ui/spinner'
 
   let { class: className, ...restProps }: HTMLAttributes<HTMLDivElement> =
     $props()
@@ -128,8 +129,13 @@
           {/if}
 
           <Field>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Вхід...' : 'Логін'}
+            <Button class="flex" type="submit" disabled={loading}>
+              {#if loading}
+                <Spinner />
+                Зберігаємо…
+              {:else}
+                Логін
+              {/if}
             </Button>
             <FieldDescription class="text-center">
               Немає облікового запису? <a href="/user/register"

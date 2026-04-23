@@ -1,3 +1,4 @@
+<!-- src/lib/components/header/mobile-nav.svelte -->
 <script lang="ts">
   import { Home, LayoutGrid, Bell, User, MessageCircle } from 'lucide-svelte'
   import { page } from '$app/stores'
@@ -33,14 +34,15 @@
       label: 'Чат',
       href: '/messages',
       action: () => onnavigate('/messages'),
+      badge: 3,
     },
     {
       id: 'notifications',
       icon: Bell,
       label: 'Сповіщення',
       href: '/notifications',
-      badge: true,
       action: () => onnavigate('/notifications'),
+      badge: hasNotifications ? 5 : 0,
     },
     {
       id: 'profile',
@@ -51,7 +53,6 @@
     },
   ]
 
-  // Визначаємо активний пункт з URL
   function isActive(item: (typeof items)[0]): boolean {
     if (item.id === 'catalog') return false
     if (item.href === '/') return $page.url.pathname === '/'
@@ -60,43 +61,52 @@
 </script>
 
 <nav
-  class="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/5 flex items-center"
-  style="background-color: var(--bg-header); padding-bottom: env(safe-area-inset-bottom, 0px)"
+  class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center"
+  style="background-color: #000;
+         border-top: 1px solid rgba(255,255,255,0.08);
+         padding-bottom: env(safe-area-inset-bottom, 0px);"
 >
   {#each items as item}
+    {@const active = isActive(item)}
     <button
       type="button"
       onclick={item.action}
-      class="flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors cursor-pointer relative"
+      class="flex-1 flex flex-col items-center justify-center gap-1 py-3 cursor-pointer relative transition-opacity"
+      class:opacity-100={active}
+      style="opacity: {active ? 1 : 0.6}"
     >
-      {#if isActive(item)}
-        <span
-          class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
-        ></span>
-      {/if}
-
       <div class="relative">
         <item.icon
-          class="w-5 h-5 transition-colors
-            {isActive(item) ? 'text-primary' : 'text-foreground/50'}"
+          class="size-[22px]"
+          strokeWidth={1.75}
+          color="white"
         />
-        {#if item.badge && hasNotifications}
+        {#if item.badge && item.badge > 0}
           <span
-            class="absolute -top-1 -right-1.5 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] font-bold rounded-full flex items-center justify-center border border-[var(--bg-header)]"
+            class="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full flex items-center justify-center px-1 pointer-events-none"
+            style="background-color: black; color: white; border: 1.5px solid white;"
           >
-            5
+            {item.badge > 99 ? '99+' : item.badge}
           </span>
         {/if}
       </div>
 
       <span
-        class="text-[10px] font-medium leading-none transition-colors
-          {isActive(item) ? 'text-primary' : 'text-foreground/50'}"
+        class="text-[10px] font-medium leading-none"
+        style="color: white"
       >
         {item.label}
       </span>
+
+      {#if active}
+        <span
+          class="absolute bottom-1.5 size-1 rounded-full"
+          style="background-color: white"
+        ></span>
+      {/if}
     </button>
   {/each}
 </nav>
 
-<div class="md:hidden h-8"></div>
+<!-- Spacer щоб контент не ховався за fixed-меню (бот 68px + safe-area) -->
+ 

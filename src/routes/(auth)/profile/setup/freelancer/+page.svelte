@@ -12,13 +12,8 @@
   import AvatarUploader from '$lib/components/avatar-uploader.svelte'
   import PortfolioUploader from '$lib/components/portfolio-uploader.svelte'
   import UsernameInput from '$lib/components/username-input.svelte'
-  import {
-    ArrowLeft,
-    ArrowRight,
-    Check,
-    X,
-    Plus,
-  } from 'lucide-svelte'
+  import { ArrowLeft, ArrowRight, Check, X, Plus } from 'lucide-svelte'
+  import { Spinner } from '$lib/components/ui/spinner/index.js'
 
   interface PortfolioItem {
     url: string
@@ -62,7 +57,9 @@
   let selectedCategories = $state<string[]>([...data.prefill.categories])
   let selectedSkills = $state<string[]>([...data.prefill.skills])
   let selectedLanguages = $state<string[]>(
-    data.prefill.languages.length ? [...data.prefill.languages] : ['Українська'],
+    data.prefill.languages.length
+      ? [...data.prefill.languages]
+      : ['Українська'],
   )
   let hourlyRate = $state(data.prefill.hourlyRate)
 
@@ -74,11 +71,28 @@
   let error = $state('')
 
   const cities = [
-    'Київ', 'Харків', 'Одеса', 'Дніпро', 'Запоріжжя', 'Львів',
-    'Кривий Ріг', 'Миколаїв', 'Вінниця', 'Полтава', 'Черкаси',
-    'Житомир', 'Суми', 'Хмельницький', 'Чернівці', 'Рівне',
-    'Кропивницький', 'Івано-Франківськ', 'Тернопіль', 'Луцьк',
-    'Ужгород', 'Інше',
+    'Київ',
+    'Харків',
+    'Одеса',
+    'Дніпро',
+    'Запоріжжя',
+    'Львів',
+    'Кривий Ріг',
+    'Миколаїв',
+    'Вінниця',
+    'Полтава',
+    'Черкаси',
+    'Житомир',
+    'Суми',
+    'Хмельницький',
+    'Чернівці',
+    'Рівне',
+    'Кропивницький',
+    'Івано-Франківськ',
+    'Тернопіль',
+    'Луцьк',
+    'Ужгород',
+    'Інше',
   ]
 
   const experienceOptions = [
@@ -223,7 +237,7 @@
     <div class="flex items-center justify-between mb-10">
       <button
         type="button"
-        onclick={() => goto('/dashboard')}
+        onclick={() => goto('/profile')}
         class="inline-flex items-center gap-2 text-sm cursor-pointer transition-opacity hover:opacity-60"
         style="color: var(--muted-foreground)"
       >
@@ -240,7 +254,7 @@
     <div class="flex gap-1.5 mb-14 max-w-md mx-auto">
       {#each Array(totalSteps) as _, i}
         <div
-          class="h-[3px] flex-1 rounded-full transition-all duration-500"
+          class="h-[3px] flex-1 rounded-xl transition-all duration-500"
           style="background-color: {i < step
             ? 'var(--primary)'
             : 'color-mix(in oklch, var(--foreground) 8%, transparent)'}"
@@ -277,7 +291,7 @@
 
               <!-- ───── USERNAME ───── -->
               <div
-                class="mb-6 p-5 rounded-2xl border"
+                class="mb-6 p-5 rounded-xl border"
                 style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
               >
                 <div class="mb-3">
@@ -302,7 +316,7 @@
 
               <!-- ───── AVATAR BLOCK ───── -->
               <div
-                class="flex items-center gap-5 mb-10 p-5 rounded-2xl border"
+                class="flex items-center gap-5 mb-10 p-5 rounded-xl border"
                 style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
               >
                 <AvatarUploader
@@ -322,8 +336,8 @@
                     class="text-xs mt-1 leading-relaxed"
                     style="color: var(--muted-foreground)"
                   >
-                    Клікніть на коло щоб завантажити.
-                    Якщо замінити — попереднє видалиться автоматично.
+                    Клікніть на коло щоб завантажити. Якщо замінити — попереднє
+                    видалиться автоматично.
                   </p>
                 </div>
               </div>
@@ -405,7 +419,7 @@
                 </Field.Field>
               </Field.Group>
 
-            <!-- ───── STEP 2 ───── -->
+              <!-- ───── STEP 2 ───── -->
             {:else if step === 2}
               <header class="mb-10">
                 <p
@@ -443,9 +457,9 @@
                         !active && selectedCategories.length >= 3}
                       <button
                         type="button"
-                        disabled={disabled}
+                        {disabled}
                         onclick={() => toggleCategory(cat.name)}
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-medium transition-all"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all"
                         class:cursor-pointer={!disabled}
                         class:opacity-40={disabled}
                         style="background-color: {active
@@ -490,9 +504,9 @@
                           !active && selectedSkills.length >= 10}
                         <button
                           type="button"
-                          disabled={disabled}
+                          {disabled}
                           onclick={() => toggleSkill(skill)}
-                          class="text-xs px-3 py-1.5 rounded-full border transition-all"
+                          class="text-xs px-3 py-1.5 rounded-xl border transition-all"
                           class:cursor-pointer={!disabled}
                           class:opacity-40={disabled}
                           style="background-color: {active
@@ -521,7 +535,7 @@
                       <button
                         type="button"
                         onclick={() => toggleLanguage(lang)}
-                        class="text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer"
+                        class="text-xs px-3 py-1.5 rounded-xl border transition-all cursor-pointer"
                         style="background-color: {active
                           ? 'var(--foreground)'
                           : 'transparent'};
@@ -564,7 +578,7 @@
                 </Field.Field>
               </Field.Group>
 
-            <!-- ───── STEP 3 ───── -->
+              <!-- ───── STEP 3 ───── -->
             {:else}
               <header class="mb-10">
                 <p
@@ -640,10 +654,7 @@
                   style="background-color: color-mix(in oklch, var(--primary) 6%, transparent);
                          border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent)"
                 >
-                  <p
-                    class="font-medium mb-1"
-                    style="color: var(--foreground)"
-                  >
+                  <p class="font-medium mb-1" style="color: var(--foreground)">
                     Після завершення — перевірка модератором
                   </p>
                   <p style="color: var(--muted-foreground)">
@@ -685,9 +696,10 @@
           <Button
             onclick={next}
             disabled={!canNext || loading}
-            class="gap-2 h-11 min-w-40 rounded-full px-6"
+            class="gap-2 h-11 min-w-40 rounded-xl px-6"
           >
             {#if loading}
+              <Spinner />
               Зберігаємо…
             {:else if step === totalSteps}
               Надіслати на перевірку
@@ -725,8 +737,8 @@
           class="text-xs mt-4 leading-relaxed"
           style="color: var(--muted-foreground)"
         >
-          Так ваша картка з’явиться у пошуку та рекомендаціях після
-          проходження модерації.
+          Так ваша картка з’явиться у пошуку та рекомендаціях після проходження
+          модерації.
         </p>
       </aside>
     </div>

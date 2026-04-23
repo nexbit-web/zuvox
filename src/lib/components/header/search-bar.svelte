@@ -1,5 +1,6 @@
+<!-- src/lib/components/header/search-bar.svelte -->
 <script lang="ts">
-  import { Search, X, ChevronRight } from 'lucide-svelte'
+  import { Search, X } from 'lucide-svelte'
   import { fly } from 'svelte/transition'
   import { allServices, type Service } from '$lib/data/categories'
 
@@ -20,7 +21,9 @@
   function handleInput() {
     if (searchValue.trim()) searchFocused = true
     if (searchTimer) clearTimeout(searchTimer)
-    searchTimer = setTimeout(() => { searchQuery = searchValue }, 120)
+    searchTimer = setTimeout(() => {
+      searchQuery = searchValue
+    }, 120)
   }
 
   const suggestions: Service[] = $derived(
@@ -28,58 +31,75 @@
       const q = searchQuery.trim().toLowerCase()
       if (!q) return []
       return allServices
-        .filter((s: Service) =>
-          s.text.toLowerCase().includes(q) ||
-          s.category.toLowerCase().includes(q)
+        .filter(
+          (s: Service) =>
+            s.text.toLowerCase().includes(q) ||
+            s.category.toLowerCase().includes(q),
         )
         .slice(0, 7)
-    })()
+    })(),
   )
 
-  const showSuggestions = $derived(searchFocused && searchValue.trim().length > 0)
+  const showSuggestions = $derived(
+    searchFocused && searchValue.trim().length > 0,
+  )
   const hasResults = $derived(suggestions.length > 0)
 
-  $effect(() => { isOpen = showSuggestions })
+  $effect(() => {
+    isOpen = showSuggestions
+  })
 
   function clear() {
     searchValue = ''
     searchQuery = ''
     searchRef?.focus()
   }
+
+  function submit() {
+    if (searchValue.trim())
+      onnavigate(`/gigs?q=${encodeURIComponent(searchValue)}`)
+  }
 </script>
 
 <div data-search class="flex justify-center w-full">
-  <div class="relative w-full max-w-2xl">
-
-    <!-- Інпут -->
+  <div class="relative w-full max-w-xl">
+    <!-- Інпут: pill з тонкою білою рамкою на чорному фоні -->
     <div
-      class="flex items-center h-12 rounded-2xl overflow-hidden transition-all
-        {showSuggestions ? 'rounded-b-none' : ''}"
-      style="background-color: var(--background)"
+      class="flex items-center h-11 rounded-xl overflow-hidden transition-all"
+      class:rounded-b-none={showSuggestions}
+      class:border-b-transparent={showSuggestions}
+      style="background-color: rgba(255,255,255,0.06);
+             border: 1px solid {searchFocused
+        ? 'rgba(255,255,255,0.22)'
+        : 'rgba(255,255,255,0.14)'};"
     >
-
-      <!-- Всюди -->
-      <div class="flex items-center gap-1 h-12 pl-3 pr-2 shrink-0">
-        <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl" style="background-color: var(--bg-header)">
-          <!-- місце для лого -->
-          <div class="w-4 h-4 rounded-full bg-primary flex items-center justify-center shrink-0">
-            <span class="text-[8px] font-bold text-white">Z</span>
-          </div>
-          <span class="text-sm font-medium text-primary whitespace-nowrap">Всюди</span>
-          <ChevronRight class="w-3 h-3 text-primary/60 shrink-0" />
-        </div>
+      <!-- Іконка пошуку зліва -->
+      <div class="flex items-center justify-center pl-4 pr-2.5 shrink-0">
+        <Search
+          class="size-4"
+          strokeWidth={2}
+          style="color: rgba(255,255,255,0.7)"
+        />
       </div>
 
       <!-- Інпут -->
       <input
         bind:this={searchRef}
         type="text"
-        placeholder="Яку послугу шукаєте?"
+        placeholder="Що потрібно зробити?"
         bind:value={searchValue}
-        onfocus={() => searchFocused = true}
-        onblur={() => setTimeout(() => searchFocused = false, 200)}
+        onfocus={() => (searchFocused = true)}
+        onblur={() => setTimeout(() => (searchFocused = false), 200)}
         oninput={handleInput}
-        class="flex-1 h-12 px-2 text-sm bg-transparent border-none outline-none placeholder:text-muted-foreground text-foreground"
+        onkeydown={(e) => {
+          if (e.key === 'Enter') submit()
+          if (e.key === 'Escape') {
+            searchFocused = false
+            searchRef?.blur()
+          }
+        }}
+        class="flex-1 h-11 pr-3 text-sm bg-transparent border-none outline-none"
+        style="color: white;"
       />
 
       <!-- Хрестик -->
@@ -87,68 +107,78 @@
         <button
           type="button"
           onclick={clear}
-          class="w-9 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
+          class="size-8 mr-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer shrink-0"
+          style="color: rgba(255,255,255,0.55)"
+          onmouseenter={(e) =>
+            ((e.currentTarget as HTMLElement).style.backgroundColor =
+              'rgba(255,255,255,0.08)')}
+          onmouseleave={(e) =>
+            ((e.currentTarget as HTMLElement).style.backgroundColor =
+              'transparent')}
+          aria-label="Очистити"
         >
-          <X class="w-4 h-4" />
+          <X class="size-3.5" strokeWidth={2} />
         </button>
       {/if}
-
-      <!-- Пошук -->
-      <div class="flex items-center h-12 pr-2 shrink-0">
-        <button
-          type="button"
-          onclick={() => { if (searchValue.trim()) onnavigate(`/gigs?q=${encodeURIComponent(searchValue)}`) }}
-          class="flex items-center justify-center w-9 h-9 rounded-xl cursor-pointer transition-colors"
-          style="background-color: var(--bg-header)"
-        >
-          <Search class="w-4 h-4 text-primary" />
-        </button>
-      </div>
-
     </div>
 
-    <!-- Підказки — як на Wikkeo -->
+    <!-- Підказки -->
     {#if showSuggestions}
       <div
         transition:fly={{ y: -4, duration: 150 }}
-        class="absolute top-full left-0 right-0 z-50 shadow-2xl rounded-b-2xl overflow-hidden"
-        style="background-color: var(--background)"
+        class="absolute top-full left-0 right-0 z-50 overflow-hidden"
+        style="background-color: #0a0a0a;
+               border: 1px solid rgba(255,255,255,0.14);
+               border-top: none;
+               border-radius: 0 0 1.5rem 1.5rem;
+               box-shadow: 0 24px 48px rgba(0,0,0,0.5);"
       >
-        <!-- Розділювач -->
-        <div class="mx-4 border-t border-white/5"></div>
-
         {#if hasResults}
           {#each suggestions as s (s.text + s.category)}
             <button
               type="button"
               onclick={() => onnavigate(`/gigs?q=${encodeURIComponent(s.text)}`)}
-              class="w-full flex items-center gap-4 px-5 py-3 hover:bg-white/5 transition-colors cursor-pointer text-left"
+              class="w-full flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer text-left"
+              onmouseenter={(e) =>
+                ((e.currentTarget as HTMLElement).style.backgroundColor =
+                  'rgba(255,255,255,0.05)')}
+              onmouseleave={(e) =>
+                ((e.currentTarget as HTMLElement).style.backgroundColor =
+                  'transparent')}
             >
-              <Search class="w-4 h-4 text-muted-foreground/50 shrink-0" />
+              <Search
+                class="size-4 shrink-0"
+                style="color: rgba(255,255,255,0.4)"
+              />
               <div class="min-w-0 flex-1">
-                <p class="text-sm font-medium text-foreground leading-snug">{s.text}</p>
+                <p class="text-sm font-medium leading-snug" style="color: white">
+                  {s.text}
+                </p>
                 {#if s.category}
-                  <p class="text-xs text-muted-foreground truncate mt-0.5">{s.category}</p>
+                  <p
+                    class="text-xs truncate mt-0.5"
+                    style="color: rgba(255,255,255,0.5)"
+                  >
+                    {s.category}
+                  </p>
                 {/if}
               </div>
             </button>
           {/each}
         {:else}
           <div class="flex flex-col items-center py-10 gap-2">
-            <Search class="w-8 h-8 text-muted-foreground/20" />
-            <p class="text-sm text-muted-foreground text-center">
-              Послугу <span class="font-medium text-foreground">«{searchValue}»</span> не знайдено
+            <Search class="size-8" style="color: rgba(255,255,255,0.2)" />
+            <p class="text-sm text-center" style="color: rgba(255,255,255,0.6)">
+              Нічого не знайдено для
+              <span class="font-medium" style="color: white">«{searchValue}»</span>
             </p>
-            <p class="text-xs text-muted-foreground/60">
-              Спробуйте інший запит або перегляньте каталог
+            <p class="text-xs" style="color: rgba(255,255,255,0.4)">
+              Спробуйте інший запит
             </p>
           </div>
         {/if}
-
-        <!-- Відступ знизу -->
         <div class="h-2"></div>
       </div>
     {/if}
-
   </div>
 </div>

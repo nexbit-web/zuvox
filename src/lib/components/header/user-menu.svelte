@@ -1,3 +1,4 @@
+<!-- src/lib/components/header/user-menu.svelte -->
 <script lang="ts">
   import {
     Avatar,
@@ -5,15 +6,14 @@
     AvatarImage,
   } from '$lib/components/ui/avatar'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
-  import { Button } from '$lib/components/ui/button'
   import {
     Bell,
     MessageSquare,
+    MessageCircle,
     User,
     LogOut,
     Settings,
     Plus,
-    MessageCircle,
     CircleUserRound,
   } from 'lucide-svelte'
   import { signOut } from '$lib/auth-client'
@@ -45,93 +45,151 @@
     await invalidateAll()
     goto('/')
   }
+
+  function formatBadge(n: number): string {
+    return n > 99 ? '99+' : String(n)
+  }
 </script>
 
-<div class="flex items-center gap-2 shrink-0">
+<div class="flex items-center gap-1 shrink-0">
   {#if !isLoggedIn}
-    <Button
-      variant="ghost"
-      size="sm"
-      class="hidden sm:flex text-sm cursor-pointer text-foreground/70 hover:text-foreground"
+    <!-- Гість: Увійти (plain text) + Реєстрація (біла pill) -->
+    <button
+      type="button"
       onclick={() => onnavigate('/user/login')}
+      class="hidden sm:flex items-center h-11 px-4 rounded-full text-sm font-medium cursor-pointer transition-colors"
+      style="color: white"
+      onmouseenter={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'rgba(255,255,255,0.06)')}
+      onmouseleave={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'transparent')}
     >
       Увійти
-    </Button>
-    <Button
-      size="sm"
-      class="text-xs sm:text-sm cursor-pointer"
+    </button>
+    <button
+      type="button"
       onclick={() => onnavigate('/user/register')}
+      class="inline-flex items-center h-11 px-5 rounded-full text-sm font-semibold cursor-pointer transition-colors"
+      style="background-color: white; color: black;"
+      onmouseenter={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor = '#e5e5e5')}
+      onmouseleave={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor = 'white')}
     >
       Реєстрація
-    </Button>
+    </button>
   {:else}
+    <!-- Авторизований: іконки з бейджами + підписами -->
+
     <!-- Повідомлення -->
-    <div class="relative">
-      <button
-        type="button"
-        onclick={() => onnavigate('/messages')}
-        class="w-11 h-11 flex items-center justify-center rounded-xl transition-colors cursor-pointer bg-primary/20 hover:bg-primary/30"
+    <button
+      type="button"
+      onclick={() => onnavigate('/messages')}
+      class="group relative flex flex-col items-center justify-center h-16 w-16 rounded-xl cursor-pointer transition-colors"
+      aria-label="Повідомлення"
+      onmouseenter={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'rgba(255,255,255,0.06)')}
+      onmouseleave={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'transparent')}
+    >
+      <div class="relative">
+        <MessageCircle class="size-[22px]" strokeWidth={1.75} color="white" />
+        {#if messageCount > 0}
+          <span
+            class="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full flex items-center justify-center px-1 pointer-events-none"
+            style="background-color: white; color: black; border: 1.5px solid white;"
+          >
+            {formatBadge(messageCount)}
+          </span>
+        {/if}
+      </div>
+      <span
+        class="text-[10px] font-medium mt-1.5 leading-none"
+        style="color: rgba(255,255,255,0.85)"
       >
-        <MessageCircle class="w-5 h-5 text-primary" />
-      </button>
-      {#if messageCount > 0}
-        <span
-          class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 border-2 pointer-events-none"
-          style="border-color: var(--bg-header)"
-        >
-          {messageCount > 99 ? '99+' : messageCount}
-        </span>
-      {/if}
-    </div>
+        Чат
+      </span>
+    </button>
 
     <!-- Сповіщення -->
-    <div class="relative">
-      <button
-        type="button"
-        class="w-11 h-11 flex items-center justify-center rounded-xl transition-colors cursor-pointer bg-primary/20 hover:bg-primary/30"
+    <button
+      type="button"
+      class="group relative flex flex-col items-center justify-center h-16 w-16 rounded-xl cursor-pointer transition-colors"
+      aria-label="Сповіщення"
+      onmouseenter={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'rgba(255,255,255,0.06)')}
+      onmouseleave={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'transparent')}
+    >
+      <div class="relative">
+        <Bell class="size-[22px]" strokeWidth={1.75} color="white" />
+        {#if notifCount > 0}
+          <span
+            class="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full flex items-center justify-center px-1 pointer-events-none"
+            style="background-color: red; color: white;  "
+          >
+            {formatBadge(notifCount)}
+          </span>
+        {/if}
+      </div>
+      <span
+        class="text-[10px] font-medium mt-1.5 leading-none"
+        style="color: rgba(255,255,255,0.85)"
       >
-        <Bell class="w-5 h-5 text-primary" />
-      </button>
-      {#if notifCount > 0}
-        <span
-          class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 border-2 pointer-events-none"
-          style="border-color: var(--bg-header)"
-        >
-          {notifCount > 99 ? '99+' : notifCount}
-        </span>
-      {/if}
-    </div>
+        Сповіщення
+      </span>
+    </button>
 
-    <!-- Профіль дропдаун -->
+    <!-- Профіль -->
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <button
-          type="button"
-          class="w-11 h-11 flex items-center justify-center rounded-xl transition-colors cursor-pointer bg-primary/20 hover:bg-primary/30"
+        <div
+          class="group flex flex-col items-center justify-center h-16 w-16 rounded-xl cursor-pointer transition-colors"
+          onmouseenter={(e) =>
+            ((e.currentTarget as HTMLElement).style.backgroundColor =
+              'rgba(255,255,255,0.06)')}
+          onmouseleave={(e) =>
+            ((e.currentTarget as HTMLElement).style.backgroundColor =
+              'transparent')}
         >
           {#if user?.avatar}
-            <Avatar class="h-8 w-8">
+            <Avatar class="size-[22px]">
               <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback
-                class="bg-primary/20 text-primary text-xs font-semibold"
+                class="text-[9px] font-semibold"
+                style="background-color: rgba(255,255,255,0.12); color: white"
               >
                 {user.initials}
               </AvatarFallback>
             </Avatar>
           {:else}
-            <CircleUserRound class="w-5 h-5 text-primary" />
+            <CircleUserRound
+              class="size-[22px]"
+              strokeWidth={1.75}
+              color="white"
+            />
           {/if}
-        </button>
+          <span
+            class="text-[10px] font-medium mt-1.5 leading-none"
+            style="color: rgba(255,255,255,0.85)"
+          >
+            Профіль
+          </span>
+        </div>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content class="w-56 mt-1" align="end">
+      <DropdownMenu.Content class="w-56 mt-2" align="end">
         <!-- Юзер інфо -->
         <div class="px-3 py-3 flex items-center gap-2.5">
-          <Avatar class="h-8 w-8 shrink-0">
+          <Avatar class="size-9 shrink-0">
             <AvatarImage src={user?.avatar ?? ''} alt={user?.name ?? ''} />
-            <AvatarFallback
-              class="bg-primary/20 text-primary text-xs font-semibold"
-            >
+            <AvatarFallback class="text-xs font-semibold">
               {user?.initials ?? 'U'}
             </AvatarFallback>
           </Avatar>
@@ -148,7 +206,7 @@
             class="gap-2 cursor-pointer"
             onclick={() => onnavigate('/profile')}
           >
-            <User class="w-3.5 h-3.5 text-muted-foreground" />
+            <User class="size-3.5 text-muted-foreground" />
             <span>Мій профіль</span>
           </DropdownMenu.Item>
 
@@ -156,11 +214,12 @@
             class="gap-2 cursor-pointer"
             onclick={() => onnavigate('/messages')}
           >
-            <MessageSquare class="w-3.5 h-3.5 text-muted-foreground" />
+            <MessageSquare class="size-3.5 text-muted-foreground" />
             <span>Повідомлення</span>
             {#if messageCount > 0}
               <span
-                class="ml-auto text-[10px] font-bold bg-primary/20 text-primary px-1.5 py-0.5 rounded-full"
+                class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                style="background-color: var(--foreground); color: var(--background)"
               >
                 {messageCount}
               </span>
@@ -170,9 +229,9 @@
           {#if isFreelancer}
             <DropdownMenu.Item
               class="gap-2 cursor-pointer"
-              onclick={() => onnavigate('/gigs/create')}
+              onclick={() => onnavigate('/gigs/new')}
             >
-              <Plus class="w-3.5 h-3.5 text-muted-foreground" />
+              <Plus class="size-3.5 text-muted-foreground" />
               <span>Новий гіг</span>
             </DropdownMenu.Item>
           {/if}
@@ -181,7 +240,7 @@
             class="gap-2 cursor-pointer"
             onclick={() => onnavigate('/settings')}
           >
-            <Settings class="w-3.5 h-3.5 text-muted-foreground" />
+            <Settings class="size-3.5 text-muted-foreground" />
             <span>Налаштування</span>
           </DropdownMenu.Item>
         </DropdownMenu.Group>
@@ -192,7 +251,7 @@
           class="gap-2 cursor-pointer text-destructive focus:text-destructive"
           onclick={handleSignOut}
         >
-          <LogOut class="w-3.5 h-3.5" />
+          <LogOut class="size-3.5" />
           <span>Вийти</span>
         </DropdownMenu.Item>
       </DropdownMenu.Content>

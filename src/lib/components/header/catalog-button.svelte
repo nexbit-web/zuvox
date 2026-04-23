@@ -1,25 +1,40 @@
 <script lang="ts">
-  import { LayoutGrid, X } from 'lucide-svelte'
+  import { LayoutGrid, ChevronDown, X } from 'lucide-svelte'
 
   let { open = $bindable(false) }: { open: boolean } = $props()
 </script>
 
-<div data-catalog>
-  <button
-    type="button"
-    onclick={(e) => {
-      e.stopPropagation()
-      open = !open
-    }}
-    class="w-11 h-11 flex items-center justify-center rounded-xl cursor-pointer text-primary -my-2 transition-all duration-200
-      {open
-        ? 'text-white bg-primary hover:bg-primary/90'
-        : 'bg-primary/20 hover:bg-primary/40'}"
-  >
-    {#if open}
-      <X class="w-5 h-5" />
-    {:else}
-      <LayoutGrid class="w-5 h-5" />
-    {/if}
-  </button>
-</div>
+<button
+  type="button"
+  onclick={(e) => {
+    e.stopPropagation()
+    open = !open
+  }}
+  aria-expanded={open}
+  aria-label="Відкрити каталог"
+  class="inline-flex items-center gap-2 h-11 px-4 rounded-xl cursor-pointer transition-colors select-none"
+  style="background-color: {open ? 'rgba(255,255,255,0.08)' : 'transparent'};
+         border: 1px solid rgb(172, 167, 167);
+         color: white;"
+  onmouseenter={(e) => {
+    if (!open)
+      (e.currentTarget as HTMLElement).style.backgroundColor =
+        'rgba(255,255,255,0.06)'
+  }}
+  onmouseleave={(e) => {
+    if (!open)
+      (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
+  }}
+>
+  {#if open}
+    <X class="size-4" strokeWidth={2} />
+  {:else}
+    <LayoutGrid class="size-4" strokeWidth={2} />
+  {/if}
+  <span class="text-sm font-medium">Каталог</span>
+  <ChevronDown
+    class="size-4 transition-transform duration-200"
+    strokeWidth={2}
+    style="transform: rotate({open ? 180 : 0}deg)"
+  />
+</button>
