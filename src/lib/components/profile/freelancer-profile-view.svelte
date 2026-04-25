@@ -1,4 +1,4 @@
-<!-- src/lib/components/profile-view.svelte -->
+<!-- src/lib/components/profile/freelancer-profile-view.svelte -->
 <script lang="ts">
   import { Badge } from '$lib/components/ui/badge'
   import {
@@ -7,9 +7,9 @@
     AvatarImage,
   } from '$lib/components/ui/avatar'
   import { Button } from '$lib/components/ui/button'
+  import { Skeleton } from '$lib/components/ui/skeleton'
   import { goto } from '$app/navigation'
   import { onMount, onDestroy } from 'svelte'
-  import { fade } from 'svelte/transition'
   import { getBannerForCategories } from '$lib/data/category-banners'
   import {
     BadgeCheck,
@@ -36,69 +36,15 @@
     Phone,
     LogIn,
     Sparkles,
+    Expand,
   } from 'lucide-svelte'
 
-  export interface ProfileGig {
-    id: string
-    title: string
-    price: number
-    rating?: number
-    orders?: number
-  }
-
-  export interface ProfileReview {
-    id: string
-    authorName: string
-    authorInitials: string
-    rating: number
-    text: string
-    createdAt: string | Date
-  }
-
-  export interface ProfilePortfolioItem {
-    id: string
-    title?: string
-    imageUrl: string
-  }
-
-  export interface ProfileData {
-    id: string
-    name: string
-    username?: string
-    avatar?: string
-    bio?: string
-    city?: string
-    phone?: string
-    createdAt: string | Date
-
-    verificationStatus: 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
-    verificationRejectReason?: string | null
-
-    categories: string[]
-    skills: string[]
-    languages: string[]
-    experience?: string | null
-    hourlyRate?: number | null
-    portfolioUrl?: string | null
-
-    avgRating: number
-    reviewsCount: number
-    totalOrders: number
-    completedOrders: number
-    responseTimeHrs?: number | null
-    repeatClientsPct: number
-    followers: number
-    successRate: number
-
-    gigs: ProfileGig[]
-    reviews: ProfileReview[]
-    portfolio: ProfilePortfolioItem[]
-  }
+  // Типи у спільному файлі — щоб імпортувалися і компонентом, і server loaders
+  import type { FreelancerProfileData as ProfileData } from '$lib/components/profile/types'
 
   interface Props {
     user: ProfileData
     isOwner: boolean
-    /** Чи залогінений поточний користувач (впливає на «Показати номер») */
     isAuthenticated: boolean
     isFollowing?: boolean
     onFollow?: () => void
@@ -129,6 +75,15 @@
       : null,
   )
 
+  // ─── Стан завантаження картинок ───
+  let bannerLoaded = $state(false)
+  let avatarLoaded = $state(false)
+  let loadedPortfolio = $state<Set<string>>(new Set())
+
+  function onPortfolioLoad(id: string) {
+    loadedPortfolio = new Set([...loadedPortfolio, id])
+  }
+
   // ─── Показати номер ───
   let phoneRevealed = $state(false)
   function togglePhone() {
@@ -151,22 +106,30 @@
     goto('/profile/setup/freelancer')
   }
 
-  // ─── PhotoSwipe lightbox для портфоліо ───
+  // ═══════════════════════════════════════════════════════
+  // PhotoSwipe lightbox
+  // ═══════════════════════════════════════════════════════
   let lightbox: { init: () => void; destroy: () => void } | null = null
 
   onMount(async () => {
     if (user.portfolio.length === 0) return
-    const [{ default: PhotoSwipeLightbox }, PhotoSwipeCore] = await Promise.all(
-      [import('photoswipe/lightbox'), import('photoswipe')],
-    )
-    lightbox = new PhotoSwipeLightbox({
-      gallery: '#zuvox-portfolio',
-      children: 'a.pswp-item',
-      pswpModule: PhotoSwipeCore.default ?? PhotoSwipeCore,
-      bgOpacity: 0.92,
-      showHideAnimationType: 'fade',
-    })
-    lightbox?.init()
+
+    try {
+      const { default: PhotoSwipeLightbox } =
+        await import('photoswipe/lightbox')
+
+      lightbox = new PhotoSwipeLightbox({
+        gallery: '#zunor-portfolio',
+        children: 'a.pswp-item',
+        pswpModule: () => import('photoswipe'),
+        bgOpacity: 0.92,
+        showHideAnimationType: 'fade',
+        padding: { top: 40, bottom: 40, left: 20, right: 20 },
+      })
+      lightbox.init()
+    } catch (err) {
+      console.error('[PhotoSwipe] failed to load:', err)
+    }
   })
 
   onDestroy(() => {
@@ -175,26 +138,111 @@
   })
 </script>
 
+<!-- CEO -->
 <svelte:head>
-  <!-- PhotoSwipe styles -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5/dist/photoswipe.css" />
+  <!-- TITLE -->
+  <title>
+    {`${user.name} — ${user.categories?.join(', ') || 'фрилансер'} ${
+      user.city ? `в ${user.city}` : ''
+    } | Послуги фрилансера · Zunor`}
+  </title>
+
+  <!-- DESCRIPTION -->
+  <meta
+    name="description"
+    content={`${user.name} — фрилансер на Zunor. ${
+      user.categories?.join(', ') || 'Професійні послуги'
+    }. ${user.city ? `Працює в ${user.city}.` : ''} ${
+      user.bio ? user.bio : ''
+    }`}
+  />
+
+  <!-- KEYWORDS (не критично, но можно) -->
+  <meta
+    name="keywords"
+    content={`${user.name}, ${user.categories?.join(', ')}, фрилансер, послуги`}
+  />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:title" content={`${user.name} — фрилансер | Zunor`} />
+  <meta
+    property="og:description"
+    content={`Послуги: ${user.categories?.join(', ') || ''}`}
+  />
+  <meta property="og:type" content="profile" />
+  <meta property="og:image" content={user.avatar || '/default-avatar.png'} />
+
+  <!-- CANONICAL -->
+  <link rel="canonical" href={`https://zunor.com/profile/${user.id}`} />
+
+  <!-- JSON-LD: PERSON -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: user.name,
+      image: user.avatar,
+      url: `https://zunor.com/profile/${user.id}`,
+      address: user.city
+        ? {
+            "@type": "PostalAddress",
+            addressLocality: user.city,
+            addressCountry: "UA"
+          }
+        : undefined,
+      knowsAbout: user.categories,
+      description: user.bio,
+    })}
+  </script>
+
+  <!-- JSON-LD: SERVICES -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      itemListElement: user.gigs.map((gig, i) => ({
+        "@type": "Service",
+        position: i + 1,
+        name: gig.title,
+        provider: {
+          "@type": "Person",
+          name: user.name,
+        },
+        offers: {
+          "@type": "Offer",
+          price: gig.price,
+          priceCurrency: "UAH"
+        }
+      }))
+    })}
+  </script>
 </svelte:head>
 
-<div class="min-h-screen pb-20 md:pb-10" style="background-color: var(--background)">
-  <!-- ═══════ БАНЕР ЗА КАТЕГОРІЄЮ ═══════ -->
+<div
+  class="min-h-screen pb-20 md:pb-10"
+  style="background-color: var(--background)"
+>
+  <!-- ═══════ БАНЕР ═══════ -->
   <div class="px-4 pt-4 sm:px-6 sm:pt-6">
     <div
       class="relative w-full h-40 sm:h-52 rounded-2xl overflow-hidden"
-      style="background-color: #0a0a0a"
+      style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent)"
     >
+      {#if !bannerLoaded}
+        <div class="absolute inset-0">
+          <Skeleton class="w-full h-full rounded-2xl" />
+        </div>
+      {/if}
       <img
         src={bannerUrl}
         alt=""
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover transition-opacity duration-300"
+        style="opacity: {bannerLoaded ? 1 : 0}"
         loading="eager"
         fetchpriority="high"
+        onload={() => (bannerLoaded = true)}
+        onerror={() => (bannerLoaded = true)}
       />
-      <!-- легке затемнення знизу для контрасту з контентом -->
       <div
         class="absolute inset-0 pointer-events-none"
         style="background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.35))"
@@ -205,12 +253,27 @@
   <div class="max-w-2xl mx-auto px-4 sm:px-8">
     <!-- ═══════ АВАТАР + CTA ═══════ -->
     <div class="flex items-start justify-between gap-3">
-      <div class="-mt-12 sm:-mt-14">
+      <div class="-mt-12 sm:-mt-14 relative">
+        {#if user.avatar && !avatarLoaded}
+          <div
+            class="absolute inset-0 size-24 sm:size-32 rounded-full border-4 overflow-hidden z-10"
+            style="border-color: var(--background)"
+          >
+            <Skeleton class="w-full h-full rounded-full" />
+          </div>
+        {/if}
         <Avatar
           class="size-24 sm:size-32 border-4 shadow-lg"
           style="border-color: var(--background)"
         >
-          <AvatarImage src={user.avatar} alt={user.name} />
+          {#if user.avatar}
+            <AvatarImage
+              src={user.avatar}
+              alt={user.name}
+              onload={() => (avatarLoaded = true)}
+              onerror={() => (avatarLoaded = true)}
+            />
+          {/if}
           <AvatarFallback
             class="text-3xl sm:text-4xl font-semibold cursor-default"
             style="background-color: var(--primary); color: var(--primary-foreground)"
@@ -220,7 +283,6 @@
         </Avatar>
       </div>
 
-      <!-- CTA-кнопки на десктопі -->
       <div class="hidden sm:flex items-center gap-2 mt-4">
         {#if isOwner}
           <Button onclick={goEdit} class="h-10 rounded-full gap-1.5">
@@ -354,13 +416,13 @@
         <span class="font-medium" style="color: var(--foreground)">
           {user.followers}
         </span>
-        підписників · <span class="font-medium" style="color: var(--primary)">
+        підписників ·
+        <span class="font-medium" style="color: var(--primary)">
           {user.reviewsCount}
         </span>
         {user.reviewsCount === 1 ? 'відгук' : 'відгуків'}
       </p>
 
-      <!-- CTA мобільне -->
       <div class="flex sm:hidden flex-col gap-2 mt-4">
         {#if isOwner}
           <Button onclick={goEdit} class="w-full h-11 rounded-full gap-2">
@@ -418,7 +480,7 @@
       </div>
     {/if}
 
-    <!-- ═══════ КОНТАКТИ (кнопка "Показати номер") ═══════ -->
+    <!-- ═══════ КОНТАКТИ ═══════ -->
     {#if !isOwner && user.phone}
       <div
         class="mb-5 p-4 rounded-2xl border"
@@ -456,10 +518,7 @@
                   {/if}
                 </button>
               {:else}
-                <p
-                  class="text-sm font-medium"
-                  style="color: var(--foreground)"
-                >
+                <p class="text-sm font-medium" style="color: var(--foreground)">
                   Контактний номер
                 </p>
                 <p class="text-xs" style="color: var(--muted-foreground)">
@@ -514,9 +573,7 @@
           class="text-sm italic"
           style="color: var(--muted-foreground); opacity: 0.6"
         >
-          {isOwner
-            ? 'Ви ще не додали опис.'
-            : 'Користувач ще не додав опис.'}
+          {isOwner ? 'Ви ще не додали опис.' : 'Користувач ще не додав опис.'}
         </p>
       {/if}
 
@@ -542,7 +599,9 @@
 
       {#if user.experience}
         <div class="flex items-center justify-between">
-          <span class="text-sm" style="color: var(--muted-foreground)">Досвід</span>
+          <span class="text-sm" style="color: var(--muted-foreground)"
+            >Досвід</span
+          >
           <span class="text-sm" style="color: var(--foreground)">
             {user.experience}
           </span>
@@ -566,7 +625,9 @@
 
       {#if user.hourlyRate}
         <div class="flex items-center justify-between">
-          <span class="text-sm" style="color: var(--muted-foreground)">Ставка</span>
+          <span class="text-sm" style="color: var(--muted-foreground)"
+            >Ставка</span
+          >
           <span class="text-sm" style="color: var(--foreground)">
             від <span class="font-semibold">
               {user.hourlyRate.toLocaleString('uk-UA')} грн
@@ -577,7 +638,7 @@
       {/if}
     </div>
 
-    <!-- ═══════ НАВИЧКИ (за обраними категоріями) ═══════ -->
+    <!-- ═══════ НАВИЧКИ ═══════ -->
     {#if user.skills.length > 0}
       <div
         class="border-t"
@@ -610,7 +671,7 @@
       style="border-color: color-mix(in oklch, var(--foreground) 6%, transparent)"
     ></div>
 
-    <!-- ═══════ Статистика (0 замість —) ═══════ -->
+    <!-- ═══════ Статистика ═══════ -->
     <div class="py-5">
       <p
         class="text-[11px] font-medium tracking-widest uppercase mb-4 flex items-center gap-1.5"
@@ -624,12 +685,21 @@
           style="background-color: color-mix(in oklch, var(--foreground) 3%, transparent);
                  border-color: color-mix(in oklch, var(--foreground) 6%, transparent)"
         >
-          <p class="text-xs mb-1 flex items-center gap-1.5" style="color: var(--muted-foreground)">
+          <p
+            class="text-xs mb-1 flex items-center gap-1.5"
+            style="color: var(--muted-foreground)"
+          >
             <Star class="size-3" /> Рейтинг
           </p>
-          <p class="text-xl font-semibold tabular-nums" style="color: var(--foreground)">
+          <p
+            class="text-xl font-semibold tabular-nums"
+            style="color: var(--foreground)"
+          >
             {user.avgRating.toFixed(1)}
-            <span class="text-sm font-normal" style="color: var(--muted-foreground)">
+            <span
+              class="text-sm font-normal"
+              style="color: var(--muted-foreground)"
+            >
               / 5.0
             </span>
           </p>
@@ -640,12 +710,21 @@
           style="background-color: color-mix(in oklch, var(--foreground) 3%, transparent);
                  border-color: color-mix(in oklch, var(--foreground) 6%, transparent)"
         >
-          <p class="text-xs mb-1 flex items-center gap-1.5" style="color: var(--muted-foreground)">
+          <p
+            class="text-xs mb-1 flex items-center gap-1.5"
+            style="color: var(--muted-foreground)"
+          >
             <BadgeCheck class="size-3" /> Виконано
           </p>
-          <p class="text-xl font-semibold tabular-nums" style="color: var(--foreground)">
+          <p
+            class="text-xl font-semibold tabular-nums"
+            style="color: var(--foreground)"
+          >
             {user.totalOrders}
-            <span class="text-sm font-normal" style="color: var(--muted-foreground)">
+            <span
+              class="text-sm font-normal"
+              style="color: var(--muted-foreground)"
+            >
               замовлень
             </span>
           </p>
@@ -656,12 +735,21 @@
           style="background-color: color-mix(in oklch, var(--foreground) 3%, transparent);
                  border-color: color-mix(in oklch, var(--foreground) 6%, transparent)"
         >
-          <p class="text-xs mb-1 flex items-center gap-1.5" style="color: var(--muted-foreground)">
+          <p
+            class="text-xs mb-1 flex items-center gap-1.5"
+            style="color: var(--muted-foreground)"
+          >
             <Clock class="size-3" /> Відповідь
           </p>
-          <p class="text-xl font-semibold tabular-nums" style="color: var(--foreground)">
+          <p
+            class="text-xl font-semibold tabular-nums"
+            style="color: var(--foreground)"
+          >
             ~{user.responseTimeHrs ?? 0}
-            <span class="text-sm font-normal" style="color: var(--muted-foreground)">
+            <span
+              class="text-sm font-normal"
+              style="color: var(--muted-foreground)"
+            >
               год
             </span>
           </p>
@@ -672,12 +760,21 @@
           style="background-color: color-mix(in oklch, var(--foreground) 3%, transparent);
                  border-color: color-mix(in oklch, var(--foreground) 6%, transparent)"
         >
-          <p class="text-xs mb-1 flex items-center gap-1.5" style="color: var(--muted-foreground)">
+          <p
+            class="text-xs mb-1 flex items-center gap-1.5"
+            style="color: var(--muted-foreground)"
+          >
             <RefreshCw class="size-3" /> Повторні
           </p>
-          <p class="text-xl font-semibold tabular-nums" style="color: var(--foreground)">
+          <p
+            class="text-xl font-semibold tabular-nums"
+            style="color: var(--foreground)"
+          >
             {user.repeatClientsPct}%
-            <span class="text-sm font-normal" style="color: var(--muted-foreground)">
+            <span
+              class="text-sm font-normal"
+              style="color: var(--muted-foreground)"
+            >
               клієнтів
             </span>
           </p>
@@ -689,7 +786,10 @@
         style="background-color: color-mix(in oklch, #10b981 8%, transparent);
                border: 1px solid color-mix(in oklch, #10b981 20%, transparent)"
       >
-        <span class="text-sm flex items-center gap-1.5" style="color: var(--muted-foreground)">
+        <span
+          class="text-sm flex items-center gap-1.5"
+          style="color: var(--muted-foreground)"
+        >
           <BadgeCheck class="size-3.5" style="color: #10b981" />
           Успішних замовлень
         </span>
@@ -739,21 +839,36 @@
                 style="background-color: color-mix(in oklch, var(--foreground) 4%, transparent);
                        border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
               >
-                <Briefcase class="size-3.5" style="color: var(--muted-foreground)" />
+                <Briefcase
+                  class="size-3.5"
+                  style="color: var(--muted-foreground)"
+                />
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium truncate" style="color: var(--foreground)">
+                <p
+                  class="text-sm font-medium truncate"
+                  style="color: var(--foreground)"
+                >
                   {gig.title}
                 </p>
                 {#if gig.rating !== undefined && gig.orders !== undefined}
-                  <p class="text-xs mt-0.5 flex items-center gap-1" style="color: var(--muted-foreground)">
-                    <Star class="size-3" style="color: #f5a623; fill: #f5a623" />
+                  <p
+                    class="text-xs mt-0.5 flex items-center gap-1"
+                    style="color: var(--muted-foreground)"
+                  >
+                    <Star
+                      class="size-3"
+                      style="color: #f5a623; fill: #f5a623"
+                    />
                     {gig.rating} · {gig.orders} замовлень
                   </p>
                 {/if}
               </div>
               <div class="flex items-center gap-2 shrink-0">
-                <span class="text-sm font-medium whitespace-nowrap" style="color: var(--primary)">
+                <span
+                  class="text-sm font-medium whitespace-nowrap"
+                  style="color: var(--primary)"
+                >
                   від {gig.price.toLocaleString('uk-UA')} грн
                 </span>
                 <ArrowUpRight
@@ -769,7 +884,10 @@
           class="text-center py-8 rounded-xl"
           style="background-color: color-mix(in oklch, var(--foreground) 2%, transparent)"
         >
-          <p class="text-sm" style="color: var(--muted-foreground); opacity: 0.7">
+          <p
+            class="text-sm"
+            style="color: var(--muted-foreground); opacity: 0.7"
+          >
             {isOwner
               ? 'У вас ще немає активних послуг'
               : 'У користувача ще немає активних послуг'}
@@ -787,7 +905,7 @@
       {/if}
     </div>
 
-    <!-- ═══════ Портфоліо (PhotoSwipe) ═══════ -->
+    <!-- ═══════ Портфоліо (PhotoSwipe lightbox) ═══════ -->
     {#if user.portfolio.length > 0 || user.portfolioUrl}
       <div
         class="border-t"
@@ -842,28 +960,57 @@
 
         {#if user.portfolio.length > 0}
           <div
-            id="zuvox-portfolio"
-            class="grid grid-cols-2 sm:grid-cols-3 gap-2 pswp-gallery"
+            id="zunor-portfolio"
+            class="grid grid-cols-2 sm:grid-cols-3 gap-2"
           >
             {#each user.portfolio as item}
+              {@const loaded = loadedPortfolio.has(item.id)}
+              <!--
+                ⚠️ Ключове для PhotoSwipe:
+                  — НЕМАЄ target="_blank" (він ламає preventDefault)
+                  — data-pswp-width / height ОБОВʼЯЗКОВІ
+                  — клас pswp-item співпадає з селектором у options.children
+              -->
               <a
                 href={item.imageUrl}
-                data-pswp-width="1600"
-                data-pswp-height="1200"
-                target="_blank"
-                rel="noopener"
+                data-pswp-width={item.width ?? 1600}
+                data-pswp-height={item.height ?? 1200}
                 class="pswp-item aspect-video rounded-xl overflow-hidden cursor-zoom-in group relative block"
+                aria-label="Відкрити {item.title ?? 'фото'} у повному розмірі"
+                style="background-color: color-mix(in oklch, var(--foreground) 4%, transparent)"
               >
+                {#if !loaded}
+                  <div class="absolute inset-0">
+                    <Skeleton class="w-full h-full rounded-xl" />
+                  </div>
+                {/if}
                 <img
                   src={item.imageUrl}
                   alt={item.title ?? 'portfolio'}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+                  style="opacity: {loaded ? 1 : 0}"
                   loading="lazy"
+                  onload={() => onPortfolioLoad(item.id)}
+                  onerror={() => onPortfolioLoad(item.id)}
                 />
+
+                <!-- Оверлей з іконкою розгортання -->
+                <div
+                  class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
+                  style="background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6))"
+                >
+                  <div
+                    class="size-10 rounded-full flex items-center justify-center"
+                    style="background-color: rgba(255,255,255,0.15); backdrop-filter: blur(8px)"
+                  >
+                    <Expand class="size-4 text-white" />
+                  </div>
+                </div>
+
                 {#if item.title}
                   <div
-                    class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2"
-                    style="background: linear-gradient(180deg, transparent, rgba(0,0,0,0.7))"
+                    class="absolute inset-x-0 bottom-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                    style="background: linear-gradient(180deg, transparent, rgba(0,0,0,0.75))"
                   >
                     <span class="text-white text-xs font-medium">
                       {item.title}
@@ -891,7 +1038,10 @@
         >
           <MessageSquare class="size-3.5" /> Відгуки
         </p>
-        <span class="text-xs flex items-center gap-1" style="color: var(--muted-foreground)">
+        <span
+          class="text-xs flex items-center gap-1"
+          style="color: var(--muted-foreground)"
+        >
           <Star class="size-3" style="color: #f5a623; fill: #f5a623" />
           {user.avgRating.toFixed(1)} · {user.reviewsCount}
           {user.reviewsCount === 1 ? 'відгук' : 'відгуків'}
@@ -916,12 +1066,18 @@
                 >
                   {review.authorInitials}
                 </div>
-                <span class="text-sm font-medium" style="color: var(--foreground)">
+                <span
+                  class="text-sm font-medium"
+                  style="color: var(--foreground)"
+                >
                   {review.authorName}
                 </span>
                 <div class="flex ml-auto gap-0.5">
                   {#each Array(review.rating) as _}
-                    <Star class="size-3" style="color: #f5a623; fill: #f5a623" />
+                    <Star
+                      class="size-3"
+                      style="color: #f5a623; fill: #f5a623"
+                    />
                   {/each}
                 </div>
               </div>
@@ -949,7 +1105,10 @@
           class="text-center py-8 rounded-xl"
           style="background-color: color-mix(in oklch, var(--foreground) 2%, transparent)"
         >
-          <p class="text-sm" style="color: var(--muted-foreground); opacity: 0.7">
+          <p
+            class="text-sm"
+            style="color: var(--muted-foreground); opacity: 0.7"
+          >
             Ще немає відгуків
           </p>
         </div>

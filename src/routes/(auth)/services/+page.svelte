@@ -1,12 +1,6 @@
 <!-- src/routes/(app)/services/+page.svelte -->
 <script lang="ts">
-  import {
-    ArrowRight,
-    Search,
-    MapPin,
-    X,
-    SlidersHorizontal,
-  } from 'lucide-svelte'
+  import { ArrowRight, Search, X, SlidersHorizontal } from 'lucide-svelte'
   import { onMount } from 'svelte'
   import { Skeleton } from '$lib/components/ui/skeleton'
   import * as Dialog from '$lib/components/ui/dialog'
@@ -17,6 +11,7 @@
   import * as Command from '$lib/components/ui/command'
   import * as Popover from '$lib/components/ui/popover'
   import { cn } from '$lib/utils'
+
   const categories = [
     {
       name: 'Домашній майстер',
@@ -358,6 +353,14 @@
 
   let cityPopoverOpen = $state(false)
 </script>
+
+<svelte:head>
+  <title>Всі послуги - Zunor</title>
+  <meta
+    name="description"
+    content="Каталог послуг Zunor: ремонт, дизайн, IT, клінінг, доставка та інші напрямки. Знаходьте перевірених фахівців і замовляйте послуги онлайн."
+  />
+</svelte:head>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
   <!-- Шапка -->

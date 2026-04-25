@@ -1,6 +1,6 @@
 <!-- src/routes/(auth)/profile/[id]/+page.svelte -->
 <script lang="ts">
-  import ProfileView from '$lib/components/profile-view.svelte'
+  import FreelancerProfileView from '$lib/components/profile/freelancer-profile-view.svelte'
   import { goto, invalidateAll } from '$app/navigation'
   import type { PageData } from './$types'
 
@@ -15,20 +15,15 @@
       goto('/user/login?next=' + encodeURIComponent(`/profile/${data.user.id}`))
       return
     }
-
     pending = true
     const wasFollowing = following
     following = !following
-
     try {
       const res = await fetch(`/api/user/${data.user.id}/follow`, {
         method: following ? 'POST' : 'DELETE',
       })
-      if (!res.ok) {
-        following = wasFollowing
-      } else {
-        invalidateAll()
-      }
+      if (!res.ok) following = wasFollowing
+      else invalidateAll()
     } catch {
       following = wasFollowing
     } finally {
@@ -45,7 +40,11 @@
   }
 </script>
 
-<ProfileView
+<svelte:head>
+  <title>{data.user.name} · Zunor</title>
+</svelte:head>
+
+<FreelancerProfileView
   user={data.user}
   isOwner={false}
   isAuthenticated={data.isAuthenticated}

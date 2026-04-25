@@ -202,28 +202,26 @@
         <DropdownMenu.Separator />
 
         <DropdownMenu.Group>
-          <DropdownMenu.Item
-            class="gap-2 cursor-pointer"
-            onclick={() => onnavigate('/profile')}
-          >
-            <User class="size-3.5 text-muted-foreground" />
-            <span>Мій профіль</span>
+          <DropdownMenu.Item class="gap-2 cursor-pointer">
+            <a href="/dashboard" class="flex items-center gap-2">
+              <User class="size-3.5 text-muted-foreground" />
+              <span>Мій профіль</span>
+            </a>
           </DropdownMenu.Item>
 
-          <DropdownMenu.Item
-            class="gap-2 cursor-pointer"
-            onclick={() => onnavigate('/messages')}
-          >
-            <MessageSquare class="size-3.5 text-muted-foreground" />
-            <span>Повідомлення</span>
-            {#if messageCount > 0}
-              <span
-                class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-                style="background-color: var(--foreground); color: var(--background)"
-              >
-                {messageCount}
-              </span>
-            {/if}
+          <DropdownMenu.Item class="gap-2 cursor-pointer">
+            <a href="/messages" class="flex items-center gap-2">
+              <MessageSquare class="size-3.5 text-muted-foreground" />
+              <span>Повідомлення</span>
+              {#if messageCount > 0}
+                <span
+                  class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                  style="background-color: var(--foreground); color: var(--background)"
+                >
+                  {messageCount}
+                </span>
+              {/if}
+            </a>
           </DropdownMenu.Item>
 
           {#if isFreelancer}
@@ -236,12 +234,11 @@
             </DropdownMenu.Item>
           {/if}
 
-          <DropdownMenu.Item
-            class="gap-2 cursor-pointer"
-            onclick={() => onnavigate('/settings')}
-          >
-            <Settings class="size-3.5 text-muted-foreground" />
-            <span>Налаштування</span>
+          <DropdownMenu.Item class="gap-2 cursor-pointer">
+            <a href="/settings" class="flex items-center gap-2">
+              <Settings class="size-3.5 text-muted-foreground" />
+              <span>Налаштування</span>
+            </a>
           </DropdownMenu.Item>
         </DropdownMenu.Group>
 

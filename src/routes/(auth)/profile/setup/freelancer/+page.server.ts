@@ -12,11 +12,6 @@ const experienceReverse: Record<string, string> = {
   Y_10_PLUS: '10_PLUS',
 }
 
-/**
- * Якщо у юзера ще немає username — пропонуємо дефолтне значення з email
- * (тільки нормалізоване). UsernameInput перевірить доступність і якщо зайнято —
- * запропонує суфіксоване.
- */
 function suggestFromEmail(email: string | null | undefined): string {
   if (!email) return ''
   const local = email.split('@')[0] ?? ''
@@ -24,7 +19,6 @@ function suggestFromEmail(email: string | null | undefined): string {
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, '')
     .slice(0, 20)
-  // username має починатися з літери
   if (!/^[a-z]/.test(cleaned)) return ''
   return cleaned.length >= 3 ? cleaned : ''
 }
@@ -43,6 +37,7 @@ export const load: PageServerLoad = async ({ request }) => {
       city: true,
       bio: true,
       avatar: true,
+      role: true,
       portfolioImages: true,
       portfolioImagesPublicIds: true,
       verificationStatus: true,
@@ -59,33 +54,38 @@ export const load: PageServerLoad = async ({ request }) => {
     },
   })
 
-  const portfolio = (user?.portfolioImages ?? []).map((url, i) => ({
+  if (!user) throw redirect(302, '/user/login')
+
+  // ⚠️ НЕ блокуємо доступ за статусом — юзер має право редагувати свій
+  // профіль у будь-якому стані. Захист від спам-надсилання модерації робиться
+  // в API: rate-limit + "не змінювати verifiedAt" замість redirect.
+
+  const portfolio = (user.portfolioImages ?? []).map((url, i) => ({
     url,
-    publicId: user?.portfolioImagesPublicIds?.[i] ?? '',
+    publicId: user.portfolioImagesPublicIds?.[i] ?? '',
   }))
 
-  // Якщо username ще немає — пропонуємо значення з email. UsernameInput
-  // автоматично перевірить доступність при першому рендері.
-  const username = user?.username ?? suggestFromEmail(user?.email)
+  const username = user.username ?? suggestFromEmail(user.email)
 
   return {
     prefill: {
-      name: user?.name ?? session.user.name ?? '',
+      name: user.name ?? session.user.name ?? '',
       username,
-      phone: user?.phone ?? '',
-      city: user?.city ?? '',
-      bio: user?.bio ?? '',
-      avatar: user?.avatar ?? '',
+      phone: user.phone ?? '',
+      city: user.city ?? '',
+      bio: user.bio ?? '',
+      avatar: user.avatar ?? '',
       portfolio,
-      verificationStatus: user?.verificationStatus ?? 'NONE',
-      categories: user?.freelancerProfile?.categories ?? [],
-      skills: user?.freelancerProfile?.skills ?? [],
-      experience: user?.freelancerProfile?.experience
+      verificationStatus: user.verificationStatus,
+      isExistingFreelancer: user.role === 'FREELANCER',
+      categories: user.freelancerProfile?.categories ?? [],
+      skills: user.freelancerProfile?.skills ?? [],
+      experience: user.freelancerProfile?.experience
         ? (experienceReverse[user.freelancerProfile.experience] ?? '')
         : '',
-      languages: user?.freelancerProfile?.languages ?? [],
-      hourlyRate: user?.freelancerProfile?.hourlyRate?.toString() ?? '',
-      portfolioUrl: user?.freelancerProfile?.portfolioUrl ?? '',
+      languages: user.freelancerProfile?.languages ?? [],
+      hourlyRate: user.freelancerProfile?.hourlyRate?.toString() ?? '',
+      portfolioUrl: user.freelancerProfile?.portfolioUrl ?? '',
     },
   }
 }

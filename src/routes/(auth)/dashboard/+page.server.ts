@@ -1,9 +1,12 @@
-// src/routes/(auth)/profile/[id]/+page.server.ts
+// src/routes/(auth)/dashboard/+page.server.ts
 import { auth } from '$lib/auth'
 import { prisma } from '$lib/prisma'
-import { error, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { FreelancerProfileData } from '$lib/components/profile/types'
+import type {
+  FreelancerProfileData,
+  ClientProfileData,
+} from '$lib/components/profile/types'
 
 const experienceLabels: Record<string, string> = {
   LT_1: 'менше 1 року',
@@ -13,31 +16,28 @@ const experienceLabels: Record<string, string> = {
   Y_10_PLUS: '10+ років',
 }
 
-interface ProfileIdData {
-  profileType: 'freelancer'
-  isOwner: false
-  isAuthenticated: boolean
-  isFollowing: boolean
-  user: FreelancerProfileData
-}
+type DashboardData =
+  | {
+      profileType: 'freelancer'
+      isOwner: true
+      isAuthenticated: true
+      user: FreelancerProfileData
+    }
+  | {
+      profileType: 'client'
+      isOwner: true
+      isAuthenticated: true
+      user: ClientProfileData
+    }
 
 export const load: PageServerLoad = async ({
-  params,
   request,
-}): Promise<ProfileIdData> => {
+}): Promise<DashboardData> => {
   const session = await auth.api.getSession({ headers: request.headers })
-  const isAuthenticated = !!session
-
-  if (session && params.id === session.user.id) {
-    throw redirect(302, '/dashboard')
-  }
-
-  const where = params.id.startsWith('@')
-    ? { username: params.id.slice(1) }
-    : { id: params.id }
+  if (!session) throw redirect(302, '/user/login')
 
   const user = await prisma.user.findUnique({
-    where,
+    where: { id: session.user.id },
     select: {
       id: true,
       name: true,
@@ -49,6 +49,7 @@ export const load: PageServerLoad = async ({
       role: true,
       createdAt: true,
       verificationStatus: true,
+      verificationRejectReason: true,
       portfolioImages: true,
       freelancerProfile: {
         select: {
@@ -76,11 +77,33 @@ export const load: PageServerLoad = async ({
     },
   })
 
-  if (!user) throw error(404, 'Користувача не знайдено')
+  if (!user) throw redirect(302, '/user/login')
+
+  // ─── КЛІЄНТ ───
   if (user.role === 'CLIENT') {
-    throw error(404, 'Користувача не знайдено')
+    const clientUser: ClientProfileData = {
+      id: user.id,
+      name: user.name ?? '',
+      username: user.username ?? undefined,
+      avatar: user.avatar ?? undefined,
+      bio: user.bio ?? undefined,
+      city: user.city ?? undefined,
+      createdAt: user.createdAt.toISOString(),
+      verificationStatus: user.verificationStatus,
+      totalOrders: 0,
+      completedOrders: 0,
+      reviews: [],
+    }
+
+    return {
+      profileType: 'client',
+      isOwner: true,
+      isAuthenticated: true,
+      user: clientUser,
+    }
   }
 
+  // ─── ФРІЛАНСЕР ───
   const fp = user.freelancerProfile
   const totalOrders = fp?.totalOrders ?? 0
   const completedOrders = fp?.completedOrders ?? 0
@@ -92,21 +115,18 @@ export const load: PageServerLoad = async ({
     imageUrl: url,
   }))
 
-  const phone = isAuthenticated ? (user.phone ?? undefined) : undefined
-  const isFollowing = false
-
-  const profileUser: FreelancerProfileData = {
+  const freelancerUser: FreelancerProfileData = {
     id: user.id,
     name: user.name ?? '',
     username: user.username ?? undefined,
     avatar: user.avatar ?? undefined,
     bio: user.bio ?? undefined,
     city: user.city ?? undefined,
-    phone,
+    phone: user.phone ?? undefined,
     createdAt: user.createdAt.toISOString(),
 
     verificationStatus: user.verificationStatus,
-    verificationRejectReason: null,
+    verificationRejectReason: user.verificationRejectReason,
 
     categories: fp?.categories ?? [],
     skills: fp?.skills ?? [],
@@ -131,9 +151,8 @@ export const load: PageServerLoad = async ({
 
   return {
     profileType: 'freelancer',
-    isOwner: false,
-    isAuthenticated,
-    isFollowing,
-    user: profileUser,
+    isOwner: true,
+    isAuthenticated: true,
+    user: freelancerUser,
   }
 }

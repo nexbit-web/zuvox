@@ -31,6 +31,7 @@
         avatar: string
         portfolio: PortfolioItem[]
         verificationStatus: 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
+        isExistingFreelancer: boolean
         categories: string[]
         skills: string[]
         experience: string
@@ -41,14 +42,15 @@
     }
   }>()
 
-  // ─── state (ініціалізуємо з prefill, щоб після "Назад" на дашборд і знову сюди — дані збереглись)
+  // ─── state ───
   let step = $state(1)
   const totalSteps = 3
 
   let avatar = $state(data.prefill.avatar)
   let username = $state(data.prefill.username)
-  /** Валідний та доступний username — встановлюється з UsernameInput.onvalidchange.
-   *  Якщо prefill має username — вважаємо його валідним (свій). */
+  /** Якщо у юзера вже є username — не блокуємо submit, навіть якщо він не
+   *  робив повторну перевірку (бо UsernameInput викликає onvalidchange лише
+   *  при зміні). */
   let usernameValid = $state(!!data.prefill.username)
   let phone = $state(data.prefill.phone)
   let city = $state(data.prefill.city)
@@ -144,6 +146,9 @@
   )
   const previewCategories = $derived(selectedCategories.slice(0, 3))
 
+  // Заголовок залежить від того, фрілансер це чи ще ні
+  const isEdit = $derived(data.prefill.isExistingFreelancer)
+
   // ─── actions
   function toggleCategory(name: string) {
     if (selectedCategories.includes(name)) {
@@ -187,6 +192,10 @@
     if (step > 1) step -= 1
   }
 
+  function leaveSetup() {
+    goto('/dashboard')
+  }
+
   async function submit() {
     error = ''
     loading = true
@@ -206,15 +215,26 @@
           skills: selectedSkills,
           languages: selectedLanguages,
           hourlyRate: Number(hourlyRate),
-          submitForReview: true, // ← надсилає профіль на модерацію
+          submitForReview: true,
         }),
       })
+
       if (!res.ok) {
-        error = 'Помилка збереження. Спробуйте ще раз.'
+        const errData = await res.json().catch(() => ({}))
+        if (errData.field === 'username') {
+          error =
+            errData.error === 'Username already taken'
+              ? 'Цей нікнейм уже зайнято — оберіть інший на кроці 1'
+              : 'Невірний нікнейм. Перевірте на кроці 1'
+          step = 1
+        } else {
+          error = errData.error ?? 'Помилка збереження. Спробуйте ще раз.'
+        }
         return
       }
+
       await invalidateAll()
-      goto('/profile')
+      goto('/dashboard')
     } catch {
       error = 'Немає з’єднання з сервером'
     } finally {
@@ -237,12 +257,12 @@
     <div class="flex items-center justify-between mb-10">
       <button
         type="button"
-        onclick={() => goto('/profile')}
+        onclick={leaveSetup}
         class="inline-flex items-center gap-2 text-sm cursor-pointer transition-opacity hover:opacity-60"
         style="color: var(--muted-foreground)"
       >
         <X class="size-4" />
-        Пропустити
+        {isEdit ? 'Скасувати' : 'Пропустити'}
       </button>
 
       <span class="text-xs tabular-nums" style="color: var(--muted-foreground)">
@@ -282,7 +302,7 @@
                   class="text-[32px] md:text-[44px] font-semibold tracking-tight leading-[1.1] mb-3"
                   style="color: var(--foreground)"
                 >
-                  Розкажіть про себе
+                  {isEdit ? 'Редагуйте свій профіль' : 'Розкажіть про себе'}
                 </h1>
                 <p class="text-base" style="color: var(--muted-foreground)">
                   Фото профілю, контакти та досвід роботи.
@@ -314,7 +334,7 @@
                 />
               </div>
 
-              <!-- ───── AVATAR BLOCK ───── -->
+              <!-- ───── AVATAR ───── -->
               <div
                 class="flex items-center gap-5 mb-10 p-5 rounded-xl border"
                 style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
@@ -398,9 +418,7 @@
                           : 'var(--foreground)'}"
                       >
                         <div>
-                          <div class="text-sm font-medium">
-                            {opt.label}
-                          </div>
+                          <div class="text-sm font-medium">{opt.label}</div>
                           <div
                             class="text-xs mt-0.5"
                             style="color: {active
@@ -526,7 +544,6 @@
                   </Field.Field>
                 {/if}
 
-                <!-- ─── Мови ─── -->
                 <Field.Field>
                   <Field.Label>Мови спілкування</Field.Label>
                   <div class="flex flex-wrap gap-1.5">
@@ -648,21 +665,40 @@
                   </Field.Description>
                 </Field.Field>
 
-                <!-- Інфо про модерацію -->
-                <div
-                  class="p-4 rounded-xl text-sm leading-relaxed"
-                  style="background-color: color-mix(in oklch, var(--primary) 6%, transparent);
-                         border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent)"
-                >
-                  <p class="font-medium mb-1" style="color: var(--foreground)">
-                    Після завершення — перевірка модератором
-                  </p>
-                  <p style="color: var(--muted-foreground)">
-                    Ваш профіль отримає статус «На модерації». Зазвичай
-                    перевірка займає до 24 годин. Після схвалення у картці
-                    з’явиться синя галочка верифікації.
-                  </p>
-                </div>
+                <!-- Інфо про модерацію — тільки для нових фрілансерів -->
+                {#if !isEdit}
+                  <div
+                    class="p-4 rounded-xl text-sm leading-relaxed"
+                    style="background-color: color-mix(in oklch, var(--primary) 6%, transparent);
+                           border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent)"
+                  >
+                    <p
+                      class="font-medium mb-1"
+                      style="color: var(--foreground)"
+                    >
+                      Після завершення — перевірка модератором
+                    </p>
+                    <p style="color: var(--muted-foreground)">
+                      Ваш профіль отримає статус «На модерації». Зазвичай
+                      перевірка займає до 24 годин. Після схвалення у картці
+                      з’явиться синя галочка верифікації.
+                    </p>
+                  </div>
+                {:else if data.prefill.verificationStatus === 'VERIFIED'}
+                  <div
+                    class="p-4 rounded-xl text-sm leading-relaxed"
+                    style="background-color: color-mix(in oklch, #f59e0b 8%, transparent);
+                           border: 1px solid color-mix(in oklch, #f59e0b 25%, transparent)"
+                  >
+                    <p class="font-medium mb-1" style="color: #b45309">
+                      Зміни знов відправляться на модерацію
+                    </p>
+                    <p style="color: var(--muted-foreground)">
+                      Після збереження ваш VERIFIED статус буде тимчасово
+                      замінено на «На модерації» поки ми перевіримо оновлення.
+                    </p>
+                  </div>
+                {/if}
               </Field.Group>
             {/if}
 
@@ -702,7 +738,7 @@
               <Spinner />
               Зберігаємо…
             {:else if step === totalSteps}
-              Надіслати на перевірку
+              {isEdit ? 'Зберегти зміни' : 'Надіслати на перевірку'}
               <Check class="size-4" />
             {:else}
               Далі
