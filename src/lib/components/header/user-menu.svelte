@@ -53,7 +53,7 @@
 
 <div class="flex items-center gap-1 shrink-0">
   {#if !isLoggedIn}
-    <!-- Гість: Увійти (plain text) + Реєстрація (біла pill) -->
+    <!-- Гість: Увійти + Реєстрація -->
     <button
       type="button"
       onclick={() => onnavigate('/user/login')}
@@ -81,8 +81,6 @@
       Реєстрація
     </button>
   {:else}
-    <!-- Авторизований: іконки з бейджами + підписами -->
-
     <!-- Повідомлення -->
     <button
       type="button"
@@ -118,6 +116,7 @@
     <!-- Сповіщення -->
     <button
       type="button"
+      onclick={() => onnavigate('/notifications')}
       class="group relative flex flex-col items-center justify-center h-16 w-16 rounded-xl cursor-pointer transition-colors"
       aria-label="Сповіщення"
       onmouseenter={(e) =>
@@ -132,7 +131,7 @@
         {#if notifCount > 0}
           <span
             class="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full flex items-center justify-center px-1 pointer-events-none"
-            style="background-color: red; color: white;  "
+            style="background-color: red; color: white;"
           >
             {formatBadge(notifCount)}
           </span>
@@ -202,43 +201,51 @@
         <DropdownMenu.Separator />
 
         <DropdownMenu.Group>
-          <DropdownMenu.Item class="gap-2 cursor-pointer">
-            <a href="/dashboard" class="flex items-center gap-2">
-              <User class="size-3.5 text-muted-foreground" />
-              <span>Мій профіль</span>
-            </a>
+          <!--
+            ⚠️ ВАЖЛИВО: НЕ обертати <a href> навколо контенту Item — це ламає
+            закриття меню. Натомість викликати goto() в onclick — це
+            правильний spa-роутинг без full page reload.
+          -->
+          <DropdownMenu.Item
+            class="gap-2 cursor-pointer"
+            onclick={() => goto('/dashboard')}
+          >
+            <User class="size-3.5 text-muted-foreground" />
+            <span>Мій профіль</span>
           </DropdownMenu.Item>
 
-          <DropdownMenu.Item class="gap-2 cursor-pointer">
-            <a href="/messages" class="flex items-center gap-2">
-              <MessageSquare class="size-3.5 text-muted-foreground" />
-              <span>Повідомлення</span>
-              {#if messageCount > 0}
-                <span
-                  class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-                  style="background-color: var(--foreground); color: var(--background)"
-                >
-                  {messageCount}
-                </span>
-              {/if}
-            </a>
+          <DropdownMenu.Item
+            class="gap-2 cursor-pointer"
+            onclick={() => goto('/messages')}
+          >
+            <MessageSquare class="size-3.5 text-muted-foreground" />
+            <span>Повідомлення</span>
+            {#if messageCount > 0}
+              <span
+                class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                style="background-color: var(--foreground); color: var(--background)"
+              >
+                {messageCount}
+              </span>
+            {/if}
           </DropdownMenu.Item>
 
           {#if isFreelancer}
             <DropdownMenu.Item
               class="gap-2 cursor-pointer"
-              onclick={() => onnavigate('/gigs/new')}
+              onclick={() => goto('/gigs/new')}
             >
               <Plus class="size-3.5 text-muted-foreground" />
               <span>Новий гіг</span>
             </DropdownMenu.Item>
           {/if}
 
-          <DropdownMenu.Item class="gap-2 cursor-pointer">
-            <a href="/settings" class="flex items-center gap-2">
-              <Settings class="size-3.5 text-muted-foreground" />
-              <span>Налаштування</span>
-            </a>
+          <DropdownMenu.Item
+            class="gap-2 cursor-pointer"
+            onclick={() => goto('/settings')}
+          >
+            <Settings class="size-3.5 text-muted-foreground" />
+            <span>Налаштування</span>
           </DropdownMenu.Item>
         </DropdownMenu.Group>
 

@@ -3,137 +3,32 @@ import { auth } from '$lib/auth'
 import { prisma } from '$lib/prisma'
 import { error, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { FreelancerProfileData } from '$lib/components/profile/types'
 
-const experienceLabels: Record<string, string> = {
-  LT_1: 'менше 1 року',
-  Y_1_2: '1–2 роки',
-  Y_3_5: '3–5 років',
-  Y_5_10: '5–10 років',
-  Y_10_PLUS: '10+ років',
-}
-
-interface ProfileIdData {
-  profileType: 'freelancer'
-  isOwner: false
-  isAuthenticated: boolean
-  isFollowing: boolean
-  user: FreelancerProfileData
-}
-
-export const load: PageServerLoad = async ({
-  params,
-  request,
-}): Promise<ProfileIdData> => {
+/**
+ * Legacy роут /profile/[id]:
+ *   - Свій id → /dashboard
+ *   - Чужий id з username → 301 на /@{username} (нова канонічна URL)
+ *   - Чужий id без username → 404 (рідкісний кейс — не зашкодить)
+ *
+ * Цей роут лишається для зворотної сумісності зі старими посиланнями.
+ * Усі нові посилання у проекті мають вести на /@{username}.
+ */
+export const load: PageServerLoad = async ({ params, request }) => {
   const session = await auth.api.getSession({ headers: request.headers })
-  const isAuthenticated = !!session
 
   if (session && params.id === session.user.id) {
     throw redirect(302, '/dashboard')
   }
 
-  const where = params.id.startsWith('@')
-    ? { username: params.id.slice(1) }
-    : { id: params.id }
-
   const user = await prisma.user.findUnique({
-    where,
-    select: {
-      id: true,
-      name: true,
-      username: true,
-      avatar: true,
-      bio: true,
-      city: true,
-      phone: true,
-      role: true,
-      createdAt: true,
-      verificationStatus: true,
-      portfolioImages: true,
-      freelancerProfile: {
-        select: {
-          categories: true,
-          skills: true,
-          languages: true,
-          experience: true,
-          hourlyRate: true,
-          portfolioUrl: true,
-          avgRating: true,
-          reviewsCount: true,
-          totalOrders: true,
-          completedOrders: true,
-          responseTimeHrs: true,
-          repeatClientsPct: true,
-          followers: true,
-        },
-      },
-      gigs: {
-        where: { isActive: true },
-        select: { id: true, title: true, price: true },
-        orderBy: { createdAt: 'desc' },
-        take: 10,
-      },
-    },
+    where: { id: params.id },
+    select: { username: true, role: true },
   })
 
   if (!user) throw error(404, 'Користувача не знайдено')
-  if (user.role === 'CLIENT') {
-    throw error(404, 'Користувача не знайдено')
-  }
+  if (user.role === 'CLIENT') throw error(404, 'Користувача не знайдено')
+  if (!user.username) throw error(404, 'Профіль не має нікнейма')
 
-  const fp = user.freelancerProfile
-  const totalOrders = fp?.totalOrders ?? 0
-  const completedOrders = fp?.completedOrders ?? 0
-  const successRate =
-    totalOrders > 0 ? Math.round((completedOrders / totalOrders) * 100) : 0
-
-  const portfolio = user.portfolioImages.map((url, i) => ({
-    id: String(i),
-    imageUrl: url,
-  }))
-
-  const phone = isAuthenticated ? (user.phone ?? undefined) : undefined
-  const isFollowing = false
-
-  const profileUser: FreelancerProfileData = {
-    id: user.id,
-    name: user.name ?? '',
-    username: user.username ?? undefined,
-    avatar: user.avatar ?? undefined,
-    bio: user.bio ?? undefined,
-    city: user.city ?? undefined,
-    phone,
-    createdAt: user.createdAt.toISOString(),
-
-    verificationStatus: user.verificationStatus,
-    verificationRejectReason: null,
-
-    categories: fp?.categories ?? [],
-    skills: fp?.skills ?? [],
-    languages: fp?.languages ?? [],
-    experience: fp?.experience ? experienceLabels[fp.experience] : null,
-    hourlyRate: fp?.hourlyRate ?? null,
-    portfolioUrl: fp?.portfolioUrl ?? null,
-
-    avgRating: fp?.avgRating ?? 0,
-    reviewsCount: fp?.reviewsCount ?? 0,
-    totalOrders,
-    completedOrders,
-    responseTimeHrs: fp?.responseTimeHrs ?? null,
-    repeatClientsPct: fp?.repeatClientsPct ?? 0,
-    followers: fp?.followers ?? 0,
-    successRate,
-
-    gigs: user.gigs,
-    reviews: [],
-    portfolio,
-  }
-
-  return {
-    profileType: 'freelancer',
-    isOwner: false,
-    isAuthenticated,
-    isFollowing,
-    user: profileUser,
-  }
+  // 301 — permanent redirect, щоб пошуковики оновили посилання
+  throw redirect(301, `/@${user.username}`)
 }

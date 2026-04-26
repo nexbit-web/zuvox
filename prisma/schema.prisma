@@ -61,6 +61,28 @@ model User {
  
   @@index([username])
   @@index([verificationStatus])
+
+  following  Follow[]  @relation("Following")  
+  followers  Follow[]  @relation("Followers")   
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+ 
+  // Хто підписується (зазвичай клієнт)
+  followerId  String
+  follower    User     @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+ 
+  // На кого підписуються (фрілансер)
+  followingId String
+  following   User     @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+ 
+  createdAt   DateTime @default(now())
+ 
+  // Один юзер може підписатися на іншого тільки раз
+  @@unique([followerId, followingId])
+  @@index([followerId])      // швидкий запит "на кого підписаний цей юзер"
+  @@index([followingId])     // швидкий запит "хто підписаний на мене"
 }
 
 model FreelancerProfile {

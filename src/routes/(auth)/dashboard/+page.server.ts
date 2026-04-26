@@ -16,19 +16,86 @@ const experienceLabels: Record<string, string> = {
   Y_10_PLUS: '10+ років',
 }
 
+/**
+ * Карточка фрілансера у списку «Мої підписки» — мінімальні поля для
+ * рендеру списку (не повний профіль).
+ */
+export interface FollowingFreelancer {
+  id: string
+  username: string | null
+  name: string
+  avatar: string | null
+  bio: string | null
+  city: string | null
+  categories: string[]
+  hourlyRate: number | null
+  avgRating: number
+  reviewsCount: number
+  isVerified: boolean
+}
+
 type DashboardData =
   | {
       profileType: 'freelancer'
       isOwner: true
       isAuthenticated: true
       user: FreelancerProfileData
+      following: FollowingFreelancer[]
     }
   | {
       profileType: 'client'
       isOwner: true
       isAuthenticated: true
       user: ClientProfileData
+      following: FollowingFreelancer[]
     }
+
+/**
+ * Завантажує список фрілансерів, на яких підписаний поточний юзер.
+ * Сортуємо за датою підписки — найновіші зверху.
+ */
+async function loadFollowing(userId: string): Promise<FollowingFreelancer[]> {
+  const follows = await prisma.follow.findMany({
+    where: { followerId: userId },
+    orderBy: { createdAt: 'desc' },
+    take: 50,
+    select: {
+      following: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          avatar: true,
+          bio: true,
+          city: true,
+          verificationStatus: true,
+          freelancerProfile: {
+            select: {
+              categories: true,
+              hourlyRate: true,
+              avgRating: true,
+              reviewsCount: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return follows.map((f) => ({
+    id: f.following.id,
+    username: f.following.username,
+    name: f.following.name ?? '',
+    avatar: f.following.avatar,
+    bio: f.following.bio,
+    city: f.following.city,
+    categories: f.following.freelancerProfile?.categories ?? [],
+    hourlyRate: f.following.freelancerProfile?.hourlyRate ?? null,
+    avgRating: f.following.freelancerProfile?.avgRating ?? 0,
+    reviewsCount: f.following.freelancerProfile?.reviewsCount ?? 0,
+    isVerified: f.following.verificationStatus === 'VERIFIED',
+  }))
+}
 
 export const load: PageServerLoad = async ({
   request,
@@ -79,6 +146,9 @@ export const load: PageServerLoad = async ({
 
   if (!user) throw redirect(302, '/user/login')
 
+  // Підписки завантажуємо для будь-якої ролі
+  const following = await loadFollowing(user.id)
+
   // ─── КЛІЄНТ ───
   if (user.role === 'CLIENT') {
     const clientUser: ClientProfileData = {
@@ -100,6 +170,7 @@ export const load: PageServerLoad = async ({
       isOwner: true,
       isAuthenticated: true,
       user: clientUser,
+      following,
     }
   }
 
@@ -154,5 +225,6 @@ export const load: PageServerLoad = async ({
     isOwner: true,
     isAuthenticated: true,
     user: freelancerUser,
+    following,
   }
 }

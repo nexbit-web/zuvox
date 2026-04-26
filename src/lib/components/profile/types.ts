@@ -1,9 +1,5 @@
 // src/lib/components/profile/types.ts
 
-// ═══════════════════════════════════════════════════════
-// Спільні типи для профільних компонентів і server loaders
-// ═══════════════════════════════════════════════════════
-
 export type VerificationStatus = 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
 
 // ─── Фрілансер ─────────────────────────────────────────
@@ -29,7 +25,6 @@ export interface ProfilePortfolioItem {
   id: string
   title?: string
   imageUrl: string
-  /** Реальні розміри фото для PhotoSwipe (якщо невідомі — 1600/1200) */
   width?: number
   height?: number
 }
@@ -92,4 +87,20 @@ export interface ClientProfileData {
   totalOrders: number
   completedOrders: number
   reviews: ClientReview[]
+}
+
+// ─── Список підписок (для dashboard) ───────────────────
+
+export interface FollowingFreelancer {
+  id: string
+  username: string | null
+  name: string
+  avatar: string | null
+  bio: string | null
+  city: string | null
+  categories: string[]
+  hourlyRate: number | null
+  avgRating: number
+  reviewsCount: number
+  isVerified: boolean
 }

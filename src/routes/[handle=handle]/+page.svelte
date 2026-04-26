@@ -1,4 +1,4 @@
-<!-- src/routes/(auth)/profile/[id]/+page.svelte -->
+<!-- src/routes/[handle=handle]/+page.svelte -->
 <script lang="ts">
   import FreelancerProfileView from '$lib/components/profile/freelancer-profile-view.svelte'
   import { goto, invalidateAll } from '$app/navigation'
@@ -9,10 +9,12 @@
   let following = $state(data.isFollowing)
   let pending = $state(false)
 
+  const profileUrl = $derived(`/@${data.user.username}`)
+
   async function handleFollow() {
     if (pending) return
     if (!data.isAuthenticated) {
-      goto('/user/login?next=' + encodeURIComponent(`/profile/${data.user.id}`))
+      goto('/user/login?next=' + encodeURIComponent(profileUrl))
       return
     }
     pending = true
@@ -33,7 +35,7 @@
 
   function handleOfferWork() {
     if (!data.isAuthenticated) {
-      goto('/user/login?next=' + encodeURIComponent(`/profile/${data.user.id}`))
+      goto('/user/login?next=' + encodeURIComponent(profileUrl))
       return
     }
     goto(`/messages?to=${data.user.id}&offer=1`)
@@ -41,9 +43,24 @@
 </script>
 
 <svelte:head>
-  <title>{data.user.name} · Zunor</title>
+  <title>{data.user.name} (@{data.user.username}) · Zunor</title>
+  {#if data.user.bio}
+    <meta name="description" content={data.user.bio.slice(0, 160)} />
+  {/if}
+  <!-- Open Graph для красивого превью при шарінгу -->
+  <meta
+    property="og:title"
+    content="{data.user.name} (@{data.user.username})"
+  />
+  {#if data.user.bio}
+    <meta property="og:description" content={data.user.bio.slice(0, 200)} />
+  {/if}
+  {#if data.user.avatar}
+    <meta property="og:image" content={data.user.avatar} />
+  {/if}
+  <meta property="og:type" content="profile" />
 </svelte:head>
-
+<div class="h-[33px]"></div>
 <FreelancerProfileView
   user={data.user}
   isOwner={false}

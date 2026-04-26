@@ -2,6 +2,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
+  import { goto } from '$app/navigation'
   import CatalogButton from './catalog-button.svelte'
   import CatalogMenu from './catalog-menu.svelte'
   import SearchBar from './search-bar.svelte'
@@ -19,10 +20,15 @@
     document.body.style.overflow = catalogOpen ? 'hidden' : ''
   })
 
+  /**
+   * Client-side навігація через goto().
+   * НЕ використовуйте window.location.href — це викликає full page reload
+   * і вбиває реактивність SvelteKit.
+   */
   function navigate(url: string) {
     catalogOpen = false
     searchOpen = false
-    window.location.href = url
+    goto(url)
   }
 
   onMount(() => {
@@ -72,7 +78,6 @@
   })
 </script>
 
-<!-- Overlay коли відкрито каталог чи пошук -->
 {#if catalogOpen || searchOpen}
   <button
     transition:fade={{ duration: 150 }}
@@ -98,7 +103,6 @@
       <div
         class="max-w-7xl mx-auto h-[72px] px-4 sm:px-6 flex items-center gap-3 sm:gap-5"
       >
-        <!-- Ліва частина: Логотип + Каталог (тільки десктоп) -->
         <div class="hidden md:flex items-center gap-4 shrink-0">
           <Logo />
           <div data-catalog>
@@ -106,17 +110,14 @@
           </div>
         </div>
 
-        <!-- Лого на мобільному -->
         <div class="md:hidden shrink-0">
           <Logo />
         </div>
 
-        <!-- Пошук — займає весь простір між лого і user-menu -->
         <div class="flex-1 min-w-0">
           <SearchBar onnavigate={navigate} bind:isOpen={searchOpen} />
         </div>
 
-        <!-- Права частина: UserMenu — тільки на десктопі -->
         <div class="hidden md:flex items-center shrink-0">
           <UserMenu onnavigate={navigate} />
         </div>
@@ -131,7 +132,6 @@
   </div>
 </div>
 
-<!-- Нижнє мобільне меню -->
 <MobileNav
   onnavigate={navigate}
   oncatalog={() => {
@@ -140,5 +140,4 @@
   hasNotifications={true}
 />
 
-<!-- Відступ під фіксований хедер (72px) -->
-<div class="h-[36px]"></div>
+<div class="h-[33px]"></div>

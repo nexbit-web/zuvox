@@ -88,7 +88,10 @@
   let phoneRevealed = $state(false)
   function togglePhone() {
     if (!isAuthenticated) {
-      goto('/user/login?next=' + encodeURIComponent(`/profile/${user.id}`))
+      const returnUrl = user.username
+        ? `/@${user.username}`
+        : `/profile/${user.id}`
+      goto('/user/login?next=' + encodeURIComponent(returnUrl))
       return
     }
     phoneRevealed = !phoneRevealed
@@ -138,84 +141,11 @@
   })
 </script>
 
-<!-- CEO -->
 <svelte:head>
-  <!-- TITLE -->
-  <title>
-    {`${user.name} — ${user.categories?.join(', ') || 'фрилансер'} ${
-      user.city ? `в ${user.city}` : ''
-    } | Послуги фрилансера · Zunor`}
-  </title>
-
-  <!-- DESCRIPTION -->
-  <meta
-    name="description"
-    content={`${user.name} — фрилансер на Zunor. ${
-      user.categories?.join(', ') || 'Професійні послуги'
-    }. ${user.city ? `Працює в ${user.city}.` : ''} ${
-      user.bio ? user.bio : ''
-    }`}
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/photoswipe@5/dist/photoswipe.css"
   />
-
-  <!-- KEYWORDS (не критично, но можно) -->
-  <meta
-    name="keywords"
-    content={`${user.name}, ${user.categories?.join(', ')}, фрилансер, послуги`}
-  />
-
-  <!-- OPEN GRAPH -->
-  <meta property="og:title" content={`${user.name} — фрилансер | Zunor`} />
-  <meta
-    property="og:description"
-    content={`Послуги: ${user.categories?.join(', ') || ''}`}
-  />
-  <meta property="og:type" content="profile" />
-  <meta property="og:image" content={user.avatar || '/default-avatar.png'} />
-
-  <!-- CANONICAL -->
-  <link rel="canonical" href={`https://zunor.com/profile/${user.id}`} />
-
-  <!-- JSON-LD: PERSON -->
-  <script type="application/ld+json">
-    {JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: user.name,
-      image: user.avatar,
-      url: `https://zunor.com/profile/${user.id}`,
-      address: user.city
-        ? {
-            "@type": "PostalAddress",
-            addressLocality: user.city,
-            addressCountry: "UA"
-          }
-        : undefined,
-      knowsAbout: user.categories,
-      description: user.bio,
-    })}
-  </script>
-
-  <!-- JSON-LD: SERVICES -->
-  <script type="application/ld+json">
-    {JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      itemListElement: user.gigs.map((gig, i) => ({
-        "@type": "Service",
-        position: i + 1,
-        name: gig.title,
-        provider: {
-          "@type": "Person",
-          name: user.name,
-        },
-        offers: {
-          "@type": "Offer",
-          price: gig.price,
-          priceCurrency: "UAH"
-        }
-      }))
-    })}
-  </script>
 </svelte:head>
 
 <div
