@@ -179,7 +179,7 @@
       <Card.Header class="text-center">
         <Card.Title class="text-xl">Створіть свій акаунт</Card.Title>
         <Card.Description
-          >Оберіть як ви плануєте використовувати Zuvox</Card.Description
+          >Оберіть як ви плануєте використовувати Zunor</Card.Description
         >
       </Card.Header>
       <Card.Content>

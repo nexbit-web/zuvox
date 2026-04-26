@@ -9,6 +9,16 @@
 * 🟢 You can import this file directly.
 */
 
+export const MessageType = {
+  TEXT: 'TEXT',
+  PHOTO: 'PHOTO',
+  FILE: 'FILE',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type MessageType = (typeof MessageType)[keyof typeof MessageType]
+
+
 export const Role = {
   CLIENT: 'CLIENT',
   FREELANCER: 'FREELANCER',

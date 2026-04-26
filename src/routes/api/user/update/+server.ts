@@ -35,7 +35,7 @@ const experienceMap: Record<string, ExperienceLevel> = {
 const USERNAME_RE = /^[a-z][a-z0-9_]{2,19}$/
 
 const RESERVED = new Set([
-  'admin', 'root', 'api', 'support', 'help', 'zuvox', 'system',
+  'admin', 'root', 'api', 'support', 'help', 'zunor', 'system',
   'user', 'users', 'profile', 'dashboard', 'settings', 'login',
   'register', 'signup', 'logout', 'moderation', 'verified',
   'null', 'undefined', 'anonymous',

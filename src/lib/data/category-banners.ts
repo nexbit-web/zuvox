@@ -16,7 +16,7 @@ export const categoryBanners: Record<string, string> = {
   'Фото та графіка': '/banners/photo-graphics.jpg',
   'Бізнес-послуги': '/banners/business.jpg',
   'Освіта та навчання': '/banners/education.jpg',
-  'Аудіо та музика': '/banners/audio-music.jpg',
+  'Аудіо та музика': '/banners/audio-music.gif',
 }
 
 export const defaultBanner = '/banners/default.jpg'

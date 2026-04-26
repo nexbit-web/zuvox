@@ -1,5 +1,6 @@
 <!-- src/lib/components/header/user-menu.svelte -->
 <script lang="ts">
+  import { onMount } from 'svelte'
   import {
     Avatar,
     AvatarFallback,
@@ -19,6 +20,7 @@
   import { signOut } from '$lib/auth-client'
   import { goto, invalidateAll } from '$app/navigation'
   import { page } from '$app/stores'
+  import { chatStore } from '$lib/stores/chat-store.svelte'
 
   let { onnavigate }: { onnavigate: (url: string) => void } = $props()
 
@@ -37,10 +39,26 @@
       : null,
   )
 
-  const messageCount = 3
-  const notifCount = 5
+  // ─── Реальні лічильники з chatStore ───
+  const messageCount = $derived(chatStore.totalUnread)
+  const notifCount = 0 // TODO: коли буде Notification модель
+
+  // Підписатись на персональний канал коли юзер залогінений
+  onMount(() => {
+    if (session?.user.id && !chatStore.initialized) {
+      // Прелоадимо список чатів щоб бейдж був точним
+      fetch('/api/chats')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => {
+          if (j?.chats) chatStore.setChats(j.chats)
+        })
+        .catch(() => {})
+      chatStore.subscribeToUserEvents(session.user.id)
+    }
+  })
 
   async function handleSignOut() {
+    chatStore.unsubscribeAll()
     await signOut()
     await invalidateAll()
     goto('/')
@@ -53,7 +71,6 @@
 
 <div class="flex items-center gap-1 shrink-0">
   {#if !isLoggedIn}
-    <!-- Гість: Увійти + Реєстрація -->
     <button
       type="button"
       onclick={() => onnavigate('/user/login')}
@@ -184,7 +201,6 @@
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content class="w-56 mt-2" align="end">
-        <!-- Юзер інфо -->
         <div class="px-3 py-3 flex items-center gap-2.5">
           <Avatar class="size-9 shrink-0">
             <AvatarImage src={user?.avatar ?? ''} alt={user?.name ?? ''} />
@@ -201,11 +217,6 @@
         <DropdownMenu.Separator />
 
         <DropdownMenu.Group>
-          <!--
-            ⚠️ ВАЖЛИВО: НЕ обертати <a href> навколо контенту Item — це ламає
-            закриття меню. Натомість викликати goto() в onclick — це
-            правильний spa-роутинг без full page reload.
-          -->
           <DropdownMenu.Item
             class="gap-2 cursor-pointer"
             onclick={() => goto('/dashboard')}

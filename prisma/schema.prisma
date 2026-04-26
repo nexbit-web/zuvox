@@ -247,47 +247,79 @@ model Task {
 // ═══════════════════════════════
 
 model Chat {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Зв'язки
-  members   ChatMember[]
-  messages  Message[]
-
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt       // оновлюється при кожному новому повідомленні
+ 
+  // Кеш останнього повідомлення для швидкого рендеру списку чатів
+  lastMessageText   String?
+  lastMessageAt     DateTime?
+  lastSenderId      String?
+ 
+  members     ChatMember[]
+  messages    Message[]
+ 
   @@index([updatedAt])
+  @@index([lastMessageAt])
 }
 
 model ChatMember {
-  id        String   @id @default(cuid())
-  chatId    String
-  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lastReadAt DateTime?
-  createdAt DateTime @default(now())
-
+  id          String     @id @default(cuid())
+  chatId      String
+  chat        Chat       @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  lastReadAt  DateTime?                     
+  mutedUntil  DateTime?                     
+ 
+  createdAt   DateTime   @default(now())
+ 
   @@unique([chatId, userId])
   @@index([userId])
+  @@index([chatId])
+}
+
+enum MessageType {
+  TEXT
+  PHOTO
+  FILE
+  SYSTEM        
 }
 
 model Message {
-  id        String      @id @default(cuid())
-  text      String
-  isRead    Boolean     @default(false)
-  createdAt DateTime    @default(now())
-
+  id          String       @id @default(cuid())
+  type        MessageType  @default(TEXT)
+  text        String       @default("")    // для TEXT — тіло, для PHOTO/FILE — підпис (caption)
+ 
+  // Вкладення (для PHOTO/FILE)
+  attachmentUrl       String?
+  attachmentPublicId  String?              // Cloudinary ID для видалення
+  attachmentMimeType  String?
+  attachmentSize      Int?                 // bytes
+  attachmentName      String?              // оригінальне ім'я файлу
+ 
+  // Метадані
+  isRead      Boolean      @default(false)
+  editedAt    DateTime?                    // якщо редагували
+  deletedAt   DateTime?                    // soft delete (показуємо "Повідомлення видалено")
+ 
+  createdAt   DateTime     @default(now())
+ 
   // Зв'язки
-  chatId    String
-  chat      Chat        @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  senderId  String
-  sender    User        @relation("SentMessages", fields: [senderId], references: [id])
-
-  @@index([chatId])
+  chatId      String
+  chat        Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User         @relation("SentMessages", fields: [senderId], references: [id])
+ 
+  // Reply-to (опційно — для відповідей на конкретне повідомлення)
+  replyToId   String?
+  replyTo     Message?     @relation("MessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies     Message[]    @relation("MessageReply")
+ 
+  @@index([chatId, createdAt])             // фетч історії чату
   @@index([senderId])
-  @@index([createdAt])
 }
-
 // ═══════════════════════════════
 // КАТЕГОРІЇ (для сторінки /services)
 // ═══════════════════════════════

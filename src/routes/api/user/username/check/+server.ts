@@ -12,7 +12,7 @@ const RESERVED = new Set([
   'api',
   'support',
   'help',
-  'zuvox',
+  'zunor',
   'system',
   'user',
   'users',

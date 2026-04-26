@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ request }) => {
   await transporter.sendMail({
     from: SMTP_FROM,
     to: email,
-    subject: 'Ваш код підтвердження — Zuvox',
+    subject: 'Ваш код підтвердження — Zunor',
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">
         <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">Код підтвердження</h2>

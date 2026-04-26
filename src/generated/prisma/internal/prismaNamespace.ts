@@ -1790,7 +1790,10 @@ export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof Task
 export const ChatScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  lastMessageText: 'lastMessageText',
+  lastMessageAt: 'lastMessageAt',
+  lastSenderId: 'lastSenderId'
 } as const
 
 export type ChatScalarFieldEnum = (typeof ChatScalarFieldEnum)[keyof typeof ChatScalarFieldEnum]
@@ -1801,6 +1804,7 @@ export const ChatMemberScalarFieldEnum = {
   chatId: 'chatId',
   userId: 'userId',
   lastReadAt: 'lastReadAt',
+  mutedUntil: 'mutedUntil',
   createdAt: 'createdAt'
 } as const
 
@@ -1809,11 +1813,20 @@ export type ChatMemberScalarFieldEnum = (typeof ChatMemberScalarFieldEnum)[keyof
 
 export const MessageScalarFieldEnum = {
   id: 'id',
+  type: 'type',
   text: 'text',
+  attachmentUrl: 'attachmentUrl',
+  attachmentPublicId: 'attachmentPublicId',
+  attachmentMimeType: 'attachmentMimeType',
+  attachmentSize: 'attachmentSize',
+  attachmentName: 'attachmentName',
   isRead: 'isRead',
+  editedAt: 'editedAt',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   chatId: 'chatId',
-  senderId: 'senderId'
+  senderId: 'senderId',
+  replyToId: 'replyToId'
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
@@ -2054,6 +2067,20 @@ export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'TaskStatus[]'
  */
 export type ListEnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MessageType'
+ */
+export type EnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType'>
+    
+
+
+/**
+ * Reference to a field of type 'MessageType[]'
+ */
+export type ListEnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType[]'>
     
 
 /**

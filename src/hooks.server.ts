@@ -1,61 +1,61 @@
 // src/hooks.server.ts
 import { auth } from '$lib/auth'
 import { svelteKitHandler } from 'better-auth/svelte-kit'
-import { building } from '$app/environment'
-import type { Handle } from '@sveltejs/kit'
+import { building, dev } from '$app/environment'
 import { sequence } from '@sveltejs/kit/hooks'
+import type { Handle } from '@sveltejs/kit'
 
-/**
- * Better-auth handler
- */
 const authHandle: Handle = async ({ event, resolve }) => {
   return svelteKitHandler({ event, resolve, auth, building })
 }
 
 /**
- * Security headers — захист від XSS, clickjacking, MIME-sniffing.
- * Для production додайте HSTS на рівні Nginx/Cloudflare.
+ * Security headers + CSP.
+ *
+ * connect-src має включати усі домени до яких клієнт робить XHR/WebSocket:
+ *   - 'self'                       — наш бекенд
+ *   - https://api.cloudinary.com   — завантаження медіа
+ *   - https://*.pusher.com         — REST API Pusher
+ *   - wss://*.pusher.com           — WebSocket
+ *   - https://sockjs-*.pusher.com  — fallback для старих браузерів
+ *
+ * У dev-режимі — менш суворе CSP, щоб HMR і Vite-overlay працювали.
  */
 const securityHeaders: Handle = async ({ event, resolve }) => {
   const response = await resolve(event)
 
-  // Clickjacking protection
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
+  if (dev) {
+    // У dev НЕ ставимо CSP — інакше HMR і інспектор ламаються.
+    // Ставимо тільки безпечні базові заголовки.
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+    return response
+  }
 
-  // MIME-type sniffing protection
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-
-  // Referrer — не віддаємо повний URL у зовнішні сервіси
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-
-  // Permissions-Policy — забороняємо доступ до камери/мікрофона/геолокації
-  // за замовчуванням (включайте точково коли треба).
-  response.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=(), interest-cohort=()',
-  )
-
-  // Cross-Origin Resource Policy — наші ресурси тільки для нашого origin
-  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin')
-
-  // Content Security Policy
-  // ⚠️ Налаштуйте під свій продакшн-домен, зараз ліберальна для dev.
-  // 'unsafe-inline' для стилів — Tailwind inline-styles + Svelte scoped.
-  // 'unsafe-eval' НЕ додаємо — це розвʼязує руки XSS-атакам.
   const csp = [
     `default-src 'self'`,
-    `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
+    `script-src 'self' 'unsafe-inline' https://js.pusher.com https://cdn.jsdelivr.net`,
     `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
-    `img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com`,
+    `img-src 'self' data: blob: https://res.cloudinary.com https://*.googleusercontent.com`,
+    `media-src 'self' blob: https://res.cloudinary.com`,
     `font-src 'self' data:`,
-    `connect-src 'self' https://api.cloudinary.com`,
-    `frame-ancestors 'self'`,
+    // ↓ ОБОВ'ЯЗКОВО для Pusher
+    `connect-src 'self' https://api.cloudinary.com https://*.pusher.com wss://*.pusher.com https://sockjs-eu.pusher.com https://sockjs-mt1.pusher.com https://sockjs-ap1.pusher.com https://sockjs-ap2.pusher.com`,
+    `frame-src 'none'`,
+    `frame-ancestors 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,
-    `object-src 'none'`,
   ].join('; ')
 
   response.headers.set('Content-Security-Policy', csp)
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=()',
+  )
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin')
 
   return response
 }
