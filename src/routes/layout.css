@@ -146,6 +146,6 @@
 }
 
 html #nprogress .bar {
-  background: var(--nprogress-bar);
+  background: rgb(36, 255, 25);
   height: 3px;
 }
