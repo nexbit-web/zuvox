@@ -1,6 +1,16 @@
 <!-- src/lib/components/chat/message-composer.svelte -->
 <script lang="ts">
-  import { Send, Paperclip, X, Image as ImageIcon, Reply } from 'lucide-svelte'
+  import {
+    Send,
+    Plus,
+    X,
+    Image as ImageIcon,
+    Reply,
+    Smile,
+    Paperclip,
+    Pencil,
+  } from 'lucide-svelte'
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import type { ChatMessage } from './types'
 
   interface PendingAttachment {
@@ -20,22 +30,13 @@
   interface Props {
     chatId: string
     currentUserId: string
-    /**
-     * Викликається ОДРАЗУ коли натиснули Send — повертає optimistic
-     * повідомлення з тимчасовим id (`tmp-...`). ChatWindow одразу
-     * додає його у список, юзер бачить його миттєво.
-     */
     onSendOptimistic?: (msg: ChatMessage) => void
-    /**
-     * Викликається коли сервер підтвердив повідомлення — тимчасовий
-     * id треба замінити на реальний.
-     */
     onSendConfirmed?: (tmpId: string, real: ChatMessage) => void
-    /**
-     * Викликається коли відправка провалилася — повідомлення треба
-     * позначити як failed або видалити.
-     */
     onSendFailed?: (tmpId: string, error: string) => void
+    /** Edit mode: коли юзер редагує своє повідомлення */
+    editing?: ChatMessage | null
+    onEditDone?: (m: ChatMessage) => void
+    onCancelEdit?: () => void
     replyTo?: ChatMessage | null
     onCancelReply?: () => void
     onTyping?: () => void
@@ -47,6 +48,9 @@
     onSendOptimistic,
     onSendConfirmed,
     onSendFailed,
+    editing = null,
+    onEditDone,
+    onCancelEdit,
     replyTo,
     onCancelReply,
     onTyping,
@@ -56,11 +60,33 @@
   let textarea = $state<HTMLTextAreaElement | undefined>(undefined)
   let pending: PendingAttachment | null = $state(null)
   let dragActive = $state(false)
+  let photoInput = $state<HTMLInputElement | undefined>(undefined)
+  let fileInput = $state<HTMLInputElement | undefined>(undefined)
 
   const MAX_SIZE = 10 * 1024 * 1024
   const PHOTO_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
-  // ─── Auto-resize textarea ───
+  // Коли entering edit mode — підвантажуємо текст редагованого
+  let lastEditingId = ''
+  $effect(() => {
+    const id = editing?.id ?? ''
+    if (id === lastEditingId) return
+    lastEditingId = id
+    if (editing) {
+      text = editing.text
+      // pending attachments чищуть, бо не редагуємо файли
+      if (pending?.previewUrl) URL.revokeObjectURL(pending.previewUrl)
+      pending = null
+      textarea?.focus()
+      // ставимо курсор у кінець
+      requestAnimationFrame(() => {
+        if (textarea) {
+          textarea.selectionStart = textarea.selectionEnd = text.length
+        }
+      })
+    }
+  })
+
   $effect(() => {
     if (!textarea) return
     text
@@ -69,6 +95,7 @@
   })
 
   function handleFile(file: File) {
+    if (editing) return // у edit mode файли не дозволені
     if (file.size > MAX_SIZE) {
       onSendFailed?.('', 'Файл занадто великий. Максимум 10 МБ.')
       return
@@ -77,11 +104,7 @@
     const previewUrl = isPhoto ? URL.createObjectURL(file) : null
     if (pending?.previewUrl) URL.revokeObjectURL(pending.previewUrl)
 
-    pending = {
-      file,
-      previewUrl,
-      type: isPhoto ? 'PHOTO' : 'FILE',
-    }
+    pending = { file, previewUrl, type: isPhoto ? 'PHOTO' : 'FILE' }
     textarea?.focus()
   }
 
@@ -99,7 +122,7 @@
 
   function onDragEnter(e: DragEvent) {
     e.preventDefault()
-    if (e.dataTransfer?.types.includes('Files')) dragActive = true
+    if (e.dataTransfer?.types.includes('Files') && !editing) dragActive = true
   }
 
   function onDragLeave(e: DragEvent) {
@@ -117,6 +140,7 @@
   }
 
   function onPaste(e: ClipboardEvent) {
+    if (editing) return
     const item = Array.from(e.clipboardData?.items ?? []).find((i) =>
       i.type.startsWith('image/'),
     )
@@ -168,17 +192,48 @@
     }
   }
 
-  /**
-   * Generate temporary id (UUID-ish for optimistic UI)
-   */
   function tmpId(): string {
     return 'tmp-' + Math.random().toString(36).slice(2, 10) + Date.now()
   }
 
-  /**
-   * MAIN — мгновенно показуємо повідомлення, потім грузимо у фоні.
-   */
-  async function send() {
+  /** Зберегти редагування */
+  async function saveEdit() {
+    if (!editing) return
+    const trimmed = text.trim()
+    if (!trimmed || trimmed === editing.text) {
+      onCancelEdit?.()
+      return
+    }
+    try {
+      const res = await fetch(
+        `/api/chats/${chatId}/messages/${editing.id}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: trimmed }),
+        },
+      )
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.message ?? 'Не вдалося зберегти')
+      }
+      const json = await res.json()
+      const updated: ChatMessage = {
+        ...editing,
+        text: json.text,
+        editedAt: json.editedAt,
+      }
+      onEditDone?.(updated)
+      text = ''
+    } catch (err) {
+      onSendFailed?.(
+        '',
+        err instanceof Error ? err.message : 'Помилка збереження',
+      )
+    }
+  }
+
+  async function sendNew() {
     const trimmed = text.trim()
     if (!trimmed && !pending) return
 
@@ -187,12 +242,11 @@
     const currentReplyTo = replyTo
     const currentPending = pending
 
-    // ─── 1. ОДРАЗУ показуємо optimistic повідомлення ───
     const optimistic: ChatMessage = {
       id,
       type,
       text: trimmed,
-      attachmentUrl: currentPending?.previewUrl ?? null, // local preview
+      attachmentUrl: currentPending?.previewUrl ?? null,
       attachmentMimeType: currentPending?.file.type ?? null,
       attachmentSize: currentPending?.file.size ?? null,
       attachmentName: currentPending?.file.name ?? null,
@@ -213,14 +267,11 @@
     }
 
     onSendOptimistic?.(optimistic)
-
-    // ─── 2. Очищаємо composer (юзер може писати наступне) ───
     text = ''
     clearAttachment()
     onCancelReply?.()
     textarea?.focus()
 
-    // ─── 3. У фоні: upload + send ───
     try {
       let attachment: UploadedAttachment | null = null
       if (currentPending) {
@@ -249,14 +300,22 @@
       const json = await res.json()
       onSendConfirmed?.(id, json.message)
     } catch (err) {
-      onSendFailed?.(
-        id,
-        err instanceof Error ? err.message : 'Помилка відправки',
-      )
+      onSendFailed?.(id, err instanceof Error ? err.message : 'Помилка')
     }
   }
 
+  function send() {
+    if (editing) saveEdit()
+    else sendNew()
+  }
+
   function onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape' && editing) {
+      e.preventDefault()
+      text = ''
+      onCancelEdit?.()
+      return
+    }
     if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
       send()
@@ -265,13 +324,15 @@
     onTyping?.()
   }
 
-  const canSend = $derived(text.trim().length > 0 || pending !== null)
+  const canSend = $derived(
+    editing ? text.trim().length > 0 : text.trim().length > 0 || pending !== null,
+  )
 </script>
 
 <div
-  class="relative px-3 py-3 sm:px-4 sm:py-3.5"
+  class="relative px-4 py-3"
   style="background-color: var(--background);
-         border-top: 1px solid color-mix(in oklch, var(--foreground) 6%, transparent)"
+         border-top: 1px solid var(--border)"
   ondragenter={onDragEnter}
   ondragover={(e) => e.preventDefault()}
   ondragleave={onDragLeave}
@@ -281,35 +342,61 @@
 >
   {#if dragActive}
     <div
-      class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none rounded-t-xl"
-      style="background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+      class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
+      style="background-color: color-mix(in srgb, var(--primary) 8%, transparent);
              border: 2px dashed var(--primary)"
     >
       <div class="text-center">
-        <ImageIcon class="size-10 mx-auto mb-2" style="color: var(--primary)" />
+        <ImageIcon class="size-8 mx-auto mb-1.5" style="color: var(--primary)" />
         <p class="text-sm font-medium" style="color: var(--primary)">
-          Відпустіть файл щоб надіслати
+          Відпустіть файл
         </p>
       </div>
     </div>
   {/if}
 
-  {#if replyTo}
+  <!-- Edit / Reply preview -->
+  {#if editing}
     <div
-      class="flex items-center gap-2 px-3 py-2 mb-2 rounded-lg border-l-2"
-      style="background-color: color-mix(in oklch, var(--foreground) 4%, transparent);
-             border-left-color: var(--primary)"
+      class="flex items-center gap-2 px-3 py-2 mb-2 rounded-xl border-l-2"
+      style="background-color: var(--muted); border-left-color: var(--primary)"
+    >
+      <Pencil class="size-3.5 shrink-0" style="color: var(--primary)" />
+      <div class="flex-1 min-w-0">
+        <p class="text-[11px] font-medium" style="color: var(--primary)">
+          Редагування повідомлення
+        </p>
+        <p class="text-xs truncate" style="color: var(--muted-foreground)">
+          {editing.text}
+        </p>
+      </div>
+      <button
+        type="button"
+        onclick={() => {
+          text = ''
+          onCancelEdit?.()
+        }}
+        class="size-6 rounded-full flex items-center justify-center cursor-pointer hover:opacity-70"
+        aria-label="Скасувати"
+      >
+        <X class="size-3.5" style="color: var(--muted-foreground)" />
+      </button>
+    </div>
+  {:else if replyTo}
+    <div
+      class="flex items-center gap-2 px-3 py-2 mb-2 rounded-xl border-l-2"
+      style="background-color: var(--muted); border-left-color: var(--primary)"
     >
       <Reply class="size-3.5 shrink-0" style="color: var(--primary)" />
       <div class="flex-1 min-w-0">
         <p class="text-[11px] font-medium" style="color: var(--primary)">
-          У відповідь на
+          У відповідь
         </p>
         <p class="text-xs truncate" style="color: var(--muted-foreground)">
           {replyTo.type === 'PHOTO'
-            ? 'Фото'
+            ? '📷 Фото'
             : replyTo.type === 'FILE'
-              ? 'Файл'
+              ? '📎 Файл'
               : replyTo.text}
         </p>
       </div>
@@ -317,99 +404,132 @@
         type="button"
         onclick={onCancelReply}
         class="size-6 rounded-full flex items-center justify-center cursor-pointer hover:opacity-70"
-        aria-label="Скасувати відповідь"
+        aria-label="Скасувати"
       >
         <X class="size-3.5" style="color: var(--muted-foreground)" />
       </button>
     </div>
   {/if}
 
-  {#if pending}
+  {#if pending && !editing}
     <div
-      class="flex items-center gap-3 px-3 py-2.5 mb-2 rounded-xl"
-      style="background-color: color-mix(in oklch, var(--foreground) 4%, transparent)"
+      class="flex items-center gap-3 px-3 py-2 mb-2 rounded-xl"
+      style="background-color: var(--muted)"
     >
       {#if pending.previewUrl}
         <img
           src={pending.previewUrl}
           alt=""
-          class="size-12 rounded-lg object-cover shrink-0"
+          class="size-10 rounded-lg object-cover shrink-0"
         />
       {:else}
         <div
-          class="size-12 rounded-lg flex items-center justify-center shrink-0"
-          style="background-color: color-mix(in oklch, var(--primary) 12%, transparent)"
+          class="size-10 rounded-lg flex items-center justify-center shrink-0"
+          style="background-color: var(--accent)"
         >
-          <Paperclip class="size-5" style="color: var(--primary)" />
+          <Paperclip class="size-4" style="color: var(--muted-foreground)" />
         </div>
       {/if}
       <div class="flex-1 min-w-0">
-        <p
-          class="text-sm font-medium truncate"
-          style="color: var(--foreground)"
-        >
+        <p class="text-sm font-medium truncate" style="color: var(--foreground)">
           {pending.file.name}
         </p>
-        <p class="text-xs" style="color: var(--muted-foreground)">
-          {pending.type === 'PHOTO' ? 'Фото' : 'Файл'} ·
+        <p class="text-[11px]" style="color: var(--muted-foreground)">
           {(pending.file.size / 1024 / 1024).toFixed(2)} МБ
         </p>
       </div>
       <button
         type="button"
         onclick={clearAttachment}
-        class="size-8 rounded-full flex items-center justify-center cursor-pointer transition-colors"
-        style="background-color: color-mix(in oklch, var(--foreground) 6%, transparent)"
-        aria-label="Видалити вкладення"
+        class="size-7 rounded-full flex items-center justify-center cursor-pointer hover:opacity-70"
+        aria-label="Видалити"
       >
-        <X class="size-4" style="color: var(--foreground)" />
+        <X class="size-3.5" style="color: var(--muted-foreground)" />
       </button>
     </div>
   {/if}
 
   <div class="flex items-end gap-2">
-    <label
-      class="size-10 shrink-0 rounded-full flex items-center justify-center cursor-pointer transition-colors"
-      style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent);
-             color: var(--muted-foreground)"
-    >
-      <Paperclip class="size-4" />
+    {#if !editing}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <div
+            class="size-9 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+            style="background-color: var(--muted); color: var(--muted-foreground)"
+          >
+            <Plus class="size-4" />
+          </div>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="start" class="w-44">
+          <DropdownMenu.Item
+            class="cursor-pointer gap-2"
+            onclick={() => photoInput?.click()}
+          >
+            <ImageIcon class="size-3.5 text-muted-foreground" />
+            <span>Фото</span>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            class="cursor-pointer gap-2"
+            onclick={() => fileInput?.click()}
+          >
+            <Paperclip class="size-3.5 text-muted-foreground" />
+            <span>Файл</span>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+
       <input
+        bind:this={photoInput}
         type="file"
-        accept="image/*,application/pdf,.doc,.docx,.zip,.txt"
+        accept="image/*"
         onchange={onFileInput}
         class="sr-only"
       />
-    </label>
+      <input
+        bind:this={fileInput}
+        type="file"
+        accept="application/pdf,.doc,.docx,.zip,.txt,.xlsx"
+        onchange={onFileInput}
+        class="sr-only"
+      />
+    {/if}
 
     <textarea
       bind:this={textarea}
       bind:value={text}
       onkeydown={onKeyDown}
       onpaste={onPaste}
-      placeholder="Написати повідомлення..."
+      placeholder={editing ? 'Редагувати повідомлення' : 'Написати повідомлення'}
       rows="1"
-      class="flex-1 min-w-0 resize-none px-4 py-2.5 rounded-3xl outline-none text-sm leading-snug"
-      style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent);
-             color: var(--foreground);
-             max-height: 160px"
+      class="flex-1 min-w-0 resize-none px-4 py-2 rounded-3xl outline-none text-[14px] leading-snug"
+      style="background-color: var(--muted); color: var(--foreground); max-height: 160px"
       maxlength={4000}
     ></textarea>
 
-    <button
-      type="button"
-      onclick={send}
-      disabled={!canSend}
-      class="size-10 shrink-0 rounded-full flex items-center justify-center transition-all"
-      style="background-color: {canSend
-        ? 'var(--primary)'
-        : 'color-mix(in oklch, var(--foreground) 8%, transparent)'};
-             color: {canSend
-        ? 'var(--primary-foreground)'
-        : 'var(--muted-foreground)'};
-             cursor: {canSend ? 'pointer' : 'not-allowed'}"
-    >
-      <Send class="size-4" />
-    </button>
+    {#if canSend}
+      <button
+        type="button"
+        onclick={send}
+        class="size-9 shrink-0 rounded-full flex items-center justify-center cursor-pointer transition-all"
+        style="background-color: var(--primary); color: var(--primary-foreground)"
+        aria-label={editing ? 'Зберегти' : 'Надіслати'}
+      >
+        {#if editing}
+          <Pencil class="size-4" />
+        {:else}
+          <Send class="size-4" />
+        {/if}
+      </button>
+    {:else}
+      <button
+        type="button"
+        class="size-9 shrink-0 rounded-full flex items-center justify-center cursor-not-allowed transition-colors"
+        style="background-color: var(--muted); color: var(--muted-foreground)"
+        aria-label="Емодзі"
+        disabled
+      >
+        <Smile class="size-4" />
+      </button>
+    {/if}
   </div>
 </div>

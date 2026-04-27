@@ -10,10 +10,6 @@
     children,
   }: { data: LayoutData; children: import('svelte').Snippet } = $props()
 
-  // Ініціалізуємо store ОДИН раз при монтуванні. Подальші оновлення
-  // приходять через Pusher (chat:update / message:new) — не треба
-  // синхронізувати з server-data, бо це створює нескінченний цикл
-  // реактивності.
   onMount(() => {
     chatStore.setChats(data.chats)
     chatStore.subscribeToUserEvents(data.currentUserId)
@@ -22,4 +18,9 @@
   })
 </script>
 
-{@render children()}
+<div
+  class="h-screen w-screen overflow-hidden flex flex-col"
+  style="background-color: var(--background)"
+>
+  {@render children()}
+</div>

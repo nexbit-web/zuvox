@@ -6,7 +6,13 @@
     AvatarFallback,
     AvatarImage,
   } from '$lib/components/ui/avatar'
-  import { Search, BadgeCheck, MessageSquare } from 'lucide-svelte'
+  import {
+    Search,
+    BadgeCheck,
+    MessageSquare,
+    ChevronLeft,
+    X,
+  } from 'lucide-svelte'
   import { chatStore } from '$lib/stores/chat-store.svelte'
   import type { ChatPreview } from './types'
 
@@ -46,6 +52,7 @@
     today.setHours(0, 0, 0, 0)
     const dDate = new Date(date)
     dDate.setHours(0, 0, 0, 0)
+
     if (dDate.getTime() === today.getTime()) {
       return date.toLocaleTimeString('uk-UA', {
         hour: '2-digit',
@@ -56,7 +63,17 @@
     yesterday.setDate(yesterday.getDate() - 1)
     if (dDate.getTime() === yesterday.getTime()) return 'вчора'
 
-    return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })
+    const diffDays = (today.getTime() - dDate.getTime()) / (1000 * 60 * 60 * 24)
+    if (diffDays < 7) {
+      return date
+        .toLocaleDateString('uk-UA', { weekday: 'short' })
+        .replace('.', '')
+    }
+
+    return date.toLocaleDateString('uk-UA', {
+      day: 'numeric',
+      month: 'short',
+    })
   }
 
   function previewLabel(c: ChatPreview): string {
@@ -67,84 +84,126 @@
 </script>
 
 <div
-  class="flex flex-col h-full"
+  class="flex flex-col h-full overflow-hidden"
   style="background-color: var(--background);
-         border-right: 1px solid color-mix(in oklch, var(--foreground) 6%, transparent)"
+         border-right: 1px solid var(--border)"
 >
-  <!-- Header -->
-  <div class="px-4 pt-4 pb-3 shrink-0">
-    <h1
-      class="text-2xl font-semibold mb-3 tracking-tight"
-      style="color: var(--foreground)"
+  <!-- ─── HEADER: стрілка назад + Zunor ─── -->
+  <div class="px-3 pt-3 pb-2 shrink-0 flex items-center gap-2">
+    <button
+      type="button"
+      onclick={() => goto('/')}
+      class="size-9 rounded-full flex items-center justify-center cursor-pointer transition-colors shrink-0"
+      style="color: var(--muted-foreground)"
+      onmouseenter={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'var(--muted)')}
+      onmouseleave={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'transparent')}
+      aria-label="На головну"
     >
-      Повідомлення
-    </h1>
+      <ChevronLeft class="size-5" />
+    </button>
 
+    <a
+      href="/"
+      class="text-[18px] font-bold tracking-tight cursor-pointer transition-opacity hover:opacity-70"
+      style="color: var(--foreground); letter-spacing: -0.02em"
+    >
+      Zunor
+    </a>
+  </div>
+
+  <!-- ─── SEARCH з хрестиком ─── -->
+  <div class="px-3 pb-3 shrink-0">
     <div class="relative">
       <Search
-        class="size-4 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+        class="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
         style="color: var(--muted-foreground)"
       />
       <input
         type="text"
         bind:value={search}
         placeholder="Пошук"
-        class="w-full h-10 pl-10 pr-4 rounded-full text-sm outline-none"
-        style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent);
+        class="w-full h-9 pl-10 pr-9 rounded-full text-[13px] outline-none transition-colors"
+        style="background-color: var(--muted);
                color: var(--foreground)"
       />
+      {#if search}
+        <button
+          type="button"
+          onclick={() => (search = '')}
+          class="absolute right-1.5 top-1/2 -translate-y-1/2 size-6 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+          style="color: var(--muted-foreground)"
+          aria-label="Очистити"
+          onmouseenter={(e) =>
+            ((e.currentTarget as HTMLElement).style.backgroundColor =
+              'var(--accent)')}
+          onmouseleave={(e) =>
+            ((e.currentTarget as HTMLElement).style.backgroundColor =
+              'transparent')}
+        >
+          <X class="size-3.5" />
+        </button>
+      {/if}
     </div>
   </div>
 
-  <!-- List -->
-  <div class="flex-1 overflow-y-auto">
+  <!-- ─── LIST ─── -->
+  <div class="flex-1 overflow-y-auto pb-3">
     {#if !chatStore.initialized}
-      <!-- Скелетон -->
       <div class="px-2 space-y-1">
         {#each Array(6) as _}
-          <div class="flex items-center gap-3 p-3">
-            <div class="size-12 rounded-full bg-muted animate-pulse"></div>
+          <div class="flex items-center gap-3 px-3 py-2.5">
+            <div
+              class="size-10 rounded-full animate-pulse"
+              style="background-color: var(--muted)"
+            ></div>
             <div class="flex-1 space-y-1.5">
-              <div class="h-3 w-2/3 bg-muted rounded animate-pulse"></div>
-              <div class="h-3 w-1/2 bg-muted rounded animate-pulse"></div>
+              <div
+                class="h-3 w-2/3 rounded animate-pulse"
+                style="background-color: var(--muted)"
+              ></div>
+              <div
+                class="h-3 w-1/2 rounded animate-pulse"
+                style="background-color: var(--muted)"
+              ></div>
             </div>
           </div>
         {/each}
       </div>
     {:else if filtered.length === 0}
       <div
-        class="flex flex-col items-center justify-center h-full text-center px-6"
+        class="flex flex-col items-center justify-center h-full text-center px-6 py-12"
       >
         <div
           class="size-12 mb-3 rounded-full flex items-center justify-center"
-          style="background-color: color-mix(in oklch, var(--primary) 10%, transparent)"
+          style="background-color: var(--muted)"
         >
-          <MessageSquare class="size-5" style="color: var(--primary)" />
+          <MessageSquare class="size-5" style="color: var(--muted-foreground)" />
         </div>
-        <p class="text-sm font-medium" style="color: var(--foreground)">
-          {search ? 'Нічого не знайдено' : 'У вас ще немає чатів'}
+        <p class="text-sm font-medium mb-1" style="color: var(--foreground)">
+          {search ? 'Нічого не знайдено' : 'Немає чатів'}
         </p>
-        <p class="text-xs mt-1" style="color: var(--muted-foreground)">
-          {search
-            ? 'Спробуйте інший запит'
-            : 'Знайдіть майстра і напишіть йому'}
+        <p class="text-xs" style="color: var(--muted-foreground)">
+          {search ? 'Спробуйте інший запит' : 'Знайдіть майстра і напишіть йому'}
         </p>
       </div>
     {:else}
-      <div class="px-2 pb-2">
+      <div class="flex flex-col gap-1 px-2">
         {#each filtered as chat (chat.id)}
           {@const isActive = chat.id === activeChatId}
+          {@const hasUnread = chat.unreadCount > 0}
           <button
             type="button"
             onclick={() => goto(`/messages/${chat.id}`)}
-            class="w-full flex items-center gap-3 p-3 rounded-xl text-left transition-colors cursor-pointer"
-            style="background-color: {isActive
-              ? 'color-mix(in oklch, var(--primary) 8%, transparent)'
-              : 'transparent'}"
+            class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left cursor-pointer transition-colors"
+            style="background-color: {isActive ? 'var(--accent)' : 'transparent'}"
             onmouseenter={(e) => {
               if (!isActive)
                 (e.currentTarget as HTMLElement).style.backgroundColor =
-                  'color-mix(in oklch, var(--foreground) 4%, transparent)'
+                  'var(--muted)'
             }}
             onmouseleave={(e) => {
               if (!isActive)
@@ -152,11 +211,11 @@
                   'transparent'
             }}
           >
-            <Avatar class="size-12 shrink-0">
+            <Avatar class="size-10 shrink-0">
               <AvatarImage src={chat.peer.avatar ?? ''} alt={chat.peer.name} />
               <AvatarFallback
-                class="text-sm font-semibold"
-                style="background-color: var(--secondary); color: var(--secondary-foreground)"
+                class="text-[13px] font-semibold"
+                style="background-color: var(--muted); color: var(--foreground)"
               >
                 {chat.peer.name?.[0]?.toUpperCase() ?? '?'}
               </AvatarFallback>
@@ -166,7 +225,7 @@
               <div class="flex items-center justify-between gap-2 mb-0.5">
                 <div class="flex items-center gap-1 min-w-0">
                   <p
-                    class="text-sm font-semibold truncate"
+                    class="text-[14px] font-semibold truncate"
                     style="color: var(--foreground)"
                   >
                     {chat.peer.name}
@@ -187,17 +246,17 @@
               </div>
               <div class="flex items-center justify-between gap-2">
                 <p
-                  class="text-xs truncate"
-                  style="color: {chat.unreadCount > 0
+                  class="text-[12.5px] truncate leading-snug"
+                  style="color: {hasUnread
                     ? 'var(--foreground)'
                     : 'var(--muted-foreground)'};
-                         font-weight: {chat.unreadCount > 0 ? '500' : '400'}"
+                         font-weight: {hasUnread ? '500' : '400'}"
                 >
                   {previewLabel(chat)}
                 </p>
-                {#if chat.unreadCount > 0}
+                {#if hasUnread}
                   <span
-                    class="shrink-0 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center tabular-nums"
+                    class="shrink-0 min-w-[18px] h-[18px] px-1.5 rounded-full text-[10px] font-bold flex items-center justify-center tabular-nums"
                     style="background-color: var(--primary); color: var(--primary-foreground)"
                   >
                     {chat.unreadCount > 99 ? '99+' : chat.unreadCount}

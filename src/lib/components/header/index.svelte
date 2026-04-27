@@ -1,4 +1,4 @@
-<!-- src/lib/components/header/index.svelte -->
+
 <script lang="ts">
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
@@ -140,4 +140,4 @@
   hasNotifications={true}
 />
 
-<div class="h-[33px]"></div>
+<div class="h-[73px]"></div>

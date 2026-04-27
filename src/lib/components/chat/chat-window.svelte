@@ -12,6 +12,10 @@
     ChevronLeft,
     Volume2,
     VolumeX,
+    Search,
+    X,
+    ArrowUp,
+    ArrowDown,
   } from 'lucide-svelte'
   import { getPusher } from '$lib/pusher-client'
   import {
@@ -24,7 +28,7 @@
   import { chatStore } from '$lib/stores/chat-store.svelte'
   import MessageBubble from './message-bubble.svelte'
   import MessageComposer from './message-composer.svelte'
-  import TypingIndicator from './typing-indicator.svelte'
+  import HeaderTyping from './header-typing.svelte'
   import type {
     ChatMessage,
     ChatDetails,
@@ -58,13 +62,45 @@
   let muted = $state(isMuted())
   let scrollContainer = $state<HTMLDivElement | undefined>(undefined)
   let replyTo = $state<ChatMessage | null>(null)
+  let editing = $state<ChatMessage | null>(null)
   let error = $state('')
-  /** Set tmp-id повідомлень які ще летять на сервер */
   let pendingIds = $state<Set<string>>(new Set())
-  /** Set tmp-id які впали — показуємо як failed */
   let failedIds = $state<Set<string>>(new Set())
 
+  // ─── Search ───
+  let searchOpen = $state(false)
+  let searchQuery = $state('')
+  let searchInput = $state<HTMLInputElement | undefined>(undefined)
+  let currentMatchIdx = $state(0)
+
   const peer = $derived(chat.peer)
+
+  // Знаходимо матчі (id повідомлень які містять searchQuery)
+  const matchedIds = $derived.by(() => {
+    if (!searchQuery.trim()) return [] as string[]
+    const q = searchQuery.toLowerCase()
+    return messages
+      .filter(
+        (m) =>
+          !m.deletedAt &&
+          m.text &&
+          m.text.toLowerCase().includes(q),
+      )
+      .map((m) => m.id)
+  })
+
+  // Скрол до поточного матча
+  $effect(() => {
+    if (matchedIds.length === 0) return
+    const id = matchedIds[currentMatchIdx]
+    if (!id) return
+    requestAnimationFrame(() => {
+      const el = document.querySelector(
+        `[data-message-id="${id}"]`,
+      ) as HTMLElement | null
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  })
 
   let lastInitChatId = ''
   $effect(() => {
@@ -78,9 +114,13 @@
       peerLastReadAt = chat.myLastReadAt ? new Date(chat.myLastReadAt) : null
       typingPeer = null
       replyTo = null
+      editing = null
       error = ''
       pendingIds = new Set()
       failedIds = new Set()
+      searchOpen = false
+      searchQuery = ''
+      currentMatchIdx = 0
     })
     tick().then(() => scrollToBottom('auto'))
   })
@@ -98,7 +138,6 @@
     const channel = pusher.subscribe(channelName)
 
     const onNew = (data: MessageNewPayload) => {
-      // Не дублюємо своє підтверджене (вже додане через onSendConfirmed)
       if (data.message.senderId === currentUserId) return
       if (untrack(() => messages.some((m) => m.id === data.message.id))) return
 
@@ -110,6 +149,22 @@
         }
         if (isNearBottom()) scrollToBottom()
       })
+    }
+
+    const onEdit = (data: { messageId: string; text: string; editedAt: string }) => {
+      messages = messages.map((m) =>
+        m.id === data.messageId
+          ? { ...m, text: data.text, editedAt: data.editedAt }
+          : m,
+      )
+    }
+
+    const onDelete = (data: { messageId: string }) => {
+      messages = messages.map((m) =>
+        m.id === data.messageId
+          ? { ...m, deletedAt: new Date().toISOString(), text: '' }
+          : m,
+      )
     }
 
     const onRead = (data: MessageReadPayload) => {
@@ -126,6 +181,8 @@
     }
 
     channel.bind('message:new', onNew)
+    channel.bind('message:edit', onEdit)
+    channel.bind('message:delete', onDelete)
     channel.bind('message:read', onRead)
     channel.bind('client-typing', onTypingEvt)
 
@@ -151,7 +208,6 @@
     }
   })
 
-  // ─── Optimistic handlers ───
   function handleSendOptimistic(msg: ChatMessage) {
     messages = [...messages, msg]
     pendingIds = new Set([...pendingIds, msg.id])
@@ -173,7 +229,6 @@
 
   function handleSendFailed(tmpId: string, errMsg: string) {
     if (!tmpId) {
-      // Помилка ще до optimistic (наприклад файл занадто великий)
       error = errMsg
       setTimeout(() => (error = ''), 4000)
       return
@@ -184,6 +239,37 @@
     failedIds = new Set([...failedIds, tmpId])
     error = errMsg
     setTimeout(() => (error = ''), 5000)
+  }
+
+  function handleEdit(m: ChatMessage) {
+    editing = m
+    replyTo = null
+  }
+
+  function handleEditDone(updated: ChatMessage) {
+    messages = messages.map((m) => (m.id === updated.id ? updated : m))
+    editing = null
+  }
+
+  async function handleDelete(m: ChatMessage) {
+    if (!confirm('Видалити це повідомлення?')) return
+    // Optimistic
+    const before = messages
+    messages = messages.map((mm) =>
+      mm.id === m.id
+        ? { ...mm, deletedAt: new Date().toISOString(), text: '' }
+        : mm,
+    )
+    try {
+      const res = await fetch(`/api/chats/${chatId}/messages/${m.id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error('Не вдалося видалити')
+    } catch (err) {
+      messages = before
+      error = err instanceof Error ? err.message : 'Помилка'
+      setTimeout(() => (error = ''), 4000)
+    }
   }
 
   async function markRead() {
@@ -260,6 +346,37 @@
     if (!muted) unlockAudio()
   }
 
+  function toggleSearch() {
+    searchOpen = !searchOpen
+    if (searchOpen) {
+      tick().then(() => searchInput?.focus())
+    } else {
+      searchQuery = ''
+      currentMatchIdx = 0
+    }
+  }
+
+  function nextMatch() {
+    if (matchedIds.length === 0) return
+    currentMatchIdx = (currentMatchIdx + 1) % matchedIds.length
+  }
+
+  function prevMatch() {
+    if (matchedIds.length === 0) return
+    currentMatchIdx =
+      (currentMatchIdx - 1 + matchedIds.length) % matchedIds.length
+  }
+
+  function onSearchKeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      e.shiftKey ? prevMatch() : nextMatch()
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      toggleSearch()
+    }
+  }
+
   function isLastInGroup(idx: number): boolean {
     const m = messages[idx]
     const next = messages[idx + 1]
@@ -301,13 +418,15 @@
       year: d.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
     })
   }
+
+  const lastSeenLabel = $derived('був(ла) нещодавно')
 </script>
 
 <div class="flex flex-col h-full" style="background-color: var(--background)">
+  <!-- ═══════ HEADER ═══════ -->
   <header
-    class="flex items-center gap-3 px-3 sm:px-4 h-14 shrink-0"
-    style="background-color: var(--card);
-           border-bottom: 1px solid color-mix(in oklch, var(--foreground) 6%, transparent)"
+    class="flex items-center gap-3 px-4 h-[60px] shrink-0"
+    style="border-bottom: 1px solid var(--border)"
   >
     <button
       type="button"
@@ -322,20 +441,23 @@
     <button
       type="button"
       onclick={() => peer.username && goto(`/@${peer.username}`)}
-      class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer text-left"
+      class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer text-left"
     >
       <Avatar class="size-9 shrink-0">
         <AvatarImage src={peer.avatar ?? ''} alt={peer.name} />
         <AvatarFallback
           class="text-xs font-semibold"
-          style="background-color: var(--secondary); color: var(--secondary-foreground)"
+          style="background-color: var(--muted); color: var(--foreground)"
         >
           {peer.name?.[0]?.toUpperCase() ?? '?'}
         </AvatarFallback>
       </Avatar>
-      <div class="min-w-0">
+      <div class="min-w-0 flex flex-col justify-center">
         <div class="flex items-center gap-1">
-          <p class="text-sm font-semibold truncate" style="color: var(--foreground)">
+          <p
+            class="text-[14px] font-semibold truncate leading-tight"
+            style="color: var(--foreground)"
+          >
             {peer.name}
           </p>
           {#if peer.isVerified}
@@ -345,14 +467,35 @@
             />
           {/if}
         </div>
-        {#if typingPeer}
-          <p class="text-xs" style="color: var(--primary)">друкує...</p>
-        {:else if peer.username}
-          <p class="text-xs truncate" style="color: var(--muted-foreground)">
-            @{peer.username}
-          </p>
-        {/if}
+        <div class="leading-tight mt-0.5">
+          {#if typingPeer}
+            <HeaderTyping />
+          {:else}
+            <p class="text-[11px] truncate" style="color: var(--muted-foreground)">
+              {lastSeenLabel}
+            </p>
+          {/if}
+        </div>
       </div>
+    </button>
+
+    <button
+      type="button"
+      onclick={toggleSearch}
+      class="size-9 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+      style="background-color: {searchOpen ? 'var(--accent)' : 'transparent'};
+             color: var(--muted-foreground)"
+      aria-label="Пошук"
+      onmouseenter={(e) => {
+        if (!searchOpen)
+          (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--muted)'
+      }}
+      onmouseleave={(e) => {
+        if (!searchOpen)
+          (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
+      }}
+    >
+      <Search class="size-4" />
     </button>
 
     <button
@@ -361,6 +504,10 @@
       class="size-9 rounded-full flex items-center justify-center cursor-pointer transition-colors"
       style="color: var(--muted-foreground)"
       aria-label={muted ? 'Увімкнути звук' : 'Вимкнути звук'}
+      onmouseenter={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor = 'var(--muted)')}
+      onmouseleave={(e) =>
+        ((e.currentTarget as HTMLElement).style.backgroundColor = 'transparent')}
     >
       {#if muted}
         <VolumeX class="size-4" />
@@ -370,81 +517,159 @@
     </button>
   </header>
 
+  <!-- ═══════ SEARCH BAR ═══════ -->
+  {#if searchOpen}
+    <div
+      class="flex items-center gap-2 px-4 py-2 shrink-0"
+      style="background-color: var(--muted); border-bottom: 1px solid var(--border)"
+    >
+      <Search class="size-4 shrink-0" style="color: var(--muted-foreground)" />
+      <input
+        bind:this={searchInput}
+        bind:value={searchQuery}
+        onkeydown={onSearchKeydown}
+        type="text"
+        placeholder="Пошук у цьому чаті"
+        class="flex-1 min-w-0 bg-transparent outline-none text-[13px]"
+        style="color: var(--foreground)"
+      />
+      {#if searchQuery}
+        <span class="text-[11px] tabular-nums" style="color: var(--muted-foreground)">
+          {matchedIds.length === 0
+            ? 'нічого'
+            : `${currentMatchIdx + 1} / ${matchedIds.length}`}
+        </span>
+        <button
+          type="button"
+          onclick={prevMatch}
+          disabled={matchedIds.length === 0}
+          class="size-7 rounded-full flex items-center justify-center cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          style="color: var(--muted-foreground)"
+          aria-label="Попередній"
+        >
+          <ArrowUp class="size-3.5" />
+        </button>
+        <button
+          type="button"
+          onclick={nextMatch}
+          disabled={matchedIds.length === 0}
+          class="size-7 rounded-full flex items-center justify-center cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          style="color: var(--muted-foreground)"
+          aria-label="Наступний"
+        >
+          <ArrowDown class="size-3.5" />
+        </button>
+      {/if}
+      <button
+        type="button"
+        onclick={toggleSearch}
+        class="size-7 rounded-full flex items-center justify-center cursor-pointer"
+        style="color: var(--muted-foreground)"
+        aria-label="Закрити пошук"
+      >
+        <X class="size-3.5" />
+      </button>
+    </div>
+  {/if}
+
+  <!-- ═══════ MESSAGES ═══════ -->
   <div
     bind:this={scrollContainer}
     onscroll={onScroll}
-    class="flex-1 overflow-y-auto px-3 sm:px-6 py-4 space-y-1.5"
+    class="flex-1 overflow-y-auto"
     style="background-color: var(--background)"
   >
-    {#if loadingMore}
-      <div class="flex justify-center py-2">
-        <div
-          class="size-5 rounded-full border-2 border-t-transparent animate-spin"
-          style="border-color: var(--primary); border-top-color: transparent"
-        ></div>
-      </div>
-    {/if}
+    <!-- Контейнер обмежує ширину на великих екранах -->
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-1.5">
+      {#if loadingMore}
+        <div class="flex justify-center py-2">
+          <div
+            class="size-4 rounded-full border-2 border-t-transparent animate-spin"
+            style="border-color: var(--muted-foreground); border-top-color: transparent"
+          ></div>
+        </div>
+      {/if}
 
-    {#if messages.length === 0}
-      <div class="flex flex-col items-center justify-center h-full text-center">
-        <p class="text-sm" style="color: var(--muted-foreground)">
-          Це початок вашого чату з {peer.name}
-        </p>
-        <p class="text-xs mt-1" style="color: var(--muted-foreground)">
-          Напишіть перше повідомлення
-        </p>
-      </div>
-    {:else}
-      {#each messages as msg, idx (msg.id)}
-        {@const dateLabel = shouldShowDateSeparator(idx)}
-        {#if dateLabel}
-          <div class="flex justify-center py-3">
-            <span
-              class="text-[11px] px-3 py-1 rounded-full"
-              style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent);
-                     color: var(--muted-foreground)"
+      {#if messages.length === 0}
+        <div class="flex flex-col items-center justify-center py-20 text-center">
+          <Avatar class="size-14 mb-3">
+            <AvatarImage src={peer.avatar ?? ''} alt={peer.name} />
+            <AvatarFallback
+              class="text-lg font-semibold"
+              style="background-color: var(--muted); color: var(--foreground)"
             >
-              {dateLabel}
-            </span>
-          </div>
-        {/if}
-        <MessageBubble
-          message={msg}
-          isMine={msg.senderId === currentUserId}
-          isLastInGroup={isLastInGroup(idx)}
-          showReadStatus={msg.senderId === currentUserId &&
-            idx === messages.length - 1}
-          isRead={isReadByPeer(msg)}
-          isPending={pendingIds.has(msg.id)}
-          isFailed={failedIds.has(msg.id)}
-          onReply={(m) => (replyTo = m)}
-        />
-      {/each}
-    {/if}
-
-    {#if typingPeer}
-      <TypingIndicator />
-    {/if}
+              {peer.name?.[0]?.toUpperCase() ?? '?'}
+            </AvatarFallback>
+          </Avatar>
+          <p class="text-[13px] font-medium" style="color: var(--foreground)">
+            {peer.name}
+          </p>
+          <p class="text-xs mt-1" style="color: var(--muted-foreground)">
+            Запропонувати роботу
+          </p>
+        </div>
+      {:else}
+        {#each messages as msg, idx (msg.id)}
+          {@const dateLabel = shouldShowDateSeparator(idx)}
+          {#if dateLabel}
+            <div class="flex justify-center py-3">
+              <span
+                class="text-[11px] px-3 py-0.5 rounded-full"
+                style="background-color: var(--muted); color: var(--muted-foreground)"
+              >
+                {dateLabel}
+              </span>
+            </div>
+          {/if}
+          <MessageBubble
+            message={msg}
+            isMine={msg.senderId === currentUserId}
+            isLastInGroup={isLastInGroup(idx)}
+            showReadStatus={msg.senderId === currentUserId &&
+              idx === messages.length - 1}
+            isRead={isReadByPeer(msg)}
+            isPending={pendingIds.has(msg.id)}
+            isFailed={failedIds.has(msg.id)}
+            isHighlighted={searchQuery !== '' &&
+              matchedIds[currentMatchIdx] === msg.id}
+            onReply={(m) => {
+              replyTo = m
+              editing = null
+            }}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        {/each}
+      {/if}
+    </div>
   </div>
 
   {#if error}
     <div
-      class="px-4 py-2 text-xs text-center"
-      style="background-color: color-mix(in oklch, var(--destructive) 10%, transparent);
+      class="px-4 py-2 text-xs text-center shrink-0"
+      style="background-color: color-mix(in srgb, var(--destructive) 10%, transparent);
              color: var(--destructive)"
     >
       {error}
     </div>
   {/if}
 
-  <MessageComposer
-    {chatId}
-    {currentUserId}
-    {replyTo}
-    onCancelReply={() => (replyTo = null)}
-    onSendOptimistic={handleSendOptimistic}
-    onSendConfirmed={handleSendConfirmed}
-    onSendFailed={handleSendFailed}
-    {onTyping}
-  />
+  <!-- ═══════ COMPOSER (з обмеженням ширини) ═══════ -->
+  <div class="shrink-0">
+    <div class="max-w-3xl mx-auto">
+      <MessageComposer
+        {chatId}
+        {currentUserId}
+        {replyTo}
+        {editing}
+        onCancelReply={() => (replyTo = null)}
+        onCancelEdit={() => (editing = null)}
+        onSendOptimistic={handleSendOptimistic}
+        onSendConfirmed={handleSendConfirmed}
+        onSendFailed={handleSendFailed}
+        onEditDone={handleEditDone}
+        {onTyping}
+      />
+    </div>
+  </div>
 </div>
