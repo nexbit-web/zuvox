@@ -7,7 +7,12 @@
     AvatarFallback,
     AvatarImage,
   } from '$lib/components/ui/avatar'
-  import { BadgeCheck, ChevronLeft, Volume2, VolumeX } from 'lucide-svelte'
+  import {
+    BadgeCheck,
+    ChevronLeft,
+    Volume2,
+    VolumeX,
+  } from 'lucide-svelte'
   import { getPusher } from '$lib/pusher-client'
   import {
     playMessageSound,
@@ -44,7 +49,6 @@
     currentUserId,
   }: Props = $props()
 
-  // ─── State ───
   let messages = $state<ChatMessage[]>([...initialMessages].reverse())
   let nextCursor = $state(initialNextCursor)
   let loadingMore = $state(false)
@@ -55,15 +59,13 @@
   let scrollContainer = $state<HTMLDivElement | undefined>(undefined)
   let replyTo = $state<ChatMessage | null>(null)
   let error = $state('')
+  /** Set tmp-id повідомлень які ще летять на сервер */
+  let pendingIds = $state<Set<string>>(new Set())
+  /** Set tmp-id які впали — показуємо як failed */
+  let failedIds = $state<Set<string>>(new Set())
 
   const peer = $derived(chat.peer)
 
-  // ═══════════════════════════════════════════════════════
-  // КРИТИЧНО: всі мутації chatStore — через untrack(),
-  // інакше нескінченний цикл реактивності.
-  // ═══════════════════════════════════════════════════════
-
-  // Реініціалізація state при зміні chatId
   let lastInitChatId = ''
   $effect(() => {
     const id = chatId
@@ -77,11 +79,12 @@
       typingPeer = null
       replyTo = null
       error = ''
+      pendingIds = new Set()
+      failedIds = new Set()
     })
     tick().then(() => scrollToBottom('auto'))
   })
 
-  // Pusher subscription
   $effect(() => {
     if (typeof window === 'undefined') return
     const id = chatId
@@ -95,10 +98,11 @@
     const channel = pusher.subscribe(channelName)
 
     const onNew = (data: MessageNewPayload) => {
+      // Не дублюємо своє підтверджене (вже додане через onSendConfirmed)
       if (data.message.senderId === currentUserId) return
       if (untrack(() => messages.some((m) => m.id === data.message.id))) return
-      messages = [...messages, data.message]
 
+      messages = [...messages, data.message]
       tick().then(() => {
         if (document.visibilityState === 'visible') {
           playMessageSound()
@@ -142,22 +146,46 @@
         typingTimer = null
       }
       untrack(() => {
-        if (chatStore.activeChatId === id) {
-          chatStore.activeChatId = null
-        }
+        if (chatStore.activeChatId === id) chatStore.activeChatId = null
       })
     }
   })
 
-  // ─── Optimistic send ───
-  function handleSent(msg: ChatMessage) {
-    if (messages.some((m) => m.id === msg.id)) return
+  // ─── Optimistic handlers ───
+  function handleSendOptimistic(msg: ChatMessage) {
     messages = [...messages, msg]
-    playSentSound()
+    pendingIds = new Set([...pendingIds, msg.id])
     tick().then(() => scrollToBottom())
   }
 
-  // ─── Прочитати ───
+  function handleSendConfirmed(tmpId: string, real: ChatMessage) {
+    const idx = messages.findIndex((m) => m.id === tmpId)
+    if (idx === -1) {
+      messages = [...messages, real]
+    } else {
+      messages = messages.map((m, i) => (i === idx ? real : m))
+    }
+    const newPending = new Set(pendingIds)
+    newPending.delete(tmpId)
+    pendingIds = newPending
+    playSentSound()
+  }
+
+  function handleSendFailed(tmpId: string, errMsg: string) {
+    if (!tmpId) {
+      // Помилка ще до optimistic (наприклад файл занадто великий)
+      error = errMsg
+      setTimeout(() => (error = ''), 4000)
+      return
+    }
+    const newPending = new Set(pendingIds)
+    newPending.delete(tmpId)
+    pendingIds = newPending
+    failedIds = new Set([...failedIds, tmpId])
+    error = errMsg
+    setTimeout(() => (error = ''), 5000)
+  }
+
   async function markRead() {
     untrack(() => chatStore.markChatRead(chatId))
     try {
@@ -167,13 +195,11 @@
     }
   }
 
-  // ─── Typing ───
   let lastTypingSent = 0
   function onTyping() {
     const now = Date.now()
     if (now - lastTypingSent < 2000) return
     lastTypingSent = now
-
     try {
       const pusher = getPusher()
       const channel = pusher.channel(`private-chat-${chatId}`)
@@ -182,11 +208,10 @@
         userName: 'співрозмовник',
       })
     } catch {
-      // Pusher може бути недоступний — typing просто не показується
+      // Pusher може бути недоступний
     }
   }
 
-  // ─── Scroll helpers ───
   function isNearBottom(): boolean {
     if (!scrollContainer) return true
     const { scrollTop, scrollHeight, clientHeight } = scrollContainer
@@ -226,9 +251,7 @@
 
   function onScroll(e: Event) {
     const el = e.currentTarget as HTMLDivElement
-    if (el.scrollTop < 100 && !loadingMore && nextCursor) {
-      loadMore()
-    }
+    if (el.scrollTop < 100 && !loadingMore && nextCursor) loadMore()
   }
 
   function toggleMute() {
@@ -281,7 +304,6 @@
 </script>
 
 <div class="flex flex-col h-full" style="background-color: var(--background)">
-  <!-- HEADER -->
   <header
     class="flex items-center gap-3 px-3 sm:px-4 h-14 shrink-0"
     style="background-color: var(--card);
@@ -313,10 +335,7 @@
       </Avatar>
       <div class="min-w-0">
         <div class="flex items-center gap-1">
-          <p
-            class="text-sm font-semibold truncate"
-            style="color: var(--foreground)"
-          >
+          <p class="text-sm font-semibold truncate" style="color: var(--foreground)">
             {peer.name}
           </p>
           {#if peer.isVerified}
@@ -342,7 +361,6 @@
       class="size-9 rounded-full flex items-center justify-center cursor-pointer transition-colors"
       style="color: var(--muted-foreground)"
       aria-label={muted ? 'Увімкнути звук' : 'Вимкнути звук'}
-      title={muted ? 'Увімкнути звук' : 'Вимкнути звук'}
     >
       {#if muted}
         <VolumeX class="size-4" />
@@ -352,7 +370,6 @@
     </button>
   </header>
 
-  <!-- MESSAGES -->
   <div
     bind:this={scrollContainer}
     onscroll={onScroll}
@@ -398,6 +415,8 @@
           showReadStatus={msg.senderId === currentUserId &&
             idx === messages.length - 1}
           isRead={isReadByPeer(msg)}
+          isPending={pendingIds.has(msg.id)}
+          isFailed={failedIds.has(msg.id)}
           onReply={(m) => (replyTo = m)}
         />
       {/each}
@@ -420,13 +439,12 @@
 
   <MessageComposer
     {chatId}
+    {currentUserId}
     {replyTo}
     onCancelReply={() => (replyTo = null)}
-    onSent={handleSent}
-    onSendError={(err) => {
-      error = err
-      setTimeout(() => (error = ''), 4000)
-    }}
+    onSendOptimistic={handleSendOptimistic}
+    onSendConfirmed={handleSendConfirmed}
+    onSendFailed={handleSendFailed}
     {onTyping}
   />
 </div>

@@ -1,12 +1,11 @@
 <!-- src/lib/components/chat/message-composer.svelte -->
 <script lang="ts">
   import { Send, Paperclip, X, Image as ImageIcon, Reply } from 'lucide-svelte'
-  import { Button } from '$lib/components/ui/button'
   import type { ChatMessage } from './types'
 
   interface PendingAttachment {
     file: File
-    previewUrl: string | null // local objectURL
+    previewUrl: string | null
     type: 'PHOTO' | 'FILE'
   }
 
@@ -20,23 +19,34 @@
 
   interface Props {
     chatId: string
-    /** Виклик коли натиснуто Send */
-    onSendStart?: (text: string) => void
-    /** Колбек який отримує optimistic-id повідомлення (для відкату на помилці) */
-    onSent?: (message: ChatMessage) => void
-    onSendError?: (error: string) => void
-    /** Reply-to — встановлюється з ChatWindow */
+    currentUserId: string
+    /**
+     * Викликається ОДРАЗУ коли натиснули Send — повертає optimistic
+     * повідомлення з тимчасовим id (`tmp-...`). ChatWindow одразу
+     * додає його у список, юзер бачить його миттєво.
+     */
+    onSendOptimistic?: (msg: ChatMessage) => void
+    /**
+     * Викликається коли сервер підтвердив повідомлення — тимчасовий
+     * id треба замінити на реальний.
+     */
+    onSendConfirmed?: (tmpId: string, real: ChatMessage) => void
+    /**
+     * Викликається коли відправка провалилася — повідомлення треба
+     * позначити як failed або видалити.
+     */
+    onSendFailed?: (tmpId: string, error: string) => void
     replyTo?: ChatMessage | null
     onCancelReply?: () => void
-    /** Викликається коли юзер друкує (для typing-indicator) */
     onTyping?: () => void
   }
 
   let {
     chatId,
-    onSendStart,
-    onSent,
-    onSendError,
+    currentUserId,
+    onSendOptimistic,
+    onSendConfirmed,
+    onSendFailed,
     replyTo,
     onCancelReply,
     onTyping,
@@ -45,24 +55,22 @@
   let text = $state('')
   let textarea = $state<HTMLTextAreaElement | undefined>(undefined)
   let pending: PendingAttachment | null = $state(null)
-  let sending = $state(false)
   let dragActive = $state(false)
 
-  const MAX_SIZE = 10 * 1024 * 1024 // 10 MB
+  const MAX_SIZE = 10 * 1024 * 1024
   const PHOTO_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
   // ─── Auto-resize textarea ───
   $effect(() => {
     if (!textarea) return
-    text // tracking
+    text
     textarea.style.height = 'auto'
     textarea.style.height = Math.min(textarea.scrollHeight, 160) + 'px'
   })
 
-  // ─── Файл вибрано ───
   function handleFile(file: File) {
     if (file.size > MAX_SIZE) {
-      onSendError?.('Файл занадто великий. Максимум 10 МБ.')
+      onSendFailed?.('', 'Файл занадто великий. Максимум 10 МБ.')
       return
     }
     const isPhoto = PHOTO_MIME.includes(file.type)
@@ -86,19 +94,15 @@
     const input = e.target as HTMLInputElement
     const file = input.files?.[0]
     if (file) handleFile(file)
-    input.value = '' // дозволяє вибрати той самий файл знову
+    input.value = ''
   }
 
-  // ─── Drag-n-drop ───
   function onDragEnter(e: DragEvent) {
     e.preventDefault()
-    if (e.dataTransfer?.types.includes('Files')) {
-      dragActive = true
-    }
+    if (e.dataTransfer?.types.includes('Files')) dragActive = true
   }
 
   function onDragLeave(e: DragEvent) {
-    // Перевіряємо чи курсор реально вийшов із зони (а не зайшов у дочірній)
     const rt = e.relatedTarget as Node | null
     if (!rt || !(e.currentTarget as HTMLElement).contains(rt)) {
       dragActive = false
@@ -112,7 +116,6 @@
     if (file) handleFile(file)
   }
 
-  // ─── Paste з буфера обміну (фото з clipboard) ───
   function onPaste(e: ClipboardEvent) {
     const item = Array.from(e.clipboardData?.items ?? []).find((i) =>
       i.type.startsWith('image/'),
@@ -126,25 +129,24 @@
     }
   }
 
-  // ─── Завантаження на Cloudinary через signed upload ───
   async function uploadToCloudinary(
     file: File,
     type: 'PHOTO' | 'FILE',
   ): Promise<UploadedAttachment> {
-    // 1. Отримати підписаний токен від нашого API
     const sigRes = await fetch('/api/upload/signature', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         folder: 'zunor/chat',
-        // для FILE дозволяємо raw, для PHOTO image
         resourceType: type === 'PHOTO' ? 'image' : 'raw',
       }),
     })
-    if (!sigRes.ok) throw new Error('Не вдалося отримати токен завантаження')
+    if (!sigRes.ok) {
+      const err = await sigRes.json().catch(() => ({}))
+      throw new Error(err.error ?? 'Не вдалося отримати токен завантаження')
+    }
     const sig = await sigRes.json()
 
-    // 2. POST у Cloudinary
     const fd = new FormData()
     fd.append('file', file)
     fd.append('api_key', sig.apiKey)
@@ -166,21 +168,66 @@
     }
   }
 
-  // ─── Відправка ───
+  /**
+   * Generate temporary id (UUID-ish for optimistic UI)
+   */
+  function tmpId(): string {
+    return 'tmp-' + Math.random().toString(36).slice(2, 10) + Date.now()
+  }
+
+  /**
+   * MAIN — мгновенно показуємо повідомлення, потім грузимо у фоні.
+   */
   async function send() {
-    if (sending) return
     const trimmed = text.trim()
     if (!trimmed && !pending) return
 
-    sending = true
-    onSendStart?.(trimmed)
+    const id = tmpId()
+    const type: 'TEXT' | 'PHOTO' | 'FILE' = pending?.type ?? 'TEXT'
+    const currentReplyTo = replyTo
+    const currentPending = pending
 
+    // ─── 1. ОДРАЗУ показуємо optimistic повідомлення ───
+    const optimistic: ChatMessage = {
+      id,
+      type,
+      text: trimmed,
+      attachmentUrl: currentPending?.previewUrl ?? null, // local preview
+      attachmentMimeType: currentPending?.file.type ?? null,
+      attachmentSize: currentPending?.file.size ?? null,
+      attachmentName: currentPending?.file.name ?? null,
+      isRead: false,
+      editedAt: null,
+      deletedAt: null,
+      createdAt: new Date().toISOString(),
+      senderId: currentUserId,
+      replyToId: currentReplyTo?.id ?? null,
+      replyTo: currentReplyTo
+        ? {
+            id: currentReplyTo.id,
+            text: currentReplyTo.text,
+            senderId: currentReplyTo.senderId,
+            type: currentReplyTo.type,
+          }
+        : null,
+    }
+
+    onSendOptimistic?.(optimistic)
+
+    // ─── 2. Очищаємо composer (юзер може писати наступне) ───
+    text = ''
+    clearAttachment()
+    onCancelReply?.()
+    textarea?.focus()
+
+    // ─── 3. У фоні: upload + send ───
     try {
       let attachment: UploadedAttachment | null = null
-      const type: 'TEXT' | 'PHOTO' | 'FILE' = pending?.type ?? 'TEXT'
-
-      if (pending) {
-        attachment = await uploadToCloudinary(pending.file, pending.type)
+      if (currentPending) {
+        attachment = await uploadToCloudinary(
+          currentPending.file,
+          currentPending.type,
+        )
       }
 
       const res = await fetch(`/api/chats/${chatId}/messages`, {
@@ -190,7 +237,7 @@
           type,
           text: trimmed,
           attachment,
-          replyToId: replyTo?.id ?? null,
+          replyToId: currentReplyTo?.id ?? null,
         }),
       })
 
@@ -200,21 +247,16 @@
       }
 
       const json = await res.json()
-      onSent?.(json.message)
-
-      text = ''
-      clearAttachment()
-      onCancelReply?.()
-      textarea?.focus()
+      onSendConfirmed?.(id, json.message)
     } catch (err) {
-      onSendError?.(err instanceof Error ? err.message : 'Помилка відправки')
-    } finally {
-      sending = false
+      onSendFailed?.(
+        id,
+        err instanceof Error ? err.message : 'Помилка відправки',
+      )
     }
   }
 
   function onKeyDown(e: KeyboardEvent) {
-    // Enter без Shift — надіслати; Shift+Enter — новий рядок
     if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
       send()
@@ -222,6 +264,8 @@
     }
     onTyping?.()
   }
+
+  const canSend = $derived(text.trim().length > 0 || pending !== null)
 </script>
 
 <div
@@ -235,7 +279,6 @@
   role="region"
   aria-label="Поле вводу"
 >
-  <!-- Drag-n-drop оверлей -->
   {#if dragActive}
     <div
       class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none rounded-t-xl"
@@ -251,7 +294,6 @@
     </div>
   {/if}
 
-  <!-- Reply-to preview -->
   {#if replyTo}
     <div
       class="flex items-center gap-2 px-3 py-2 mb-2 rounded-lg border-l-2"
@@ -265,9 +307,9 @@
         </p>
         <p class="text-xs truncate" style="color: var(--muted-foreground)">
           {replyTo.type === 'PHOTO'
-            ? '📷 Фото'
+            ? 'Фото'
             : replyTo.type === 'FILE'
-              ? '📎 Файл'
+              ? 'Файл'
               : replyTo.text}
         </p>
       </div>
@@ -282,7 +324,6 @@
     </div>
   {/if}
 
-  <!-- Attachment preview -->
   {#if pending}
     <div
       class="flex items-center gap-3 px-3 py-2.5 mb-2 rounded-xl"
@@ -326,19 +367,11 @@
     </div>
   {/if}
 
-  <!-- Поле вводу -->
   <div class="flex items-end gap-2">
-    <!-- Кнопка прикріпити файл -->
     <label
       class="size-10 shrink-0 rounded-full flex items-center justify-center cursor-pointer transition-colors"
       style="background-color: color-mix(in oklch, var(--foreground) 5%, transparent);
              color: var(--muted-foreground)"
-      onmouseenter={(e) =>
-        ((e.currentTarget as HTMLElement).style.backgroundColor =
-          'color-mix(in oklch, var(--foreground) 9%, transparent)')}
-      onmouseleave={(e) =>
-        ((e.currentTarget as HTMLElement).style.backgroundColor =
-          'color-mix(in oklch, var(--foreground) 5%, transparent)')}
     >
       <Paperclip class="size-4" />
       <input
@@ -363,13 +396,20 @@
       maxlength={4000}
     ></textarea>
 
-    <Button
+    <button
       type="button"
       onclick={send}
-      disabled={sending || (!text.trim() && !pending)}
-      class="size-10 shrink-0 rounded-full p-0"
+      disabled={!canSend}
+      class="size-10 shrink-0 rounded-full flex items-center justify-center transition-all"
+      style="background-color: {canSend
+        ? 'var(--primary)'
+        : 'color-mix(in oklch, var(--foreground) 8%, transparent)'};
+             color: {canSend
+        ? 'var(--primary-foreground)'
+        : 'var(--muted-foreground)'};
+             cursor: {canSend ? 'pointer' : 'not-allowed'}"
     >
       <Send class="size-4" />
-    </Button>
+    </button>
   </div>
 </div>

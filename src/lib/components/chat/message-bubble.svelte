@@ -1,17 +1,25 @@
 <!-- src/lib/components/chat/message-bubble.svelte -->
 <script lang="ts">
-  import { Check, CheckCheck, FileText, Download } from 'lucide-svelte'
+  import {
+    Check,
+    CheckCheck,
+    FileText,
+    Download,
+    Clock,
+    AlertCircle,
+  } from 'lucide-svelte'
   import type { ChatMessage } from './types'
 
   interface Props {
     message: ChatMessage
     isMine: boolean
-    /** Чи останнє повідомлення в групі (для tail-радіуса) */
     isLastInGroup: boolean
-    /** Чи показувати «прочитано» (тільки для своїх останніх) */
     showReadStatus: boolean
-    /** Чи прочитано — рахується ззовні за останнім readAt співрозмовника */
     isRead: boolean
+    /** Чи повідомлення ще летить на сервер */
+    isPending?: boolean
+    /** Чи відправка провалилася */
+    isFailed?: boolean
     onReply?: (m: ChatMessage) => void
   }
 
@@ -21,6 +29,8 @@
     isLastInGroup,
     showReadStatus,
     isRead,
+    isPending = false,
+    isFailed = false,
     onReply,
   }: Props = $props()
 
@@ -38,7 +48,6 @@
     return `${(bytes / 1024 / 1024).toFixed(1)} MB`
   }
 
-  // Tail-радіус — як у Telegram, "хвостик" у напрямку співрозмовника
   const radiusClass = $derived(
     isMine
       ? isLastInGroup
@@ -52,7 +61,6 @@
 
 <div class="flex {isMine ? 'justify-end' : 'justify-start'} group">
   <div class="max-w-[85%] sm:max-w-[70%] flex flex-col gap-0.5">
-    <!-- Reply-to preview -->
     {#if message.replyTo}
       <div
         class="px-3 py-1.5 rounded-lg mb-1 border-l-2 text-xs leading-tight"
@@ -76,12 +84,15 @@
       </div>
     {/if}
 
-    <!-- Body -->
     <div
-      class="relative {radiusClass} px-3 py-2"
-      style={isMine
-        ? 'background-color: var(--primary); color: var(--primary-foreground)'
-        : 'background-color: color-mix(in oklch, var(--foreground) 5%, transparent); color: var(--foreground)'}
+      class="relative {radiusClass} px-3 py-2 transition-opacity"
+      style="background-color: {isMine
+        ? 'var(--primary)'
+        : 'color-mix(in oklch, var(--foreground) 5%, transparent)'};
+             color: {isMine
+        ? 'var(--primary-foreground)'
+        : 'var(--foreground)'};
+             opacity: {isPending ? 0.65 : 1}"
     >
       {#if message.deletedAt}
         <p class="text-sm italic opacity-60">Повідомлення видалено</p>
@@ -160,7 +171,6 @@
         </p>
       {/if}
 
-      <!-- Час + статус прочитання -->
       <div class="flex items-center gap-1 justify-end mt-0.5 -mb-0.5">
         {#if message.editedAt}
           <span
@@ -180,18 +190,31 @@
         >
           {time}
         </span>
-        {#if isMine && showReadStatus}
-          {#if isRead}
-            <CheckCheck class="size-3" style="color: rgba(255,255,255,0.95)" />
-          {:else}
-            <Check class="size-3" style="color: rgba(255,255,255,0.7)" />
+
+        {#if isMine}
+          {#if isFailed}
+            <span title="Не вдалося надіслати" class="inline-flex">
+              <AlertCircle class="size-3" style="color: #ef4444" />
+            </span>
+          {:else if isPending}
+            <span title="Надсилається..." class="inline-flex">
+              <Clock class="size-3" style="color: rgba(255,255,255,0.7)" />
+            </span>
+          {:else if showReadStatus}
+            {#if isRead}
+              <CheckCheck
+                class="size-3"
+                style="color: rgba(255,255,255,0.95)"
+              />
+            {:else}
+              <Check class="size-3" style="color: rgba(255,255,255,0.7)" />
+            {/if}
           {/if}
         {/if}
       </div>
     </div>
 
-    <!-- Reply кнопка (на hover) -->
-    {#if onReply && !message.deletedAt}
+    {#if onReply && !message.deletedAt && !isPending && !isFailed}
       <button
         type="button"
         onclick={() => onReply?.(message)}
