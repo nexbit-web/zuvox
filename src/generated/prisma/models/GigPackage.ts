@@ -27,13 +27,13 @@ export type AggregateGigPackage = {
 }
 
 export type GigPackageAvgAggregateOutputType = {
-  price: number | null
+  priceCents: number | null
   deliveryDays: number | null
   revisions: number | null
 }
 
 export type GigPackageSumAggregateOutputType = {
-  price: number | null
+  priceCents: number | null
   deliveryDays: number | null
   revisions: number | null
 }
@@ -41,44 +41,53 @@ export type GigPackageSumAggregateOutputType = {
 export type GigPackageMinAggregateOutputType = {
   id: string | null
   gigId: string | null
+  tier: $Enums.GigPackageTier | null
   name: string | null
   description: string | null
-  price: number | null
+  priceCents: number | null
   deliveryDays: number | null
   revisions: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type GigPackageMaxAggregateOutputType = {
   id: string | null
   gigId: string | null
+  tier: $Enums.GigPackageTier | null
   name: string | null
   description: string | null
-  price: number | null
+  priceCents: number | null
   deliveryDays: number | null
   revisions: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type GigPackageCountAggregateOutputType = {
   id: number
   gigId: number
+  tier: number
   name: number
   description: number
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions: number
   features: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type GigPackageAvgAggregateInputType = {
-  price?: true
+  priceCents?: true
   deliveryDays?: true
   revisions?: true
 }
 
 export type GigPackageSumAggregateInputType = {
-  price?: true
+  priceCents?: true
   deliveryDays?: true
   revisions?: true
 }
@@ -86,32 +95,41 @@ export type GigPackageSumAggregateInputType = {
 export type GigPackageMinAggregateInputType = {
   id?: true
   gigId?: true
+  tier?: true
   name?: true
   description?: true
-  price?: true
+  priceCents?: true
   deliveryDays?: true
   revisions?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type GigPackageMaxAggregateInputType = {
   id?: true
   gigId?: true
+  tier?: true
   name?: true
   description?: true
-  price?: true
+  priceCents?: true
   deliveryDays?: true
   revisions?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type GigPackageCountAggregateInputType = {
   id?: true
   gigId?: true
+  tier?: true
   name?: true
   description?: true
-  price?: true
+  priceCents?: true
   deliveryDays?: true
   revisions?: true
   features?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -204,12 +222,15 @@ export type GigPackageGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type GigPackageGroupByOutputType = {
   id: string
   gigId: string
+  tier: $Enums.GigPackageTier
   name: string
   description: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions: number
   features: string[]
+  createdAt: Date
+  updatedAt: Date
   _count: GigPackageCountAggregateOutputType | null
   _avg: GigPackageAvgAggregateOutputType | null
   _sum: GigPackageSumAggregateOutputType | null
@@ -238,51 +259,64 @@ export type GigPackageWhereInput = {
   NOT?: Prisma.GigPackageWhereInput | Prisma.GigPackageWhereInput[]
   id?: Prisma.StringFilter<"GigPackage"> | string
   gigId?: Prisma.StringFilter<"GigPackage"> | string
+  tier?: Prisma.EnumGigPackageTierFilter<"GigPackage"> | $Enums.GigPackageTier
   name?: Prisma.StringFilter<"GigPackage"> | string
   description?: Prisma.StringNullableFilter<"GigPackage"> | string | null
-  price?: Prisma.IntFilter<"GigPackage"> | number
+  priceCents?: Prisma.IntFilter<"GigPackage"> | number
   deliveryDays?: Prisma.IntFilter<"GigPackage"> | number
   revisions?: Prisma.IntFilter<"GigPackage"> | number
   features?: Prisma.StringNullableListFilter<"GigPackage">
+  createdAt?: Prisma.DateTimeFilter<"GigPackage"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"GigPackage"> | Date | string
   gig?: Prisma.XOR<Prisma.GigScalarRelationFilter, Prisma.GigWhereInput>
 }
 
 export type GigPackageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
   features?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   gig?: Prisma.GigOrderByWithRelationInput
 }
 
 export type GigPackageWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  gigId_tier?: Prisma.GigPackageGigIdTierCompoundUniqueInput
   AND?: Prisma.GigPackageWhereInput | Prisma.GigPackageWhereInput[]
   OR?: Prisma.GigPackageWhereInput[]
   NOT?: Prisma.GigPackageWhereInput | Prisma.GigPackageWhereInput[]
   gigId?: Prisma.StringFilter<"GigPackage"> | string
+  tier?: Prisma.EnumGigPackageTierFilter<"GigPackage"> | $Enums.GigPackageTier
   name?: Prisma.StringFilter<"GigPackage"> | string
   description?: Prisma.StringNullableFilter<"GigPackage"> | string | null
-  price?: Prisma.IntFilter<"GigPackage"> | number
+  priceCents?: Prisma.IntFilter<"GigPackage"> | number
   deliveryDays?: Prisma.IntFilter<"GigPackage"> | number
   revisions?: Prisma.IntFilter<"GigPackage"> | number
   features?: Prisma.StringNullableListFilter<"GigPackage">
+  createdAt?: Prisma.DateTimeFilter<"GigPackage"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"GigPackage"> | Date | string
   gig?: Prisma.XOR<Prisma.GigScalarRelationFilter, Prisma.GigWhereInput>
-}, "id">
+}, "id" | "gigId_tier">
 
 export type GigPackageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
   features?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.GigPackageCountOrderByAggregateInput
   _avg?: Prisma.GigPackageAvgOrderByAggregateInput
   _max?: Prisma.GigPackageMaxOrderByAggregateInput
@@ -296,88 +330,112 @@ export type GigPackageScalarWhereWithAggregatesInput = {
   NOT?: Prisma.GigPackageScalarWhereWithAggregatesInput | Prisma.GigPackageScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"GigPackage"> | string
   gigId?: Prisma.StringWithAggregatesFilter<"GigPackage"> | string
+  tier?: Prisma.EnumGigPackageTierWithAggregatesFilter<"GigPackage"> | $Enums.GigPackageTier
   name?: Prisma.StringWithAggregatesFilter<"GigPackage"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"GigPackage"> | string | null
-  price?: Prisma.IntWithAggregatesFilter<"GigPackage"> | number
+  priceCents?: Prisma.IntWithAggregatesFilter<"GigPackage"> | number
   deliveryDays?: Prisma.IntWithAggregatesFilter<"GigPackage"> | number
   revisions?: Prisma.IntWithAggregatesFilter<"GigPackage"> | number
   features?: Prisma.StringNullableListFilter<"GigPackage">
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"GigPackage"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GigPackage"> | Date | string
 }
 
 export type GigPackageCreateInput = {
   id?: string
-  name: string
+  tier: $Enums.GigPackageTier
+  name?: string
   description?: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions?: number
   features?: Prisma.GigPackageCreatefeaturesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
   gig: Prisma.GigCreateNestedOneWithoutPackagesInput
 }
 
 export type GigPackageUncheckedCreateInput = {
   id?: string
   gigId: string
-  name: string
+  tier: $Enums.GigPackageTier
+  name?: string
   description?: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions?: number
   features?: Prisma.GigPackageCreatefeaturesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GigPackageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gig?: Prisma.GigUpdateOneRequiredWithoutPackagesNestedInput
 }
 
 export type GigPackageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gigId?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GigPackageCreateManyInput = {
   id?: string
   gigId: string
-  name: string
+  tier: $Enums.GigPackageTier
+  name?: string
   description?: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions?: number
   features?: Prisma.GigPackageCreatefeaturesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GigPackageUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GigPackageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gigId?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GigPackageListRelationFilter = {
@@ -390,19 +448,27 @@ export type GigPackageOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type GigPackageGigIdTierCompoundUniqueInput = {
+  gigId: string
+  tier: $Enums.GigPackageTier
+}
+
 export type GigPackageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
   features?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GigPackageAvgOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
 }
@@ -410,25 +476,31 @@ export type GigPackageAvgOrderByAggregateInput = {
 export type GigPackageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GigPackageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GigPackageSumOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   revisions?: Prisma.SortOrder
 }
@@ -479,6 +551,10 @@ export type GigPackageCreatefeaturesInput = {
   set: string[]
 }
 
+export type EnumGigPackageTierFieldUpdateOperationsInput = {
+  set?: $Enums.GigPackageTier
+}
+
 export type GigPackageUpdatefeaturesInput = {
   set?: string[]
   push?: string | string[]
@@ -486,22 +562,28 @@ export type GigPackageUpdatefeaturesInput = {
 
 export type GigPackageCreateWithoutGigInput = {
   id?: string
-  name: string
+  tier: $Enums.GigPackageTier
+  name?: string
   description?: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions?: number
   features?: Prisma.GigPackageCreatefeaturesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GigPackageUncheckedCreateWithoutGigInput = {
   id?: string
-  name: string
+  tier: $Enums.GigPackageTier
+  name?: string
   description?: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions?: number
   features?: Prisma.GigPackageCreatefeaturesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GigPackageCreateOrConnectWithoutGigInput = {
@@ -536,52 +618,67 @@ export type GigPackageScalarWhereInput = {
   NOT?: Prisma.GigPackageScalarWhereInput | Prisma.GigPackageScalarWhereInput[]
   id?: Prisma.StringFilter<"GigPackage"> | string
   gigId?: Prisma.StringFilter<"GigPackage"> | string
+  tier?: Prisma.EnumGigPackageTierFilter<"GigPackage"> | $Enums.GigPackageTier
   name?: Prisma.StringFilter<"GigPackage"> | string
   description?: Prisma.StringNullableFilter<"GigPackage"> | string | null
-  price?: Prisma.IntFilter<"GigPackage"> | number
+  priceCents?: Prisma.IntFilter<"GigPackage"> | number
   deliveryDays?: Prisma.IntFilter<"GigPackage"> | number
   revisions?: Prisma.IntFilter<"GigPackage"> | number
   features?: Prisma.StringNullableListFilter<"GigPackage">
+  createdAt?: Prisma.DateTimeFilter<"GigPackage"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"GigPackage"> | Date | string
 }
 
 export type GigPackageCreateManyGigInput = {
   id?: string
-  name: string
+  tier: $Enums.GigPackageTier
+  name?: string
   description?: string | null
-  price: number
+  priceCents: number
   deliveryDays: number
   revisions?: number
   features?: Prisma.GigPackageCreatefeaturesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GigPackageUpdateWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GigPackageUncheckedUpdateWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GigPackageUncheckedUpdateManyWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  tier?: Prisma.EnumGigPackageTierFieldUpdateOperationsInput | $Enums.GigPackageTier
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryDays?: Prisma.IntFieldUpdateOperationsInput | number
   revisions?: Prisma.IntFieldUpdateOperationsInput | number
   features?: Prisma.GigPackageUpdatefeaturesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -589,51 +686,63 @@ export type GigPackageUncheckedUpdateManyWithoutGigInput = {
 export type GigPackageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gigId?: boolean
+  tier?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
+  priceCents?: boolean
   deliveryDays?: boolean
   revisions?: boolean
   features?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gigPackage"]>
 
 export type GigPackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gigId?: boolean
+  tier?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
+  priceCents?: boolean
   deliveryDays?: boolean
   revisions?: boolean
   features?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gigPackage"]>
 
 export type GigPackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gigId?: boolean
+  tier?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
+  priceCents?: boolean
   deliveryDays?: boolean
   revisions?: boolean
   features?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gigPackage"]>
 
 export type GigPackageSelectScalar = {
   id?: boolean
   gigId?: boolean
+  tier?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
+  priceCents?: boolean
   deliveryDays?: boolean
   revisions?: boolean
   features?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type GigPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gigId" | "name" | "description" | "price" | "deliveryDays" | "revisions" | "features", ExtArgs["result"]["gigPackage"]>
+export type GigPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gigId" | "tier" | "name" | "description" | "priceCents" | "deliveryDays" | "revisions" | "features" | "createdAt" | "updatedAt", ExtArgs["result"]["gigPackage"]>
 export type GigPackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
 }
@@ -652,12 +761,15 @@ export type $GigPackagePayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     gigId: string
+    tier: $Enums.GigPackageTier
     name: string
     description: string | null
-    price: number
+    priceCents: number
     deliveryDays: number
     revisions: number
     features: string[]
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["gigPackage"]>
   composites: {}
 }
@@ -1084,12 +1196,15 @@ export interface Prisma__GigPackageClient<T, Null = never, ExtArgs extends runti
 export interface GigPackageFieldRefs {
   readonly id: Prisma.FieldRef<"GigPackage", 'String'>
   readonly gigId: Prisma.FieldRef<"GigPackage", 'String'>
+  readonly tier: Prisma.FieldRef<"GigPackage", 'GigPackageTier'>
   readonly name: Prisma.FieldRef<"GigPackage", 'String'>
   readonly description: Prisma.FieldRef<"GigPackage", 'String'>
-  readonly price: Prisma.FieldRef<"GigPackage", 'Int'>
+  readonly priceCents: Prisma.FieldRef<"GigPackage", 'Int'>
   readonly deliveryDays: Prisma.FieldRef<"GigPackage", 'Int'>
   readonly revisions: Prisma.FieldRef<"GigPackage", 'Int'>
   readonly features: Prisma.FieldRef<"GigPackage", 'String[]'>
+  readonly createdAt: Prisma.FieldRef<"GigPackage", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"GigPackage", 'DateTime'>
 }
     
 

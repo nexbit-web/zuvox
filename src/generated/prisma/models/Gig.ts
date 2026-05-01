@@ -27,112 +27,164 @@ export type AggregateGig = {
 }
 
 export type GigAvgAggregateOutputType = {
-  price: number | null
   viewCount: number | null
+  ordersCount: number | null
+  avgRating: number | null
+  reviewsCount: number | null
 }
 
 export type GigSumAggregateOutputType = {
-  price: number | null
   viewCount: number | null
+  ordersCount: number | null
+  avgRating: number | null
+  reviewsCount: number | null
 }
 
 export type GigMinAggregateOutputType = {
   id: string | null
   title: string | null
+  slug: string | null
   description: string | null
-  price: number | null
+  shortDescription: string | null
   category: string | null
   subcategory: string | null
+  videoUrl: string | null
+  status: $Enums.GigStatus | null
   isActive: boolean | null
   viewCount: number | null
+  ordersCount: number | null
+  avgRating: number | null
+  reviewsCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  publishedAt: Date | null
   sellerId: string | null
 }
 
 export type GigMaxAggregateOutputType = {
   id: string | null
   title: string | null
+  slug: string | null
   description: string | null
-  price: number | null
+  shortDescription: string | null
   category: string | null
   subcategory: string | null
+  videoUrl: string | null
+  status: $Enums.GigStatus | null
   isActive: boolean | null
   viewCount: number | null
+  ordersCount: number | null
+  avgRating: number | null
+  reviewsCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  publishedAt: Date | null
   sellerId: string | null
 }
 
 export type GigCountAggregateOutputType = {
   id: number
   title: number
+  slug: number
   description: number
-  price: number
+  shortDescription: number
   category: number
   subcategory: number
   tags: number
   images: number
+  imagesPublicIds: number
+  videoUrl: number
+  status: number
   isActive: number
   viewCount: number
+  ordersCount: number
+  avgRating: number
+  reviewsCount: number
   createdAt: number
   updatedAt: number
+  publishedAt: number
   sellerId: number
   _all: number
 }
 
 
 export type GigAvgAggregateInputType = {
-  price?: true
   viewCount?: true
+  ordersCount?: true
+  avgRating?: true
+  reviewsCount?: true
 }
 
 export type GigSumAggregateInputType = {
-  price?: true
   viewCount?: true
+  ordersCount?: true
+  avgRating?: true
+  reviewsCount?: true
 }
 
 export type GigMinAggregateInputType = {
   id?: true
   title?: true
+  slug?: true
   description?: true
-  price?: true
+  shortDescription?: true
   category?: true
   subcategory?: true
+  videoUrl?: true
+  status?: true
   isActive?: true
   viewCount?: true
+  ordersCount?: true
+  avgRating?: true
+  reviewsCount?: true
   createdAt?: true
   updatedAt?: true
+  publishedAt?: true
   sellerId?: true
 }
 
 export type GigMaxAggregateInputType = {
   id?: true
   title?: true
+  slug?: true
   description?: true
-  price?: true
+  shortDescription?: true
   category?: true
   subcategory?: true
+  videoUrl?: true
+  status?: true
   isActive?: true
   viewCount?: true
+  ordersCount?: true
+  avgRating?: true
+  reviewsCount?: true
   createdAt?: true
   updatedAt?: true
+  publishedAt?: true
   sellerId?: true
 }
 
 export type GigCountAggregateInputType = {
   id?: true
   title?: true
+  slug?: true
   description?: true
-  price?: true
+  shortDescription?: true
   category?: true
   subcategory?: true
   tags?: true
   images?: true
+  imagesPublicIds?: true
+  videoUrl?: true
+  status?: true
   isActive?: true
   viewCount?: true
+  ordersCount?: true
+  avgRating?: true
+  reviewsCount?: true
   createdAt?: true
   updatedAt?: true
+  publishedAt?: true
   sellerId?: true
   _all?: true
 }
@@ -226,16 +278,24 @@ export type GigGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type GigGroupByOutputType = {
   id: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription: string | null
   category: string
   subcategory: string | null
   tags: string[]
   images: string[]
+  imagesPublicIds: string[]
+  videoUrl: string | null
+  status: $Enums.GigStatus
   isActive: boolean
   viewCount: number
+  ordersCount: number
+  avgRating: number
+  reviewsCount: number
   createdAt: Date
   updatedAt: Date
+  publishedAt: Date | null
   sellerId: string
   _count: GigCountAggregateOutputType | null
   _avg: GigAvgAggregateOutputType | null
@@ -265,19 +325,27 @@ export type GigWhereInput = {
   NOT?: Prisma.GigWhereInput | Prisma.GigWhereInput[]
   id?: Prisma.StringFilter<"Gig"> | string
   title?: Prisma.StringFilter<"Gig"> | string
+  slug?: Prisma.StringFilter<"Gig"> | string
   description?: Prisma.StringFilter<"Gig"> | string
-  price?: Prisma.IntFilter<"Gig"> | number
+  shortDescription?: Prisma.StringNullableFilter<"Gig"> | string | null
   category?: Prisma.StringFilter<"Gig"> | string
   subcategory?: Prisma.StringNullableFilter<"Gig"> | string | null
   tags?: Prisma.StringNullableListFilter<"Gig">
   images?: Prisma.StringNullableListFilter<"Gig">
+  imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
+  videoUrl?: Prisma.StringNullableFilter<"Gig"> | string | null
+  status?: Prisma.EnumGigStatusFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolFilter<"Gig"> | boolean
   viewCount?: Prisma.IntFilter<"Gig"> | number
+  ordersCount?: Prisma.IntFilter<"Gig"> | number
+  avgRating?: Prisma.FloatFilter<"Gig"> | number
+  reviewsCount?: Prisma.IntFilter<"Gig"> | number
   createdAt?: Prisma.DateTimeFilter<"Gig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Gig"> | Date | string
+  publishedAt?: Prisma.DateTimeNullableFilter<"Gig"> | Date | string | null
   sellerId?: Prisma.StringFilter<"Gig"> | string
-  packages?: Prisma.GigPackageListRelationFilter
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  packages?: Prisma.GigPackageListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
 }
@@ -285,59 +353,83 @@ export type GigWhereInput = {
 export type GigOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   images?: Prisma.SortOrder
+  imagesPublicIds?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerId?: Prisma.SortOrder
-  packages?: Prisma.GigPackageOrderByRelationAggregateInput
   seller?: Prisma.UserOrderByWithRelationInput
+  packages?: Prisma.GigPackageOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
 }
 
 export type GigWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  slug?: string
   AND?: Prisma.GigWhereInput | Prisma.GigWhereInput[]
   OR?: Prisma.GigWhereInput[]
   NOT?: Prisma.GigWhereInput | Prisma.GigWhereInput[]
   title?: Prisma.StringFilter<"Gig"> | string
   description?: Prisma.StringFilter<"Gig"> | string
-  price?: Prisma.IntFilter<"Gig"> | number
+  shortDescription?: Prisma.StringNullableFilter<"Gig"> | string | null
   category?: Prisma.StringFilter<"Gig"> | string
   subcategory?: Prisma.StringNullableFilter<"Gig"> | string | null
   tags?: Prisma.StringNullableListFilter<"Gig">
   images?: Prisma.StringNullableListFilter<"Gig">
+  imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
+  videoUrl?: Prisma.StringNullableFilter<"Gig"> | string | null
+  status?: Prisma.EnumGigStatusFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolFilter<"Gig"> | boolean
   viewCount?: Prisma.IntFilter<"Gig"> | number
+  ordersCount?: Prisma.IntFilter<"Gig"> | number
+  avgRating?: Prisma.FloatFilter<"Gig"> | number
+  reviewsCount?: Prisma.IntFilter<"Gig"> | number
   createdAt?: Prisma.DateTimeFilter<"Gig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Gig"> | Date | string
+  publishedAt?: Prisma.DateTimeNullableFilter<"Gig"> | Date | string | null
   sellerId?: Prisma.StringFilter<"Gig"> | string
-  packages?: Prisma.GigPackageListRelationFilter
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  packages?: Prisma.GigPackageListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
-}, "id">
+}, "id" | "slug">
 
 export type GigOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   images?: Prisma.SortOrder
+  imagesPublicIds?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   _count?: Prisma.GigCountOrderByAggregateInput
   _avg?: Prisma.GigAvgOrderByAggregateInput
@@ -352,34 +444,50 @@ export type GigScalarWhereWithAggregatesInput = {
   NOT?: Prisma.GigScalarWhereWithAggregatesInput | Prisma.GigScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Gig"> | string
   title?: Prisma.StringWithAggregatesFilter<"Gig"> | string
+  slug?: Prisma.StringWithAggregatesFilter<"Gig"> | string
   description?: Prisma.StringWithAggregatesFilter<"Gig"> | string
-  price?: Prisma.IntWithAggregatesFilter<"Gig"> | number
+  shortDescription?: Prisma.StringNullableWithAggregatesFilter<"Gig"> | string | null
   category?: Prisma.StringWithAggregatesFilter<"Gig"> | string
   subcategory?: Prisma.StringNullableWithAggregatesFilter<"Gig"> | string | null
   tags?: Prisma.StringNullableListFilter<"Gig">
   images?: Prisma.StringNullableListFilter<"Gig">
+  imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
+  videoUrl?: Prisma.StringNullableWithAggregatesFilter<"Gig"> | string | null
+  status?: Prisma.EnumGigStatusWithAggregatesFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolWithAggregatesFilter<"Gig"> | boolean
   viewCount?: Prisma.IntWithAggregatesFilter<"Gig"> | number
+  ordersCount?: Prisma.IntWithAggregatesFilter<"Gig"> | number
+  avgRating?: Prisma.FloatWithAggregatesFilter<"Gig"> | number
+  reviewsCount?: Prisma.IntWithAggregatesFilter<"Gig"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Gig"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Gig"> | Date | string
+  publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Gig"> | Date | string | null
   sellerId?: Prisma.StringWithAggregatesFilter<"Gig"> | string
 }
 
 export type GigCreateInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
+  publishedAt?: Date | string | null
   seller: Prisma.UserCreateNestedOneWithoutGigsInput
+  packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
   orders?: Prisma.OrderCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutGigInput
 }
@@ -387,16 +495,24 @@ export type GigCreateInput = {
 export type GigUncheckedCreateInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   sellerId: string
   packages?: Prisma.GigPackageUncheckedCreateNestedManyWithoutGigInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGigInput
@@ -406,18 +522,26 @@ export type GigUncheckedCreateInput = {
 export type GigUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   seller?: Prisma.UserUpdateOneRequiredWithoutGigsNestedInput
+  packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
   orders?: Prisma.OrderUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutGigNestedInput
 }
@@ -425,16 +549,24 @@ export type GigUpdateInput = {
 export type GigUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   packages?: Prisma.GigPackageUncheckedUpdateManyWithoutGigNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGigNestedInput
@@ -444,47 +576,71 @@ export type GigUncheckedUpdateInput = {
 export type GigCreateManyInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   sellerId: string
 }
 
 export type GigUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type GigUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -501,60 +657,91 @@ export type GigOrderByRelationAggregateInput = {
 export type GigCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  shortDescription?: Prisma.SortOrder
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   images?: Prisma.SortOrder
+  imagesPublicIds?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
 }
 
 export type GigAvgOrderByAggregateInput = {
-  price?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
 }
 
 export type GigMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  shortDescription?: Prisma.SortOrder
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
 }
 
 export type GigMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  shortDescription?: Prisma.SortOrder
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
 }
 
 export type GigSumOrderByAggregateInput = {
-  price?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  ordersCount?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
+  reviewsCount?: Prisma.SortOrder
 }
 
 export type GigScalarRelationFilter = {
   is?: Prisma.GigWhereInput
   isNot?: Prisma.GigWhereInput
+}
+
+export type GigNullableScalarRelationFilter = {
+  is?: Prisma.GigWhereInput | null
+  isNot?: Prisma.GigWhereInput | null
 }
 
 export type GigCreateNestedManyWithoutSellerInput = {
@@ -607,6 +794,10 @@ export type GigCreateimagesInput = {
   set: string[]
 }
 
+export type GigCreateimagesPublicIdsInput = {
+  set: string[]
+}
+
 export type GigUpdatetagsInput = {
   set?: string[]
   push?: string | string[]
@@ -615,6 +806,15 @@ export type GigUpdatetagsInput = {
 export type GigUpdateimagesInput = {
   set?: string[]
   push?: string | string[]
+}
+
+export type GigUpdateimagesPublicIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type EnumGigStatusFieldUpdateOperationsInput = {
+  set?: $Enums.GigStatus
 }
 
 export type GigCreateNestedOneWithoutPackagesInput = {
@@ -637,10 +837,12 @@ export type GigCreateNestedOneWithoutOrdersInput = {
   connect?: Prisma.GigWhereUniqueInput
 }
 
-export type GigUpdateOneRequiredWithoutOrdersNestedInput = {
+export type GigUpdateOneWithoutOrdersNestedInput = {
   create?: Prisma.XOR<Prisma.GigCreateWithoutOrdersInput, Prisma.GigUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.GigCreateOrConnectWithoutOrdersInput
   upsert?: Prisma.GigUpsertWithoutOrdersInput
+  disconnect?: Prisma.GigWhereInput | boolean
+  delete?: Prisma.GigWhereInput | boolean
   connect?: Prisma.GigWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.GigUpdateToOneWithWhereWithoutOrdersInput, Prisma.GigUpdateWithoutOrdersInput>, Prisma.GigUncheckedUpdateWithoutOrdersInput>
 }
@@ -651,10 +853,12 @@ export type GigCreateNestedOneWithoutReviewsInput = {
   connect?: Prisma.GigWhereUniqueInput
 }
 
-export type GigUpdateOneRequiredWithoutReviewsNestedInput = {
+export type GigUpdateOneWithoutReviewsNestedInput = {
   create?: Prisma.XOR<Prisma.GigCreateWithoutReviewsInput, Prisma.GigUncheckedCreateWithoutReviewsInput>
   connectOrCreate?: Prisma.GigCreateOrConnectWithoutReviewsInput
   upsert?: Prisma.GigUpsertWithoutReviewsInput
+  disconnect?: Prisma.GigWhereInput | boolean
+  delete?: Prisma.GigWhereInput | boolean
   connect?: Prisma.GigWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.GigUpdateToOneWithWhereWithoutReviewsInput, Prisma.GigUpdateWithoutReviewsInput>, Prisma.GigUncheckedUpdateWithoutReviewsInput>
 }
@@ -662,16 +866,24 @@ export type GigUpdateOneRequiredWithoutReviewsNestedInput = {
 export type GigCreateWithoutSellerInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
   orders?: Prisma.OrderCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutGigInput
@@ -680,16 +892,24 @@ export type GigCreateWithoutSellerInput = {
 export type GigUncheckedCreateWithoutSellerInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   packages?: Prisma.GigPackageUncheckedCreateNestedManyWithoutGigInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutGigInput
@@ -727,32 +947,48 @@ export type GigScalarWhereInput = {
   NOT?: Prisma.GigScalarWhereInput | Prisma.GigScalarWhereInput[]
   id?: Prisma.StringFilter<"Gig"> | string
   title?: Prisma.StringFilter<"Gig"> | string
+  slug?: Prisma.StringFilter<"Gig"> | string
   description?: Prisma.StringFilter<"Gig"> | string
-  price?: Prisma.IntFilter<"Gig"> | number
+  shortDescription?: Prisma.StringNullableFilter<"Gig"> | string | null
   category?: Prisma.StringFilter<"Gig"> | string
   subcategory?: Prisma.StringNullableFilter<"Gig"> | string | null
   tags?: Prisma.StringNullableListFilter<"Gig">
   images?: Prisma.StringNullableListFilter<"Gig">
+  imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
+  videoUrl?: Prisma.StringNullableFilter<"Gig"> | string | null
+  status?: Prisma.EnumGigStatusFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolFilter<"Gig"> | boolean
   viewCount?: Prisma.IntFilter<"Gig"> | number
+  ordersCount?: Prisma.IntFilter<"Gig"> | number
+  avgRating?: Prisma.FloatFilter<"Gig"> | number
+  reviewsCount?: Prisma.IntFilter<"Gig"> | number
   createdAt?: Prisma.DateTimeFilter<"Gig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Gig"> | Date | string
+  publishedAt?: Prisma.DateTimeNullableFilter<"Gig"> | Date | string | null
   sellerId?: Prisma.StringFilter<"Gig"> | string
 }
 
 export type GigCreateWithoutPackagesInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   seller: Prisma.UserCreateNestedOneWithoutGigsInput
   orders?: Prisma.OrderCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutGigInput
@@ -761,16 +997,24 @@ export type GigCreateWithoutPackagesInput = {
 export type GigUncheckedCreateWithoutPackagesInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   sellerId: string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutGigInput
@@ -795,16 +1039,24 @@ export type GigUpdateToOneWithWhereWithoutPackagesInput = {
 export type GigUpdateWithoutPackagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   seller?: Prisma.UserUpdateOneRequiredWithoutGigsNestedInput
   orders?: Prisma.OrderUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutGigNestedInput
@@ -813,16 +1065,24 @@ export type GigUpdateWithoutPackagesInput = {
 export type GigUncheckedUpdateWithoutPackagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutGigNestedInput
@@ -831,34 +1091,50 @@ export type GigUncheckedUpdateWithoutPackagesInput = {
 export type GigCreateWithoutOrdersInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
+  publishedAt?: Date | string | null
   seller: Prisma.UserCreateNestedOneWithoutGigsInput
+  packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutGigInput
 }
 
 export type GigUncheckedCreateWithoutOrdersInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   sellerId: string
   packages?: Prisma.GigPackageUncheckedCreateNestedManyWithoutGigInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutGigInput
@@ -883,34 +1159,50 @@ export type GigUpdateToOneWithWhereWithoutOrdersInput = {
 export type GigUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   seller?: Prisma.UserUpdateOneRequiredWithoutGigsNestedInput
+  packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutGigNestedInput
 }
 
 export type GigUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   packages?: Prisma.GigPackageUncheckedUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutGigNestedInput
@@ -919,34 +1211,50 @@ export type GigUncheckedUpdateWithoutOrdersInput = {
 export type GigCreateWithoutReviewsInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
+  publishedAt?: Date | string | null
   seller: Prisma.UserCreateNestedOneWithoutGigsInput
+  packages?: Prisma.GigPackageCreateNestedManyWithoutGigInput
   orders?: Prisma.OrderCreateNestedManyWithoutGigInput
 }
 
 export type GigUncheckedCreateWithoutReviewsInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
   sellerId: string
   packages?: Prisma.GigPackageUncheckedCreateNestedManyWithoutGigInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGigInput
@@ -971,34 +1279,50 @@ export type GigUpdateToOneWithWhereWithoutReviewsInput = {
 export type GigUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   seller?: Prisma.UserUpdateOneRequiredWithoutGigsNestedInput
+  packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
   orders?: Prisma.OrderUpdateManyWithoutGigNestedInput
 }
 
 export type GigUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   packages?: Prisma.GigPackageUncheckedUpdateManyWithoutGigNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGigNestedInput
@@ -1007,31 +1331,47 @@ export type GigUncheckedUpdateWithoutReviewsInput = {
 export type GigCreateManySellerInput = {
   id?: string
   title: string
+  slug: string
   description: string
-  price: number
+  shortDescription?: string | null
   category: string
   subcategory?: string | null
   tags?: Prisma.GigCreatetagsInput | string[]
   images?: Prisma.GigCreateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
+  videoUrl?: string | null
+  status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
+  ordersCount?: number
+  avgRating?: number
+  reviewsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  publishedAt?: Date | string | null
 }
 
 export type GigUpdateWithoutSellerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   packages?: Prisma.GigPackageUpdateManyWithoutGigNestedInput
   orders?: Prisma.OrderUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutGigNestedInput
@@ -1040,16 +1380,24 @@ export type GigUpdateWithoutSellerInput = {
 export type GigUncheckedUpdateWithoutSellerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   packages?: Prisma.GigPackageUncheckedUpdateManyWithoutGigNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGigNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutGigNestedInput
@@ -1058,16 +1406,24 @@ export type GigUncheckedUpdateWithoutSellerInput = {
 export type GigUncheckedUpdateManyWithoutSellerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
   subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.GigUpdatetagsInput | string[]
   images?: Prisma.GigUpdateimagesInput | string[]
+  imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1122,19 +1478,27 @@ export type GigCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Ext
 export type GigSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  slug?: boolean
   description?: boolean
-  price?: boolean
+  shortDescription?: boolean
   category?: boolean
   subcategory?: boolean
   tags?: boolean
   images?: boolean
+  imagesPublicIds?: boolean
+  videoUrl?: boolean
+  status?: boolean
   isActive?: boolean
   viewCount?: boolean
+  ordersCount?: boolean
+  avgRating?: boolean
+  reviewsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publishedAt?: boolean
   sellerId?: boolean
-  packages?: boolean | Prisma.Gig$packagesArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  packages?: boolean | Prisma.Gig$packagesArgs<ExtArgs>
   orders?: boolean | Prisma.Gig$ordersArgs<ExtArgs>
   reviews?: boolean | Prisma.Gig$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.GigCountOutputTypeDefaultArgs<ExtArgs>
@@ -1143,16 +1507,24 @@ export type GigSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type GigSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  slug?: boolean
   description?: boolean
-  price?: boolean
+  shortDescription?: boolean
   category?: boolean
   subcategory?: boolean
   tags?: boolean
   images?: boolean
+  imagesPublicIds?: boolean
+  videoUrl?: boolean
+  status?: boolean
   isActive?: boolean
   viewCount?: boolean
+  ordersCount?: boolean
+  avgRating?: boolean
+  reviewsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publishedAt?: boolean
   sellerId?: boolean
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gig"]>
@@ -1160,16 +1532,24 @@ export type GigSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
 export type GigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  slug?: boolean
   description?: boolean
-  price?: boolean
+  shortDescription?: boolean
   category?: boolean
   subcategory?: boolean
   tags?: boolean
   images?: boolean
+  imagesPublicIds?: boolean
+  videoUrl?: boolean
+  status?: boolean
   isActive?: boolean
   viewCount?: boolean
+  ordersCount?: boolean
+  avgRating?: boolean
+  reviewsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publishedAt?: boolean
   sellerId?: boolean
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gig"]>
@@ -1177,23 +1557,31 @@ export type GigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
 export type GigSelectScalar = {
   id?: boolean
   title?: boolean
+  slug?: boolean
   description?: boolean
-  price?: boolean
+  shortDescription?: boolean
   category?: boolean
   subcategory?: boolean
   tags?: boolean
   images?: boolean
+  imagesPublicIds?: boolean
+  videoUrl?: boolean
+  status?: boolean
   isActive?: boolean
   viewCount?: boolean
+  ordersCount?: boolean
+  avgRating?: boolean
+  reviewsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publishedAt?: boolean
   sellerId?: boolean
 }
 
-export type GigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "category" | "subcategory" | "tags" | "images" | "isActive" | "viewCount" | "createdAt" | "updatedAt" | "sellerId", ExtArgs["result"]["gig"]>
+export type GigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "category" | "subcategory" | "tags" | "images" | "imagesPublicIds" | "videoUrl" | "status" | "isActive" | "viewCount" | "ordersCount" | "avgRating" | "reviewsCount" | "createdAt" | "updatedAt" | "publishedAt" | "sellerId", ExtArgs["result"]["gig"]>
 export type GigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  packages?: boolean | Prisma.Gig$packagesArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  packages?: boolean | Prisma.Gig$packagesArgs<ExtArgs>
   orders?: boolean | Prisma.Gig$ordersArgs<ExtArgs>
   reviews?: boolean | Prisma.Gig$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.GigCountOutputTypeDefaultArgs<ExtArgs>
@@ -1208,24 +1596,32 @@ export type GigIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type $GigPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Gig"
   objects: {
-    packages: Prisma.$GigPackagePayload<ExtArgs>[]
     seller: Prisma.$UserPayload<ExtArgs>
+    packages: Prisma.$GigPackagePayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
+    slug: string
     description: string
-    price: number
+    shortDescription: string | null
     category: string
     subcategory: string | null
     tags: string[]
     images: string[]
+    imagesPublicIds: string[]
+    videoUrl: string | null
+    status: $Enums.GigStatus
     isActive: boolean
     viewCount: number
+    ordersCount: number
+    avgRating: number
+    reviewsCount: number
     createdAt: Date
     updatedAt: Date
+    publishedAt: Date | null
     sellerId: string
   }, ExtArgs["result"]["gig"]>
   composites: {}
@@ -1621,8 +2017,8 @@ readonly fields: GigFieldRefs;
  */
 export interface Prisma__GigClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  packages<T extends Prisma.Gig$packagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Gig$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GigPackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   seller<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  packages<T extends Prisma.Gig$packagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Gig$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GigPackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.Gig$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Gig$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Gig$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Gig$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1656,16 +2052,24 @@ export interface Prisma__GigClient<T, Null = never, ExtArgs extends runtime.Type
 export interface GigFieldRefs {
   readonly id: Prisma.FieldRef<"Gig", 'String'>
   readonly title: Prisma.FieldRef<"Gig", 'String'>
+  readonly slug: Prisma.FieldRef<"Gig", 'String'>
   readonly description: Prisma.FieldRef<"Gig", 'String'>
-  readonly price: Prisma.FieldRef<"Gig", 'Int'>
+  readonly shortDescription: Prisma.FieldRef<"Gig", 'String'>
   readonly category: Prisma.FieldRef<"Gig", 'String'>
   readonly subcategory: Prisma.FieldRef<"Gig", 'String'>
   readonly tags: Prisma.FieldRef<"Gig", 'String[]'>
   readonly images: Prisma.FieldRef<"Gig", 'String[]'>
+  readonly imagesPublicIds: Prisma.FieldRef<"Gig", 'String[]'>
+  readonly videoUrl: Prisma.FieldRef<"Gig", 'String'>
+  readonly status: Prisma.FieldRef<"Gig", 'GigStatus'>
   readonly isActive: Prisma.FieldRef<"Gig", 'Boolean'>
   readonly viewCount: Prisma.FieldRef<"Gig", 'Int'>
+  readonly ordersCount: Prisma.FieldRef<"Gig", 'Int'>
+  readonly avgRating: Prisma.FieldRef<"Gig", 'Float'>
+  readonly reviewsCount: Prisma.FieldRef<"Gig", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Gig", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Gig", 'DateTime'>
+  readonly publishedAt: Prisma.FieldRef<"Gig", 'DateTime'>
   readonly sellerId: Prisma.FieldRef<"Gig", 'String'>
 }
     

@@ -57,8 +57,12 @@ export const ModelName = {
   Gig: 'Gig',
   GigPackage: 'GigPackage',
   Order: 'Order',
+  OrderEvent: 'OrderEvent',
+  Job: 'Job',
+  Proposal: 'Proposal',
+  Wallet: 'Wallet',
+  WalletTransaction: 'WalletTransaction',
   Review: 'Review',
-  Task: 'Task',
   Chat: 'Chat',
   ChatMember: 'ChatMember',
   Message: 'Message',
@@ -149,16 +153,24 @@ export type FreelancerProfileScalarFieldEnum = (typeof FreelancerProfileScalarFi
 export const GigScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  slug: 'slug',
   description: 'description',
-  price: 'price',
+  shortDescription: 'shortDescription',
   category: 'category',
   subcategory: 'subcategory',
   tags: 'tags',
   images: 'images',
+  imagesPublicIds: 'imagesPublicIds',
+  videoUrl: 'videoUrl',
+  status: 'status',
   isActive: 'isActive',
   viewCount: 'viewCount',
+  ordersCount: 'ordersCount',
+  avgRating: 'avgRating',
+  reviewsCount: 'reviewsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  publishedAt: 'publishedAt',
   sellerId: 'sellerId'
 } as const
 
@@ -168,12 +180,15 @@ export type GigScalarFieldEnum = (typeof GigScalarFieldEnum)[keyof typeof GigSca
 export const GigPackageScalarFieldEnum = {
   id: 'id',
   gigId: 'gigId',
+  tier: 'tier',
   name: 'name',
   description: 'description',
-  price: 'price',
+  priceCents: 'priceCents',
   deliveryDays: 'deliveryDays',
   revisions: 'revisions',
-  features: 'features'
+  features: 'features',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GigPackageScalarFieldEnum = (typeof GigPackageScalarFieldEnum)[keyof typeof GigPackageScalarFieldEnum]
@@ -181,53 +196,135 @@ export type GigPackageScalarFieldEnum = (typeof GigPackageScalarFieldEnum)[keyof
 
 export const OrderScalarFieldEnum = {
   id: 'id',
-  status: 'status',
-  message: 'message',
-  price: 'price',
+  clientId: 'clientId',
+  freelancerId: 'freelancerId',
+  gigId: 'gigId',
+  source: 'source',
+  title: 'title',
+  description: 'description',
+  priceCents: 'priceCents',
+  currency: 'currency',
   deliveryDays: 'deliveryDays',
-  deadline: 'deadline',
+  deadlineAt: 'deadlineAt',
+  status: 'status',
+  acceptedAt: 'acceptedAt',
+  deliveredAt: 'deliveredAt',
   completedAt: 'completedAt',
   cancelledAt: 'cancelledAt',
+  cancelledById: 'cancelledById',
   cancelReason: 'cancelReason',
+  deliverables: 'deliverables',
+  deliveryNote: 'deliveryNote',
+  chatId: 'chatId',
+  leadFeeCents: 'leadFeeCents',
+  autoCompleteAt: 'autoCompleteAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  gigId: 'gigId',
-  clientId: 'clientId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const OrderEventScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  type: 'type',
+  actorId: 'actorId',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderEventScalarFieldEnum = (typeof OrderEventScalarFieldEnum)[keyof typeof OrderEventScalarFieldEnum]
+
+
+export const JobScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  subcategory: 'subcategory',
+  tags: 'tags',
+  budgetType: 'budgetType',
+  budgetMinCents: 'budgetMinCents',
+  budgetMaxCents: 'budgetMaxCents',
+  currency: 'currency',
+  deliveryDays: 'deliveryDays',
+  deadlineAt: 'deadlineAt',
+  expiresAt: 'expiresAt',
+  type: 'type',
+  city: 'city',
+  status: 'status',
+  proposalsCount: 'proposalsCount',
+  viewsCount: 'viewsCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt',
+  clientId: 'clientId',
+  selectedOrderId: 'selectedOrderId'
+} as const
+
+export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+
+
+export const ProposalScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  freelancerId: 'freelancerId',
+  coverLetter: 'coverLetter',
+  proposedPriceCents: 'proposedPriceCents',
+  proposedDays: 'proposedDays',
+  status: 'status',
+  leadFeeCents: 'leadFeeCents',
+  refunded: 'refunded',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  withdrawnAt: 'withdrawnAt'
+} as const
+
+export type ProposalScalarFieldEnum = (typeof ProposalScalarFieldEnum)[keyof typeof ProposalScalarFieldEnum]
+
+
+export const WalletScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  balanceCents: 'balanceCents',
+  heldCents: 'heldCents',
+  currency: 'currency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WalletScalarFieldEnum = (typeof WalletScalarFieldEnum)[keyof typeof WalletScalarFieldEnum]
+
+
+export const WalletTransactionScalarFieldEnum = {
+  id: 'id',
+  walletId: 'walletId',
+  amountCents: 'amountCents',
+  type: 'type',
+  description: 'description',
+  orderId: 'orderId',
+  proposalId: 'proposalId',
+  externalRef: 'externalRef',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type WalletTransactionScalarFieldEnum = (typeof WalletTransactionScalarFieldEnum)[keyof typeof WalletTransactionScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {
   id: 'id',
   rating: 'rating',
   comment: 'comment',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   gigId: 'gigId',
   authorId: 'authorId',
-  orderId: 'orderId'
+  orderId: 'orderId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
-
-
-export const TaskScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  budget: 'budget',
-  category: 'category',
-  subcategory: 'subcategory',
-  city: 'city',
-  type: 'type',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  clientId: 'clientId'
-} as const
-
-export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
 export const ChatScalarFieldEnum = {
@@ -266,10 +363,10 @@ export const MessageScalarFieldEnum = {
   isRead: 'isRead',
   editedAt: 'editedAt',
   deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
   chatId: 'chatId',
   senderId: 'senderId',
-  replyToId: 'replyToId'
+  replyToId: 'replyToId',
+  createdAt: 'createdAt'
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
@@ -317,9 +414,9 @@ export const AccountScalarFieldEnum = {
   refreshToken: 'refreshToken',
   idToken: 'idToken',
   expiresAt: 'expiresAt',
+  password: 'password',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  password: 'password'
+  updatedAt: 'updatedAt'
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
@@ -344,6 +441,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -358,4 +463,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

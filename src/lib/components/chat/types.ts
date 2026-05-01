@@ -2,12 +2,20 @@
 
 export type MessageType = 'TEXT' | 'PHOTO' | 'FILE' | 'SYSTEM'
 
+export type UserRole = 'CLIENT' | 'FREELANCER' | 'ADMIN'
+
 export interface ChatUser {
   id: string
   name: string
   username: string | null
   avatar: string | null
   isVerified: boolean
+  /**
+   * Роль юзера. Опціонально — старі чати можуть не мати цього поля.
+   * Використовується для визначення чи показувати кнопку "Створити замовлення"
+   * (доступна тільки клієнту по відношенню до фрілансера).
+   */
+  role?: UserRole
 }
 
 export interface ChatMessage {
@@ -30,6 +38,12 @@ export interface ChatMessage {
     senderId: string
     type: MessageType
   } | null
+  /**
+   * ID замовлення — заповнюється для SYSTEM повідомлень про події
+   * замовлень (CREATED/ACCEPTED/DELIVERED/COMPLETED/CANCELLED).
+   * Використовується для побудови посилання на /orders/{id}.
+   */
+  orderId?: string
 }
 
 export interface ChatPreview {

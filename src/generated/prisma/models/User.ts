@@ -312,12 +312,16 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   gigs?: Prisma.GigListRelationFilter
   orders?: Prisma.OrderListRelationFilter
-  tasks?: Prisma.TaskListRelationFilter
+  freelancerOrders?: Prisma.OrderListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
+  proposals?: Prisma.ProposalListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   sentMessages?: Prisma.MessageListRelationFilter
   chats?: Prisma.ChatMemberListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  wallet?: Prisma.XOR<Prisma.WalletNullableScalarRelationFilter, Prisma.WalletWhereInput> | null
+  orderEvents?: Prisma.OrderEventListRelationFilter
   freelancerProfile?: Prisma.XOR<Prisma.FreelancerProfileNullableScalarRelationFilter, Prisma.FreelancerProfileWhereInput> | null
   following?: Prisma.FollowListRelationFilter
   followers?: Prisma.FollowListRelationFilter
@@ -348,12 +352,16 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   gigs?: Prisma.GigOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
-  tasks?: Prisma.TaskOrderByRelationAggregateInput
+  freelancerOrders?: Prisma.OrderOrderByRelationAggregateInput
+  jobs?: Prisma.JobOrderByRelationAggregateInput
+  proposals?: Prisma.ProposalOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   sentMessages?: Prisma.MessageOrderByRelationAggregateInput
   chats?: Prisma.ChatMemberOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
+  wallet?: Prisma.WalletOrderByWithRelationInput
+  orderEvents?: Prisma.OrderEventOrderByRelationAggregateInput
   freelancerProfile?: Prisma.FreelancerProfileOrderByWithRelationInput
   following?: Prisma.FollowOrderByRelationAggregateInput
   followers?: Prisma.FollowOrderByRelationAggregateInput
@@ -387,12 +395,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   gigs?: Prisma.GigListRelationFilter
   orders?: Prisma.OrderListRelationFilter
-  tasks?: Prisma.TaskListRelationFilter
+  freelancerOrders?: Prisma.OrderListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
+  proposals?: Prisma.ProposalListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   sentMessages?: Prisma.MessageListRelationFilter
   chats?: Prisma.ChatMemberListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  wallet?: Prisma.XOR<Prisma.WalletNullableScalarRelationFilter, Prisma.WalletWhereInput> | null
+  orderEvents?: Prisma.OrderEventListRelationFilter
   freelancerProfile?: Prisma.XOR<Prisma.FreelancerProfileNullableScalarRelationFilter, Prisma.FreelancerProfileWhereInput> | null
   following?: Prisma.FollowListRelationFilter
   followers?: Prisma.FollowListRelationFilter
@@ -479,12 +491,16 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -515,12 +531,16 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -551,12 +571,16 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -587,12 +611,16 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -757,6 +785,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type UserCreateportfolioImagesInput = {
   set: string[]
 }
@@ -865,12 +898,84 @@ export type UserCreateNestedOneWithoutOrdersInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutFreelancerOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFreelancerOrdersInput, Prisma.UserUncheckedCreateWithoutFreelancerOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFreelancerOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput
   upsert?: Prisma.UserUpsertWithoutOrdersInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrdersInput, Prisma.UserUpdateWithoutOrdersInput>, Prisma.UserUncheckedUpdateWithoutOrdersInput>
+}
+
+export type UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFreelancerOrdersInput, Prisma.UserUncheckedCreateWithoutFreelancerOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFreelancerOrdersInput
+  upsert?: Prisma.UserUpsertWithoutFreelancerOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFreelancerOrdersInput, Prisma.UserUpdateWithoutFreelancerOrdersInput>, Prisma.UserUncheckedUpdateWithoutFreelancerOrdersInput>
+}
+
+export type UserCreateNestedOneWithoutOrderEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderEventsInput, Prisma.UserUncheckedCreateWithoutOrderEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutOrderEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderEventsInput, Prisma.UserUncheckedCreateWithoutOrderEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderEventsInput
+  upsert?: Prisma.UserUpsertWithoutOrderEventsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrderEventsInput, Prisma.UserUpdateWithoutOrderEventsInput>, Prisma.UserUncheckedUpdateWithoutOrderEventsInput>
+}
+
+export type UserCreateNestedOneWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutJobsInput, Prisma.UserUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutJobsInput, Prisma.UserUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutJobsInput
+  upsert?: Prisma.UserUpsertWithoutJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutJobsInput, Prisma.UserUpdateWithoutJobsInput>, Prisma.UserUncheckedUpdateWithoutJobsInput>
+}
+
+export type UserCreateNestedOneWithoutProposalsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProposalsInput, Prisma.UserUncheckedCreateWithoutProposalsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProposalsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProposalsInput, Prisma.UserUncheckedCreateWithoutProposalsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProposalsInput
+  upsert?: Prisma.UserUpsertWithoutProposalsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProposalsInput, Prisma.UserUpdateWithoutProposalsInput>, Prisma.UserUncheckedUpdateWithoutProposalsInput>
+}
+
+export type UserCreateNestedOneWithoutWalletInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWalletInput, Prisma.UserUncheckedCreateWithoutWalletInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWalletInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWalletNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWalletInput, Prisma.UserUncheckedCreateWithoutWalletInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWalletInput
+  upsert?: Prisma.UserUpsertWithoutWalletInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWalletInput, Prisma.UserUpdateWithoutWalletInput>, Prisma.UserUncheckedUpdateWithoutWalletInput>
 }
 
 export type UserCreateNestedOneWithoutReviewsInput = {
@@ -885,20 +990,6 @@ export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutReviewsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewsInput, Prisma.UserUpdateWithoutReviewsInput>, Prisma.UserUncheckedUpdateWithoutReviewsInput>
-}
-
-export type UserCreateNestedOneWithoutTasksInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTasksInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutTasksNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTasksInput
-  upsert?: Prisma.UserUpsertWithoutTasksInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTasksInput, Prisma.UserUpdateWithoutTasksInput>, Prisma.UserUncheckedUpdateWithoutTasksInput>
 }
 
 export type UserCreateNestedOneWithoutChatsInput = {
@@ -982,12 +1073,16 @@ export type UserCreateWithoutFollowingInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
 }
@@ -1017,12 +1112,16 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
 }
@@ -1057,12 +1156,16 @@ export type UserCreateWithoutFollowersInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
 }
@@ -1092,12 +1195,16 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
 }
@@ -1143,12 +1250,16 @@ export type UserUpdateWithoutFollowingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
 }
@@ -1178,12 +1289,16 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
 }
@@ -1224,12 +1339,16 @@ export type UserUpdateWithoutFollowersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
 }
@@ -1259,12 +1378,16 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
 }
@@ -1294,12 +1417,16 @@ export type UserCreateWithoutFreelancerProfileInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
 }
@@ -1329,12 +1456,16 @@ export type UserUncheckedCreateWithoutFreelancerProfileInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
 }
@@ -1380,12 +1511,16 @@ export type UserUpdateWithoutFreelancerProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
 }
@@ -1415,12 +1550,16 @@ export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
 }
@@ -1449,12 +1588,16 @@ export type UserCreateWithoutGigsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -1484,12 +1627,16 @@ export type UserUncheckedCreateWithoutGigsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -1535,12 +1682,16 @@ export type UserUpdateWithoutGigsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -1570,12 +1721,16 @@ export type UserUncheckedUpdateWithoutGigsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -1605,12 +1760,16 @@ export type UserCreateWithoutOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -1640,12 +1799,16 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -1654,6 +1817,89 @@ export type UserUncheckedCreateWithoutOrdersInput = {
 export type UserCreateOrConnectWithoutOrdersInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+}
+
+export type UserCreateWithoutFreelancerOrdersInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+}
+
+export type UserUncheckedCreateWithoutFreelancerOrdersInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type UserCreateOrConnectWithoutFreelancerOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFreelancerOrdersInput, Prisma.UserUncheckedCreateWithoutFreelancerOrdersInput>
 }
 
 export type UserUpsertWithoutOrdersInput = {
@@ -1691,12 +1937,16 @@ export type UserUpdateWithoutOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -1726,12 +1976,793 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUpsertWithoutFreelancerOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFreelancerOrdersInput, Prisma.UserUncheckedUpdateWithoutFreelancerOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFreelancerOrdersInput, Prisma.UserUncheckedCreateWithoutFreelancerOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFreelancerOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFreelancerOrdersInput, Prisma.UserUncheckedUpdateWithoutFreelancerOrdersInput>
+}
+
+export type UserUpdateWithoutFreelancerOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFreelancerOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserCreateWithoutOrderEventsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+}
+
+export type UserUncheckedCreateWithoutOrderEventsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type UserCreateOrConnectWithoutOrderEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderEventsInput, Prisma.UserUncheckedCreateWithoutOrderEventsInput>
+}
+
+export type UserUpsertWithoutOrderEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrderEventsInput, Prisma.UserUncheckedUpdateWithoutOrderEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderEventsInput, Prisma.UserUncheckedCreateWithoutOrderEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOrderEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrderEventsInput, Prisma.UserUncheckedUpdateWithoutOrderEventsInput>
+}
+
+export type UserUpdateWithoutOrderEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrderEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserCreateWithoutJobsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+}
+
+export type UserUncheckedCreateWithoutJobsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type UserCreateOrConnectWithoutJobsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutJobsInput, Prisma.UserUncheckedCreateWithoutJobsInput>
+}
+
+export type UserUpsertWithoutJobsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutJobsInput, Prisma.UserUncheckedUpdateWithoutJobsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutJobsInput, Prisma.UserUncheckedCreateWithoutJobsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutJobsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutJobsInput, Prisma.UserUncheckedUpdateWithoutJobsInput>
+}
+
+export type UserUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUncheckedUpdateWithoutJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserCreateWithoutProposalsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+}
+
+export type UserUncheckedCreateWithoutProposalsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type UserCreateOrConnectWithoutProposalsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProposalsInput, Prisma.UserUncheckedCreateWithoutProposalsInput>
+}
+
+export type UserUpsertWithoutProposalsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProposalsInput, Prisma.UserUncheckedUpdateWithoutProposalsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProposalsInput, Prisma.UserUncheckedCreateWithoutProposalsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProposalsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProposalsInput, Prisma.UserUncheckedUpdateWithoutProposalsInput>
+}
+
+export type UserUpdateWithoutProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserCreateWithoutWalletInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+}
+
+export type UserUncheckedCreateWithoutWalletInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type UserCreateOrConnectWithoutWalletInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWalletInput, Prisma.UserUncheckedCreateWithoutWalletInput>
+}
+
+export type UserUpsertWithoutWalletInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWalletInput, Prisma.UserUncheckedUpdateWithoutWalletInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWalletInput, Prisma.UserUncheckedCreateWithoutWalletInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWalletInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWalletInput, Prisma.UserUncheckedUpdateWithoutWalletInput>
+}
+
+export type UserUpdateWithoutWalletInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWalletInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -1762,11 +2793,15 @@ export type UserCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -1797,11 +2832,15 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -1848,11 +2887,15 @@ export type UserUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -1883,167 +2926,15 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
-  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
-  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
-}
-
-export type UserCreateWithoutTasksInput = {
-  id?: string
-  email: string
-  emailVerified?: boolean
-  name?: string | null
-  username?: string | null
-  bio?: string | null
-  phone?: string | null
-  city?: string | null
-  avatar?: string | null
-  avatarPublicId?: string | null
-  banner?: string | null
-  bannerPublicId?: string | null
-  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
-  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
-  verificationStatus?: $Enums.VerificationStatus
-  verificationRejectReason?: string | null
-  verifiedAt?: Date | string | null
-  role?: $Enums.Role
-  isOnline?: boolean
-  lastSeen?: Date | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
-  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
-  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
-  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
-  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
-  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
-}
-
-export type UserUncheckedCreateWithoutTasksInput = {
-  id?: string
-  email: string
-  emailVerified?: boolean
-  name?: string | null
-  username?: string | null
-  bio?: string | null
-  phone?: string | null
-  city?: string | null
-  avatar?: string | null
-  avatarPublicId?: string | null
-  banner?: string | null
-  bannerPublicId?: string | null
-  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
-  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
-  verificationStatus?: $Enums.VerificationStatus
-  verificationRejectReason?: string | null
-  verifiedAt?: Date | string | null
-  role?: $Enums.Role
-  isOnline?: boolean
-  lastSeen?: Date | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
-  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
-  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
-  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
-  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
-}
-
-export type UserCreateOrConnectWithoutTasksInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
-}
-
-export type UserUpsertWithoutTasksInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTasksInput, Prisma.UserUncheckedUpdateWithoutTasksInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutTasksInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTasksInput, Prisma.UserUncheckedUpdateWithoutTasksInput>
-}
-
-export type UserUpdateWithoutTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
-  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
-  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
-  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
-  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
-  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
-}
-
-export type UserUncheckedUpdateWithoutTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
-  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
-  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
-  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -2074,11 +2965,15 @@ export type UserCreateWithoutChatsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -2109,11 +3004,15 @@ export type UserUncheckedCreateWithoutChatsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -2160,11 +3059,15 @@ export type UserUpdateWithoutChatsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -2195,11 +3098,15 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -2230,11 +3137,15 @@ export type UserCreateWithoutSentMessagesInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -2265,11 +3176,15 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -2316,11 +3231,15 @@ export type UserUpdateWithoutSentMessagesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -2351,11 +3270,15 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -2386,11 +3309,15 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -2421,11 +3348,15 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -2472,11 +3403,15 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -2507,11 +3442,15 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -2542,11 +3481,15 @@ export type UserCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
@@ -2577,11 +3520,15 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -2628,11 +3575,15 @@ export type UserUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
@@ -2663,11 +3614,15 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -2681,12 +3636,15 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
 export type UserCountOutputType = {
   gigs: number
   orders: number
-  tasks: number
+  freelancerOrders: number
+  jobs: number
+  proposals: number
   reviews: number
   sentMessages: number
   chats: number
   sessions: number
   accounts: number
+  orderEvents: number
   following: number
   followers: number
 }
@@ -2694,12 +3652,15 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gigs?: boolean | UserCountOutputTypeCountGigsArgs
   orders?: boolean | UserCountOutputTypeCountOrdersArgs
-  tasks?: boolean | UserCountOutputTypeCountTasksArgs
+  freelancerOrders?: boolean | UserCountOutputTypeCountFreelancerOrdersArgs
+  jobs?: boolean | UserCountOutputTypeCountJobsArgs
+  proposals?: boolean | UserCountOutputTypeCountProposalsArgs
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
   sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
   chats?: boolean | UserCountOutputTypeCountChatsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+  orderEvents?: boolean | UserCountOutputTypeCountOrderEventsArgs
   following?: boolean | UserCountOutputTypeCountFollowingArgs
   followers?: boolean | UserCountOutputTypeCountFollowersArgs
 }
@@ -2731,8 +3692,22 @@ export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Ext
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TaskWhereInput
+export type UserCountOutputTypeCountFreelancerOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProposalWhereInput
 }
 
 /**
@@ -2768,6 +3743,13 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
  */
 export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AccountWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrderEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderEventWhereInput
 }
 
 /**
@@ -2810,12 +3792,16 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   gigs?: boolean | Prisma.User$gigsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
-  tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
+  freelancerOrders?: boolean | Prisma.User$freelancerOrdersArgs<ExtArgs>
+  jobs?: boolean | Prisma.User$jobsArgs<ExtArgs>
+  proposals?: boolean | Prisma.User$proposalsArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
   chats?: boolean | Prisma.User$chatsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  wallet?: boolean | Prisma.User$walletArgs<ExtArgs>
+  orderEvents?: boolean | Prisma.User$orderEventsArgs<ExtArgs>
   freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
@@ -2901,12 +3887,16 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gigs?: boolean | Prisma.User$gigsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
-  tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
+  freelancerOrders?: boolean | Prisma.User$freelancerOrdersArgs<ExtArgs>
+  jobs?: boolean | Prisma.User$jobsArgs<ExtArgs>
+  proposals?: boolean | Prisma.User$proposalsArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
   chats?: boolean | Prisma.User$chatsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  wallet?: boolean | Prisma.User$walletArgs<ExtArgs>
+  orderEvents?: boolean | Prisma.User$orderEventsArgs<ExtArgs>
   freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
@@ -2920,12 +3910,16 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     gigs: Prisma.$GigPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
-    tasks: Prisma.$TaskPayload<ExtArgs>[]
+    freelancerOrders: Prisma.$OrderPayload<ExtArgs>[]
+    jobs: Prisma.$JobPayload<ExtArgs>[]
+    proposals: Prisma.$ProposalPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     sentMessages: Prisma.$MessagePayload<ExtArgs>[]
     chats: Prisma.$ChatMemberPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
+    wallet: Prisma.$WalletPayload<ExtArgs> | null
+    orderEvents: Prisma.$OrderEventPayload<ExtArgs>[]
     freelancerProfile: Prisma.$FreelancerProfilePayload<ExtArgs> | null
     following: Prisma.$FollowPayload<ExtArgs>[]
     followers: Prisma.$FollowPayload<ExtArgs>[]
@@ -3349,12 +4343,16 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   gigs<T extends Prisma.User$gigsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$gigsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  tasks<T extends Prisma.User$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  freelancerOrders<T extends Prisma.User$freelancerOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$freelancerOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobs<T extends Prisma.User$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  proposals<T extends Prisma.User$proposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentMessages<T extends Prisma.User$sentMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   chats<T extends Prisma.User$chatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  wallet<T extends Prisma.User$walletArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$walletArgs<ExtArgs>>): Prisma.Prisma__WalletClient<runtime.Types.Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  orderEvents<T extends Prisma.User$orderEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$orderEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   freelancerProfile<T extends Prisma.User$freelancerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$freelancerProfileArgs<ExtArgs>>): Prisma.Prisma__FreelancerProfileClient<runtime.Types.Result.GetResult<Prisma.$FreelancerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3850,27 +4848,75 @@ export type User$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 /**
- * User.tasks
+ * User.freelancerOrders
  */
-export type User$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$freelancerOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Task
+   * Select specific fields to fetch from the Order
    */
-  select?: Prisma.TaskSelect<ExtArgs> | null
+  select?: Prisma.OrderSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Task
+   * Omit specific fields from the Order
    */
-  omit?: Prisma.TaskOmit<ExtArgs> | null
+  omit?: Prisma.OrderOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TaskInclude<ExtArgs> | null
-  where?: Prisma.TaskWhereInput
-  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
-  cursor?: Prisma.TaskWhereUniqueInput
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * User.jobs
+ */
+export type User$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
+ * User.proposals
+ */
+export type User$proposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Proposal
+   */
+  select?: Prisma.ProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Proposal
+   */
+  omit?: Prisma.ProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProposalInclude<ExtArgs> | null
+  where?: Prisma.ProposalWhereInput
+  orderBy?: Prisma.ProposalOrderByWithRelationInput | Prisma.ProposalOrderByWithRelationInput[]
+  cursor?: Prisma.ProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProposalScalarFieldEnum | Prisma.ProposalScalarFieldEnum[]
 }
 
 /**
@@ -3991,6 +5037,49 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * User.wallet
+ */
+export type User$walletArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Wallet
+   */
+  select?: Prisma.WalletSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Wallet
+   */
+  omit?: Prisma.WalletOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WalletInclude<ExtArgs> | null
+  where?: Prisma.WalletWhereInput
+}
+
+/**
+ * User.orderEvents
+ */
+export type User$orderEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderEvent
+   */
+  select?: Prisma.OrderEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderEvent
+   */
+  omit?: Prisma.OrderEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderEventInclude<ExtArgs> | null
+  where?: Prisma.OrderEventWhereInput
+  orderBy?: Prisma.OrderEventOrderByWithRelationInput | Prisma.OrderEventOrderByWithRelationInput[]
+  cursor?: Prisma.OrderEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderEventScalarFieldEnum | Prisma.OrderEventScalarFieldEnum[]
 }
 
 /**

@@ -27,121 +27,193 @@ export type AggregateOrder = {
 }
 
 export type OrderAvgAggregateOutputType = {
-  price: number | null
+  priceCents: number | null
   deliveryDays: number | null
+  leadFeeCents: number | null
 }
 
 export type OrderSumAggregateOutputType = {
-  price: number | null
+  priceCents: number | null
   deliveryDays: number | null
+  leadFeeCents: number | null
 }
 
 export type OrderMinAggregateOutputType = {
   id: string | null
-  status: $Enums.OrderStatus | null
-  message: string | null
-  price: number | null
+  clientId: string | null
+  freelancerId: string | null
+  gigId: string | null
+  source: $Enums.OrderSource | null
+  title: string | null
+  description: string | null
+  priceCents: number | null
+  currency: string | null
   deliveryDays: number | null
-  deadline: Date | null
+  deadlineAt: Date | null
+  status: $Enums.OrderStatus | null
+  acceptedAt: Date | null
+  deliveredAt: Date | null
   completedAt: Date | null
   cancelledAt: Date | null
+  cancelledById: string | null
   cancelReason: string | null
+  deliveryNote: string | null
+  chatId: string | null
+  leadFeeCents: number | null
+  autoCompleteAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
-  gigId: string | null
-  clientId: string | null
 }
 
 export type OrderMaxAggregateOutputType = {
   id: string | null
-  status: $Enums.OrderStatus | null
-  message: string | null
-  price: number | null
+  clientId: string | null
+  freelancerId: string | null
+  gigId: string | null
+  source: $Enums.OrderSource | null
+  title: string | null
+  description: string | null
+  priceCents: number | null
+  currency: string | null
   deliveryDays: number | null
-  deadline: Date | null
+  deadlineAt: Date | null
+  status: $Enums.OrderStatus | null
+  acceptedAt: Date | null
+  deliveredAt: Date | null
   completedAt: Date | null
   cancelledAt: Date | null
+  cancelledById: string | null
   cancelReason: string | null
+  deliveryNote: string | null
+  chatId: string | null
+  leadFeeCents: number | null
+  autoCompleteAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
-  gigId: string | null
-  clientId: string | null
 }
 
 export type OrderCountAggregateOutputType = {
   id: number
-  status: number
-  message: number
-  price: number
+  clientId: number
+  freelancerId: number
+  gigId: number
+  source: number
+  title: number
+  description: number
+  priceCents: number
+  currency: number
   deliveryDays: number
-  deadline: number
+  deadlineAt: number
+  status: number
+  acceptedAt: number
+  deliveredAt: number
   completedAt: number
   cancelledAt: number
+  cancelledById: number
   cancelReason: number
+  deliverables: number
+  deliveryNote: number
+  chatId: number
+  leadFeeCents: number
+  autoCompleteAt: number
   createdAt: number
   updatedAt: number
-  gigId: number
-  clientId: number
   _all: number
 }
 
 
 export type OrderAvgAggregateInputType = {
-  price?: true
+  priceCents?: true
   deliveryDays?: true
+  leadFeeCents?: true
 }
 
 export type OrderSumAggregateInputType = {
-  price?: true
+  priceCents?: true
   deliveryDays?: true
+  leadFeeCents?: true
 }
 
 export type OrderMinAggregateInputType = {
   id?: true
-  status?: true
-  message?: true
-  price?: true
+  clientId?: true
+  freelancerId?: true
+  gigId?: true
+  source?: true
+  title?: true
+  description?: true
+  priceCents?: true
+  currency?: true
   deliveryDays?: true
-  deadline?: true
+  deadlineAt?: true
+  status?: true
+  acceptedAt?: true
+  deliveredAt?: true
   completedAt?: true
   cancelledAt?: true
+  cancelledById?: true
   cancelReason?: true
+  deliveryNote?: true
+  chatId?: true
+  leadFeeCents?: true
+  autoCompleteAt?: true
   createdAt?: true
   updatedAt?: true
-  gigId?: true
-  clientId?: true
 }
 
 export type OrderMaxAggregateInputType = {
   id?: true
-  status?: true
-  message?: true
-  price?: true
+  clientId?: true
+  freelancerId?: true
+  gigId?: true
+  source?: true
+  title?: true
+  description?: true
+  priceCents?: true
+  currency?: true
   deliveryDays?: true
-  deadline?: true
+  deadlineAt?: true
+  status?: true
+  acceptedAt?: true
+  deliveredAt?: true
   completedAt?: true
   cancelledAt?: true
+  cancelledById?: true
   cancelReason?: true
+  deliveryNote?: true
+  chatId?: true
+  leadFeeCents?: true
+  autoCompleteAt?: true
   createdAt?: true
   updatedAt?: true
-  gigId?: true
-  clientId?: true
 }
 
 export type OrderCountAggregateInputType = {
   id?: true
-  status?: true
-  message?: true
-  price?: true
+  clientId?: true
+  freelancerId?: true
+  gigId?: true
+  source?: true
+  title?: true
+  description?: true
+  priceCents?: true
+  currency?: true
   deliveryDays?: true
-  deadline?: true
+  deadlineAt?: true
+  status?: true
+  acceptedAt?: true
+  deliveredAt?: true
   completedAt?: true
   cancelledAt?: true
+  cancelledById?: true
   cancelReason?: true
+  deliverables?: true
+  deliveryNote?: true
+  chatId?: true
+  leadFeeCents?: true
+  autoCompleteAt?: true
   createdAt?: true
   updatedAt?: true
-  gigId?: true
-  clientId?: true
   _all?: true
 }
 
@@ -233,18 +305,30 @@ export type OrderGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type OrderGroupByOutputType = {
   id: string
-  status: $Enums.OrderStatus
-  message: string | null
-  price: number
+  clientId: string
+  freelancerId: string
+  gigId: string | null
+  source: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency: string
   deliveryDays: number | null
-  deadline: Date | null
+  deadlineAt: Date | null
+  status: $Enums.OrderStatus
+  acceptedAt: Date | null
+  deliveredAt: Date | null
   completedAt: Date | null
   cancelledAt: Date | null
+  cancelledById: string | null
   cancelReason: string | null
+  deliverables: string[]
+  deliveryNote: string | null
+  chatId: string | null
+  leadFeeCents: number
+  autoCompleteAt: Date | null
   createdAt: Date
   updatedAt: Date
-  gigId: string
-  clientId: string
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
   _sum: OrderSumAggregateOutputType | null
@@ -272,40 +356,72 @@ export type OrderWhereInput = {
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   id?: Prisma.StringFilter<"Order"> | string
-  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
-  message?: Prisma.StringNullableFilter<"Order"> | string | null
-  price?: Prisma.IntFilter<"Order"> | number
+  clientId?: Prisma.StringFilter<"Order"> | string
+  freelancerId?: Prisma.StringFilter<"Order"> | string
+  gigId?: Prisma.StringNullableFilter<"Order"> | string | null
+  source?: Prisma.EnumOrderSourceFilter<"Order"> | $Enums.OrderSource
+  title?: Prisma.StringFilter<"Order"> | string
+  description?: Prisma.StringFilter<"Order"> | string
+  priceCents?: Prisma.IntFilter<"Order"> | number
+  currency?: Prisma.StringFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableFilter<"Order"> | number | null
-  deadline?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deadlineAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+  acceptedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   cancelledAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  cancelledById?: Prisma.StringNullableFilter<"Order"> | string | null
   cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  deliverables?: Prisma.StringNullableListFilter<"Order">
+  deliveryNote?: Prisma.StringNullableFilter<"Order"> | string | null
+  chatId?: Prisma.StringNullableFilter<"Order"> | string | null
+  leadFeeCents?: Prisma.IntFilter<"Order"> | number
+  autoCompleteAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
-  gigId?: Prisma.StringFilter<"Order"> | string
-  clientId?: Prisma.StringFilter<"Order"> | string
-  gig?: Prisma.XOR<Prisma.GigScalarRelationFilter, Prisma.GigWhereInput>
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  freelancer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  gig?: Prisma.XOR<Prisma.GigNullableScalarRelationFilter, Prisma.GigWhereInput> | null
+  chat?: Prisma.XOR<Prisma.ChatNullableScalarRelationFilter, Prisma.ChatWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  events?: Prisma.OrderEventListRelationFilter
+  fromJob?: Prisma.XOR<Prisma.JobNullableScalarRelationFilter, Prisma.JobWhereInput> | null
 }
 
 export type OrderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  message?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  freelancerId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  deadline?: Prisma.SortOrderInput | Prisma.SortOrder
+  deadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancelledById?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliverables?: Prisma.SortOrder
+  deliveryNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  chatId?: Prisma.SortOrderInput | Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
+  autoCompleteAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
-  clientId?: Prisma.SortOrder
-  gig?: Prisma.GigOrderByWithRelationInput
   client?: Prisma.UserOrderByWithRelationInput
+  freelancer?: Prisma.UserOrderByWithRelationInput
+  gig?: Prisma.GigOrderByWithRelationInput
+  chat?: Prisma.ChatOrderByWithRelationInput
   review?: Prisma.ReviewOrderByWithRelationInput
+  events?: Prisma.OrderEventOrderByRelationAggregateInput
+  fromJob?: Prisma.JobOrderByWithRelationInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -313,37 +429,65 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
-  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
-  message?: Prisma.StringNullableFilter<"Order"> | string | null
-  price?: Prisma.IntFilter<"Order"> | number
+  clientId?: Prisma.StringFilter<"Order"> | string
+  freelancerId?: Prisma.StringFilter<"Order"> | string
+  gigId?: Prisma.StringNullableFilter<"Order"> | string | null
+  source?: Prisma.EnumOrderSourceFilter<"Order"> | $Enums.OrderSource
+  title?: Prisma.StringFilter<"Order"> | string
+  description?: Prisma.StringFilter<"Order"> | string
+  priceCents?: Prisma.IntFilter<"Order"> | number
+  currency?: Prisma.StringFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableFilter<"Order"> | number | null
-  deadline?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deadlineAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+  acceptedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   cancelledAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  cancelledById?: Prisma.StringNullableFilter<"Order"> | string | null
   cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  deliverables?: Prisma.StringNullableListFilter<"Order">
+  deliveryNote?: Prisma.StringNullableFilter<"Order"> | string | null
+  chatId?: Prisma.StringNullableFilter<"Order"> | string | null
+  leadFeeCents?: Prisma.IntFilter<"Order"> | number
+  autoCompleteAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
-  gigId?: Prisma.StringFilter<"Order"> | string
-  clientId?: Prisma.StringFilter<"Order"> | string
-  gig?: Prisma.XOR<Prisma.GigScalarRelationFilter, Prisma.GigWhereInput>
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  freelancer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  gig?: Prisma.XOR<Prisma.GigNullableScalarRelationFilter, Prisma.GigWhereInput> | null
+  chat?: Prisma.XOR<Prisma.ChatNullableScalarRelationFilter, Prisma.ChatWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  events?: Prisma.OrderEventListRelationFilter
+  fromJob?: Prisma.XOR<Prisma.JobNullableScalarRelationFilter, Prisma.JobWhereInput> | null
 }, "id">
 
 export type OrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  message?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  freelancerId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  deadline?: Prisma.SortOrderInput | Prisma.SortOrder
+  deadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancelledById?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliverables?: Prisma.SortOrder
+  deliveryNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  chatId?: Prisma.SortOrderInput | Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
+  autoCompleteAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
-  clientId?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
   _max?: Prisma.OrderMaxOrderByAggregateInput
@@ -356,132 +500,234 @@ export type OrderScalarWhereWithAggregatesInput = {
   OR?: Prisma.OrderScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrderScalarWhereWithAggregatesInput | Prisma.OrderScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Order"> | string
-  status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
-  message?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
-  price?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  clientId?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  freelancerId?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  gigId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  source?: Prisma.EnumOrderSourceWithAggregatesFilter<"Order"> | $Enums.OrderSource
+  title?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  description?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  priceCents?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  currency?: Prisma.StringWithAggregatesFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
-  deadline?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  deadlineAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
+  acceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   cancelledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  cancelledById?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   cancelReason?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  deliverables?: Prisma.StringNullableListFilter<"Order">
+  deliveryNote?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  chatId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  leadFeeCents?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  autoCompleteAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
-  gigId?: Prisma.StringWithAggregatesFilter<"Order"> | string
-  clientId?: Prisma.StringWithAggregatesFilter<"Order"> | string
 }
 
 export type OrderCreateInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gig: Prisma.GigCreateNestedOneWithoutOrdersInput
   client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
   review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
-  clientId: string
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gig?: Prisma.GigUpdateOneRequiredWithoutOrdersNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
   review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
   review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
-  clientId: string
 }
 
 export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type OrderListRelationFilter = {
@@ -496,65 +742,106 @@ export type OrderOrderByRelationAggregateInput = {
 
 export type OrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  message?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  freelancerId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
-  deadline?: Prisma.SortOrder
+  deadlineAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  acceptedAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   cancelledAt?: Prisma.SortOrder
+  cancelledById?: Prisma.SortOrder
   cancelReason?: Prisma.SortOrder
+  deliverables?: Prisma.SortOrder
+  deliveryNote?: Prisma.SortOrder
+  chatId?: Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
+  autoCompleteAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
-  clientId?: Prisma.SortOrder
 }
 
 export type OrderAvgOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
 }
 
 export type OrderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  message?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  freelancerId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
-  deadline?: Prisma.SortOrder
+  deadlineAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  acceptedAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   cancelledAt?: Prisma.SortOrder
+  cancelledById?: Prisma.SortOrder
   cancelReason?: Prisma.SortOrder
+  deliveryNote?: Prisma.SortOrder
+  chatId?: Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
+  autoCompleteAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
-  clientId?: Prisma.SortOrder
 }
 
 export type OrderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  message?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  freelancerId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
-  deadline?: Prisma.SortOrder
+  deadlineAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  acceptedAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   cancelledAt?: Prisma.SortOrder
+  cancelledById?: Prisma.SortOrder
   cancelReason?: Prisma.SortOrder
+  deliveryNote?: Prisma.SortOrder
+  chatId?: Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
+  autoCompleteAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
-  clientId?: Prisma.SortOrder
 }
 
 export type OrderSumOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
+  leadFeeCents?: Prisma.SortOrder
 }
 
 export type OrderScalarRelationFilter = {
   is?: Prisma.OrderWhereInput
   isNot?: Prisma.OrderWhereInput
+}
+
+export type OrderNullableScalarRelationFilter = {
+  is?: Prisma.OrderWhereInput | null
+  isNot?: Prisma.OrderWhereInput | null
 }
 
 export type OrderCreateNestedManyWithoutClientInput = {
@@ -564,10 +851,24 @@ export type OrderCreateNestedManyWithoutClientInput = {
   connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
 }
 
+export type OrderCreateNestedManyWithoutFreelancerInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutFreelancerInput, Prisma.OrderUncheckedCreateWithoutFreelancerInput> | Prisma.OrderCreateWithoutFreelancerInput[] | Prisma.OrderUncheckedCreateWithoutFreelancerInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutFreelancerInput | Prisma.OrderCreateOrConnectWithoutFreelancerInput[]
+  createMany?: Prisma.OrderCreateManyFreelancerInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
 export type OrderUncheckedCreateNestedManyWithoutClientInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutClientInput, Prisma.OrderUncheckedCreateWithoutClientInput> | Prisma.OrderCreateWithoutClientInput[] | Prisma.OrderUncheckedCreateWithoutClientInput[]
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutClientInput | Prisma.OrderCreateOrConnectWithoutClientInput[]
   createMany?: Prisma.OrderCreateManyClientInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUncheckedCreateNestedManyWithoutFreelancerInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutFreelancerInput, Prisma.OrderUncheckedCreateWithoutFreelancerInput> | Prisma.OrderCreateWithoutFreelancerInput[] | Prisma.OrderUncheckedCreateWithoutFreelancerInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutFreelancerInput | Prisma.OrderCreateOrConnectWithoutFreelancerInput[]
+  createMany?: Prisma.OrderCreateManyFreelancerInputEnvelope
   connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
 }
 
@@ -585,6 +886,20 @@ export type OrderUpdateManyWithoutClientNestedInput = {
   deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
 }
 
+export type OrderUpdateManyWithoutFreelancerNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutFreelancerInput, Prisma.OrderUncheckedCreateWithoutFreelancerInput> | Prisma.OrderCreateWithoutFreelancerInput[] | Prisma.OrderUncheckedCreateWithoutFreelancerInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutFreelancerInput | Prisma.OrderCreateOrConnectWithoutFreelancerInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutFreelancerInput | Prisma.OrderUpsertWithWhereUniqueWithoutFreelancerInput[]
+  createMany?: Prisma.OrderCreateManyFreelancerInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutFreelancerInput | Prisma.OrderUpdateWithWhereUniqueWithoutFreelancerInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutFreelancerInput | Prisma.OrderUpdateManyWithWhereWithoutFreelancerInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
 export type OrderUncheckedUpdateManyWithoutClientNestedInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutClientInput, Prisma.OrderUncheckedCreateWithoutClientInput> | Prisma.OrderCreateWithoutClientInput[] | Prisma.OrderUncheckedCreateWithoutClientInput[]
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutClientInput | Prisma.OrderCreateOrConnectWithoutClientInput[]
@@ -596,6 +911,20 @@ export type OrderUncheckedUpdateManyWithoutClientNestedInput = {
   connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
   update?: Prisma.OrderUpdateWithWhereUniqueWithoutClientInput | Prisma.OrderUpdateWithWhereUniqueWithoutClientInput[]
   updateMany?: Prisma.OrderUpdateManyWithWhereWithoutClientInput | Prisma.OrderUpdateManyWithWhereWithoutClientInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
+export type OrderUncheckedUpdateManyWithoutFreelancerNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutFreelancerInput, Prisma.OrderUncheckedCreateWithoutFreelancerInput> | Prisma.OrderCreateWithoutFreelancerInput[] | Prisma.OrderUncheckedCreateWithoutFreelancerInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutFreelancerInput | Prisma.OrderCreateOrConnectWithoutFreelancerInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutFreelancerInput | Prisma.OrderUpsertWithWhereUniqueWithoutFreelancerInput[]
+  createMany?: Prisma.OrderCreateManyFreelancerInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutFreelancerInput | Prisma.OrderUpdateWithWhereUniqueWithoutFreelancerInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutFreelancerInput | Prisma.OrderUpdateManyWithWhereWithoutFreelancerInput[]
   deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
 }
 
@@ -641,8 +970,51 @@ export type OrderUncheckedUpdateManyWithoutGigNestedInput = {
   deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
 }
 
+export type OrderCreatedeliverablesInput = {
+  set: string[]
+}
+
+export type EnumOrderSourceFieldUpdateOperationsInput = {
+  set?: $Enums.OrderSource
+}
+
 export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
+}
+
+export type OrderUpdatedeliverablesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type OrderCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutEventsInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneRequiredWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.OrderUpsertWithoutEventsInput
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutEventsInput, Prisma.OrderUpdateWithoutEventsInput>, Prisma.OrderUncheckedUpdateWithoutEventsInput>
+}
+
+export type OrderCreateNestedOneWithoutFromJobInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutFromJobInput, Prisma.OrderUncheckedCreateWithoutFromJobInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutFromJobInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneWithoutFromJobNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutFromJobInput, Prisma.OrderUncheckedCreateWithoutFromJobInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutFromJobInput
+  upsert?: Prisma.OrderUpsertWithoutFromJobInput
+  disconnect?: Prisma.OrderWhereInput | boolean
+  delete?: Prisma.OrderWhereInput | boolean
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutFromJobInput, Prisma.OrderUpdateWithoutFromJobInput>, Prisma.OrderUncheckedUpdateWithoutFromJobInput>
 }
 
 export type OrderCreateNestedOneWithoutReviewInput = {
@@ -659,36 +1031,106 @@ export type OrderUpdateOneRequiredWithoutReviewNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutReviewInput, Prisma.OrderUpdateWithoutReviewInput>, Prisma.OrderUncheckedUpdateWithoutReviewInput>
 }
 
+export type OrderCreateNestedManyWithoutChatInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutChatInput, Prisma.OrderUncheckedCreateWithoutChatInput> | Prisma.OrderCreateWithoutChatInput[] | Prisma.OrderUncheckedCreateWithoutChatInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutChatInput | Prisma.OrderCreateOrConnectWithoutChatInput[]
+  createMany?: Prisma.OrderCreateManyChatInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUncheckedCreateNestedManyWithoutChatInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutChatInput, Prisma.OrderUncheckedCreateWithoutChatInput> | Prisma.OrderCreateWithoutChatInput[] | Prisma.OrderUncheckedCreateWithoutChatInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutChatInput | Prisma.OrderCreateOrConnectWithoutChatInput[]
+  createMany?: Prisma.OrderCreateManyChatInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUpdateManyWithoutChatNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutChatInput, Prisma.OrderUncheckedCreateWithoutChatInput> | Prisma.OrderCreateWithoutChatInput[] | Prisma.OrderUncheckedCreateWithoutChatInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutChatInput | Prisma.OrderCreateOrConnectWithoutChatInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutChatInput | Prisma.OrderUpsertWithWhereUniqueWithoutChatInput[]
+  createMany?: Prisma.OrderCreateManyChatInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutChatInput | Prisma.OrderUpdateWithWhereUniqueWithoutChatInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutChatInput | Prisma.OrderUpdateManyWithWhereWithoutChatInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
+export type OrderUncheckedUpdateManyWithoutChatNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutChatInput, Prisma.OrderUncheckedCreateWithoutChatInput> | Prisma.OrderCreateWithoutChatInput[] | Prisma.OrderUncheckedCreateWithoutChatInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutChatInput | Prisma.OrderCreateOrConnectWithoutChatInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutChatInput | Prisma.OrderUpsertWithWhereUniqueWithoutChatInput[]
+  createMany?: Prisma.OrderCreateManyChatInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutChatInput | Prisma.OrderUpdateWithWhereUniqueWithoutChatInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutChatInput | Prisma.OrderUpdateManyWithWhereWithoutChatInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
 export type OrderCreateWithoutClientInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gig: Prisma.GigCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
   review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderUncheckedCreateWithoutClientInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderCreateOrConnectWithoutClientInput = {
@@ -698,6 +1140,76 @@ export type OrderCreateOrConnectWithoutClientInput = {
 
 export type OrderCreateManyClientInputEnvelope = {
   data: Prisma.OrderCreateManyClientInput | Prisma.OrderCreateManyClientInput[]
+  skipDuplicates?: boolean
+}
+
+export type OrderCreateWithoutFreelancerInput = {
+  id?: string
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
+  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
+}
+
+export type OrderUncheckedCreateWithoutFreelancerInput = {
+  id?: string
+  clientId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
+}
+
+export type OrderCreateOrConnectWithoutFreelancerInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutFreelancerInput, Prisma.OrderUncheckedCreateWithoutFreelancerInput>
+}
+
+export type OrderCreateManyFreelancerInputEnvelope = {
+  data: Prisma.OrderCreateManyFreelancerInput | Prisma.OrderCreateManyFreelancerInput[]
   skipDuplicates?: boolean
 }
 
@@ -722,50 +1234,106 @@ export type OrderScalarWhereInput = {
   OR?: Prisma.OrderScalarWhereInput[]
   NOT?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
   id?: Prisma.StringFilter<"Order"> | string
-  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
-  message?: Prisma.StringNullableFilter<"Order"> | string | null
-  price?: Prisma.IntFilter<"Order"> | number
+  clientId?: Prisma.StringFilter<"Order"> | string
+  freelancerId?: Prisma.StringFilter<"Order"> | string
+  gigId?: Prisma.StringNullableFilter<"Order"> | string | null
+  source?: Prisma.EnumOrderSourceFilter<"Order"> | $Enums.OrderSource
+  title?: Prisma.StringFilter<"Order"> | string
+  description?: Prisma.StringFilter<"Order"> | string
+  priceCents?: Prisma.IntFilter<"Order"> | number
+  currency?: Prisma.StringFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableFilter<"Order"> | number | null
-  deadline?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deadlineAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+  acceptedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   cancelledAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  cancelledById?: Prisma.StringNullableFilter<"Order"> | string | null
   cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  deliverables?: Prisma.StringNullableListFilter<"Order">
+  deliveryNote?: Prisma.StringNullableFilter<"Order"> | string | null
+  chatId?: Prisma.StringNullableFilter<"Order"> | string | null
+  leadFeeCents?: Prisma.IntFilter<"Order"> | number
+  autoCompleteAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
-  gigId?: Prisma.StringFilter<"Order"> | string
-  clientId?: Prisma.StringFilter<"Order"> | string
+}
+
+export type OrderUpsertWithWhereUniqueWithoutFreelancerInput = {
+  where: Prisma.OrderWhereUniqueInput
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutFreelancerInput, Prisma.OrderUncheckedUpdateWithoutFreelancerInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutFreelancerInput, Prisma.OrderUncheckedCreateWithoutFreelancerInput>
+}
+
+export type OrderUpdateWithWhereUniqueWithoutFreelancerInput = {
+  where: Prisma.OrderWhereUniqueInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutFreelancerInput, Prisma.OrderUncheckedUpdateWithoutFreelancerInput>
+}
+
+export type OrderUpdateManyWithWhereWithoutFreelancerInput = {
+  where: Prisma.OrderScalarWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateManyMutationInput, Prisma.OrderUncheckedUpdateManyWithoutFreelancerInput>
 }
 
 export type OrderCreateWithoutGigInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
   review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderUncheckedCreateWithoutGigInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  clientId: string
+  freelancerId: string
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  clientId: string
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderCreateOrConnectWithoutGigInput = {
@@ -794,36 +1362,336 @@ export type OrderUpdateManyWithWhereWithoutGigInput = {
   data: Prisma.XOR<Prisma.OrderUpdateManyMutationInput, Prisma.OrderUncheckedUpdateManyWithoutGigInput>
 }
 
-export type OrderCreateWithoutReviewInput = {
+export type OrderCreateWithoutEventsInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gig: Prisma.GigCreateNestedOneWithoutOrdersInput
   client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
+  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
+}
+
+export type OrderUncheckedCreateWithoutEventsInput = {
+  id?: string
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
+}
+
+export type OrderCreateOrConnectWithoutEventsInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+}
+
+export type OrderUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutEventsInput, Prisma.OrderUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutEventsInput, Prisma.OrderUncheckedCreateWithoutEventsInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutEventsInput, Prisma.OrderUncheckedUpdateWithoutEventsInput>
+}
+
+export type OrderUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderCreateWithoutFromJobInput = {
+  id?: string
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
+  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutFromJobInput = {
+  id?: string
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutFromJobInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutFromJobInput, Prisma.OrderUncheckedCreateWithoutFromJobInput>
+}
+
+export type OrderUpsertWithoutFromJobInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutFromJobInput, Prisma.OrderUncheckedUpdateWithoutFromJobInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutFromJobInput, Prisma.OrderUncheckedCreateWithoutFromJobInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutFromJobInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutFromJobInput, Prisma.OrderUncheckedUpdateWithoutFromJobInput>
+}
+
+export type OrderUpdateWithoutFromJobInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutFromJobInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderCreateWithoutReviewInput = {
+  id?: string
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderUncheckedCreateWithoutReviewInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
-  clientId: string
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
 
 export type OrderCreateOrConnectWithoutReviewInput = {
@@ -844,269 +1712,826 @@ export type OrderUpdateToOneWithWhereWithoutReviewInput = {
 
 export type OrderUpdateWithoutReviewInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gig?: Prisma.GigUpdateOneRequiredWithoutOrdersNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutReviewInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderCreateWithoutChatInput = {
+  id?: string
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  client: Prisma.UserCreateNestedOneWithoutOrdersInput
+  freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
+  gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
+  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
+}
+
+export type OrderUncheckedCreateWithoutChatInput = {
+  id?: string
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
+  fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
+}
+
+export type OrderCreateOrConnectWithoutChatInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutChatInput, Prisma.OrderUncheckedCreateWithoutChatInput>
+}
+
+export type OrderCreateManyChatInputEnvelope = {
+  data: Prisma.OrderCreateManyChatInput | Prisma.OrderCreateManyChatInput[]
+  skipDuplicates?: boolean
+}
+
+export type OrderUpsertWithWhereUniqueWithoutChatInput = {
+  where: Prisma.OrderWhereUniqueInput
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutChatInput, Prisma.OrderUncheckedUpdateWithoutChatInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutChatInput, Prisma.OrderUncheckedCreateWithoutChatInput>
+}
+
+export type OrderUpdateWithWhereUniqueWithoutChatInput = {
+  where: Prisma.OrderWhereUniqueInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutChatInput, Prisma.OrderUncheckedUpdateWithoutChatInput>
+}
+
+export type OrderUpdateManyWithWhereWithoutChatInput = {
+  where: Prisma.OrderScalarWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateManyMutationInput, Prisma.OrderUncheckedUpdateManyWithoutChatInput>
 }
 
 export type OrderCreateManyClientInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
+}
+
+export type OrderCreateManyFreelancerInput = {
+  id?: string
+  clientId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OrderUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gig?: Prisma.GigUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
   review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
   review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type OrderUpdateWithoutFreelancerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutFreelancerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderUncheckedUpdateManyWithoutFreelancerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OrderCreateManyGigInput = {
   id?: string
-  status?: $Enums.OrderStatus
-  message?: string | null
-  price: number
+  clientId: string
+  freelancerId: string
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
   deliveryDays?: number | null
-  deadline?: Date | string | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
+  cancelledById?: string | null
   cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  chatId?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  clientId: string
 }
 
 export type OrderUpdateWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
   review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
   review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.IntFieldUpdateOperationsInput | number
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+export type OrderCreateManyChatInput = {
+  id?: string
+  clientId: string
+  freelancerId: string
+  gigId?: string | null
+  source?: $Enums.OrderSource
+  title: string
+  description: string
+  priceCents: number
+  currency?: string
+  deliveryDays?: number | null
+  deadlineAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  acceptedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  completedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  cancelledById?: string | null
+  cancelReason?: string | null
+  deliverables?: Prisma.OrderCreatedeliverablesInput | string[]
+  deliveryNote?: string | null
+  leadFeeCents?: number
+  autoCompleteAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type OrderUpdateWithoutChatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
+  gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutChatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
+  fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
+}
+
+export type OrderUncheckedUpdateManyWithoutChatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliverables?: Prisma.OrderUpdatedeliverablesInput | string[]
+  deliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadFeeCents?: Prisma.IntFieldUpdateOperationsInput | number
+  autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type OrderCountOutputType
+ */
+
+export type OrderCountOutputType = {
+  events: number
+}
+
+export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  events?: boolean | OrderCountOutputTypeCountEventsArgs
+}
+
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderCountOutputType
+   */
+  select?: Prisma.OrderCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderEventWhereInput
+}
 
 
 export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  status?: boolean
-  message?: boolean
-  price?: boolean
+  clientId?: boolean
+  freelancerId?: boolean
+  gigId?: boolean
+  source?: boolean
+  title?: boolean
+  description?: boolean
+  priceCents?: boolean
+  currency?: boolean
   deliveryDays?: boolean
-  deadline?: boolean
+  deadlineAt?: boolean
+  status?: boolean
+  acceptedAt?: boolean
+  deliveredAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
+  cancelledById?: boolean
   cancelReason?: boolean
+  deliverables?: boolean
+  deliveryNote?: boolean
+  chatId?: boolean
+  leadFeeCents?: boolean
+  autoCompleteAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  gigId?: boolean
-  clientId?: boolean
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
+  chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
   review?: boolean | Prisma.Order$reviewArgs<ExtArgs>
+  events?: boolean | Prisma.Order$eventsArgs<ExtArgs>
+  fromJob?: boolean | Prisma.Order$fromJobArgs<ExtArgs>
+  _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  status?: boolean
-  message?: boolean
-  price?: boolean
+  clientId?: boolean
+  freelancerId?: boolean
+  gigId?: boolean
+  source?: boolean
+  title?: boolean
+  description?: boolean
+  priceCents?: boolean
+  currency?: boolean
   deliveryDays?: boolean
-  deadline?: boolean
+  deadlineAt?: boolean
+  status?: boolean
+  acceptedAt?: boolean
+  deliveredAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
+  cancelledById?: boolean
   cancelReason?: boolean
+  deliverables?: boolean
+  deliveryNote?: boolean
+  chatId?: boolean
+  leadFeeCents?: boolean
+  autoCompleteAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  gigId?: boolean
-  clientId?: boolean
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
+  chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  status?: boolean
-  message?: boolean
-  price?: boolean
+  clientId?: boolean
+  freelancerId?: boolean
+  gigId?: boolean
+  source?: boolean
+  title?: boolean
+  description?: boolean
+  priceCents?: boolean
+  currency?: boolean
   deliveryDays?: boolean
-  deadline?: boolean
+  deadlineAt?: boolean
+  status?: boolean
+  acceptedAt?: boolean
+  deliveredAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
+  cancelledById?: boolean
   cancelReason?: boolean
+  deliverables?: boolean
+  deliveryNote?: boolean
+  chatId?: boolean
+  leadFeeCents?: boolean
+  autoCompleteAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  gigId?: boolean
-  clientId?: boolean
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
+  chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectScalar = {
   id?: boolean
-  status?: boolean
-  message?: boolean
-  price?: boolean
+  clientId?: boolean
+  freelancerId?: boolean
+  gigId?: boolean
+  source?: boolean
+  title?: boolean
+  description?: boolean
+  priceCents?: boolean
+  currency?: boolean
   deliveryDays?: boolean
-  deadline?: boolean
+  deadlineAt?: boolean
+  status?: boolean
+  acceptedAt?: boolean
+  deliveredAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
+  cancelledById?: boolean
   cancelReason?: boolean
+  deliverables?: boolean
+  deliveryNote?: boolean
+  chatId?: boolean
+  leadFeeCents?: boolean
+  autoCompleteAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  gigId?: boolean
-  clientId?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "message" | "price" | "deliveryDays" | "deadline" | "completedAt" | "cancelledAt" | "cancelReason" | "createdAt" | "updatedAt" | "gigId" | "clientId", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "freelancerId" | "gigId" | "source" | "title" | "description" | "priceCents" | "currency" | "deliveryDays" | "deadlineAt" | "status" | "acceptedAt" | "deliveredAt" | "completedAt" | "cancelledAt" | "cancelledById" | "cancelReason" | "deliverables" | "deliveryNote" | "chatId" | "leadFeeCents" | "autoCompleteAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
+  chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
   review?: boolean | Prisma.Order$reviewArgs<ExtArgs>
+  events?: boolean | Prisma.Order$eventsArgs<ExtArgs>
+  fromJob?: boolean | Prisma.Order$fromJobArgs<ExtArgs>
+  _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
+  chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
 }
 export type OrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
+  chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
 }
 
 export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Order"
   objects: {
-    gig: Prisma.$GigPayload<ExtArgs>
     client: Prisma.$UserPayload<ExtArgs>
+    freelancer: Prisma.$UserPayload<ExtArgs>
+    gig: Prisma.$GigPayload<ExtArgs> | null
+    chat: Prisma.$ChatPayload<ExtArgs> | null
     review: Prisma.$ReviewPayload<ExtArgs> | null
+    events: Prisma.$OrderEventPayload<ExtArgs>[]
+    fromJob: Prisma.$JobPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    status: $Enums.OrderStatus
-    message: string | null
-    price: number
+    clientId: string
+    freelancerId: string
+    gigId: string | null
+    source: $Enums.OrderSource
+    title: string
+    description: string
+    priceCents: number
+    currency: string
     deliveryDays: number | null
-    deadline: Date | null
+    deadlineAt: Date | null
+    status: $Enums.OrderStatus
+    acceptedAt: Date | null
+    deliveredAt: Date | null
     completedAt: Date | null
     cancelledAt: Date | null
+    cancelledById: string | null
     cancelReason: string | null
+    deliverables: string[]
+    deliveryNote: string | null
+    chatId: string | null
+    leadFeeCents: number
+    autoCompleteAt: Date | null
     createdAt: Date
     updatedAt: Date
-    gigId: string
-    clientId: string
   }, ExtArgs["result"]["order"]>
   composites: {}
 }
@@ -1501,9 +2926,13 @@ readonly fields: OrderFieldRefs;
  */
 export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  gig<T extends Prisma.GigDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GigDefaultArgs<ExtArgs>>): Prisma.Prisma__GigClient<runtime.Types.Result.GetResult<Prisma.$GigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  freelancer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  gig<T extends Prisma.Order$gigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$gigArgs<ExtArgs>>): Prisma.Prisma__GigClient<runtime.Types.Result.GetResult<Prisma.$GigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  chat<T extends Prisma.Order$chatArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$chatArgs<ExtArgs>>): Prisma.Prisma__ChatClient<runtime.Types.Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   review<T extends Prisma.Order$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$reviewArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  events<T extends Prisma.Order$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fromJob<T extends Prisma.Order$fromJobArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$fromJobArgs<ExtArgs>>): Prisma.Prisma__JobClient<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1534,18 +2963,30 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface OrderFieldRefs {
   readonly id: Prisma.FieldRef<"Order", 'String'>
-  readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
-  readonly message: Prisma.FieldRef<"Order", 'String'>
-  readonly price: Prisma.FieldRef<"Order", 'Int'>
+  readonly clientId: Prisma.FieldRef<"Order", 'String'>
+  readonly freelancerId: Prisma.FieldRef<"Order", 'String'>
+  readonly gigId: Prisma.FieldRef<"Order", 'String'>
+  readonly source: Prisma.FieldRef<"Order", 'OrderSource'>
+  readonly title: Prisma.FieldRef<"Order", 'String'>
+  readonly description: Prisma.FieldRef<"Order", 'String'>
+  readonly priceCents: Prisma.FieldRef<"Order", 'Int'>
+  readonly currency: Prisma.FieldRef<"Order", 'String'>
   readonly deliveryDays: Prisma.FieldRef<"Order", 'Int'>
-  readonly deadline: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly deadlineAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
+  readonly acceptedAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly deliveredAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly cancelledAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly cancelledById: Prisma.FieldRef<"Order", 'String'>
   readonly cancelReason: Prisma.FieldRef<"Order", 'String'>
+  readonly deliverables: Prisma.FieldRef<"Order", 'String[]'>
+  readonly deliveryNote: Prisma.FieldRef<"Order", 'String'>
+  readonly chatId: Prisma.FieldRef<"Order", 'String'>
+  readonly leadFeeCents: Prisma.FieldRef<"Order", 'Int'>
+  readonly autoCompleteAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
-  readonly gigId: Prisma.FieldRef<"Order", 'String'>
-  readonly clientId: Prisma.FieldRef<"Order", 'String'>
 }
     
 
@@ -1947,6 +3388,44 @@ export type OrderDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Order.gig
+ */
+export type Order$gigArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Gig
+   */
+  select?: Prisma.GigSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Gig
+   */
+  omit?: Prisma.GigOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GigInclude<ExtArgs> | null
+  where?: Prisma.GigWhereInput
+}
+
+/**
+ * Order.chat
+ */
+export type Order$chatArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Chat
+   */
+  select?: Prisma.ChatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Chat
+   */
+  omit?: Prisma.ChatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatInclude<ExtArgs> | null
+  where?: Prisma.ChatWhereInput
+}
+
+/**
  * Order.review
  */
 export type Order$reviewArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1963,6 +3442,49 @@ export type Order$reviewArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.ReviewInclude<ExtArgs> | null
   where?: Prisma.ReviewWhereInput
+}
+
+/**
+ * Order.events
+ */
+export type Order$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderEvent
+   */
+  select?: Prisma.OrderEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderEvent
+   */
+  omit?: Prisma.OrderEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderEventInclude<ExtArgs> | null
+  where?: Prisma.OrderEventWhereInput
+  orderBy?: Prisma.OrderEventOrderByWithRelationInput | Prisma.OrderEventOrderByWithRelationInput[]
+  cursor?: Prisma.OrderEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderEventScalarFieldEnum | Prisma.OrderEventScalarFieldEnum[]
+}
+
+/**
+ * Order.fromJob
+ */
+export type Order$fromJobArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
 }
 
 /**

@@ -48,15 +48,35 @@ export type GigPackage = Prisma.GigPackageModel
  */
 export type Order = Prisma.OrderModel
 /**
+ * Model OrderEvent
+ * 
+ */
+export type OrderEvent = Prisma.OrderEventModel
+/**
+ * Model Job
+ * 
+ */
+export type Job = Prisma.JobModel
+/**
+ * Model Proposal
+ * 
+ */
+export type Proposal = Prisma.ProposalModel
+/**
+ * Model Wallet
+ * 
+ */
+export type Wallet = Prisma.WalletModel
+/**
+ * Model WalletTransaction
+ * 
+ */
+export type WalletTransaction = Prisma.WalletTransactionModel
+/**
  * Model Review
  * 
  */
 export type Review = Prisma.ReviewModel
-/**
- * Model Task
- * 
- */
-export type Task = Prisma.TaskModel
 /**
  * Model Chat
  * 

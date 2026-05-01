@@ -136,8 +136,17 @@ export const load: PageServerLoad = async ({
         },
       },
       gigs: {
-        where: { isActive: true },
-        select: { id: true, title: true, price: true },
+        where: { status: 'ACTIVE' },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          packages: {
+            orderBy: { priceCents: 'asc' },
+            select: { priceCents: true },
+            take: 1, // лише найдешевший — для відображення "від N грн"
+          },
+        },
         orderBy: { createdAt: 'desc' },
         take: 10,
       },
@@ -186,6 +195,16 @@ export const load: PageServerLoad = async ({
     imageUrl: url,
   }))
 
+  // Мапимо гіги: ціна = найдешевший пакет у гривнах
+  // (для backward compat з UI який очікує gig.price)
+  const gigsForUi = user.gigs.map((g) => ({
+    id: g.id,
+    title: g.title,
+    slug: g.slug,
+    price:
+      g.packages.length > 0 ? Math.round(g.packages[0].priceCents / 100) : 0,
+  }))
+
   const freelancerUser: FreelancerProfileData = {
     id: user.id,
     name: user.name ?? '',
@@ -215,7 +234,7 @@ export const load: PageServerLoad = async ({
     followers: fp?.followers ?? 0,
     successRate,
 
-    gigs: user.gigs,
+    gigs: gigsForUi,
     reviews: [],
     portfolio,
   }

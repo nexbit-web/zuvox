@@ -4,349 +4,641 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 // # 1. Створити міграцію і запушити в БД
-// npx prisma migrate dev --name init
-
+// npx prisma migrate dev --name jobs_proposals_v3
+//
 // # 2. Згенерувати клієнт
 // npx prisma generate
 
-// ═══════════════════════════════
-// КОРИСТУВАЧІ
-// ═══════════════════════════════
+// ═══════════════════════════════════════════════════════
+// 1. ENUMS
+// ═══════════════════════════════════════════════════════
 
-model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  emailVerified Boolean  @default(false)
-  name          String?
-  username      String?  @unique                    
- 
-  bio           String?
-  phone         String?
-  city          String?
- 
-  // Медіа
-  avatar                    String?
-  avatarPublicId            String?
-  banner                    String?
-  bannerPublicId            String?
-  portfolioImages           String[] @default([])
-  portfolioImagesPublicIds  String[] @default([])
- 
-  // Модерація
-  verificationStatus        VerificationStatus @default(NONE)
-  verificationRejectReason  String?
-  verifiedAt                DateTime?
- 
-  role          Role     @default(CLIENT)
-  isOnline      Boolean  @default(false)
-  lastSeen      DateTime @default(now())
- 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
- 
-  gigs            Gig[]
-  orders          Order[]       @relation("ClientOrders")
-  tasks           Task[]
-  reviews         Review[]      @relation("AuthorReviews")
-  sentMessages    Message[]     @relation("SentMessages")
-  chats           ChatMember[]
-  sessions        Session[]
-  accounts        Account[]
- 
-  freelancerProfile  FreelancerProfile?
- 
-  @@index([username])
-  @@index([verificationStatus])
-
-  following  Follow[]  @relation("Following")  
-  followers  Follow[]  @relation("Followers")   
+enum Role {
+  CLIENT
+  FREELANCER
+  ADMIN
 }
 
-model Follow {
-  id          String   @id @default(cuid())
- 
-  // Хто підписується (зазвичай клієнт)
-  followerId  String
-  follower    User     @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
- 
-  // На кого підписуються (фрілансер)
-  followingId String
-  following   User     @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
- 
-  createdAt   DateTime @default(now())
- 
-  // Один юзер може підписатися на іншого тільки раз
-  @@unique([followerId, followingId])
-  @@index([followerId])      // швидкий запит "на кого підписаний цей юзер"
-  @@index([followingId])     // швидкий запит "хто підписаний на мене"
+enum VerificationStatus {
+  NONE        // щойно зареєстровані клієнти
+  PENDING     // фрілансер завершив онбординг, чекає модерації
+  VERIFIED    // модерація пройдена — синя галочка
+  REJECTED    // модерація не пройдена — червоний бейдж
 }
 
-model FreelancerProfile {
-  id              String          @id @default(cuid())
-  userId          String          @unique
-  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  categories      String[]        @default([])
-  skills          String[]        @default([])
- 
-  experience      ExperienceLevel?
-  languages       String[]        @default([])
- 
-  hourlyRate      Int?
-  portfolioUrl    String?
- 
-  // Денормалізовані (оновлюються джобами/тригерами)
-  avgRating        Float   @default(0)
-  reviewsCount     Int     @default(0)
-  totalOrders      Int     @default(0)
-  completedOrders  Int     @default(0)
-  responseTimeHrs  Int?
-  repeatClientsPct Int     @default(0)
-  followers        Int     @default(0)
- 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
- 
-  @@index([userId])
-  @@index([avgRating])
-  @@index([hourlyRate])
+enum ExperienceLevel {
+  LT_1        // менше 1 року
+  Y_1_2       // 1–2 роки
+  Y_3_5       // 3–5 років
+  Y_5_10      // 5–10 років
+  Y_10_PLUS   // 10+ років
 }
 
-// ═══════════════════════════════
-// ГІГИ (послуги фрілансера)
-// ═══════════════════════════════
-
-model Gig {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  price       Int      // мінімальна ціна в гривнях
-  category    String   // "Розробка сайтів"
-  subcategory String?  // "Landing page"
-  tags        String[]
-  images      String[]
-  isActive    Boolean  @default(true)
-  viewCount   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Пакети (базовий / стандартний / преміум)
-  packages    GigPackage[]
-
-  // Зв'язки
-  sellerId    String
-  seller      User         @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  orders      Order[]
-  reviews     Review[]
-
-  @@index([category])
-  @@index([sellerId])
-  @@index([isActive])
-  @@index([price])
+enum OrderSource {
+  DIRECT        // створено напряму з чату
+  GIG_PURCHASE  // куплено зі сторінки гіга
+  JOB_PROPOSAL  // створено через відгук на заявку клієнта
 }
 
-model GigPackage {
-  id           String   @id @default(cuid())
-  gigId        String
-  gig          Gig      @relation(fields: [gigId], references: [id], onDelete: Cascade)
-  name         String   // "Базовий", "Стандартний", "Преміум"
-  description  String?
-  price        Int      // ціна пакету в гривнях
-  deliveryDays Int      // днів на виконання
-  revisions    Int      @default(1)
-  features     String[] // список що входить
-
-  @@index([gigId])
+enum OrderStatus {
+  NEGOTIATING   // створено, узгоджуємо умови
+  ACCEPTED      // фрілансер прийняв
+  DELIVERED     // фрілансер здав роботу
+  COMPLETED     // клієнт прийняв
+  CANCELLED     // скасовано
+  DISPUTED      // спір
 }
 
-// ═══════════════════════════════
-// ЗАМОВЛЕННЯ
-// ═══════════════════════════════
-
-model Order {
-  id          String      @id @default(cuid())
-  status      OrderStatus @default(PENDING)
-  message     String?     // повідомлення від клієнта
-  price       Int         // фінальна ціна в гривнях
-  deliveryDays Int?
-  deadline    DateTime?
-  completedAt DateTime?
-  cancelledAt DateTime?
-  cancelReason String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  // Зв'язки
-  gigId       String
-  gig         Gig         @relation(fields: [gigId], references: [id])
-  clientId    String
-  client      User        @relation("ClientOrders", fields: [clientId], references: [id])
-  review      Review?
-
-  @@index([status])
-  @@index([clientId])
-  @@index([gigId])
+enum OrderEventType {
+  CREATED
+  ACCEPTED
+  DELIVERED
+  REVISION_REQUESTED
+  COMPLETED
+  CANCELLED
+  AUTO_COMPLETED
+  DISPUTED
 }
 
-// ═══════════════════════════════
-// ВІДГУКИ
-// ═══════════════════════════════
-
-model Review {
-  id        String   @id @default(cuid())
-  rating    Int      // 1-5
-  comment   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Зв'язки
-  gigId     String
-  gig       Gig      @relation(fields: [gigId], references: [id])
-  authorId  String
-  author    User     @relation("AuthorReviews", fields: [authorId], references: [id])
-  orderId   String   @unique
-  order     Order    @relation(fields: [orderId], references: [id])
-
-  @@index([gigId])
-  @@index([authorId])
-  @@index([rating])
+enum JobStatus {
+  OPEN        // приймаємо відгуки
+  CLOSED      // клієнт обрав фрілансера, замовлення створено
+  EXPIRED     // 30 днів без вибору
+  CANCELLED   // клієнт скасував до вибору
 }
 
-// ═══════════════════════════════
-// ЗАВДАННЯ (клієнт шукає виконавця)
-// ═══════════════════════════════
-
-model Task {
-  id          String     @id @default(cuid())
-  title       String
-  description String
-  budget      Int?       // бюджет в гривнях
-  category    String
-  subcategory String?
-  city        String?    // місто або "Онлайн"
-  type        ServiceType @default(ANY)
-  status      TaskStatus  @default(OPEN)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  // Зв'язки
-  clientId    String
-  client      User        @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
-  @@index([status])
-  @@index([category])
-  @@index([clientId])
+enum JobBudgetType {
+  FIXED       // одна сума (budgetMaxCents)
+  RANGE       // діапазон (budgetMinCents - budgetMaxCents)
+  NEGOTIABLE  // договірна (обидва null)
 }
 
-// ═══════════════════════════════
-// ЧАТИ І ПОВІДОМЛЕННЯ
-// ═══════════════════════════════
-
-model Chat {
-  id          String       @id @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt       // оновлюється при кожному новому повідомленні
- 
-  // Кеш останнього повідомлення для швидкого рендеру списку чатів
-  lastMessageText   String?
-  lastMessageAt     DateTime?
-  lastSenderId      String?
- 
-  members     ChatMember[]
-  messages    Message[]
- 
-  @@index([updatedAt])
-  @@index([lastMessageAt])
+enum ProposalStatus {
+  SUBMITTED    // надіслано
+  ACCEPTED     // клієнт обрав цей proposal → створено Order
+  REJECTED     // клієнт обрав іншого
+  WITHDRAWN    // фрілансер сам відкликав (lead fee НЕ повертається)
 }
 
-model ChatMember {
-  id          String     @id @default(cuid())
-  chatId      String
-  chat        Chat       @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  userId      String
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  lastReadAt  DateTime?                     
-  mutedUntil  DateTime?                     
- 
-  createdAt   DateTime   @default(now())
- 
-  @@unique([chatId, userId])
-  @@index([userId])
-  @@index([chatId])
+enum ServiceType {
+  ONLINE    // онлайн
+  OFFLINE   // офлайн
+  VISIT     // виїзд до клієнта
+  ANY       // будь-який
 }
 
 enum MessageType {
   TEXT
   PHOTO
   FILE
-  SYSTEM        
+  SYSTEM
+}
+
+enum TxType {
+  TOPUP            // поповнення з картки
+  LEAD_FEE         // списання за лід (відгук на заявку)
+  GIG_COMMISSION   // комісія з покупки гіга
+  REFUND           // повернення (наприклад, заявка скасована до відгуків)
+  WITHDRAWAL       // виведення (на майбутнє)
+  ADJUSTMENT       // ручне коригування адміном
+}
+
+enum TxStatus {
+  PENDING    // очікує підтвердження від LiqPay
+  SUCCESS
+  FAILED
+  REVERSED
+}
+
+enum GigStatus {
+  DRAFT       // створено, ще не опубліковано
+  ACTIVE      // опубліковано і доступне
+  PAUSED      // фрілансер тимчасово вимкнув (відпустка)
+  REJECTED    // не пройшло модерацію (на майбутнє)
+  ARCHIVED    // архівовано (видалено soft-delete)
+}
+
+enum GigPackageTier {
+  BASIC
+  STANDARD
+  PREMIUM
+}
+
+// ═══════════════════════════════════════════════════════
+// 2. КОРИСТУВАЧІ
+// ═══════════════════════════════════════════════════════
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String?
+  username      String?  @unique
+
+  bio   String?
+  phone String?
+  city  String?
+
+  // Медіа
+  avatar                   String?
+  avatarPublicId           String?
+  banner                   String?
+  bannerPublicId           String?
+  portfolioImages          String[] @default([])
+  portfolioImagesPublicIds String[] @default([])
+
+  // Модерація
+  verificationStatus       VerificationStatus @default(NONE)
+  verificationRejectReason String?
+  verifiedAt               DateTime?
+
+  role     Role     @default(CLIENT)
+  isOnline Boolean  @default(false)
+  lastSeen DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Зв'язки
+  gigs              Gig[]
+  orders            Order[]            @relation("ClientOrders")
+  freelancerOrders  Order[]            @relation("FreelancerOrders")
+  jobs              Job[]              @relation("ClientJobs")
+  proposals         Proposal[]         @relation("FreelancerProposals")
+  reviews           Review[]           @relation("AuthorReviews")
+  sentMessages      Message[]          @relation("SentMessages")
+  chats             ChatMember[]
+  sessions          Session[]
+  accounts          Account[]
+  wallet            Wallet?
+  orderEvents       OrderEvent[]
+  freelancerProfile FreelancerProfile?
+  following         Follow[]           @relation("Following")
+  followers         Follow[]           @relation("Followers")
+
+  @@index([username])
+  @@index([verificationStatus])
+}
+
+model Follow {
+  id String @id @default(cuid())
+
+  followerId String
+  follower   User   @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingId String
+  following   User   @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model FreelancerProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categories String[]         @default([])
+  skills     String[]         @default([])
+  experience ExperienceLevel?
+  languages  String[]         @default([])
+
+  hourlyRate   Int?
+  portfolioUrl String?
+
+  // Денормалізовані (оновлюються джобами/тригерами)
+  avgRating        Float @default(0)
+  reviewsCount     Int   @default(0)
+  totalOrders      Int   @default(0)
+  completedOrders  Int   @default(0)
+  responseTimeHrs  Int?
+  repeatClientsPct Int   @default(0)
+  followers        Int   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([avgRating])
+  @@index([hourlyRate])
+}
+
+// ═══════════════════════════════════════════════════════
+// 3. ГІГИ (послуги фрілансера — Fiverr-style)
+// ═══════════════════════════════════════════════════════
+
+model Gig {
+  id String @id @default(cuid())
+
+  // ─── Базова інформація ───
+  title            String
+  slug             String  @unique
+  description      String  @db.Text
+  shortDescription String? @db.VarChar(280)
+
+  // ─── Категоризація ───
+  category    String
+  subcategory String?
+  tags        String[] @default([])
+
+  // ─── Медіа ───
+  images          String[] @default([])
+  imagesPublicIds String[] @default([])
+  videoUrl        String?
+
+  // ─── Стан ───
+  status   GigStatus @default(DRAFT)
+  isActive Boolean   @default(false)
+
+  // ─── Метрики (denormalized) ───
+  viewCount    Int   @default(0)
+  ordersCount  Int   @default(0)
+  avgRating    Float @default(0)
+  reviewsCount Int   @default(0)
+
+  // ─── Часові мітки ───
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  // ─── Зв'язки ───
+  sellerId String
+  seller   User         @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  packages GigPackage[]
+  orders   Order[]
+  reviews  Review[]
+
+  @@index([category])
+  @@index([sellerId])
+  @@index([status])
+  @@index([slug])
+  @@index([avgRating])
+  @@index([ordersCount])
+}
+
+model GigPackage {
+  id    String @id @default(cuid())
+  gigId String
+  gig   Gig    @relation(fields: [gigId], references: [id], onDelete: Cascade)
+
+  tier GigPackageTier
+
+  name        String  @default("")
+  description String? @db.Text
+
+  // Ціна у копійках
+  priceCents Int
+
+  deliveryDays Int
+  revisions    Int      @default(1) // -1 = unlimited
+  features     String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([gigId, tier])
+  @@index([gigId])
+}
+
+// ═══════════════════════════════════════════════════════
+// 4. ЗАМОВЛЕННЯ
+// ═══════════════════════════════════════════════════════
+
+model Order {
+  id String @id @default(cuid())
+
+  // Учасники
+  clientId     String
+  client       User   @relation("ClientOrders", fields: [clientId], references: [id])
+  freelancerId String
+  freelancer   User   @relation("FreelancerOrders", fields: [freelancerId], references: [id])
+
+  // Джерело
+  gigId  String?
+  gig    Gig?        @relation(fields: [gigId], references: [id])
+  source OrderSource @default(DIRECT)
+
+  // Деталі
+  title        String
+  description  String    @db.Text
+  priceCents   Int
+  currency     String    @default("UAH")
+  deliveryDays Int?
+  deadlineAt   DateTime?
+
+  // Стан
+  status OrderStatus @default(NEGOTIATING)
+
+  // Часові мітки переходів
+  acceptedAt    DateTime?
+  deliveredAt   DateTime?
+  completedAt   DateTime?
+  cancelledAt   DateTime?
+  cancelledById String?
+  cancelReason  String?   @db.Text
+
+  // Здані роботи
+  deliverables String[] @default([])
+  deliveryNote String?  @db.Text
+
+  // Чат
+  chatId String?
+  chat   Chat?   @relation(fields: [chatId], references: [id], onDelete: SetNull)
+
+  // Lead fee у копійках (для GIG_PURCHASE — комісія, для JOB_PROPOSAL — 0)
+  leadFeeCents Int @default(0)
+
+  // Автозавершення (cron через 7 днів після DELIVERED)
+  autoCompleteAt DateTime?
+
+  // ─── Зв'язки ───
+  review  Review?
+  events  OrderEvent[]
+  fromJob Job?         @relation("JobToOrder")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId, status])
+  @@index([freelancerId, status])
+  @@index([chatId])
+  @@index([status, createdAt])
+}
+
+model OrderEvent {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  type    OrderEventType
+  actorId String? // null = системна подія
+  actor   User?          @relation(fields: [actorId], references: [id])
+  payload Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+// ═══════════════════════════════════════════════════════
+// 5. ЗАЯВКИ КЛІЄНТІВ (Upwork-style Jobs)
+// ═══════════════════════════════════════════════════════
+
+model Job {
+  id String @id @default(cuid())
+
+  // ─── Базова інформація ───
+  title       String
+  description String   @db.Text
+  category    String
+  subcategory String?
+  tags        String[] @default([])
+
+  // ─── Бюджет (у копійках) ───
+  budgetType     JobBudgetType @default(FIXED)
+  budgetMinCents Int?
+  budgetMaxCents Int?
+  currency       String        @default("UAH")
+
+  // ─── Терміни ───
+  deliveryDays Int?
+  deadlineAt   DateTime?
+  expiresAt    DateTime // коли закривається прийом proposals
+
+  // ─── Локація / тип роботи ───
+  type ServiceType @default(ANY)
+  city String?
+
+  // ─── Стан ───
+  status JobStatus @default(OPEN)
+
+  // ─── Метрики ───
+  proposalsCount Int @default(0)
+  viewsCount     Int @default(0)
+
+  // ─── Часові мітки ───
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  closedAt  DateTime?
+
+  // ─── Зв'язки ───
+  clientId String
+  client   User   @relation("ClientJobs", fields: [clientId], references: [id], onDelete: Cascade)
+
+  proposals Proposal[]
+
+  // Якщо клієнт обрав фрілансера — посилання на створений Order
+  selectedOrderId String? @unique
+  selectedOrder   Order?  @relation("JobToOrder", fields: [selectedOrderId], references: [id])
+
+  @@index([status, createdAt])
+  @@index([category])
+  @@index([clientId])
+  @@index([expiresAt])
+}
+
+model Proposal {
+  id String @id @default(cuid())
+
+  jobId        String
+  job          Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  freelancerId String
+  freelancer   User   @relation("FreelancerProposals", fields: [freelancerId], references: [id], onDelete: Cascade)
+
+  // Контент
+  coverLetter        String @db.Text
+  proposedPriceCents Int
+  proposedDays       Int
+
+  status ProposalStatus @default(SUBMITTED)
+
+  // Lead fee
+  leadFeeCents Int     @default(0)
+  refunded     Boolean @default(false)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  withdrawnAt DateTime?
+
+  // Один фрілансер = один proposal на job
+  @@unique([jobId, freelancerId])
+  @@index([jobId, status])
+  @@index([freelancerId, status])
+}
+
+// ═══════════════════════════════════════════════════════
+// 6. ГАМАНЕЦЬ
+// ═══════════════════════════════════════════════════════
+
+model Wallet {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  balanceCents Int    @default(0)
+  heldCents    Int    @default(0)
+  currency     String @default("UAH")
+
+  transactions WalletTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WalletTransaction {
+  id       String @id @default(cuid())
+  walletId String
+  wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  amountCents Int    // від'ємне = списання, додатне = поповнення
+  type        TxType
+  description String?
+
+  // Прив'язки до related entity (опційно)
+  orderId    String?
+  proposalId String?
+
+  externalRef String? @unique // ID транзакції LiqPay/Fondy
+
+  status TxStatus @default(SUCCESS)
+
+  createdAt DateTime @default(now())
+
+  @@index([walletId, createdAt])
+  @@index([orderId])
+  @@index([proposalId])
+}
+
+// ═══════════════════════════════════════════════════════
+// 7. ВІДГУКИ
+// ═══════════════════════════════════════════════════════
+
+model Review {
+  id      String  @id @default(cuid())
+  rating  Int     // 1–5
+  comment String?
+ 
+  // ─── ЗМІНА: gigId тепер опціональний ───
+  gigId    String?
+  gig      Gig?    @relation(fields: [gigId], references: [id])
+ 
+  authorId String
+  author   User    @relation("AuthorReviews", fields: [authorId], references: [id])
+  orderId  String  @unique
+  order    Order   @relation(fields: [orderId], references: [id])
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  @@index([gigId])
+  @@index([authorId])
+  @@index([rating])
+}
+
+// ═══════════════════════════════════════════════════════
+// 8. ЧАТИ І ПОВІДОМЛЕННЯ
+// ═══════════════════════════════════════════════════════
+
+model Chat {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Кеш останнього повідомлення
+  lastMessageText String?
+  lastMessageAt   DateTime?
+  lastSenderId    String?
+
+  members  ChatMember[]
+  messages Message[]
+  orders   Order[]
+
+  @@index([updatedAt])
+  @@index([lastMessageAt])
+}
+
+model ChatMember {
+  id     String @id @default(cuid())
+  chatId String
+  chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  lastReadAt DateTime?
+  mutedUntil DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([chatId, userId])
+  @@index([userId])
+  @@index([chatId])
 }
 
 model Message {
-  id          String       @id @default(cuid())
-  type        MessageType  @default(TEXT)
-  text        String       @default("")    // для TEXT — тіло, для PHOTO/FILE — підпис (caption)
- 
-  // Вкладення (для PHOTO/FILE)
-  attachmentUrl       String?
-  attachmentPublicId  String?              // Cloudinary ID для видалення
-  attachmentMimeType  String?
-  attachmentSize      Int?                 // bytes
-  attachmentName      String?              // оригінальне ім'я файлу
- 
-  // Метадані
-  isRead      Boolean      @default(false)
-  editedAt    DateTime?                    // якщо редагували
-  deletedAt   DateTime?                    // soft delete (показуємо "Повідомлення видалено")
- 
-  createdAt   DateTime     @default(now())
- 
-  // Зв'язки
-  chatId      String
-  chat        Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  senderId    String
-  sender      User         @relation("SentMessages", fields: [senderId], references: [id])
- 
-  // Reply-to (опційно — для відповідей на конкретне повідомлення)
-  replyToId   String?
-  replyTo     Message?     @relation("MessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
-  replies     Message[]    @relation("MessageReply")
- 
-  @@index([chatId, createdAt])             // фетч історії чату
+  id   String      @id @default(cuid())
+  type MessageType @default(TEXT)
+  text String      @default("")
+
+  // Вкладення
+  attachmentUrl      String?
+  attachmentPublicId String?
+  attachmentMimeType String?
+  attachmentSize     Int?
+  attachmentName     String?
+
+  isRead    Boolean   @default(false)
+  editedAt  DateTime?
+  deletedAt DateTime? // soft delete
+
+  chatId   String
+  chat     Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  senderId String
+  sender   User   @relation("SentMessages", fields: [senderId], references: [id])
+
+  replyToId String?
+  replyTo   Message?  @relation("MessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   Message[] @relation("MessageReply")
+
+  createdAt DateTime @default(now())
+
+  @@index([chatId, createdAt])
   @@index([senderId])
 }
-// ═══════════════════════════════
-// КАТЕГОРІЇ (для сторінки /services)
-// ═══════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+// 9. КАТЕГОРІЇ
+// ═══════════════════════════════════════════════════════
 
 model Category {
-  id          String     @id @default(cuid())
-  name        String     @unique
-  icon        String?
-  count       Int        @default(0)
+  id            String        @id @default(cuid())
+  name          String        @unique
+  icon          String?
+  count         Int           @default(0)
   subcategories Subcategory[]
 
   @@index([name])
 }
 
 model Subcategory {
-  id          String   @id @default(cuid())
-  name        String
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  name       String
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([name, categoryId])
   @@index([categoryId])
 }
 
-// ═══════════════════════════════
-// BETTER-AUTH
-// ═══════════════════════════════
+// ═══════════════════════════════════════════════════════
+// 10. BETTER-AUTH
+// ═══════════════════════════════════════════════════════
 
 model Session {
   id        String   @id
@@ -370,9 +662,9 @@ model Account {
   refreshToken String?
   idToken      String?
   expiresAt    DateTime?
+  password     String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  password     String?
 
   @@unique([providerId, accountId])
 }
@@ -385,52 +677,4 @@ model OtpCode {
   createdAt DateTime @default(now())
 
   @@index([email])
-}
-
-// ═══════════════════════════════
-// ENUM
-// ═══════════════════════════════
-
-enum Role {
-  CLIENT
-  FREELANCER
-  ADMIN
-}
-
-enum OrderStatus {
-  PENDING       // очікує підтвердження
-  IN_PROGRESS   // в роботі
-  REVIEW        // на перевірці у клієнта
-  COMPLETED     // завершено
-  CANCELLED     // скасовано
-  DISPUTED      // спір
-}
-
-enum TaskStatus {
-  OPEN
-  IN_PROGRESS
-  CLOSED
-}
-
-enum ServiceType {
-  ONLINE        // онлайн
-  OFFLINE       // офлайн
-  VISIT         // виїзд до клієнта
-  ANY           // будь-який
-}
-
-enum VerificationStatus {
-  NONE        // щойно зареєстровані клієнти
-  PENDING     // фрілансер завершив онбординг, чекає модерації
-  VERIFIED    // модерація пройдена — синя галочка
-  REJECTED    // модерація не пройдена — червоний бейдж
-}
-
-
-enum ExperienceLevel {
-  LT_1        // менше 1 року
-  Y_1_2       // 1–2 роки
-  Y_3_5       // 3–5 років
-  Y_5_10      // 5–10 років
-  Y_10_PLUS   // 10+ років
 }

@@ -16,6 +16,7 @@
     X,
     ArrowUp,
     ArrowDown,
+    Briefcase,
   } from 'lucide-svelte'
   import { getPusher } from '$lib/pusher-client'
   import {
@@ -29,6 +30,7 @@
   import MessageBubble from './message-bubble.svelte'
   import MessageComposer from './message-composer.svelte'
   import HeaderTyping from './header-typing.svelte'
+  import CreateOrderDialog from '$lib/components/orders/create-order-dialog.svelte'
   import type {
     ChatMessage,
     ChatDetails,
@@ -43,6 +45,14 @@
     initialMessages: ChatMessage[]
     initialNextCursor: string | null
     currentUserId: string
+    /** Роль поточного юзера — потрібно для кнопки "Створити замовлення" */
+    currentUserRole?: string
+    /** Активне замовлення у цьому чаті (опційно) — для бейджа під шапкою */
+    activeOrder?: {
+      id: string
+      title: string
+      status: string
+    } | null
   }
 
   let {
@@ -51,6 +61,8 @@
     initialMessages,
     initialNextCursor,
     currentUserId,
+    currentUserRole,
+    activeOrder = null,
   }: Props = $props()
 
   let messages = $state<ChatMessage[]>([...initialMessages].reverse())
@@ -73,7 +85,28 @@
   let searchInput = $state<HTMLInputElement | undefined>(undefined)
   let currentMatchIdx = $state(0)
 
+  // ─── Order creation ───
+  let createOrderOpen = $state(false)
+
   const peer = $derived(chat.peer)
+
+  /**
+   * Чи може поточний юзер створити замовлення для peer.
+   *
+   * Правила:
+   *   • Я — CLIENT
+   *   • peer — FREELANCER (читаємо з chat.peer.role якщо є,
+   *     інакше fallback на verificationStatus — фрілансери проходять верифікацію)
+   */
+  const canCreateOrder = $derived.by(() => {
+    if (currentUserRole !== 'CLIENT') return false
+    const peerAny = peer as any
+    if (peerAny.role) {
+      return peerAny.role === 'FREELANCER'
+    }
+    // Fallback: вважаємо що верифікований юзер — фрілансер
+    return peer.isVerified === true
+  })
 
   // Знаходимо матчі (id повідомлень які містять searchQuery)
   const matchedIds = $derived.by(() => {
@@ -83,6 +116,7 @@
       .filter(
         (m) =>
           !m.deletedAt &&
+          m.type !== 'SYSTEM' &&
           m.text &&
           m.text.toLowerCase().includes(q),
       )
@@ -151,7 +185,11 @@
       })
     }
 
-    const onEdit = (data: { messageId: string; text: string; editedAt: string }) => {
+    const onEdit = (data: {
+      messageId: string
+      text: string
+      editedAt: string
+    }) => {
       messages = messages.map((m) =>
         m.id === data.messageId
           ? { ...m, text: data.text, editedAt: data.editedAt }
@@ -381,6 +419,8 @@
     const m = messages[idx]
     const next = messages[idx + 1]
     if (!next) return true
+    // SYSTEM повідомлення завжди рендерять як окремий блок
+    if (m.type === 'SYSTEM' || next.type === 'SYSTEM') return true
     if (next.senderId !== m.senderId) return true
     const diff =
       new Date(next.createdAt).getTime() - new Date(m.createdAt).getTime()
@@ -418,6 +458,25 @@
       year: d.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
     })
   }
+
+  // ─── Active order helpers ───
+  const orderStatusLabel = $derived.by(() => {
+    if (!activeOrder) return null
+    switch (activeOrder.status) {
+      case 'NEGOTIATING':
+        return 'Узгодження'
+      case 'ACCEPTED':
+        return 'У роботі'
+      case 'DELIVERED':
+        return 'На перевірці'
+      case 'COMPLETED':
+        return 'Завершено'
+      case 'CANCELLED':
+        return 'Скасовано'
+      default:
+        return activeOrder.status
+    }
+  })
 
   const lastSeenLabel = $derived('був(ла) нещодавно')
 </script>
@@ -471,13 +530,40 @@
           {#if typingPeer}
             <HeaderTyping />
           {:else}
-            <p class="text-[11px] truncate" style="color: var(--muted-foreground)">
+            <p
+              class="text-[11px] truncate"
+              style="color: var(--muted-foreground)"
+            >
               {lastSeenLabel}
             </p>
           {/if}
         </div>
       </div>
     </button>
+
+    {#if canCreateOrder}
+      <!-- Велика кнопка для desktop -->
+      <button
+        type="button"
+        onclick={() => (createOrderOpen = true)}
+        class="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold cursor-pointer transition-opacity hover:opacity-90"
+        style="background-color: var(--primary); color: var(--primary-foreground)"
+        aria-label="Створити замовлення"
+      >
+        <Briefcase class="size-3.5" />
+        Замовити
+      </button>
+      <!-- Іконка для mobile -->
+      <button
+        type="button"
+        onclick={() => (createOrderOpen = true)}
+        class="sm:hidden size-9 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+        style="background-color: var(--primary); color: var(--primary-foreground)"
+        aria-label="Створити замовлення"
+      >
+        <Briefcase class="size-4" />
+      </button>
+    {/if}
 
     <button
       type="button"
@@ -488,7 +574,8 @@
       aria-label="Пошук"
       onmouseenter={(e) => {
         if (!searchOpen)
-          (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--muted)'
+          (e.currentTarget as HTMLElement).style.backgroundColor =
+            'var(--muted)'
       }}
       onmouseleave={(e) => {
         if (!searchOpen)
@@ -505,9 +592,11 @@
       style="color: var(--muted-foreground)"
       aria-label={muted ? 'Увімкнути звук' : 'Вимкнути звук'}
       onmouseenter={(e) =>
-        ((e.currentTarget as HTMLElement).style.backgroundColor = 'var(--muted)')}
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'var(--muted)')}
       onmouseleave={(e) =>
-        ((e.currentTarget as HTMLElement).style.backgroundColor = 'transparent')}
+        ((e.currentTarget as HTMLElement).style.backgroundColor =
+          'transparent')}
     >
       {#if muted}
         <VolumeX class="size-4" />
@@ -516,6 +605,34 @@
       {/if}
     </button>
   </header>
+
+  <!-- ═══════ ACTIVE ORDER BADGE ═══════ -->
+  {#if activeOrder}
+    <a
+      href={`/orders/${activeOrder.id}`}
+      class="flex items-center gap-2 px-4 py-2 shrink-0 transition-colors hover:opacity-90"
+      style="background-color: var(--muted); border-bottom: 1px solid var(--border)"
+    >
+      <Briefcase
+        class="size-3.5 shrink-0"
+        style="color: var(--muted-foreground)"
+      />
+      <div class="flex-1 min-w-0">
+        <p
+          class="text-xs font-medium truncate"
+          style="color: var(--foreground)"
+        >
+          Замовлення: {activeOrder.title}
+        </p>
+      </div>
+      <span
+        class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded shrink-0"
+        style="background-color: var(--background); color: var(--muted-foreground)"
+      >
+        {orderStatusLabel}
+      </span>
+    </a>
+  {/if}
 
   <!-- ═══════ SEARCH BAR ═══════ -->
   {#if searchOpen}
@@ -534,7 +651,10 @@
         style="color: var(--foreground)"
       />
       {#if searchQuery}
-        <span class="text-[11px] tabular-nums" style="color: var(--muted-foreground)">
+        <span
+          class="text-[11px] tabular-nums"
+          style="color: var(--muted-foreground)"
+        >
           {matchedIds.length === 0
             ? 'нічого'
             : `${currentMatchIdx + 1} / ${matchedIds.length}`}
@@ -591,7 +711,9 @@
       {/if}
 
       {#if messages.length === 0}
-        <div class="flex flex-col items-center justify-center py-20 text-center">
+        <div
+          class="flex flex-col items-center justify-center py-20 text-center"
+        >
           <Avatar class="size-14 mb-3">
             <AvatarImage src={peer.avatar ?? ''} alt={peer.name} />
             <AvatarFallback
@@ -673,3 +795,13 @@
     </div>
   </div>
 </div>
+
+<!-- ═══════ CREATE ORDER DIALOG ═══════ -->
+{#if canCreateOrder}
+  <CreateOrderDialog
+    bind:open={createOrderOpen}
+    freelancerId={peer.id}
+    freelancerName={peer.name ?? 'Майстер'}
+    {chatId}
+  />
+{/if}

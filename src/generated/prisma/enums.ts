@@ -9,16 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const MessageType = {
-  TEXT: 'TEXT',
-  PHOTO: 'PHOTO',
-  FILE: 'FILE',
-  SYSTEM: 'SYSTEM'
-} as const
-
-export type MessageType = (typeof MessageType)[keyof typeof MessageType]
-
-
 export const Role = {
   CLIENT: 'CLIENT',
   FREELANCER: 'FREELANCER',
@@ -26,37 +16,6 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
-
-
-export const OrderStatus = {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  REVIEW: 'REVIEW',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED',
-  DISPUTED: 'DISPUTED'
-} as const
-
-export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
-
-
-export const TaskStatus = {
-  OPEN: 'OPEN',
-  IN_PROGRESS: 'IN_PROGRESS',
-  CLOSED: 'CLOSED'
-} as const
-
-export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
-
-
-export const ServiceType = {
-  ONLINE: 'ONLINE',
-  OFFLINE: 'OFFLINE',
-  VISIT: 'VISIT',
-  ANY: 'ANY'
-} as const
-
-export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
 
 
 export const VerificationStatus = {
@@ -78,3 +37,129 @@ export const ExperienceLevel = {
 } as const
 
 export type ExperienceLevel = (typeof ExperienceLevel)[keyof typeof ExperienceLevel]
+
+
+export const OrderSource = {
+  DIRECT: 'DIRECT',
+  GIG_PURCHASE: 'GIG_PURCHASE',
+  JOB_PROPOSAL: 'JOB_PROPOSAL'
+} as const
+
+export type OrderSource = (typeof OrderSource)[keyof typeof OrderSource]
+
+
+export const OrderStatus = {
+  NEGOTIATING: 'NEGOTIATING',
+  ACCEPTED: 'ACCEPTED',
+  DELIVERED: 'DELIVERED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  DISPUTED: 'DISPUTED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const OrderEventType = {
+  CREATED: 'CREATED',
+  ACCEPTED: 'ACCEPTED',
+  DELIVERED: 'DELIVERED',
+  REVISION_REQUESTED: 'REVISION_REQUESTED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  AUTO_COMPLETED: 'AUTO_COMPLETED',
+  DISPUTED: 'DISPUTED'
+} as const
+
+export type OrderEventType = (typeof OrderEventType)[keyof typeof OrderEventType]
+
+
+export const JobStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
+
+
+export const JobBudgetType = {
+  FIXED: 'FIXED',
+  RANGE: 'RANGE',
+  NEGOTIABLE: 'NEGOTIABLE'
+} as const
+
+export type JobBudgetType = (typeof JobBudgetType)[keyof typeof JobBudgetType]
+
+
+export const ProposalStatus = {
+  SUBMITTED: 'SUBMITTED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  WITHDRAWN: 'WITHDRAWN'
+} as const
+
+export type ProposalStatus = (typeof ProposalStatus)[keyof typeof ProposalStatus]
+
+
+export const ServiceType = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
+  VISIT: 'VISIT',
+  ANY: 'ANY'
+} as const
+
+export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
+
+
+export const MessageType = {
+  TEXT: 'TEXT',
+  PHOTO: 'PHOTO',
+  FILE: 'FILE',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type MessageType = (typeof MessageType)[keyof typeof MessageType]
+
+
+export const TxType = {
+  TOPUP: 'TOPUP',
+  LEAD_FEE: 'LEAD_FEE',
+  GIG_COMMISSION: 'GIG_COMMISSION',
+  REFUND: 'REFUND',
+  WITHDRAWAL: 'WITHDRAWAL',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type TxType = (typeof TxType)[keyof typeof TxType]
+
+
+export const TxStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type TxStatus = (typeof TxStatus)[keyof typeof TxStatus]
+
+
+export const GigStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  REJECTED: 'REJECTED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type GigStatus = (typeof GigStatus)[keyof typeof GigStatus]
+
+
+export const GigPackageTier = {
+  BASIC: 'BASIC',
+  STANDARD: 'STANDARD',
+  PREMIUM: 'PREMIUM'
+} as const
+
+export type GigPackageTier = (typeof GigPackageTier)[keyof typeof GigPackageTier]

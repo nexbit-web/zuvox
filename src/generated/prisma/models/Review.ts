@@ -38,33 +38,33 @@ export type ReviewMinAggregateOutputType = {
   id: string | null
   rating: number | null
   comment: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
   gigId: string | null
   authorId: string | null
   orderId: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ReviewMaxAggregateOutputType = {
   id: string | null
   rating: number | null
   comment: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
   gigId: string | null
   authorId: string | null
   orderId: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ReviewCountAggregateOutputType = {
   id: number
   rating: number
   comment: number
-  createdAt: number
-  updatedAt: number
   gigId: number
   authorId: number
   orderId: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -81,33 +81,33 @@ export type ReviewMinAggregateInputType = {
   id?: true
   rating?: true
   comment?: true
-  createdAt?: true
-  updatedAt?: true
   gigId?: true
   authorId?: true
   orderId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ReviewMaxAggregateInputType = {
   id?: true
   rating?: true
   comment?: true
-  createdAt?: true
-  updatedAt?: true
   gigId?: true
   authorId?: true
   orderId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ReviewCountAggregateInputType = {
   id?: true
   rating?: true
   comment?: true
-  createdAt?: true
-  updatedAt?: true
   gigId?: true
   authorId?: true
   orderId?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -201,11 +201,11 @@ export type ReviewGroupByOutputType = {
   id: string
   rating: number
   comment: string | null
-  createdAt: Date
-  updatedAt: Date
-  gigId: string
+  gigId: string | null
   authorId: string
   orderId: string
+  createdAt: Date
+  updatedAt: Date
   _count: ReviewCountAggregateOutputType | null
   _avg: ReviewAvgAggregateOutputType | null
   _sum: ReviewSumAggregateOutputType | null
@@ -235,12 +235,12 @@ export type ReviewWhereInput = {
   id?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringNullableFilter<"Review"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  gigId?: Prisma.StringFilter<"Review"> | string
+  gigId?: Prisma.StringNullableFilter<"Review"> | string | null
   authorId?: Prisma.StringFilter<"Review"> | string
   orderId?: Prisma.StringFilter<"Review"> | string
-  gig?: Prisma.XOR<Prisma.GigScalarRelationFilter, Prisma.GigWhereInput>
+  createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  gig?: Prisma.XOR<Prisma.GigNullableScalarRelationFilter, Prisma.GigWhereInput> | null
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
 }
@@ -249,11 +249,11 @@ export type ReviewOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   gig?: Prisma.GigOrderByWithRelationInput
   author?: Prisma.UserOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
@@ -267,11 +267,11 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringNullableFilter<"Review"> | string | null
+  gigId?: Prisma.StringNullableFilter<"Review"> | string | null
+  authorId?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  gigId?: Prisma.StringFilter<"Review"> | string
-  authorId?: Prisma.StringFilter<"Review"> | string
-  gig?: Prisma.XOR<Prisma.GigScalarRelationFilter, Prisma.GigWhereInput>
+  gig?: Prisma.XOR<Prisma.GigNullableScalarRelationFilter, Prisma.GigWhereInput> | null
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
 }, "id" | "orderId">
@@ -280,11 +280,11 @@ export type ReviewOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  gigId?: Prisma.SortOrder
+  gigId?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ReviewCountOrderByAggregateInput
   _avg?: Prisma.ReviewAvgOrderByAggregateInput
   _max?: Prisma.ReviewMaxOrderByAggregateInput
@@ -299,11 +299,11 @@ export type ReviewScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Review"> | string
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
   comment?: Prisma.StringNullableWithAggregatesFilter<"Review"> | string | null
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
-  gigId?: Prisma.StringWithAggregatesFilter<"Review"> | string
+  gigId?: Prisma.StringNullableWithAggregatesFilter<"Review"> | string | null
   authorId?: Prisma.StringWithAggregatesFilter<"Review"> | string
   orderId?: Prisma.StringWithAggregatesFilter<"Review"> | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
 }
 
 export type ReviewCreateInput = {
@@ -312,7 +312,7 @@ export type ReviewCreateInput = {
   comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gig: Prisma.GigCreateNestedOneWithoutReviewsInput
+  gig?: Prisma.GigCreateNestedOneWithoutReviewsInput
   author: Prisma.UserCreateNestedOneWithoutReviewsInput
   order: Prisma.OrderCreateNestedOneWithoutReviewInput
 }
@@ -321,11 +321,11 @@ export type ReviewUncheckedCreateInput = {
   id?: string
   rating: number
   comment?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  gigId: string
+  gigId?: string | null
   authorId: string
   orderId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReviewUpdateInput = {
@@ -334,7 +334,7 @@ export type ReviewUpdateInput = {
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gig?: Prisma.GigUpdateOneRequiredWithoutReviewsNestedInput
+  gig?: Prisma.GigUpdateOneWithoutReviewsNestedInput
   author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutReviewNestedInput
 }
@@ -343,22 +343,22 @@ export type ReviewUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewCreateManyInput = {
   id?: string
   rating: number
   comment?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  gigId: string
+  gigId?: string | null
   authorId: string
   orderId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReviewUpdateManyMutationInput = {
@@ -373,11 +373,11 @@ export type ReviewUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewListRelationFilter = {
@@ -399,11 +399,11 @@ export type ReviewCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ReviewAvgOrderByAggregateInput = {
@@ -414,22 +414,22 @@ export type ReviewMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ReviewMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
   gigId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ReviewSumOrderByAggregateInput = {
@@ -558,7 +558,7 @@ export type ReviewCreateWithoutAuthorInput = {
   comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gig: Prisma.GigCreateNestedOneWithoutReviewsInput
+  gig?: Prisma.GigCreateNestedOneWithoutReviewsInput
   order: Prisma.OrderCreateNestedOneWithoutReviewInput
 }
 
@@ -566,10 +566,10 @@ export type ReviewUncheckedCreateWithoutAuthorInput = {
   id?: string
   rating: number
   comment?: string | null
+  gigId?: string | null
+  orderId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
-  orderId: string
 }
 
 export type ReviewCreateOrConnectWithoutAuthorInput = {
@@ -605,11 +605,11 @@ export type ReviewScalarWhereInput = {
   id?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringNullableFilter<"Review"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  gigId?: Prisma.StringFilter<"Review"> | string
+  gigId?: Prisma.StringNullableFilter<"Review"> | string | null
   authorId?: Prisma.StringFilter<"Review"> | string
   orderId?: Prisma.StringFilter<"Review"> | string
+  createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
 }
 
 export type ReviewCreateWithoutGigInput = {
@@ -626,10 +626,10 @@ export type ReviewUncheckedCreateWithoutGigInput = {
   id?: string
   rating: number
   comment?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
   authorId: string
   orderId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReviewCreateOrConnectWithoutGigInput = {
@@ -664,7 +664,7 @@ export type ReviewCreateWithoutOrderInput = {
   comment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  gig: Prisma.GigCreateNestedOneWithoutReviewsInput
+  gig?: Prisma.GigCreateNestedOneWithoutReviewsInput
   author: Prisma.UserCreateNestedOneWithoutReviewsInput
 }
 
@@ -672,10 +672,10 @@ export type ReviewUncheckedCreateWithoutOrderInput = {
   id?: string
   rating: number
   comment?: string | null
+  gigId?: string | null
+  authorId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
-  authorId: string
 }
 
 export type ReviewCreateOrConnectWithoutOrderInput = {
@@ -700,7 +700,7 @@ export type ReviewUpdateWithoutOrderInput = {
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gig?: Prisma.GigUpdateOneRequiredWithoutReviewsNestedInput
+  gig?: Prisma.GigUpdateOneWithoutReviewsNestedInput
   author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
 }
 
@@ -708,20 +708,20 @@ export type ReviewUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
-  authorId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ReviewCreateManyAuthorInput = {
   id?: string
   rating: number
   comment?: string | null
+  gigId?: string | null
+  orderId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  gigId: string
-  orderId: string
 }
 
 export type ReviewUpdateWithoutAuthorInput = {
@@ -730,7 +730,7 @@ export type ReviewUpdateWithoutAuthorInput = {
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gig?: Prisma.GigUpdateOneRequiredWithoutReviewsNestedInput
+  gig?: Prisma.GigUpdateOneWithoutReviewsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutReviewNestedInput
 }
 
@@ -738,30 +738,30 @@ export type ReviewUncheckedUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ReviewUncheckedUpdateManyWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  gigId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ReviewCreateManyGigInput = {
   id?: string
   rating: number
   comment?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
   authorId: string
   orderId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReviewUpdateWithoutGigInput = {
@@ -778,20 +778,20 @@ export type ReviewUncheckedUpdateWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewUncheckedUpdateManyWithoutGigInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -800,12 +800,12 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   rating?: boolean
   comment?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
   gigId?: boolean
   authorId?: boolean
   orderId?: boolean
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
+  createdAt?: boolean
+  updatedAt?: boolean
+  gig?: boolean | Prisma.Review$gigArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
@@ -814,12 +814,12 @@ export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   rating?: boolean
   comment?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
   gigId?: boolean
   authorId?: boolean
   orderId?: boolean
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
+  createdAt?: boolean
+  updatedAt?: boolean
+  gig?: boolean | Prisma.Review$gigArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
@@ -828,12 +828,12 @@ export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   rating?: boolean
   comment?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
   gigId?: boolean
   authorId?: boolean
   orderId?: boolean
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
+  createdAt?: boolean
+  updatedAt?: boolean
+  gig?: boolean | Prisma.Review$gigArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
@@ -842,26 +842,26 @@ export type ReviewSelectScalar = {
   id?: boolean
   rating?: boolean
   comment?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
   gigId?: boolean
   authorId?: boolean
   orderId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "rating" | "comment" | "createdAt" | "updatedAt" | "gigId" | "authorId" | "orderId", ExtArgs["result"]["review"]>
+export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "rating" | "comment" | "gigId" | "authorId" | "orderId" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Review$gigArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Review$gigArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  gig?: boolean | Prisma.GigDefaultArgs<ExtArgs>
+  gig?: boolean | Prisma.Review$gigArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
@@ -869,7 +869,7 @@ export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Review"
   objects: {
-    gig: Prisma.$GigPayload<ExtArgs>
+    gig: Prisma.$GigPayload<ExtArgs> | null
     author: Prisma.$UserPayload<ExtArgs>
     order: Prisma.$OrderPayload<ExtArgs>
   }
@@ -877,11 +877,11 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     rating: number
     comment: string | null
-    createdAt: Date
-    updatedAt: Date
-    gigId: string
+    gigId: string | null
     authorId: string
     orderId: string
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["review"]>
   composites: {}
 }
@@ -1276,7 +1276,7 @@ readonly fields: ReviewFieldRefs;
  */
 export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  gig<T extends Prisma.GigDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GigDefaultArgs<ExtArgs>>): Prisma.Prisma__GigClient<runtime.Types.Result.GetResult<Prisma.$GigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  gig<T extends Prisma.Review$gigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$gigArgs<ExtArgs>>): Prisma.Prisma__GigClient<runtime.Types.Result.GetResult<Prisma.$GigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1311,11 +1311,11 @@ export interface ReviewFieldRefs {
   readonly id: Prisma.FieldRef<"Review", 'String'>
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
   readonly comment: Prisma.FieldRef<"Review", 'String'>
-  readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"Review", 'DateTime'>
   readonly gigId: Prisma.FieldRef<"Review", 'String'>
   readonly authorId: Prisma.FieldRef<"Review", 'String'>
   readonly orderId: Prisma.FieldRef<"Review", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Review", 'DateTime'>
 }
     
 
@@ -1714,6 +1714,25 @@ export type ReviewDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Reviews to delete.
    */
   limit?: number
+}
+
+/**
+ * Review.gig
+ */
+export type Review$gigArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Gig
+   */
+  select?: Prisma.GigSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Gig
+   */
+  omit?: Prisma.GigOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GigInclude<ExtArgs> | null
+  where?: Prisma.GigWhereInput
 }
 
 /**

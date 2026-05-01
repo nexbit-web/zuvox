@@ -40,8 +40,7 @@ type HandleData = FreelancerHandleData | ClientHandleData
  *   • FREELANCER → публічний, дивиться всі (навіть гості)
  *   • CLIENT     → приватний за замовчуванням (404 для всіх)
  *     ВИНЯТОК: якщо поточний user-фрілансер має чат з цим клієнтом —
- *     дозволяємо перегляд. Це для випадку коли клієнт написав
- *     фрілансеру і той хоче подивитися хто це.
+ *     дозволяємо перегляд.
  *
  * Свій профіль завжди → /dashboard.
  */
@@ -86,8 +85,17 @@ export const load: PageServerLoad = async ({
         },
       },
       gigs: {
-        where: { isActive: true },
-        select: { id: true, title: true, price: true },
+        where: { status: 'ACTIVE' },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          packages: {
+            orderBy: { priceCents: 'asc' },
+            select: { priceCents: true },
+            take: 1,
+          },
+        },
         orderBy: { createdAt: 'desc' },
         take: 10,
       },
@@ -103,11 +111,8 @@ export const load: PageServerLoad = async ({
 
   // ─── CLIENT: перевірка приватності ───
   if (user.role === 'CLIENT') {
-    // Гість — завжди 404
     if (!session) throw error(404, 'Користувача не знайдено')
 
-    // Перевіряємо чи поточний юзер є фрілансером
-    // (тільки фрілансери можуть бачити клієнтів)
     if (session.user.role !== 'FREELANCER') {
       throw error(404, 'Користувача не знайдено')
     }
@@ -125,7 +130,6 @@ export const load: PageServerLoad = async ({
 
     if (!sharedChat) throw error(404, 'Користувача не знайдено')
 
-    // ─── Дозволено: рендеримо клієнтський профіль ───
     const clientUser: ClientProfileData = {
       id: user.id,
       name: user.name ?? '',
@@ -135,7 +139,6 @@ export const load: PageServerLoad = async ({
       city: user.city ?? undefined,
       createdAt: user.createdAt.toISOString(),
       verificationStatus: user.verificationStatus,
-      // Замовлення/відгуки покажемо коли буде Order модель
       totalOrders: 0,
       completedOrders: 0,
       reviews: [],
@@ -178,6 +181,16 @@ export const load: PageServerLoad = async ({
   // Phone тільки для авторизованих
   const phone = isAuthenticated ? (user.phone ?? undefined) : undefined
 
+  // Мапимо гіги: ціна = найдешевший пакет у гривнах
+  // (для backward compat з UI який очікує gig.price)
+  const gigsForUi = user.gigs.map((g) => ({
+    id: g.id,
+    title: g.title,
+    slug: g.slug,
+    price:
+      g.packages.length > 0 ? Math.round(g.packages[0].priceCents / 100) : 0,
+  }))
+
   const profileUser: FreelancerProfileData = {
     id: user.id,
     name: user.name ?? '',
@@ -207,7 +220,7 @@ export const load: PageServerLoad = async ({
     followers: fp?.followers ?? 0,
     successRate,
 
-    gigs: user.gigs,
+    gigs: gigsForUi,
     reviews: [],
     portfolio,
   }

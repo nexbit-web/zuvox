@@ -50,6 +50,8 @@
     initialMessages={data.initialMessages}
     initialNextCursor={data.initialNextCursor}
     currentUserId={data.currentUserId}
+    currentUserRole={data.currentUserRole ?? undefined}
+    activeOrder={data.activeOrder}
   />
 </div>
 
@@ -80,6 +82,8 @@
         initialMessages={data.initialMessages}
         initialNextCursor={data.initialNextCursor}
         currentUserId={data.currentUserId}
+        currentUserRole={data.currentUserRole ?? undefined}
+        activeOrder={data.activeOrder}
       />
     </Resizable.Pane>
   </Resizable.PaneGroup>

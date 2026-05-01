@@ -31,6 +31,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
                   username: true,
                   avatar: true,
                   verificationStatus: true,
+                  role: true,
                 },
               },
             },
@@ -44,6 +45,22 @@ export const load: PageServerLoad = async ({ params, request }) => {
 
   const peer = membership.chat.members.find((m) => m.user.id !== userId)?.user
   if (!peer) throw error(404, 'Співрозмовник не знайдено')
+
+  // ─── Поточний юзер: роль (для кнопки "Створити замовлення") ───
+  const me = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  })
+
+  // ─── Активне замовлення в цьому чаті (для бейджа під шапкою) ───
+  const activeOrder = await prisma.order.findFirst({
+    where: {
+      chatId,
+      status: { in: ['NEGOTIATING', 'ACCEPTED', 'DELIVERED'] },
+    },
+    select: { id: true, title: true, status: true },
+    orderBy: { updatedAt: 'desc' },
+  })
 
   const messages = await prisma.message.findMany({
     where: { chatId },
@@ -105,6 +122,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
       username: peer.username,
       avatar: peer.avatar,
       isVerified: peer.verificationStatus === 'VERIFIED',
+      role: peer.role, // ← ДОДАНО
     },
     members: membership.chat.members.map((m) => ({
       id: m.user.id,
@@ -121,5 +139,8 @@ export const load: PageServerLoad = async ({ params, request }) => {
     chat,
     initialMessages,
     initialNextCursor: nextCursor,
+    currentUserId: userId,
+    currentUserRole: me?.role ?? null,
+    activeOrder,
   }
 }
