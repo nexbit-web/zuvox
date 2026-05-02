@@ -7,11 +7,13 @@
 
   interface Props {
     orderId: string
-    /** Як звати фрілансера (для placeholder) */
-    freelancerName?: string
+    /** Кого ми оцінюємо: 'майстра' (клієнт пише про фрілансера) або 'клієнта' (фрілансер пише про клієнта) */
+    peerLabel: string
+    /** Ім'я peer для повідомлень */
+    peerName?: string
   }
 
-  let { orderId, freelancerName = 'майстра' }: Props = $props()
+  let { orderId, peerLabel, peerName = '' }: Props = $props()
 
   let rating = $state(0)
   let hover = $state(0)
@@ -55,10 +57,14 @@
   style="background-color: var(--card); border: 1px solid var(--border)"
 >
   <h3 class="text-base font-semibold mb-1" style="color: var(--foreground)">
-    Залишити відгук
+    Залишити відгук про {peerLabel}
   </h3>
   <p class="text-xs mb-4" style="color: var(--muted-foreground)">
-    Оцініть роботу {freelancerName}. Це допоможе іншим клієнтам.
+    {#if peerName}
+      Оцініть співпрацю з <strong>{peerName}</strong>. Це допоможе іншим.
+    {:else}
+      Оцініть співпрацю. Це допоможе іншим.
+    {/if}
   </p>
 
   <!-- Stars -->
@@ -90,7 +96,7 @@
   <Textarea
     bind:value={comment}
     rows={4}
-    placeholder="Розкажіть як пройшла робота. Це допоможе іншим..."
+    placeholder="Розкажіть як пройшла співпраця. Це допоможе іншим..."
     maxlength={2000}
     class="mb-3"
   />

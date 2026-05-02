@@ -111,7 +111,9 @@ export const UserScalarFieldEnum = {
   isOnline: 'isOnline',
   lastSeen: 'lastSeen',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  clientAvgRating: 'clientAvgRating',
+  clientReviewsCount: 'clientReviewsCount'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -317,6 +319,7 @@ export const ReviewScalarFieldEnum = {
   id: 'id',
   rating: 'rating',
   comment: 'comment',
+  direction: 'direction',
   gigId: 'gigId',
   authorId: 'authorId',
   orderId: 'orderId',

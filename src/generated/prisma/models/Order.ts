@@ -384,7 +384,7 @@ export type OrderWhereInput = {
   freelancer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   gig?: Prisma.XOR<Prisma.GigNullableScalarRelationFilter, Prisma.GigWhereInput> | null
   chat?: Prisma.XOR<Prisma.ChatNullableScalarRelationFilter, Prisma.ChatWhereInput> | null
-  review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  reviews?: Prisma.ReviewListRelationFilter
   events?: Prisma.OrderEventListRelationFilter
   fromJob?: Prisma.XOR<Prisma.JobNullableScalarRelationFilter, Prisma.JobWhereInput> | null
 }
@@ -419,7 +419,7 @@ export type OrderOrderByWithRelationInput = {
   freelancer?: Prisma.UserOrderByWithRelationInput
   gig?: Prisma.GigOrderByWithRelationInput
   chat?: Prisma.ChatOrderByWithRelationInput
-  review?: Prisma.ReviewOrderByWithRelationInput
+  reviews?: Prisma.ReviewOrderByRelationAggregateInput
   events?: Prisma.OrderEventOrderByRelationAggregateInput
   fromJob?: Prisma.JobOrderByWithRelationInput
 }
@@ -457,7 +457,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   freelancer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   gig?: Prisma.XOR<Prisma.GigNullableScalarRelationFilter, Prisma.GigWhereInput> | null
   chat?: Prisma.XOR<Prisma.ChatNullableScalarRelationFilter, Prisma.ChatWhereInput> | null
-  review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  reviews?: Prisma.ReviewListRelationFilter
   events?: Prisma.OrderEventListRelationFilter
   fromJob?: Prisma.XOR<Prisma.JobNullableScalarRelationFilter, Prisma.JobWhereInput> | null
 }, "id">
@@ -552,7 +552,7 @@ export type OrderCreateInput = {
   freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
   gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
@@ -583,7 +583,7 @@ export type OrderUncheckedCreateInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
@@ -614,7 +614,7 @@ export type OrderUpdateInput = {
   freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
   gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -645,7 +645,7 @@ export type OrderUncheckedUpdateInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -1017,18 +1017,18 @@ export type OrderUpdateOneWithoutFromJobNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutFromJobInput, Prisma.OrderUpdateWithoutFromJobInput>, Prisma.OrderUncheckedUpdateWithoutFromJobInput>
 }
 
-export type OrderCreateNestedOneWithoutReviewInput = {
-  create?: Prisma.XOR<Prisma.OrderCreateWithoutReviewInput, Prisma.OrderUncheckedCreateWithoutReviewInput>
-  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutReviewInput
+export type OrderCreateNestedOneWithoutReviewsInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutReviewsInput, Prisma.OrderUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutReviewsInput
   connect?: Prisma.OrderWhereUniqueInput
 }
 
-export type OrderUpdateOneRequiredWithoutReviewNestedInput = {
-  create?: Prisma.XOR<Prisma.OrderCreateWithoutReviewInput, Prisma.OrderUncheckedCreateWithoutReviewInput>
-  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutReviewInput
-  upsert?: Prisma.OrderUpsertWithoutReviewInput
+export type OrderUpdateOneRequiredWithoutReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutReviewsInput, Prisma.OrderUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutReviewsInput
+  upsert?: Prisma.OrderUpsertWithoutReviewsInput
   connect?: Prisma.OrderWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutReviewInput, Prisma.OrderUpdateWithoutReviewInput>, Prisma.OrderUncheckedUpdateWithoutReviewInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutReviewsInput, Prisma.OrderUpdateWithoutReviewsInput>, Prisma.OrderUncheckedUpdateWithoutReviewsInput>
 }
 
 export type OrderCreateNestedManyWithoutChatInput = {
@@ -1098,7 +1098,7 @@ export type OrderCreateWithoutClientInput = {
   freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
   gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1128,7 +1128,7 @@ export type OrderUncheckedCreateWithoutClientInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1168,7 +1168,7 @@ export type OrderCreateWithoutFreelancerInput = {
   client: Prisma.UserCreateNestedOneWithoutOrdersInput
   gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1198,7 +1198,7 @@ export type OrderUncheckedCreateWithoutFreelancerInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1301,7 +1301,7 @@ export type OrderCreateWithoutGigInput = {
   client: Prisma.UserCreateNestedOneWithoutOrdersInput
   freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1331,7 +1331,7 @@ export type OrderUncheckedCreateWithoutGigInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1388,7 +1388,7 @@ export type OrderCreateWithoutEventsInput = {
   freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
   gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
 
@@ -1418,7 +1418,7 @@ export type OrderUncheckedCreateWithoutEventsInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
 
@@ -1464,7 +1464,7 @@ export type OrderUpdateWithoutEventsInput = {
   freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
   gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
 
@@ -1494,7 +1494,7 @@ export type OrderUncheckedUpdateWithoutEventsInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
 
@@ -1524,7 +1524,7 @@ export type OrderCreateWithoutFromJobInput = {
   freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
   gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
 }
 
@@ -1554,7 +1554,7 @@ export type OrderUncheckedCreateWithoutFromJobInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
 }
 
@@ -1600,7 +1600,7 @@ export type OrderUpdateWithoutFromJobInput = {
   freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
   gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
 }
 
@@ -1630,11 +1630,11 @@ export type OrderUncheckedUpdateWithoutFromJobInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
 }
 
-export type OrderCreateWithoutReviewInput = {
+export type OrderCreateWithoutReviewsInput = {
   id?: string
   source?: $Enums.OrderSource
   title: string
@@ -1664,7 +1664,7 @@ export type OrderCreateWithoutReviewInput = {
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
 
-export type OrderUncheckedCreateWithoutReviewInput = {
+export type OrderUncheckedCreateWithoutReviewsInput = {
   id?: string
   clientId: string
   freelancerId: string
@@ -1694,23 +1694,23 @@ export type OrderUncheckedCreateWithoutReviewInput = {
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
 
-export type OrderCreateOrConnectWithoutReviewInput = {
+export type OrderCreateOrConnectWithoutReviewsInput = {
   where: Prisma.OrderWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrderCreateWithoutReviewInput, Prisma.OrderUncheckedCreateWithoutReviewInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutReviewsInput, Prisma.OrderUncheckedCreateWithoutReviewsInput>
 }
 
-export type OrderUpsertWithoutReviewInput = {
-  update: Prisma.XOR<Prisma.OrderUpdateWithoutReviewInput, Prisma.OrderUncheckedUpdateWithoutReviewInput>
-  create: Prisma.XOR<Prisma.OrderCreateWithoutReviewInput, Prisma.OrderUncheckedCreateWithoutReviewInput>
+export type OrderUpsertWithoutReviewsInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutReviewsInput, Prisma.OrderUncheckedUpdateWithoutReviewsInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutReviewsInput, Prisma.OrderUncheckedCreateWithoutReviewsInput>
   where?: Prisma.OrderWhereInput
 }
 
-export type OrderUpdateToOneWithWhereWithoutReviewInput = {
+export type OrderUpdateToOneWithWhereWithoutReviewsInput = {
   where?: Prisma.OrderWhereInput
-  data: Prisma.XOR<Prisma.OrderUpdateWithoutReviewInput, Prisma.OrderUncheckedUpdateWithoutReviewInput>
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutReviewsInput, Prisma.OrderUncheckedUpdateWithoutReviewsInput>
 }
 
-export type OrderUpdateWithoutReviewInput = {
+export type OrderUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1740,7 +1740,7 @@ export type OrderUpdateWithoutReviewInput = {
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
 
-export type OrderUncheckedUpdateWithoutReviewInput = {
+export type OrderUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1795,7 +1795,7 @@ export type OrderCreateWithoutChatInput = {
   client: Prisma.UserCreateNestedOneWithoutOrdersInput
   freelancer: Prisma.UserCreateNestedOneWithoutFreelancerOrdersInput
   gig?: Prisma.GigCreateNestedOneWithoutOrdersInput
-  review?: Prisma.ReviewCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1825,7 +1825,7 @@ export type OrderUncheckedCreateWithoutChatInput = {
   autoCompleteAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutOrderInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
 }
@@ -1935,7 +1935,7 @@ export type OrderUpdateWithoutClientInput = {
   freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
   gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -1965,7 +1965,7 @@ export type OrderUncheckedUpdateWithoutClientInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2022,7 +2022,7 @@ export type OrderUpdateWithoutFreelancerInput = {
   client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2052,7 +2052,7 @@ export type OrderUncheckedUpdateWithoutFreelancerInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2136,7 +2136,7 @@ export type OrderUpdateWithoutGigInput = {
   client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2166,7 +2166,7 @@ export type OrderUncheckedUpdateWithoutGigInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2250,7 +2250,7 @@ export type OrderUpdateWithoutChatInput = {
   client?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   freelancer?: Prisma.UserUpdateOneRequiredWithoutFreelancerOrdersNestedInput
   gig?: Prisma.GigUpdateOneWithoutOrdersNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2280,7 +2280,7 @@ export type OrderUncheckedUpdateWithoutChatInput = {
   autoCompleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutOrderNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
 }
@@ -2318,10 +2318,12 @@ export type OrderUncheckedUpdateManyWithoutChatInput = {
  */
 
 export type OrderCountOutputType = {
+  reviews: number
   events: number
 }
 
 export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reviews?: boolean | OrderCountOutputTypeCountReviewsArgs
   events?: boolean | OrderCountOutputTypeCountEventsArgs
 }
 
@@ -2333,6 +2335,13 @@ export type OrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Select specific fields to fetch from the OrderCountOutputType
    */
   select?: Prisma.OrderCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewWhereInput
 }
 
 /**
@@ -2373,7 +2382,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
   chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
-  review?: boolean | Prisma.Order$reviewArgs<ExtArgs>
+  reviews?: boolean | Prisma.Order$reviewsArgs<ExtArgs>
   events?: boolean | Prisma.Order$eventsArgs<ExtArgs>
   fromJob?: boolean | Prisma.Order$fromJobArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -2477,7 +2486,7 @@ export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   gig?: boolean | Prisma.Order$gigArgs<ExtArgs>
   chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
-  review?: boolean | Prisma.Order$reviewArgs<ExtArgs>
+  reviews?: boolean | Prisma.Order$reviewsArgs<ExtArgs>
   events?: boolean | Prisma.Order$eventsArgs<ExtArgs>
   fromJob?: boolean | Prisma.Order$fromJobArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -2502,7 +2511,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     freelancer: Prisma.$UserPayload<ExtArgs>
     gig: Prisma.$GigPayload<ExtArgs> | null
     chat: Prisma.$ChatPayload<ExtArgs> | null
-    review: Prisma.$ReviewPayload<ExtArgs> | null
+    reviews: Prisma.$ReviewPayload<ExtArgs>[]
     events: Prisma.$OrderEventPayload<ExtArgs>[]
     fromJob: Prisma.$JobPayload<ExtArgs> | null
   }
@@ -2930,7 +2939,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   freelancer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   gig<T extends Prisma.Order$gigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$gigArgs<ExtArgs>>): Prisma.Prisma__GigClient<runtime.Types.Result.GetResult<Prisma.$GigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   chat<T extends Prisma.Order$chatArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$chatArgs<ExtArgs>>): Prisma.Prisma__ChatClient<runtime.Types.Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  review<T extends Prisma.Order$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$reviewArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  reviews<T extends Prisma.Order$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.Order$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fromJob<T extends Prisma.Order$fromJobArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$fromJobArgs<ExtArgs>>): Prisma.Prisma__JobClient<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -3426,9 +3435,9 @@ export type Order$chatArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }
 
 /**
- * Order.review
+ * Order.reviews
  */
-export type Order$reviewArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Order$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Review
    */
@@ -3442,6 +3451,11 @@ export type Order$reviewArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.ReviewInclude<ExtArgs> | null
   where?: Prisma.ReviewWhereInput
+  orderBy?: Prisma.ReviewOrderByWithRelationInput | Prisma.ReviewOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
 }
 
 /**

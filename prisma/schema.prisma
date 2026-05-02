@@ -128,6 +128,11 @@ enum GigPackageTier {
   PREMIUM
 }
 
+enum ReviewDirection {
+  CLIENT_TO_FREELANCER  // клієнт оцінює фрілансера (стандартний кейс)
+  FREELANCER_TO_CLIENT  // фрілансер оцінює клієнта
+}
+
 // ═══════════════════════════════════════════════════════
 // 2. КОРИСТУВАЧІ
 // ═══════════════════════════════════════════════════════
@@ -162,6 +167,9 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  clientAvgRating    Float @default(0)
+  clientReviewsCount Int   @default(0)
 
   // Зв'язки
   gigs              Gig[]
@@ -359,7 +367,7 @@ model Order {
   autoCompleteAt DateTime?
 
   // ─── Зв'язки ───
-  review  Review?
+  reviews Review[]
   events  OrderEvent[]
   fromJob Job?         @relation("JobToOrder")
 
@@ -525,21 +533,32 @@ model Review {
   rating  Int     // 1–5
   comment String?
  
-  // ─── ЗМІНА: gigId тепер опціональний ───
-  gigId    String?
-  gig      Gig?    @relation(fields: [gigId], references: [id])
+  // ─── НОВЕ: напрямок відгука ───
+  direction ReviewDirection
+ 
+  // gigId опціональний — пов'язується тільки якщо це CLIENT_TO_FREELANCER
+  // і замовлення з gig (бо це впливає на рейтинг гіга)
+  gigId String?
+  gig   Gig?    @relation(fields: [gigId], references: [id])
  
   authorId String
-  author   User    @relation("AuthorReviews", fields: [authorId], references: [id])
-  orderId  String  @unique
-  order    Order   @relation(fields: [orderId], references: [id])
+  author   User   @relation("AuthorReviews", fields: [authorId], references: [id])
+ 
+  // ─── ЗМІНА: orderId БЕЗ @unique ───
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
  
+  // ─── НОВЕ: 1 review per (order, direction) ───
+  // Тобто: один order — максимум 2 review (по одному з кожної сторони)
+  @@unique([orderId, direction])
+ 
   @@index([gigId])
   @@index([authorId])
   @@index([rating])
+  @@index([direction])
 }
 
 // ═══════════════════════════════════════════════════════

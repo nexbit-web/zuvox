@@ -38,9 +38,22 @@
     ORDER_STATUS[order.status] ?? ORDER_STATUS.NEGOTIATING,
   )
 
-  // Чи можна залишити відгук (тільки клієнт, тільки після COMPLETED, тільки якщо ще немає)
-  const canLeaveReview = $derived(
-    isClient && order.status === 'COMPLETED' && !order.review,
+  // Знаходимо відгуки за напрямком
+  const reviewFromClient = $derived(
+    order.reviews.find((r: any) => r.direction === 'CLIENT_TO_FREELANCER') ??
+      null,
+  )
+  const reviewFromFreelancer = $derived(
+    order.reviews.find((r: any) => r.direction === 'FREELANCER_TO_CLIENT') ??
+      null,
+  )
+
+  // Чи може поточний юзер залишити відгук (тільки після COMPLETED, не дублікат)
+  const canClientLeaveReview = $derived(
+    isClient && order.status === 'COMPLETED' && !reviewFromClient,
+  )
+  const canFreelancerLeaveReview = $derived(
+    isFreelancer && order.status === 'COMPLETED' && !reviewFromFreelancer,
   )
 
   // Auto-complete countdown
@@ -205,54 +218,108 @@
         </div>
       {/if}
 
-      <!-- ━━━ REVIEW BLOCK ━━━ -->
-      <!-- Існуючий відгук — показуємо обом сторонам -->
-      {#if order.review}
-        <div
-          class="rounded-xl p-4 mb-6"
-          style="background-color: var(--muted); border: 1px solid var(--border)"
-        >
-          <div class="flex items-center gap-2 mb-2">
-            <h3 class="text-sm font-semibold" style="color: var(--foreground)">
-              Відгук
-            </h3>
-            <div class="flex items-center gap-0.5">
-              {#each Array(5) as _, i}
-                <Star
-                  class="size-3.5"
-                  style="color: {i < order.review.rating
-                    ? '#f59e0b'
-                    : 'var(--border)'};
-                         fill: {i < order.review.rating
-                    ? '#f59e0b'
-                    : 'transparent'}"
-                />
-              {/each}
+      <!-- ━━━ REVIEWS — ДВОСТОРОННІ ━━━ -->
+      {#if order.status === 'COMPLETED'}
+        <div class="space-y-4 mb-6">
+          <!-- Відгук клієнта про фрілансера -->
+          {#if reviewFromClient}
+            <div
+              class="rounded-xl p-4"
+              style="background-color: var(--muted); border: 1px solid var(--border)"
+            >
+              <div class="flex items-center gap-2 mb-2">
+                <h3
+                  class="text-sm font-semibold"
+                  style="color: var(--foreground)"
+                >
+                  Відгук клієнта
+                </h3>
+                <div class="flex items-center gap-0.5">
+                  {#each Array(5) as _, i}
+                    <Star
+                      class="size-3.5"
+                      style="color: {i < reviewFromClient.rating
+                        ? '#f59e0b'
+                        : 'var(--border)'};
+                             fill: {i < reviewFromClient.rating
+                        ? '#f59e0b'
+                        : 'transparent'}"
+                    />
+                  {/each}
+                </div>
+              </div>
+              {#if reviewFromClient.comment}
+                <p class="text-[13px]" style="color: var(--foreground)">
+                  {reviewFromClient.comment}
+                </p>
+              {/if}
             </div>
-          </div>
-          {#if order.review.comment}
-            <p class="text-[13px]" style="color: var(--foreground)">
-              {order.review.comment}
-            </p>
+          {:else if canClientLeaveReview}
+            <ReviewForm
+              orderId={order.id}
+              peerLabel="майстра"
+              peerName={order.freelancer.name ?? ''}
+            />
+          {:else if isFreelancer}
+            <div
+              class="rounded-xl p-4 text-center"
+              style="background-color: var(--muted); border: 1px solid var(--border)"
+            >
+              <p class="text-xs" style="color: var(--muted-foreground)">
+                Очікуємо відгук від клієнта
+              </p>
+            </div>
           {/if}
-        </div>
-      {:else if canLeaveReview}
-        <!-- Форма відгука — тільки клієнту після COMPLETED -->
-        <div class="mb-6">
-          <ReviewForm
-            orderId={order.id}
-            freelancerName={order.freelancer.name ?? 'майстра'}
-          />
-        </div>
-      {:else if order.status === 'COMPLETED' && isFreelancer && !order.review}
-        <!-- Підказка фрілансеру що відгука ще немає -->
-        <div
-          class="rounded-xl p-4 mb-6 text-center"
-          style="background-color: var(--muted); border: 1px solid var(--border)"
-        >
-          <p class="text-xs" style="color: var(--muted-foreground)">
-            Очікуємо відгук від клієнта
-          </p>
+
+          <!-- Відгук фрілансера про клієнта -->
+          {#if reviewFromFreelancer}
+            <div
+              class="rounded-xl p-4"
+              style="background-color: var(--muted); border: 1px solid var(--border)"
+            >
+              <div class="flex items-center gap-2 mb-2">
+                <h3
+                  class="text-sm font-semibold"
+                  style="color: var(--foreground)"
+                >
+                  Відгук майстра
+                </h3>
+                <div class="flex items-center gap-0.5">
+                  {#each Array(5) as _, i}
+                    <Star
+                      class="size-3.5"
+                      style="color: {i < reviewFromFreelancer.rating
+                        ? '#f59e0b'
+                        : 'var(--border)'};
+                             fill: {i < reviewFromFreelancer.rating
+                        ? '#f59e0b'
+                        : 'transparent'}"
+                    />
+                  {/each}
+                </div>
+              </div>
+              {#if reviewFromFreelancer.comment}
+                <p class="text-[13px]" style="color: var(--foreground)">
+                  {reviewFromFreelancer.comment}
+                </p>
+              {/if}
+            </div>
+          {:else if canFreelancerLeaveReview}
+            <ReviewForm
+              orderId={order.id}
+              peerLabel="клієнта"
+              peerName={order.client.name ?? ''}
+            />
+          {:else if isClient}
+            <div
+              class="rounded-xl p-4 text-center"
+              style="background-color: var(--muted); border: 1px solid var(--border)"
+            >
+              <p class="text-xs" style="color: var(--muted-foreground)">
+                Очікуємо відгук від майстра
+              </p>
+            </div>
+          {/if}
         </div>
       {/if}
 
@@ -354,6 +421,16 @@
                 <Star class="size-3" style="fill: currentColor" />
                 {order.freelancer.freelancerProfile.avgRating.toFixed(1)}
                 ({order.freelancer.freelancerProfile.reviewsCount})
+              </p>
+            {/if}
+            {#if isClient && order.client.clientReviewsCount > 0}
+              <p
+                class="text-[11px] inline-flex items-center gap-0.5"
+                style="color: var(--muted-foreground)"
+              >
+                <Star class="size-3" style="fill: currentColor" />
+                {order.client.clientAvgRating.toFixed(1)}
+                ({order.client.clientReviewsCount})
               </p>
             {/if}
           </div>

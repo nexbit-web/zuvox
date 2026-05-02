@@ -10,7 +10,7 @@ import type { RequestHandler } from './$types'
  *
  * Підтримує два формати тіла:
  *   1. { kind: 'avatar' | 'portfolio' }     — для onboarding
- *   2. { folder: string, resourceType?: 'image'|'raw'|'auto' }  — для чату
+ *   2. { folder: string, resourceType?: 'image'|'raw'|'auto' }  — для чату/гігів/deliverables
  *
  * Повертає:
  *   { signature, timestamp, apiKey, cloudName, folder, resourceType }
@@ -24,6 +24,8 @@ const ALLOWED_FOLDERS = [
   'zunor/chat',
   'zunor/avatars',
   'zunor/portfolio',
+  'zunor/gigs',
+  'zunor/deliverables',
 ]
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -66,7 +68,7 @@ export const POST: RequestHandler = async ({ request }) => {
     return json(signUploadParams({ folder, resourceType: 'image' }))
   }
 
-  // ─── Шлях 2: explicit folder + resourceType (для чату) ───
+  // ─── Шлях 2: explicit folder + resourceType ───
   if (body.folder) {
     // Валідація folder — тільки наші префікси, не дозволяємо довільні
     const isAllowed = ALLOWED_FOLDERS.some((p) => body.folder!.startsWith(p))

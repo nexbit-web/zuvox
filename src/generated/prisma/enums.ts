@@ -163,3 +163,11 @@ export const GigPackageTier = {
 } as const
 
 export type GigPackageTier = (typeof GigPackageTier)[keyof typeof GigPackageTier]
+
+
+export const ReviewDirection = {
+  CLIENT_TO_FREELANCER: 'CLIENT_TO_FREELANCER',
+  FREELANCER_TO_CLIENT: 'FREELANCER_TO_CLIENT'
+} as const
+
+export type ReviewDirection = (typeof ReviewDirection)[keyof typeof ReviewDirection]

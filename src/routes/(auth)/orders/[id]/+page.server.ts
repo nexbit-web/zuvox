@@ -23,6 +23,8 @@ export const load: PageServerLoad = async ({ params, request }) => {
           avatar: true,
           city: true,
           verificationStatus: true,
+          clientAvgRating: true,
+          clientReviewsCount: true,
         },
       },
       freelancer: {
@@ -59,11 +61,13 @@ export const load: PageServerLoad = async ({ params, request }) => {
           createdAt: true,
         },
       },
-      review: {
+      reviews: {
         select: {
           id: true,
           rating: true,
           comment: true,
+          direction: true,
+          authorId: true,
           createdAt: true,
         },
       },
@@ -92,9 +96,10 @@ export const load: PageServerLoad = async ({ params, request }) => {
         ...e,
         createdAt: e.createdAt.toISOString(),
       })),
-      review: order.review
-        ? { ...order.review, createdAt: order.review.createdAt.toISOString() }
-        : null,
+      reviews: order.reviews.map((r) => ({
+        ...r,
+        createdAt: r.createdAt.toISOString(),
+      })),
     },
     viewerId: userId,
   }

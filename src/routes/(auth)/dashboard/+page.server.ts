@@ -16,10 +16,6 @@ const experienceLabels: Record<string, string> = {
   Y_10_PLUS: '10+ років',
 }
 
-/**
- * Карточка фрілансера у списку «Мої підписки» — мінімальні поля для
- * рендеру списку (не повний профіль).
- */
 export interface FollowingFreelancer {
   id: string
   username: string | null
@@ -50,10 +46,6 @@ type DashboardData =
       following: FollowingFreelancer[]
     }
 
-/**
- * Завантажує список фрілансерів, на яких підписаний поточний юзер.
- * Сортуємо за датою підписки — найновіші зверху.
- */
 async function loadFollowing(userId: string): Promise<FollowingFreelancer[]> {
   const follows = await prisma.follow.findMany({
     where: { followerId: userId },
@@ -97,6 +89,95 @@ async function loadFollowing(userId: string): Promise<FollowingFreelancer[]> {
   }))
 }
 
+/**
+ * Завантажує відгуки про фрілансера (CLIENT_TO_FREELANCER).
+ */
+async function loadFreelancerReviews(freelancerId: string) {
+  const reviews = await prisma.review.findMany({
+    where: {
+      direction: 'CLIENT_TO_FREELANCER',
+      order: { freelancerId },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 30,
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  })
+
+  return reviews.map((r) => {
+    const name = r.author.name ?? 'Користувач'
+    return {
+      id: r.id,
+      authorName: name,
+      authorInitials: name[0]?.toUpperCase() ?? '?',
+      rating: r.rating,
+      text: r.comment ?? '',
+      createdAt: r.createdAt.toISOString(),
+    }
+  })
+}
+
+/**
+ * Завантажує відгуки про клієнта (FREELANCER_TO_CLIENT).
+ * Автор — фрілансер (master).
+ */
+async function loadClientReviews(clientId: string) {
+  const reviews = await prisma.review.findMany({
+    where: {
+      direction: 'FREELANCER_TO_CLIENT',
+      order: { clientId },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 30,
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      order: {
+        select: {
+          gig: {
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return reviews.map((r) => {
+    const name = r.author.name ?? 'Майстер'
+    return {
+      id: r.id,
+      masterName: name,
+      masterInitials: name[0]?.toUpperCase() ?? '?',
+      rating: r.rating,
+      text: r.comment ?? '',
+      createdAt: r.createdAt.toISOString(),
+      gig: r.order.gig?.title ?? '',
+    }
+  })
+}
+
 export const load: PageServerLoad = async ({
   request,
 }): Promise<DashboardData> => {
@@ -118,6 +199,8 @@ export const load: PageServerLoad = async ({
       verificationStatus: true,
       verificationRejectReason: true,
       portfolioImages: true,
+      clientAvgRating: true,
+      clientReviewsCount: true,
       freelancerProfile: {
         select: {
           categories: true,
@@ -144,7 +227,7 @@ export const load: PageServerLoad = async ({
           packages: {
             orderBy: { priceCents: 'asc' },
             select: { priceCents: true },
-            take: 1, // лише найдешевший — для відображення "від N грн"
+            take: 1,
           },
         },
         orderBy: { createdAt: 'desc' },
@@ -155,11 +238,12 @@ export const load: PageServerLoad = async ({
 
   if (!user) throw redirect(302, '/user/login')
 
-  // Підписки завантажуємо для будь-якої ролі
   const following = await loadFollowing(user.id)
 
   // ─── КЛІЄНТ ───
   if (user.role === 'CLIENT') {
+    const reviews = await loadClientReviews(user.id)
+
     const clientUser: ClientProfileData = {
       id: user.id,
       name: user.name ?? '',
@@ -171,7 +255,7 @@ export const load: PageServerLoad = async ({
       verificationStatus: user.verificationStatus,
       totalOrders: 0,
       completedOrders: 0,
-      reviews: [],
+      reviews,
     }
 
     return {
@@ -195,8 +279,6 @@ export const load: PageServerLoad = async ({
     imageUrl: url,
   }))
 
-  // Мапимо гіги: ціна = найдешевший пакет у гривнах
-  // (для backward compat з UI який очікує gig.price)
   const gigsForUi = user.gigs.map((g) => ({
     id: g.id,
     title: g.title,
@@ -204,6 +286,8 @@ export const load: PageServerLoad = async ({
     price:
       g.packages.length > 0 ? Math.round(g.packages[0].priceCents / 100) : 0,
   }))
+
+  const reviews = await loadFreelancerReviews(user.id)
 
   const freelancerUser: FreelancerProfileData = {
     id: user.id,
@@ -235,7 +319,7 @@ export const load: PageServerLoad = async ({
     successRate,
 
     gigs: gigsForUi,
-    reviews: [],
+    reviews,
     portfolio,
   }
 

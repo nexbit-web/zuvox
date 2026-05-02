@@ -2,6 +2,7 @@
 import { json, error } from '@sveltejs/kit'
 import { auth } from '$lib/auth'
 import { prisma } from '$lib/prisma'
+import { Notify } from '$lib/server/notifications'
 import type { RequestHandler } from './$types'
 
 /**
@@ -15,6 +16,9 @@ import type { RequestHandler } from './$types'
  *   4. Job → CLOSED + selectedOrderId
  *   5. Створюється чат якщо немає
  *   6. Audit log в OrderEvent
+ *
+ * Після успіху (поза транзакцією, fail-soft):
+ *   • Сповіщення обраному фрілансеру про те що його обрали
  */
 export const POST: RequestHandler = async ({ params, request }) => {
   const session = await auth.api.getSession({ headers: request.headers })
@@ -162,6 +166,17 @@ export const POST: RequestHandler = async ({ params, request }) => {
 
     return order
   })
+
+  // ─── Поза транзакцією: сповіщення обраному фрілансеру (fail-soft) ───
+  try {
+    await Notify.proposalAccepted(
+      proposal.freelancerId,
+      result.id,
+      proposal.jobId,
+    )
+  } catch (err) {
+    console.error('[proposal:accept] notification error', err)
+  }
 
   return json({ order: result }, { status: 201 })
 }

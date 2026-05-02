@@ -33,17 +33,74 @@ interface ClientHandleData {
 
 type HandleData = FreelancerHandleData | ClientHandleData
 
-/**
- * /@username
- *
- * Правила доступу:
- *   • FREELANCER → публічний, дивиться всі (навіть гості)
- *   • CLIENT     → приватний за замовчуванням (404 для всіх)
- *     ВИНЯТОК: якщо поточний user-фрілансер має чат з цим клієнтом —
- *     дозволяємо перегляд.
- *
- * Свій профіль завжди → /dashboard.
- */
+async function loadFreelancerReviews(freelancerId: string) {
+  const reviews = await prisma.review.findMany({
+    where: {
+      direction: 'CLIENT_TO_FREELANCER',
+      order: { freelancerId },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 30,
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      author: { select: { id: true, name: true } },
+    },
+  })
+
+  return reviews.map((r) => {
+    const name = r.author.name ?? 'Користувач'
+    return {
+      id: r.id,
+      authorName: name,
+      authorInitials: name[0]?.toUpperCase() ?? '?',
+      rating: r.rating,
+      text: r.comment ?? '',
+      createdAt: r.createdAt.toISOString(),
+    }
+  })
+}
+
+async function loadClientReviews(clientId: string) {
+  const reviews = await prisma.review.findMany({
+    where: {
+      direction: 'FREELANCER_TO_CLIENT',
+      order: { clientId },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 30,
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      author: { select: { id: true, name: true } },
+      order: {
+        select: {
+          gig: {
+            select: { id: true, title: true, slug: true },
+          },
+        },
+      },
+    },
+  })
+
+  return reviews.map((r) => {
+    const name = r.author.name ?? 'Майстер'
+    return {
+      id: r.id,
+      masterName: name,
+      masterInitials: name[0]?.toUpperCase() ?? '?',
+      rating: r.rating,
+      text: r.comment ?? '',
+      createdAt: r.createdAt.toISOString(),
+      gig: r.order.gig?.title ?? '',
+    }
+  })
+}
+
 export const load: PageServerLoad = async ({
   params,
   request,
@@ -67,6 +124,8 @@ export const load: PageServerLoad = async ({
       createdAt: true,
       verificationStatus: true,
       portfolioImages: true,
+      clientAvgRating: true,
+      clientReviewsCount: true,
       freelancerProfile: {
         select: {
           categories: true,
@@ -104,12 +163,11 @@ export const load: PageServerLoad = async ({
 
   if (!user) throw error(404, 'Користувача не знайдено')
 
-  // Свій профіль → редірект на /dashboard
   if (session && user.id === session.user.id) {
     throw redirect(302, '/dashboard')
   }
 
-  // ─── CLIENT: перевірка приватності ───
+  // ─── CLIENT: приватність ───
   if (user.role === 'CLIENT') {
     if (!session) throw error(404, 'Користувача не знайдено')
 
@@ -117,7 +175,6 @@ export const load: PageServerLoad = async ({
       throw error(404, 'Користувача не знайдено')
     }
 
-    // Перевіряємо чи між ними є чат (DM з рівно 2 учасниками)
     const sharedChat = await prisma.chat.findFirst({
       where: {
         AND: [
@@ -130,6 +187,8 @@ export const load: PageServerLoad = async ({
 
     if (!sharedChat) throw error(404, 'Користувача не знайдено')
 
+    const reviews = await loadClientReviews(user.id)
+
     const clientUser: ClientProfileData = {
       id: user.id,
       name: user.name ?? '',
@@ -141,7 +200,7 @@ export const load: PageServerLoad = async ({
       verificationStatus: user.verificationStatus,
       totalOrders: 0,
       completedOrders: 0,
-      reviews: [],
+      reviews,
     }
 
     return {
@@ -152,7 +211,7 @@ export const load: PageServerLoad = async ({
     }
   }
 
-  // ─── FREELANCER: публічний, рендеримо завжди ───
+  // ─── FREELANCER ───
   let isFollowing = false
   if (session) {
     const follow = await prisma.follow.findUnique({
@@ -178,11 +237,8 @@ export const load: PageServerLoad = async ({
     imageUrl: url,
   }))
 
-  // Phone тільки для авторизованих
   const phone = isAuthenticated ? (user.phone ?? undefined) : undefined
 
-  // Мапимо гіги: ціна = найдешевший пакет у гривнах
-  // (для backward compat з UI який очікує gig.price)
   const gigsForUi = user.gigs.map((g) => ({
     id: g.id,
     title: g.title,
@@ -190,6 +246,8 @@ export const load: PageServerLoad = async ({
     price:
       g.packages.length > 0 ? Math.round(g.packages[0].priceCents / 100) : 0,
   }))
+
+  const reviews = await loadFreelancerReviews(user.id)
 
   const profileUser: FreelancerProfileData = {
     id: user.id,
@@ -221,7 +279,7 @@ export const load: PageServerLoad = async ({
     successRate,
 
     gigs: gigsForUi,
-    reviews: [],
+    reviews,
     portfolio,
   }
 

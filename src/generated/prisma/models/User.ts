@@ -20,8 +20,20 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  clientAvgRating: number | null
+  clientReviewsCount: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  clientAvgRating: number | null
+  clientReviewsCount: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -45,6 +57,8 @@ export type UserMinAggregateOutputType = {
   lastSeen: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  clientAvgRating: number | null
+  clientReviewsCount: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -68,6 +82,8 @@ export type UserMaxAggregateOutputType = {
   lastSeen: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  clientAvgRating: number | null
+  clientReviewsCount: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -93,9 +109,21 @@ export type UserCountAggregateOutputType = {
   lastSeen: number
   createdAt: number
   updatedAt: number
+  clientAvgRating: number
+  clientReviewsCount: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  clientAvgRating?: true
+  clientReviewsCount?: true
+}
+
+export type UserSumAggregateInputType = {
+  clientAvgRating?: true
+  clientReviewsCount?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -118,6 +146,8 @@ export type UserMinAggregateInputType = {
   lastSeen?: true
   createdAt?: true
   updatedAt?: true
+  clientAvgRating?: true
+  clientReviewsCount?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -141,6 +171,8 @@ export type UserMaxAggregateInputType = {
   lastSeen?: true
   createdAt?: true
   updatedAt?: true
+  clientAvgRating?: true
+  clientReviewsCount?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -166,6 +198,8 @@ export type UserCountAggregateInputType = {
   lastSeen?: true
   createdAt?: true
   updatedAt?: true
+  clientAvgRating?: true
+  clientReviewsCount?: true
   _all?: true
 }
 
@@ -207,6 +241,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -237,6 +283,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -264,7 +312,11 @@ export type UserGroupByOutputType = {
   lastSeen: Date
   createdAt: Date
   updatedAt: Date
+  clientAvgRating: number
+  clientReviewsCount: number
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -310,6 +362,8 @@ export type UserWhereInput = {
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  clientAvgRating?: Prisma.FloatFilter<"User"> | number
+  clientReviewsCount?: Prisma.IntFilter<"User"> | number
   gigs?: Prisma.GigListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   freelancerOrders?: Prisma.OrderListRelationFilter
@@ -350,6 +404,8 @@ export type UserOrderByWithRelationInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
   gigs?: Prisma.GigOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
   freelancerOrders?: Prisma.OrderOrderByRelationAggregateInput
@@ -393,6 +449,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  clientAvgRating?: Prisma.FloatFilter<"User"> | number
+  clientReviewsCount?: Prisma.IntFilter<"User"> | number
   gigs?: Prisma.GigListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   freelancerOrders?: Prisma.OrderListRelationFilter
@@ -433,9 +491,13 @@ export type UserOrderByWithAggregationInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -464,6 +526,8 @@ export type UserScalarWhereWithAggregatesInput = {
   lastSeen?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  clientAvgRating?: Prisma.FloatWithAggregatesFilter<"User"> | number
+  clientReviewsCount?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
@@ -489,6 +553,8 @@ export type UserCreateInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -529,6 +595,8 @@ export type UserUncheckedCreateInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -569,6 +637,8 @@ export type UserUpdateInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -609,6 +679,8 @@ export type UserUncheckedUpdateInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -649,6 +721,8 @@ export type UserCreateManyInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
 }
 
 export type UserUpdateManyMutationInput = {
@@ -674,6 +748,8 @@ export type UserUpdateManyMutationInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -699,6 +775,8 @@ export type UserUncheckedUpdateManyInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type StringNullableListFilter<$PrismaModel = never> = {
@@ -732,6 +810,13 @@ export type UserCountOrderByAggregateInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -755,6 +840,8 @@ export type UserMaxOrderByAggregateInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -778,6 +865,13 @@ export type UserMinOrderByAggregateInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  clientAvgRating?: Prisma.SortOrder
+  clientReviewsCount?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -834,6 +928,22 @@ export type EnumRoleFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type UserCreateNestedOneWithoutFollowingInput = {
@@ -1071,6 +1181,8 @@ export type UserCreateWithoutFollowingInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -1110,6 +1222,8 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -1154,6 +1268,8 @@ export type UserCreateWithoutFollowersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -1193,6 +1309,8 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -1248,6 +1366,8 @@ export type UserUpdateWithoutFollowingInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -1287,6 +1407,8 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -1337,6 +1459,8 @@ export type UserUpdateWithoutFollowersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -1376,6 +1500,8 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -1415,6 +1541,8 @@ export type UserCreateWithoutFreelancerProfileInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -1454,6 +1582,8 @@ export type UserUncheckedCreateWithoutFreelancerProfileInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -1509,6 +1639,8 @@ export type UserUpdateWithoutFreelancerProfileInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -1548,6 +1680,8 @@ export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -1587,6 +1721,8 @@ export type UserCreateWithoutGigsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
@@ -1626,6 +1762,8 @@ export type UserUncheckedCreateWithoutGigsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
@@ -1681,6 +1819,8 @@ export type UserUpdateWithoutGigsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
@@ -1720,6 +1860,8 @@ export type UserUncheckedUpdateWithoutGigsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
@@ -1759,6 +1901,8 @@ export type UserCreateWithoutOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
@@ -1798,6 +1942,8 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
@@ -1842,6 +1988,8 @@ export type UserCreateWithoutFreelancerOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
@@ -1881,6 +2029,8 @@ export type UserUncheckedCreateWithoutFreelancerOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
@@ -1936,6 +2086,8 @@ export type UserUpdateWithoutOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
@@ -1975,6 +2127,8 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
@@ -2025,6 +2179,8 @@ export type UserUpdateWithoutFreelancerOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
@@ -2064,6 +2220,8 @@ export type UserUncheckedUpdateWithoutFreelancerOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
@@ -2103,6 +2261,8 @@ export type UserCreateWithoutOrderEventsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -2142,6 +2302,8 @@ export type UserUncheckedCreateWithoutOrderEventsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -2197,6 +2359,8 @@ export type UserUpdateWithoutOrderEventsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -2236,6 +2400,8 @@ export type UserUncheckedUpdateWithoutOrderEventsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -2275,6 +2441,8 @@ export type UserCreateWithoutJobsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -2314,6 +2482,8 @@ export type UserUncheckedCreateWithoutJobsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -2369,6 +2539,8 @@ export type UserUpdateWithoutJobsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -2408,6 +2580,8 @@ export type UserUncheckedUpdateWithoutJobsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -2447,6 +2621,8 @@ export type UserCreateWithoutProposalsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -2486,6 +2662,8 @@ export type UserUncheckedCreateWithoutProposalsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -2541,6 +2719,8 @@ export type UserUpdateWithoutProposalsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -2580,6 +2760,8 @@ export type UserUncheckedUpdateWithoutProposalsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -2619,6 +2801,8 @@ export type UserCreateWithoutWalletInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -2658,6 +2842,8 @@ export type UserUncheckedCreateWithoutWalletInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -2713,6 +2899,8 @@ export type UserUpdateWithoutWalletInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -2752,6 +2940,8 @@ export type UserUncheckedUpdateWithoutWalletInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -2791,6 +2981,8 @@ export type UserCreateWithoutReviewsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -2830,6 +3022,8 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -2885,6 +3079,8 @@ export type UserUpdateWithoutReviewsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -2924,6 +3120,8 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -2963,6 +3161,8 @@ export type UserCreateWithoutChatsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -3002,6 +3202,8 @@ export type UserUncheckedCreateWithoutChatsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -3057,6 +3259,8 @@ export type UserUpdateWithoutChatsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -3096,6 +3300,8 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -3135,6 +3341,8 @@ export type UserCreateWithoutSentMessagesInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -3174,6 +3382,8 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -3229,6 +3439,8 @@ export type UserUpdateWithoutSentMessagesInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -3268,6 +3480,8 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -3307,6 +3521,8 @@ export type UserCreateWithoutSessionsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -3346,6 +3562,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -3401,6 +3619,8 @@ export type UserUpdateWithoutSessionsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -3440,6 +3660,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -3479,6 +3701,8 @@ export type UserCreateWithoutAccountsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
@@ -3518,6 +3742,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
   gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
   freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
@@ -3573,6 +3799,8 @@ export type UserUpdateWithoutAccountsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
@@ -3612,6 +3840,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -3790,6 +4020,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  clientAvgRating?: boolean
+  clientReviewsCount?: boolean
   gigs?: boolean | Prisma.User$gigsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   freelancerOrders?: boolean | Prisma.User$freelancerOrdersArgs<ExtArgs>
@@ -3831,6 +4063,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  clientAvgRating?: boolean
+  clientReviewsCount?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -3856,6 +4090,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  clientAvgRating?: boolean
+  clientReviewsCount?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -3881,9 +4117,11 @@ export type UserSelectScalar = {
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  clientAvgRating?: boolean
+  clientReviewsCount?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "username" | "bio" | "phone" | "city" | "avatar" | "avatarPublicId" | "banner" | "bannerPublicId" | "portfolioImages" | "portfolioImagesPublicIds" | "verificationStatus" | "verificationRejectReason" | "verifiedAt" | "role" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "username" | "bio" | "phone" | "city" | "avatar" | "avatarPublicId" | "banner" | "bannerPublicId" | "portfolioImages" | "portfolioImagesPublicIds" | "verificationStatus" | "verificationRejectReason" | "verifiedAt" | "role" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt" | "clientAvgRating" | "clientReviewsCount", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gigs?: boolean | Prisma.User$gigsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
@@ -3947,6 +4185,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     lastSeen: Date
     createdAt: Date
     updatedAt: Date
+    clientAvgRating: number
+    clientReviewsCount: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -4407,6 +4647,8 @@ export interface UserFieldRefs {
   readonly lastSeen: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly clientAvgRating: Prisma.FieldRef<"User", 'Float'>
+  readonly clientReviewsCount: Prisma.FieldRef<"User", 'Int'>
 }
     
 
