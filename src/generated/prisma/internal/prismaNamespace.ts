@@ -401,6 +401,7 @@ export const ModelName = {
   Message: 'Message',
   Category: 'Category',
   Subcategory: 'Subcategory',
+  Service: 'Service',
   Session: 'Session',
   Account: 'Account',
   OtpCode: 'OtpCode'
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "follow" | "freelancerProfile" | "gig" | "gigPackage" | "order" | "orderEvent" | "job" | "proposal" | "wallet" | "walletTransaction" | "review" | "chat" | "chatMember" | "message" | "category" | "subcategory" | "session" | "account" | "otpCode"
+    modelProps: "user" | "follow" | "freelancerProfile" | "gig" | "gigPackage" | "order" | "orderEvent" | "job" | "proposal" | "wallet" | "walletTransaction" | "review" | "chat" | "chatMember" | "message" | "category" | "subcategory" | "service" | "session" | "account" | "otpCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1681,6 +1682,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Service: {
+      payload: Prisma.$ServicePayload<ExtArgs>
+      fields: Prisma.ServiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ServiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ServiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+        }
+        findFirst: {
+          args: Prisma.ServiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ServiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+        }
+        findMany: {
+          args: Prisma.ServiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>[]
+        }
+        create: {
+          args: Prisma.ServiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+        }
+        createMany: {
+          args: Prisma.ServiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ServiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>[]
+        }
+        delete: {
+          args: Prisma.ServiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+        }
+        update: {
+          args: Prisma.ServiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+        }
+        deleteMany: {
+          args: Prisma.ServiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ServiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ServiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>[]
+        }
+        upsert: {
+          args: Prisma.ServiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+        }
+        aggregate: {
+          args: Prisma.ServiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateService>
+        }
+        groupBy: {
+          args: Prisma.ServiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ServiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ServiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ServiceCountAggregateOutputType> | number
+        }
+      }
+    }
     Session: {
       payload: Prisma.$SessionPayload<ExtArgs>
       fields: Prisma.SessionFieldRefs
@@ -2230,9 +2305,20 @@ export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeo
 
 export const CategoryScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   name: 'name',
+  description: 'description',
   icon: 'icon',
-  count: 'count'
+  color: 'color',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  gigsCount: 'gigsCount',
+  jobsCount: 'jobsCount',
+  freelancersCount: 'freelancersCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -2240,11 +2326,41 @@ export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typ
 
 export const SubcategoryScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   name: 'name',
-  categoryId: 'categoryId'
+  description: 'description',
+  icon: 'icon',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  categoryId: 'categoryId',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  gigsCount: 'gigsCount',
+  jobsCount: 'jobsCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SubcategoryScalarFieldEnum = (typeof SubcategoryScalarFieldEnum)[keyof typeof SubcategoryScalarFieldEnum]
+
+
+export const ServiceScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  avgPriceCents: 'avgPriceCents',
+  subcategoryId: 'subcategoryId',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  gigsCount: 'gigsCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
@@ -2636,6 +2752,20 @@ export type EnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 export type ListEnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType[]'>
     
 
+
+/**
+ * Reference to a field of type 'CategoryStatus'
+ */
+export type EnumCategoryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategoryStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CategoryStatus[]'
+ */
+export type ListEnumCategoryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategoryStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2748,6 +2878,7 @@ export type GlobalOmitConfig = {
   message?: Prisma.MessageOmit
   category?: Prisma.CategoryOmit
   subcategory?: Prisma.SubcategoryOmit
+  service?: Prisma.ServiceOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   otpCode?: Prisma.OtpCodeOmit

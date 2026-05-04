@@ -127,6 +127,11 @@ export type Category = Prisma.CategoryModel
  */
 export type Subcategory = Prisma.SubcategoryModel
 /**
+ * Model Service
+ * 
+ */
+export type Service = Prisma.ServiceModel
+/**
  * Model Session
  * 
  */

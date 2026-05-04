@@ -68,6 +68,7 @@ export const ModelName = {
   Message: 'Message',
   Category: 'Category',
   Subcategory: 'Subcategory',
+  Service: 'Service',
   Session: 'Session',
   Account: 'Account',
   OtpCode: 'OtpCode'
@@ -377,9 +378,20 @@ export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeo
 
 export const CategoryScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   name: 'name',
+  description: 'description',
   icon: 'icon',
-  count: 'count'
+  color: 'color',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  gigsCount: 'gigsCount',
+  jobsCount: 'jobsCount',
+  freelancersCount: 'freelancersCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -387,11 +399,41 @@ export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typ
 
 export const SubcategoryScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   name: 'name',
-  categoryId: 'categoryId'
+  description: 'description',
+  icon: 'icon',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  categoryId: 'categoryId',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  gigsCount: 'gigsCount',
+  jobsCount: 'jobsCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SubcategoryScalarFieldEnum = (typeof SubcategoryScalarFieldEnum)[keyof typeof SubcategoryScalarFieldEnum]
+
+
+export const ServiceScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  avgPriceCents: 'avgPriceCents',
+  subcategoryId: 'subcategoryId',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  gigsCount: 'gigsCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {

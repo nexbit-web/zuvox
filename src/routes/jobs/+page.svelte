@@ -8,6 +8,7 @@
     ChevronDown,
     X,
     Briefcase,
+    Sparkles,
   } from 'lucide-svelte'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import JobCard from '$lib/components/jobs/job-card.svelte'
@@ -23,6 +24,13 @@
   let budgetMin = $state(data.filters.budgetMin)
   let budgetMax = $state(data.filters.budgetMax)
   let sort = $state(data.filters.sort || 'recent')
+
+  // Хто бачить фільтри:
+  //   • Фрілансер — так, це його робочий каталог
+  //   • Гість — так, він міг би бути фрілансером
+  //   • Клієнт — НІ, для нього сторінка інакша (CTA "опублікувати заявку")
+  const isClient = $derived(data.currentUserRole === 'CLIENT')
+  const showFilters = $derived(!isClient)
 
   function applyFilters() {
     const params = new URLSearchParams()
@@ -109,27 +117,35 @@
   const typeLabel = $derived(
     TYPE_OPTIONS.find((o) => o.value === type)?.label ?? 'Будь-який',
   )
+
+  // Текст під заголовком — різний для ролей
+  const subtitle = $derived(
+    isClient
+      ? 'Тут фрілансери шукають роботу. Опублікуйте свою заявку, щоб отримати відгуки.'
+      : 'Знайдіть роботу під ваші навички. Швидкий старт — без бюрократії.',
+  )
+
+  const titleText = $derived(
+    isClient ? 'Заявки фрілансерів' : 'Заявки клієнтів',
+  )
 </script>
 
 <svelte:head>
-  <title>Заявки клієнтів · Zunor</title>
+  <title>Заявки · Zunor</title>
 </svelte:head>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
   <!-- ━━━ HEADER ━━━ -->
   <div class="flex items-start justify-between gap-4 mb-5">
-    <div>
+    <div class="min-w-0">
       <h1
         class="text-2xl sm:text-[28px] font-bold tracking-tight"
         style="color: var(--foreground)"
       >
-        Заявки клієнтів
+        {titleText}
       </h1>
-      <p
-        class="text-sm mt-1"
-        style="color: var(--muted-foreground)"
-      >
-        Знайдіть роботу, яка вам підходить
+      <p class="text-sm mt-1" style="color: var(--muted-foreground)">
+        {subtitle}
       </p>
     </div>
     {#if data.isAuthenticated}
@@ -146,28 +162,188 @@
     {/if}
   </div>
 
-  <!-- ━━━ FILTERS CARD ━━━ -->
-  <div
-    class="rounded-xl p-4 mb-5"
-    style="background-color: var(--card); border: 1px solid var(--border)"
-  >
-    <!-- Row 1: search + category + city -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-      <!-- Search -->
-      <div class="relative">
-        <Search
-          class="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+  <!-- ━━━ CLIENT CTA BANNER ━━━ -->
+  {#if isClient}
+    <div
+      class="rounded-xl p-5 sm:p-6 mb-5 flex items-center gap-4"
+      style="background-color: var(--card); border: 1px solid var(--border)"
+    >
+      <div
+        class="size-10 sm:size-12 rounded-full flex items-center justify-center shrink-0"
+        style="background-color: var(--muted)"
+      >
+        <Sparkles class="size-5" style="color: var(--foreground)" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <p
+          class="text-sm sm:text-base font-semibold mb-0.5"
+          style="color: var(--foreground)"
+        >
+          Швидкий шлях до результату
+        </p>
+        <p
+          class="text-xs sm:text-[13px] leading-relaxed"
           style="color: var(--muted-foreground)"
-        />
+        >
+          Опишіть задачу — фрілансери надішлють відгуки протягом години. Ви
+          оберете найкращого.
+        </p>
+      </div>
+      <button
+        type="button"
+        onclick={() => goto('/jobs/new')}
+        class="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-sm font-semibold cursor-pointer transition-opacity hover:opacity-90 shrink-0"
+        style="background-color: var(--primary); color: var(--primary-foreground)"
+      >
+        <Plus class="size-4" />
+        Створити
+      </button>
+    </div>
+  {/if}
+
+  <!-- ━━━ FILTERS CARD (тільки для фрілансерів і гостей) ━━━ -->
+  {#if showFilters}
+    <div
+      class="rounded-xl p-4 mb-5"
+      style="background-color: var(--card); border: 1px solid var(--border)"
+    >
+      <!-- Row 1: search + category + city -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
+        <div class="relative">
+          <Search
+            class="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+            style="color: var(--muted-foreground)"
+          />
+          <input
+            type="text"
+            bind:value={searchInput}
+            onkeydown={onSearchKey}
+            placeholder="Пошук заявок"
+            class="w-full h-11 pl-10 pr-3 rounded-lg text-sm outline-none transition-colors"
+            style="background-color: var(--muted);
+                   border: 1px solid transparent;
+                   color: var(--foreground)"
+            onfocus={(e) => {
+              ;(e.currentTarget as HTMLInputElement).style.borderColor =
+                'var(--ring)'
+            }}
+            onblur={(e) => {
+              ;(e.currentTarget as HTMLInputElement).style.borderColor =
+                'transparent'
+            }}
+          />
+        </div>
+
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <button
+                {...props}
+                type="button"
+                class="w-full h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
+                style="background-color: var(--muted);
+                       color: {category
+                  ? 'var(--foreground)'
+                  : 'var(--muted-foreground)'}"
+              >
+                <span class="truncate">{category || 'Категорія'}</span>
+                <ChevronDown
+                  class="size-4 shrink-0"
+                  style="color: var(--muted-foreground)"
+                />
+              </button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
+            class="w-[var(--radix-dropdown-menu-trigger-width)] max-h-72 overflow-y-auto"
+          >
+            {#if category}
+              <DropdownMenu.Item
+                class="cursor-pointer text-sm"
+                onclick={() => {
+                  category = ''
+                  applyFilters()
+                }}
+              >
+                <span style="color: var(--muted-foreground)">Усі категорії</span
+                >
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+            {/if}
+            {#each CATEGORY_OPTIONS as cat}
+              <DropdownMenu.Item
+                class="cursor-pointer text-sm"
+                onclick={() => {
+                  category = cat
+                  applyFilters()
+                }}
+              >
+                {cat}
+              </DropdownMenu.Item>
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <button
+                {...props}
+                type="button"
+                class="w-full h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
+                style="background-color: var(--muted);
+                       color: {city
+                  ? 'var(--foreground)'
+                  : 'var(--muted-foreground)'}"
+              >
+                <span class="truncate">{city || 'Місто'}</span>
+                <ChevronDown
+                  class="size-4 shrink-0"
+                  style="color: var(--muted-foreground)"
+                />
+              </button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
+            class="w-[var(--radix-dropdown-menu-trigger-width)] max-h-72 overflow-y-auto"
+          >
+            {#if city}
+              <DropdownMenu.Item
+                class="cursor-pointer text-sm"
+                onclick={() => {
+                  city = ''
+                  applyFilters()
+                }}
+              >
+                <span style="color: var(--muted-foreground)">Усі міста</span>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+            {/if}
+            {#each CITY_OPTIONS as c}
+              <DropdownMenu.Item
+                class="cursor-pointer text-sm"
+                onclick={() => {
+                  city = c
+                  applyFilters()
+                }}
+              >
+                {c}
+              </DropdownMenu.Item>
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </div>
+
+      <!-- Row 2: budget + type + sort -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <input
-          type="text"
-          bind:value={searchInput}
+          type="number"
+          bind:value={budgetMin}
           onkeydown={onSearchKey}
-          placeholder="Пошук заявок"
-          class="w-full h-11 pl-10 pr-3 rounded-lg text-sm outline-none transition-colors"
-          style="background-color: var(--muted);
-                 border: 1px solid transparent;
-                 color: var(--foreground)"
+          placeholder="Бюджет від, ₴"
+          min="0"
+          class="h-11 px-4 rounded-lg text-sm outline-none transition-colors"
+          style="background-color: var(--muted); border: 1px solid transparent; color: var(--foreground)"
           onfocus={(e) => {
             ;(e.currentTarget as HTMLInputElement).style.borderColor =
               'var(--ring)'
@@ -177,238 +353,123 @@
               'transparent'
           }}
         />
+        <input
+          type="number"
+          bind:value={budgetMax}
+          onkeydown={onSearchKey}
+          placeholder="Бюджет до, ₴"
+          min="0"
+          class="h-11 px-4 rounded-lg text-sm outline-none transition-colors"
+          style="background-color: var(--muted); border: 1px solid transparent; color: var(--foreground)"
+          onfocus={(e) => {
+            ;(e.currentTarget as HTMLInputElement).style.borderColor =
+              'var(--ring)'
+          }}
+          onblur={(e) => {
+            ;(e.currentTarget as HTMLInputElement).style.borderColor =
+              'transparent'
+          }}
+        />
+
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <button
+                {...props}
+                type="button"
+                class="h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
+                style="background-color: var(--muted); color: var(--foreground)"
+              >
+                <span class="truncate">{typeLabel}</span>
+                <ChevronDown
+                  class="size-4 shrink-0"
+                  style="color: var(--muted-foreground)"
+                />
+              </button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
+            class="w-[var(--radix-dropdown-menu-trigger-width)]"
+          >
+            {#each TYPE_OPTIONS as opt}
+              <DropdownMenu.Item
+                class="cursor-pointer text-sm"
+                onclick={() => {
+                  type = opt.value
+                  applyFilters()
+                }}
+              >
+                {opt.label}
+              </DropdownMenu.Item>
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <button
+                {...props}
+                type="button"
+                class="h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
+                style="background-color: var(--muted); color: var(--foreground)"
+              >
+                <span class="truncate">Сорт: {sortLabel}</span>
+                <ChevronDown
+                  class="size-4 shrink-0"
+                  style="color: var(--muted-foreground)"
+                />
+              </button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
+            class="w-[var(--radix-dropdown-menu-trigger-width)]"
+          >
+            {#each SORT_OPTIONS as opt}
+              <DropdownMenu.Item
+                class="cursor-pointer text-sm"
+                onclick={() => {
+                  sort = opt.value
+                  applyFilters()
+                }}
+              >
+                {opt.label}
+              </DropdownMenu.Item>
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </div>
 
-      <!-- Category dropdown -->
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          {#snippet child({ props })}
-            <button
-              {...props}
-              type="button"
-              class="w-full h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
-              style="background-color: var(--muted);
-                     color: {category ? 'var(--foreground)' : 'var(--muted-foreground)'}"
-            >
-              <span class="truncate">{category || 'Категорія'}</span>
-              <ChevronDown
-                class="size-4 shrink-0"
-                style="color: var(--muted-foreground)"
-              />
-            </button>
-          {/snippet}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content class="w-[var(--radix-dropdown-menu-trigger-width)] max-h-72 overflow-y-auto">
-          {#if category}
-            <DropdownMenu.Item
-              class="cursor-pointer text-sm"
-              onclick={() => {
-                category = ''
-                applyFilters()
-              }}
-            >
-              <span style="color: var(--muted-foreground)">Усі категорії</span>
-            </DropdownMenu.Item>
-            <DropdownMenu.Separator />
-          {/if}
-          {#each CATEGORY_OPTIONS as cat}
-            <DropdownMenu.Item
-              class="cursor-pointer text-sm"
-              onclick={() => {
-                category = cat
-                applyFilters()
-              }}
-            >
-              {cat}
-            </DropdownMenu.Item>
-          {/each}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-
-      <!-- City dropdown -->
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          {#snippet child({ props })}
-            <button
-              {...props}
-              type="button"
-              class="w-full h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
-              style="background-color: var(--muted);
-                     color: {city ? 'var(--foreground)' : 'var(--muted-foreground)'}"
-            >
-              <span class="truncate">{city || 'Місто'}</span>
-              <ChevronDown
-                class="size-4 shrink-0"
-                style="color: var(--muted-foreground)"
-              />
-            </button>
-          {/snippet}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content class="w-[var(--radix-dropdown-menu-trigger-width)] max-h-72 overflow-y-auto">
-          {#if city}
-            <DropdownMenu.Item
-              class="cursor-pointer text-sm"
-              onclick={() => {
-                city = ''
-                applyFilters()
-              }}
-            >
-              <span style="color: var(--muted-foreground)">Усі міста</span>
-            </DropdownMenu.Item>
-            <DropdownMenu.Separator />
-          {/if}
-          {#each CITY_OPTIONS as c}
-            <DropdownMenu.Item
-              class="cursor-pointer text-sm"
-              onclick={() => {
-                city = c
-                applyFilters()
-              }}
-            >
-              {c}
-            </DropdownMenu.Item>
-          {/each}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </div>
-
-    <!-- Row 2: budget min/max + type + sort -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <input
-        type="number"
-        bind:value={budgetMin}
-        onkeydown={onSearchKey}
-        placeholder="Бюджет від, ₴"
-        min="0"
-        class="h-11 px-4 rounded-lg text-sm outline-none transition-colors"
-        style="background-color: var(--muted);
-               border: 1px solid transparent;
-               color: var(--foreground)"
-        onfocus={(e) => {
-          ;(e.currentTarget as HTMLInputElement).style.borderColor =
-            'var(--ring)'
-        }}
-        onblur={(e) => {
-          ;(e.currentTarget as HTMLInputElement).style.borderColor =
-            'transparent'
-        }}
-      />
-      <input
-        type="number"
-        bind:value={budgetMax}
-        onkeydown={onSearchKey}
-        placeholder="Бюджет до, ₴"
-        min="0"
-        class="h-11 px-4 rounded-lg text-sm outline-none transition-colors"
-        style="background-color: var(--muted);
-               border: 1px solid transparent;
-               color: var(--foreground)"
-        onfocus={(e) => {
-          ;(e.currentTarget as HTMLInputElement).style.borderColor =
-            'var(--ring)'
-        }}
-        onblur={(e) => {
-          ;(e.currentTarget as HTMLInputElement).style.borderColor =
-            'transparent'
-        }}
-      />
-
-      <!-- Type -->
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          {#snippet child({ props })}
-            <button
-              {...props}
-              type="button"
-              class="h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
-              style="background-color: var(--muted); color: var(--foreground)"
-            >
-              <span class="truncate">{typeLabel}</span>
-              <ChevronDown
-                class="size-4 shrink-0"
-                style="color: var(--muted-foreground)"
-              />
-            </button>
-          {/snippet}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content class="w-[var(--radix-dropdown-menu-trigger-width)]">
-          {#each TYPE_OPTIONS as opt}
-            <DropdownMenu.Item
-              class="cursor-pointer text-sm"
-              onclick={() => {
-                type = opt.value
-                applyFilters()
-              }}
-            >
-              {opt.label}
-            </DropdownMenu.Item>
-          {/each}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-
-      <!-- Sort -->
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          {#snippet child({ props })}
-            <button
-              {...props}
-              type="button"
-              class="h-11 px-4 rounded-lg text-sm cursor-pointer transition-colors flex items-center justify-between gap-2"
-              style="background-color: var(--muted); color: var(--foreground)"
-            >
-              <span class="truncate">Сорт: {sortLabel}</span>
-              <ChevronDown
-                class="size-4 shrink-0"
-                style="color: var(--muted-foreground)"
-              />
-            </button>
-          {/snippet}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content class="w-[var(--radix-dropdown-menu-trigger-width)]">
-          {#each SORT_OPTIONS as opt}
-            <DropdownMenu.Item
-              class="cursor-pointer text-sm"
-              onclick={() => {
-                sort = opt.value
-                applyFilters()
-              }}
-            >
-              {opt.label}
-            </DropdownMenu.Item>
-          {/each}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </div>
-
-    <!-- Row 3: actions + counter -->
-    <div class="flex items-center justify-between gap-2 mt-3">
-      <div class="flex items-center gap-2">
-        <button
-          type="button"
-          onclick={applyFilters}
-          class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium cursor-pointer transition-colors"
-          style="background-color: var(--muted); color: var(--foreground)"
-        >
-          <SlidersHorizontal class="size-3.5" />
-          Застосувати
-        </button>
-        {#if hasFilters}
+      <!-- Row 3: actions + counter -->
+      <div class="flex items-center justify-between gap-2 mt-3">
+        <div class="flex items-center gap-2">
           <button
             type="button"
-            onclick={clearAll}
-            class="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm cursor-pointer transition-colors"
-            style="color: var(--muted-foreground)"
+            onclick={applyFilters}
+            class="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium cursor-pointer transition-colors"
+            style="background-color: var(--muted); color: var(--foreground)"
           >
-            <X class="size-3.5" />
-            Очистити
+            <SlidersHorizontal class="size-3.5" />
+            Застосувати
           </button>
-        {/if}
+          {#if hasFilters}
+            <button
+              type="button"
+              onclick={clearAll}
+              class="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm cursor-pointer transition-colors"
+              style="color: var(--muted-foreground)"
+            >
+              <X class="size-3.5" />
+              Очистити
+            </button>
+          {/if}
+        </div>
+        <span class="text-xs" style="color: var(--muted-foreground)">
+          Знайдено: {data.total}
+        </span>
       </div>
-      <span class="text-xs" style="color: var(--muted-foreground)">
-        Знайдено: {data.total}
-      </span>
     </div>
-  </div>
+  {/if}
 
   <!-- ━━━ RESULTS ━━━ -->
   {#if data.items.length === 0}
@@ -422,14 +483,15 @@
       >
         <Briefcase class="size-5" style="color: var(--muted-foreground)" />
       </div>
-      <p
-        class="text-base font-semibold mb-1"
-        style="color: var(--foreground)"
-      >
-        Немає заявок під ваш запит
+      <p class="text-base font-semibold mb-1" style="color: var(--foreground)">
+        {isClient
+          ? 'Поки немає опублікованих заявок'
+          : 'Немає заявок під ваш запит'}
       </p>
       <p class="text-sm" style="color: var(--muted-foreground)">
-        Спробуйте змінити фільтри або повернутись пізніше
+        {isClient
+          ? 'Опублікуйте першу — фрілансери чекають'
+          : 'Спробуйте змінити фільтри або повернутись пізніше'}
       </p>
     </div>
   {:else}

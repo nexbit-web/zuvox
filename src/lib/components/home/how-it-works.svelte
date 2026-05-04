@@ -1,12 +1,11 @@
-<!-- src/lib/components/home/how-it-works.svelte -->
 <script lang="ts">
-  import { Search, Shield, Zap } from 'lucide-svelte'
+  import { Search, Shield, Zap, ArrowRight } from 'lucide-svelte'
 
   const steps = [
     {
       icon: Search,
       step: '01',
-      title: 'Створіть замовлення ',
+      title: 'Створіть замовлення',
       desc: 'Детально опишіть, що і коли потрібно зробити',
     },
     {
@@ -24,75 +23,63 @@
   ]
 </script>
 
-<section class="py-20" style="background-color: var(--bg-header)">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <!-- Заголовок -->
-    <div class="text-center mb-14">
-      <p
-        class="text-xs font-semibold uppercase tracking-widest mb-2"
-        style="color: var(--primary)"
-      >
-        Просто і зрозуміло
-      </p>
-      <h2 class="text-3xl font-bold" style="color: var(--foreground)">
+<section class="py-24 border-t" style="background-color: var(--background); border-color: var(--border)">
+  <div class="max-w-6xl mx-auto px-6">
+    
+    <!-- Заголовок в стиле Uber: огромный, жирный, с акцентной линией -->
+    <div class="mb-20">
+      <h2 class="text-4xl md:text-6xl font-bold tracking-tighter mb-8" style="color: var(--foreground)">
         Як це працює
       </h2>
+      <!-- Та самая Uber-линия -->
+      <div class="h-1.5 w-24" style="background-color: var(--primary)"></div>
     </div>
 
-    <!-- Кроки -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-      <!-- Лінія між кроками на десктопі -->
-      <div
-        class="hidden md:block absolute top-10 left-1/3 right-1/3 h-px"
-        style="background: linear-gradient(to right, color-mix(in oklch, var(--primary) 30%, transparent), color-mix(in oklch, var(--primary) 30%, transparent))"
-      ></div>
+    <!-- Сетка без карточек — только чистый контент и воздух -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12">
+      {#each steps as step}
+        <div class="group flex flex-col items-start">
+          
+          <!-- Номер шага: маленький, но жирный -->
+          <span class="text-sm font-black mb-6 opacity-40 tracking-widest" style="color: var(--foreground)">
+            {step.step} —
+          </span>
 
-      {#each steps as step, i}
-        <div
-          class="relative flex flex-col items-center text-center p-8 rounded-2xl border"
-          style="background-color: var(--background); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
-        >
-          <!-- Номер кроку -->
-          <div
-            class="absolute top-4 right-4 text-[11px] font-bold tracking-wider"
-            style="color: var(--primary); opacity: 0.5"
-          >
-            {step.step}
-          </div>
-
-          <!-- Іконка -->
-          <div
-            class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
-            style="background-color: color-mix(in oklch, var(--primary) 10%, transparent)"
-          >
-            <step.icon class="w-6 h-6" style="color: var(--primary)" />
+          <!-- Иконка: большая, тонкая (stroke 1.0) -->
+          <div class="mb-10 transition-transform duration-500 group-hover:scale-110 group-hover:translate-x-2">
+            <step.icon size={60} strokeWidth={1} style="color: var(--foreground)" />
           </div>
 
           <!-- Текст -->
-          <h3
-            class="text-base font-semibold mb-2"
-            style="color: var(--foreground)"
-          >
-            {step.title}
-          </h3>
-          <p
-            class="text-sm leading-relaxed"
-            style="color: var(--muted-foreground)"
-          >
-            {step.desc}
-          </p>
+          <div class="space-y-4">
+            <h3 class="text-2xl font-bold tracking-tight" style="color: var(--foreground)">
+              {step.title}
+            </h3>
+            <p class="text-[17px] leading-relaxed opacity-60 max-w-[280px]" style="color: var(--foreground)">
+              {step.desc}
+            </p>
+          </div>
 
-          <!-- З'єднувальна стрілка між кроками на мобілі -->
-          {#if i < steps.length - 1}
-            <div
-              class="md:hidden mt-6 text-xl"
-              style="color: var(--primary); opacity: 0.3"
-            >
-              ↓
-            </div>
-          {/if}
+          <!-- Интерактивный элемент (по желанию) -->
+          <div class="mt-8 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+            <span class="text-xs font-bold uppercase tracking-wider">Почати</span>
+            <ArrowRight size={14} />
+          </div>
         </div>
       {/each}
     </div>
   </div>
 </section>
+
+<style>
+  /* Uber стиль строится на шрифтах без засечек и больших отступах */
+  section {
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  /* Тонкая настройка для темного режима */
+  :global(.dark) section {
+    border-top-width: 1px;
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+</style>

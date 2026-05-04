@@ -171,3 +171,12 @@ export const ReviewDirection = {
 } as const
 
 export type ReviewDirection = (typeof ReviewDirection)[keyof typeof ReviewDirection]
+
+
+export const CategoryStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CategoryStatus = (typeof CategoryStatus)[keyof typeof CategoryStatus]

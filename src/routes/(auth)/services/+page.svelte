@@ -1,21 +1,49 @@
-<!-- src/routes/(app)/services/+page.svelte -->
 <script lang="ts">
-  import { ArrowRight, Search, X, SlidersHorizontal } from 'lucide-svelte'
+  import {
+    ArrowRight,
+    Search,
+    X,
+    SlidersHorizontal,
+    Check,
+    ChevronsUpDown,
+    Plus,
+    RotateCcw,
+  } from 'lucide-svelte'
   import { onMount } from 'svelte'
-  import { Skeleton } from '$lib/components/ui/skeleton'
+  import { fade, scale, fly } from 'svelte/transition'
+  import { backOut } from 'svelte/easing'
+
+  // UI Components (shadcn)
   import * as Dialog from '$lib/components/ui/dialog'
   import { Button } from '$lib/components/ui/button'
   import { Input } from '$lib/components/ui/input'
-  import { fade } from 'svelte/transition'
-  import { Check, ChevronsUpDown } from 'lucide-svelte'
+  import { Skeleton } from '$lib/components/ui/skeleton'
   import * as Command from '$lib/components/ui/command'
   import * as Popover from '$lib/components/ui/popover'
-  import { cn } from '$lib/utils'
 
-  const categories = [
+  // --- ТИПЫ ---
+  interface Item {
+    value: string
+    label: string
+  }
+  interface Category {
+    name: string
+    subs: string[]
+  }
+
+  // --- ДАННЫЕ ---
+  const rawCategories: Category[] = [
     {
       name: 'Домашній майстер',
-      subs: ['Сантехнік', 'Електрик', 'Чоловік на годину', 'Столяр', 'Слюсар'],
+      subs: [
+        'Сантехнік',
+        'Електрик',
+        'Чоловік на годину',
+        'Столяр',
+        'Слюсар',
+        'Монтажник',
+        'Дезінфектор',
+      ],
     },
     {
       name: 'Ремонт техніки',
@@ -74,268 +102,56 @@
         'Ремонт повербанків',
         'Ремонт UPS',
         'Підключення генераторів',
-        'Обслуговування генераторів',
-      ],
-    },
-    {
-      name: 'Транспортні послуги',
-      subs: [
-        'Вантажні перевезення',
-        'Послуги вантажників',
-        'Вивіз сміття',
-        'Перевезення меблів',
-        'Переїзд',
-      ],
-    },
-    {
-      name: 'Побутові послуги',
-      subs: ['Сад і город', 'Няні', 'Доглядальниця', 'Домробітниця', 'Швачка'],
-    },
-    {
-      name: 'Ремонт авто',
-      subs: [
-        'Допомога в дорозі',
-        'Діагностика',
-        'Автоелектрика',
-        'Кузовні роботи',
-        'Двигун',
-      ],
-    },
-    {
-      name: "Кур'єрські послуги",
-      subs: [
-        "Кур'єрська доставка",
-        'Доставка продуктів',
-        'Доставка їжі',
-        'Доставка ліків',
-        "Кур'єр на авто",
-      ],
-    },
-    {
-      name: 'Digital Marketing',
-      subs: [
-        'Контекстна реклама',
-        'SEO оптимізація',
-        'Копірайтинг',
-        'SMM',
-        'Email-маркетинг',
-      ],
-    },
-    {
-      name: 'AI послуги',
-      subs: [
-        'Створення AI контенту',
-        'AI консалтинг',
-        'Розробка на базі AI',
-        'Аналітика даних',
-      ],
-    },
-    {
-      name: 'Реклама',
-      subs: [
-        'Розміщення оголошень',
-        'Роздача флаєрів',
-        'Розклеювання',
-        'Реклама в скриньки',
-      ],
-    },
-    {
-      name: 'Дизайн',
-      subs: [
-        'Розробка логотипів',
-        "Дизайн інтер'єру",
-        'Дизайн сайту',
-        'Дизайн поліграфії',
-        'Друк',
-      ],
-    },
-    {
-      name: 'Репетитори',
-      subs: [
-        'Викладачі з предметів',
-        'Іноземні мови',
-        'Написання робіт',
-        'Музика',
-        'Автоінструктори',
-      ],
-    },
-    {
-      name: 'Розробка сайтів',
-      subs: [
-        'Створення сайтів',
-        'Доробка сайту',
-        'Landing page',
-        'Верстка',
-        'Тестування QA',
-      ],
-    },
-    {
-      name: 'Робота в інтернеті',
-      subs: [
-        'Збір інформації',
-        'Наповнення сайтів',
-        'Набір тексту',
-        'Введення даних',
-        'Розшифровка',
-      ],
-    },
-    {
-      name: 'Фото і відео',
-      subs: [
-        'Фотограф',
-        'Відеооператор',
-        'Обробка фото',
-        'Монтаж відео',
-        'Оцифровка',
-      ],
-    },
-    {
-      name: 'Ділові послуги',
-      subs: [
-        'Бухгалтерія',
-        'Юридичні послуги',
-        'Ріелтор',
-        'Колл-центр',
-        'Фінансові послуги',
-      ],
-    },
-    {
-      name: 'Послуги для тварин',
-      subs: [
-        'Догляд за котами',
-        'Догляд за собаками',
-        'Готель для тварин',
-        'Перевезення тварин',
-        'Догляд за рибками',
-      ],
-    },
-    {
-      name: "Краса і здоров'я",
-      subs: ['Масаж', 'Манікюр', 'Косметологія', 'Вії', 'Брови'],
-    },
-    {
-      name: 'Організація свят',
-      subs: [
-        'Послуги ведучого',
-        'Музичний супровід',
-        'Аніматори',
-        'Харчування',
-        'Випічка',
-      ],
-    },
-    {
-      name: 'Переклади',
-      subs: [
-        'Письмові переклади',
-        'Редактура',
-        'Переклад документів',
-        'Усні переклади',
-        'Технічний переклад',
-      ],
-    },
-    {
-      name: 'Послуги тренерів',
-      subs: [
-        'Йога',
-        'Груповий фітнес',
-        'Ігрові види спорту',
-        'Водні види спорту',
-        'Бойові мистецтва',
-      ],
-    },
-    {
-      name: 'Волонтерська допомога',
-      subs: [
-        'Допомога літнім',
-        'Транспортні перевезення',
-        'Доставка пального',
-        'Житло',
-        'Доставка їжі',
       ],
     },
   ]
 
-  const cities = [
+  const categories = rawCategories.map((c) => ({
+    ...c,
+    subs: [...new Set(c.subs)],
+  }))
+
+  const cities: Item[] = [
     { value: 'all', label: 'Вся Україна' },
     { value: 'kyiv', label: 'Київ' },
     { value: 'kharkiv', label: 'Харків' },
     { value: 'odesa', label: 'Одеса' },
     { value: 'dnipro', label: 'Дніпро' },
-    { value: 'zaporizhzhia', label: 'Запоріжжя' },
     { value: 'lviv', label: 'Львів' },
-    { value: 'kryvyi-rih', label: 'Кривий Ріг' },
-    { value: 'mykolaiv', label: 'Миколаїв' },
-    { value: 'vinnytsia', label: 'Вінниця' },
-    { value: 'poltava', label: 'Полтава' },
-    { value: 'cherkasy', label: 'Черкаси' },
-    { value: 'zhytomyr', label: 'Житомир' },
-    { value: 'sumy', label: 'Суми' },
   ]
 
-  const types = [
+  const types: Item[] = [
     { value: 'all', label: 'Всі типи' },
     { value: 'online', label: 'Онлайн' },
     { value: 'offline', label: 'Офлайн' },
     { value: 'visit', label: 'Виїзд до клієнта' },
   ]
 
-  // Застосовані фільтри
+  // --- СОСТОЯНИЕ (Runes) ---
   let search = $state('')
   let city = $state('all')
   let type = $state('all')
 
-  // Чернетка в модалці
   let draftSearch = $state('')
   let draftCity = $state('all')
   let draftType = $state('all')
 
   let dialogOpen = $state(false)
   let loaded = $state(false)
+  let cityPopoverOpen = $state(false)
 
-  onMount(() => setTimeout(() => (loaded = true), 700))
-
-  // При відкритті — копіюємо поточні фільтри в чернетку
-  $effect(() => {
-    if (dialogOpen) {
-      draftSearch = search
-      draftCity = city
-      draftType = type
-    }
+  onMount(() => {
+    setTimeout(() => (loaded = true), 400)
   })
 
-  function applyFilters() {
-    search = draftSearch
-    city = draftCity
-    type = draftType
-    dialogOpen = false
-  }
-
-  function resetDraft() {
-    draftSearch = ''
-    draftCity = 'all'
-    draftType = 'all'
-  }
-
-  function resetAll() {
-    search = ''
-    city = 'all'
-    type = 'all'
-    dialogOpen = false
-  }
-
+  // --- ЛОГИКА ---
   const activeCount = $derived(
     (search.trim() ? 1 : 0) +
       (city !== 'all' ? 1 : 0) +
       (type !== 'all' ? 1 : 0),
   )
 
-  const cityLabel = $derived(
-    cities.find((c) => c.value === city)?.label ?? 'Вся Україна',
-  )
-  const typeLabel = $derived(
-    types.find((t) => t.value === type)?.label ?? 'Всі типи',
-  )
-
+  // Исправлено название переменной для шаблона
   const filtered = $derived(
     (() => {
       const q = search.trim().toLowerCase()
@@ -347,294 +163,260 @@
           if (!matchName && !matchSubs.length) return null
           return { name: cat.name, subs: matchName ? cat.subs : matchSubs }
         })
-        .filter(Boolean) as typeof categories
+        .filter(Boolean) as Category[]
     })(),
   )
 
-  let cityPopoverOpen = $state(false)
+  function openFilters() {
+    draftSearch = search
+    draftCity = city
+    draftType = type
+    dialogOpen = true
+  }
+
+  function applyFilters() {
+    search = draftSearch
+    city = draftCity
+    type = draftType
+    dialogOpen = false
+  }
+
+  function resetDrafts() {
+    draftSearch = ''
+    draftCity = 'all'
+    draftType = 'all'
+  }
+
+  function resetAll() {
+    search = ''
+    city = 'all'
+    type = 'all'
+    resetDrafts()
+    dialogOpen = false
+  }
 </script>
 
-<svelte:head>
-  <title>Всі послуги - Zunor</title>
-  <meta
-    name="description"
-    content="Каталог послуг Zunor: ремонт, дизайн, IT, клінінг, доставка та інші напрямки. Знаходьте перевірених фахівців і замовляйте послуги онлайн."
-  />
-</svelte:head>
+<div class="min-h-screen relative overflow-hidden bg-background">
+  <!-- Клеточный фон -->
+  <div
+    class="absolute inset-0 pointer-events-none opacity-[0.03]"
+    style="background-image: linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px); background-size: 40px 40px;"
+  ></div>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-  <!-- Шапка -->
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="text-3xl font-bold" style="color: var(--foreground)">
-        Всі послуги
-      </h1>
-      <p class="text-sm mt-0.5" style="color: var(--muted-foreground)">
-        {filtered.length} категорій
-      </p>
-    </div>
-
-    <!-- Кнопка фільтрів -->
-    <button
-      type="button"
-      onclick={() => (dialogOpen = true)}
-      class="relative flex items-center gap-2 h-9 px-4 rounded-xl border text-sm font-medium cursor-pointer transition-all hover:opacity-80"
-      style="
-        background-color: {activeCount > 0
-        ? 'color-mix(in oklch, var(--primary) 8%, transparent)'
-        : 'color-mix(in oklch, var(--foreground) 5%, transparent)'};
-        border-color: {activeCount > 0
-        ? 'color-mix(in oklch, var(--primary) 30%, transparent)'
-        : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
-        color: {activeCount > 0 ? 'var(--primary)' : 'var(--foreground)'};
-      "
+  <div class="max-w-6xl mx-auto px-6 py-12 relative z-10">
+    <!-- Header -->
+    <header
+      class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
     >
-      <SlidersHorizontal class="w-4 h-4" />
-      Фільтри
-      {#if activeCount > 0}
-        <span
-          class="w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
-          style="background-color: var(--primary)"
+      <div in:fly={{ y: 20, duration: 500, easing: backOut }}>
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tighter mb-2">
+          Всі послуги
+        </h1>
+        <p class="text-sm font-medium opacity-40">
+          Знайдено {filtered.length} напрямків
+        </p>
+      </div>
+
+      <Button
+        variant="outline"
+        onclick={openFilters}
+        class="rounded-full gap-2.5 border-muted-foreground/20 hover:bg-secondary transition-all active:scale-95"
+      >
+        <SlidersHorizontal size={14} class="opacity-60" />
+        <span class="text-sm font-semibold">Фільтри</span>
+        {#if activeCount > 0}
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground font-bold"
+            in:scale
+          >
+            {activeCount}
+          </span>
+        {/if}
+      </Button>
+    </header>
+
+    <!-- Сетка -->
+    {#if !loaded}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {#each Array(6) as _}
+          <div
+            class="h-[280px] p-6 rounded-2xl border border-border bg-card/50"
+          >
+            <Skeleton class="h-6 w-2/3 mb-6" />
+            <div class="space-y-4">
+              <Skeleton class="h-4 w-full" />
+              <Skeleton class="h-4 w-3/4" />
+              <Skeleton class="h-4 w-5/6" />
+            </div>
+          </div>
+        {/each}
+      </div>
+    {:else if filtered.length === 0}
+      <div class="py-32 text-center" in:fade>
+        <Search size={48} class="mx-auto mb-4 opacity-10" />
+        <h3 class="text-lg font-bold text-foreground">Нічого не знайдено</h3>
+        <button
+          onclick={resetAll}
+          class="text-sm text-primary font-bold mt-2 cursor-pointer hover:underline"
         >
-          {activeCount}
-        </span>
-      {/if}
-    </button>
+          Скинути пошук
+        </button>
+      </div>
+    {:else}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {#each filtered as cat, i (cat.name)}
+          <div
+            in:fly={{ y: 20, duration: 400, delay: i * 30 }}
+            class="group flex flex-col h-full p-6 rounded-2xl border border-border bg-card transition-all hover:border-foreground/20 shadow-sm"
+          >
+            <a
+              href="/gigs?category={encodeURIComponent(cat.name)}"
+              class="flex items-start justify-between mb-5"
+            >
+              <h2 class="text-lg font-extrabold leading-tight text-foreground">
+                {cat.name}
+              </h2>
+              <ArrowRight
+                size={18}
+                class="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary"
+              />
+            </a>
+
+            <ul class="flex-1 space-y-2">
+              {#each cat.subs.slice(0, 5) as sub}
+                <li>
+                  <a
+                    href="/gigs?category={encodeURIComponent(
+                      cat.name,
+                    )}&sub={encodeURIComponent(sub)}"
+                    class="text-sm font-medium opacity-50 hover:opacity-100 hover:text-primary transition-all block text-foreground"
+                  >
+                    {sub}
+                  </a>
+                </li>
+              {/each}
+            </ul>
+
+            {#if cat.subs.length > 5}
+              <a
+                href="/gigs?category={encodeURIComponent(cat.name)}"
+                class="mt-4 pt-4 border-t border-border flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity text-foreground"
+              >
+                <Plus size={12} /> Ще {cat.subs.length - 5} категорій
+              </a>
+            {/if}
+          </div>
+        {/each}
+      </div>
+    {/if}
   </div>
-
-  <!-- Активні фільтри — чіпси -->
-  {#if activeCount > 0}
-    <div class="flex flex-wrap gap-2 mb-6" transition:fade={{ duration: 150 }}>
-      {#if search.trim()}
-        <span
-          class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border"
-          style="background-color: color-mix(in oklch, var(--primary) 8%, transparent); border-color: color-mix(in oklch, var(--primary) 20%, transparent); color: var(--primary)"
-        >
-          «{search}»
-          <button
-            type="button"
-            onclick={() => (search = '')}
-            class="cursor-pointer hover:opacity-70"
-          >
-            <X class="w-3 h-3" />
-          </button>
-        </span>
-      {/if}
-      {#if city !== 'all'}
-        <span
-          class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border"
-          style="background-color: color-mix(in oklch, var(--primary) 8%, transparent); border-color: color-mix(in oklch, var(--primary) 20%, transparent); color: var(--primary)"
-        >
-          {cityLabel}
-          <button
-            type="button"
-            onclick={() => (city = 'all')}
-            class="cursor-pointer hover:opacity-70"
-          >
-            <X class="w-3 h-3" />
-          </button>
-        </span>
-      {/if}
-      {#if type !== 'all'}
-        <span
-          class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border"
-          style="background-color: color-mix(in oklch, var(--primary) 8%, transparent); border-color: color-mix(in oklch, var(--primary) 20%, transparent); color: var(--primary)"
-        >
-          {typeLabel}
-          <button
-            type="button"
-            onclick={() => (type = 'all')}
-            class="cursor-pointer hover:opacity-70"
-          >
-            <X class="w-3 h-3" />
-          </button>
-        </span>
-      {/if}
-      <button
-        type="button"
-        onclick={resetAll}
-        class="text-xs cursor-pointer hover:opacity-70 px-1"
-        style="color: var(--muted-foreground)"
-      >
-        Скинути все
-      </button>
-    </div>
-  {/if}
-
-  <!-- Skeleton -->
-  {#if !loaded}
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10"
-    >
-      {#each Array(9) as _}
-        <div class="flex flex-col gap-2">
-          <Skeleton class="h-5 w-40 rounded" />
-          <Skeleton class="h-3.5 w-28 rounded" />
-          <Skeleton class="h-3.5 w-32 rounded" />
-          <Skeleton class="h-3.5 w-24 rounded" />
-          <Skeleton class="h-3.5 w-36 rounded" />
-          <Skeleton class="h-3.5 w-28 rounded" />
-        </div>
-      {/each}
-    </div>
-  {:else if filtered.length === 0}
-    <div class="flex flex-col items-center py-24 gap-2">
-      <Search
-        class="w-8 h-8 mb-2"
-        style="color: var(--muted-foreground); opacity: 0.3"
-      />
-      <p class="text-sm font-medium" style="color: var(--foreground)">
-        Нічого не знайдено
-      </p>
-      <button
-        type="button"
-        onclick={resetAll}
-        class="text-xs mt-1 cursor-pointer hover:opacity-70"
-        style="color: var(--primary)"
-      >
-        Скинути фільтри
-      </button>
-    </div>
-  {:else}
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10"
-    >
-      {#each filtered as cat}
-        <div>
-          <a
-            href="/gigs?category={encodeURIComponent(cat.name)}"
-            class="group inline-flex items-center gap-1 mb-3 hover:opacity-70 transition-opacity cursor-pointer"
-          >
-            <h2 class="text-base font-bold" style="color: var(--foreground)">
-              {cat.name}
-            </h2>
-            <ArrowRight
-              class="w-4 h-4 transition-transform duration-150 group-hover:translate-x-0.5"
-              style="color: var(--foreground)"
-            />
-          </a>
-          <ul class="flex flex-col gap-2">
-            {#each cat.subs as sub}
-              <li>
-                <a
-                  href="/gigs?category={encodeURIComponent(
-                    cat.name,
-                  )}&sub={encodeURIComponent(sub)}"
-                  class="text-sm transition-opacity hover:opacity-70 cursor-pointer"
-                  style="color: var(--muted-foreground)"
-                >
-                  {sub}
-                </a>
-              </li>
-            {/each}
-          </ul>
-        </div>
-      {/each}
-    </div>
-  {/if}
 </div>
 
-<!-- Модальне вікно фільтрів -->
 <Dialog.Root bind:open={dialogOpen}>
-  <Dialog.Content class="sm:max-w-md">
-    <Dialog.Header>
-      <Dialog.Title>Фільтри</Dialog.Title>
-      <Dialog.Description>Налаштуйте пошук послуг</Dialog.Description>
-    </Dialog.Header>
+  <Dialog.Content
+    class="max-w-[380px] p-0 border-none bg-card shadow-2xl rounded-[32px] overflow-hidden"
+  >
+    <div class="px-6 pt-6 pb-2 flex items-center justify-between">
+      <Dialog.Title class="text-xl font-bold tracking-tight"
+        >Налаштування</Dialog.Title
+      >
+      <button
+        onclick={() => (dialogOpen = false)}
+        class="p-2 rounded-full hover:bg-muted opacity-40 hover:opacity-100 transition-all"
+      >
+        <X size={20} />
+      </button>
+    </div>
 
-    <div class="flex flex-col gap-5 py-2">
-      <!-- Пошук -->
-      <div class="flex flex-col gap-1.5">
-        <label class="text-sm font-medium" style="color: var(--foreground)"
+    <div class="p-6 space-y-7">
+      <!-- Поиск -->
+      <div class="space-y-2.5">
+        <label
+          class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1"
           >Послуга</label
         >
-        <div class="relative">
+        <div class="relative group">
           <Search
-            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-            style="color: var(--muted-foreground)"
+            class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 group-focus-within:opacity-100 group-focus-within:text-primary transition-all"
           />
           <Input
             bind:value={draftSearch}
-            type="text"
-            placeholder="Введіть назву послуги..."
-            class="pl-9"
+            placeholder="Наприклад: Сантехнік"
+            class="h-11 pl-10 bg-muted/40 border-transparent focus:border-primary/30 focus:bg-background rounded-2xl transition-all"
           />
         </div>
       </div>
 
-      <!-- Місто -->
-      <div class="flex flex-col gap-1.5">
-        <label class="text-sm font-medium" style="color: var(--foreground)"
-          >Місто</label
+      <!-- Город -->
+      <div class="space-y-2.5">
+        <label
+          class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1"
+          >Локація</label
         >
-
         <Popover.Root bind:open={cityPopoverOpen}>
           <Popover.Trigger>
             {#snippet child({ props })}
               <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={cityPopoverOpen}
-                class="w-full justify-between font-normal"
                 {...props}
+                variant="outline"
+                class="w-full h-11 justify-between bg-muted/40 border-transparent rounded-2xl px-4 hover:bg-muted/60 transition-all font-medium"
               >
-                {cities.find((c) => c.value === draftCity)?.label ??
-                  'Оберіть місто...'}
-                <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                <span class={draftCity === 'all' ? 'opacity-40' : ''}>
+                  {cities.find((c) => c.value === draftCity)?.label}
+                </span>
+                <ChevronsUpDown class="w-4 h-4 opacity-30" />
               </Button>
             {/snippet}
           </Popover.Trigger>
-
-          <Popover.Content class="w-full p-0">
+          <Popover.Content
+            class="w-[332px] p-1 bg-popover border-border rounded-2xl shadow-xl"
+            align="start"
+          >
             <Command.Root>
-              <Command.Input placeholder="Пошук міста..." />
-              <Command.Empty>Місто не знайдено</Command.Empty>
-              <Command.Group>
-                {#each cities as c}
-                  <Command.Item
-                    value={c.label}
-                    onSelect={() => {
-                      draftCity = c.value
-                      cityPopoverOpen = false
-                    }}
-                  >
-                    <Check
-                      class={cn(
-                        'mr-2 h-4 w-4',
-                        draftCity === c.value ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
-                    {c.label}
-                  </Command.Item>
-                {/each}
-              </Command.Group>
+              <Command.Input placeholder="Шукати місто..." />
+              <Command.List class="max-h-40">
+                <Command.Empty>Не знайдено</Command.Empty>
+                <Command.Group>
+                  {#each cities as c}
+                    <Command.Item
+                      value={c.label}
+                      onSelect={() => {
+                        draftCity = c.value
+                        cityPopoverOpen = false
+                      }}
+                      class="flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer aria-selected:bg-accent transition-colors text-foreground"
+                    >
+                      <div class="w-4 flex items-center justify-center">
+                        {#if draftCity === c.value}
+                          <span in:scale={{ duration: 150, start: 0.5 }}
+                            ><Check class="w-4 h-4 text-primary" /></span
+                          >
+                        {/if}
+                      </div>
+                      <span class="text-sm font-medium">{c.label}</span>
+                    </Command.Item>
+                  {/each}
+                </Command.Group>
+              </Command.List>
             </Command.Root>
           </Popover.Content>
         </Popover.Root>
       </div>
 
-      <!-- Тип -->
-      <div class="flex flex-col gap-1.5">
-        <label class="text-sm font-medium" style="color: var(--foreground)"
-          >Тип послуги</label
+      <!-- Формат -->
+      <div class="space-y-2.5">
+        <label
+          class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1"
+          >Формат</label
         >
-        <div class="grid grid-cols-2 gap-2">
+        <div class="flex flex-wrap gap-2">
           {#each types as t}
             <button
-              type="button"
               onclick={() => (draftType = t.value)}
-              class="h-9 px-3 rounded-xl border text-sm font-medium transition-all cursor-pointer"
-              style="
-                background-color: {draftType === t.value
-                ? 'var(--primary)'
-                : 'color-mix(in oklch, var(--foreground) 5%, transparent)'};
-                color: {draftType === t.value
-                ? 'white'
-                : 'var(--muted-foreground)'};
-                border-color: {draftType === t.value
-                ? 'var(--primary)'
-                : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
-              "
+              class="px-4 py-1.5 rounded-full text-xs font-bold transition-all border shrink-0 {draftType ===
+              t.value
+                ? 'active-chip'
+                : 'inactive-chip'}"
             >
               {t.label}
             </button>
@@ -643,13 +425,43 @@
       </div>
     </div>
 
-    <Dialog.Footer class="flex flex-col-reverse sm:flex-row gap-2 pt-2">
-      <Button variant="ghost" onclick={resetDraft} class="w-full sm:w-auto">
-        Скинути
-      </Button>
-      <Button onclick={applyFilters} class="w-full sm:w-auto">
+    <div
+      class="p-5 bg-muted/20 border-t border-border/50 flex items-center gap-4"
+    >
+      <button
+        onclick={resetDrafts}
+        class="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-tight opacity-30 hover:opacity-100 transition-opacity"
+      >
+        <RotateCcw size={12} /> Скинути
+      </button>
+      <Button
+        onclick={applyFilters}
+        class="flex-1 h-11 rounded-2xl bg-foreground text-background font-bold hover:opacity-90 active:scale-[0.98] transition-all"
+      >
         Застосувати
       </Button>
-    </Dialog.Footer>
+    </div>
   </Dialog.Content>
 </Dialog.Root>
+
+<style>
+  .active-chip {
+    background-color: var(--foreground);
+    color: var(--background);
+    border-color: var(--foreground);
+  }
+  .inactive-chip {
+    background-color: transparent;
+    color: var(--foreground);
+    border-color: var(--border);
+    opacity: 0.5;
+  }
+  .inactive-chip:hover {
+    opacity: 1;
+    background-color: var(--muted);
+  }
+
+  :global([data-dialog-close]) {
+    display: none !important;
+  }
+</style>

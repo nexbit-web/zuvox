@@ -1,186 +1,132 @@
-<!-- src/lib/components/home/categories-section.svelte -->
 <script lang="ts">
   import { Skeleton } from '$lib/components/ui/skeleton'
   import { onMount } from 'svelte'
+  import {
+    Truck,
+    Hammer,
+    Settings,
+    Eraser,
+    Factory,
+    Sparkles,
+    Construction,
+    Briefcase,
+    GraduationCap,
+    Wrench,
+    ArrowRight,
+    BrushCleaning,
+    PaintRoller,
+    Drill,
+    Scissors,
+    SquareTerminal,
+    Monitor,
+    WashingMachine,
+  } from 'lucide-svelte'
 
   const mainCategories = [
-    { name: 'Перевезення\nі доставка', img: '/test.png' },
-    { name: 'Ремонт\nі оздоблення', img: '/test.png' },
-    { name: 'Ремонт\nтехніки', img: '/test.png' },
-    { name: 'Уборка', img: '/test.png' },
-    { name: 'Обладнання,\nвиробництво', img: '/test.png' },
-    { name: 'Краса', img: '/test.png' },
-    { name: 'Будівництво', img: '/test.png' },
-    { name: 'Ділові\nпослуги', img: '/test.png' },
-    { name: 'Навчання,\nкурси', img: '/test.png' },
-    { name: 'Встановлення\nтехніки', img: '/test.png' },
+    { name: 'IT', icon: Monitor },
+    { name: 'Перевезення', icon: Truck },
+    { name: 'Ремонт', icon: PaintRoller },
+    { name: 'Техніка', icon: WashingMachine },
+    { name: 'Прибирання', icon: BrushCleaning },
+    { name: 'Краса', icon: Scissors },
+    { name: 'Будівництво', icon: Hammer },
+    { name: 'Навчання', icon: GraduationCap },
+    { name: 'Монтаж', icon: Drill },
   ]
 
   let loaded = $state(false)
   onMount(() => {
     setTimeout(() => (loaded = true), 600)
   })
-
-  const cardBase = `background-color: var(--bg-header); border-color: color-mix(in oklch, var(--foreground) 8%, transparent); height: 110px;`
-  const cardHover = `background-color: var(--bg-header); border-color: color-mix(in oklch, var(--primary) 30%, transparent); height: 110px;`
 </script>
 
-<section class="py-16" style="background-color: var(--background)">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="mb-6">
-      <h2 class="text-2xl font-bold" style="color: var(--foreground)">
+<section class="py-24" style="background-color: var(--background)">
+  <div class="max-w-6xl mx-auto px-6">
+    <!-- Идентичный заголовок в стиле Uber -->
+    <div class="mb-20">
+      <h2
+        class="text-4xl md:text-6xl font-bold tracking-tighter mb-8"
+        style="color: var(--foreground)"
+      >
         Послуги
       </h2>
+      <div class="h-1.5 w-24" style="background-color: var(--primary)"></div>
     </div>
 
-    {#if !loaded}
-      <!-- Skeleton десктоп -->
-      <div class="hidden lg:grid grid-cols-5 gap-3 mb-3">
-        {#each Array(5) as _}
-          <Skeleton class="rounded-2xl" style="height: 110px" />
-        {/each}
-      </div>
-      <div class="hidden lg:grid grid-cols-6 gap-3">
-        {#each Array(6) as _}
-          <Skeleton class="rounded-2xl" style="height: 110px" />
-        {/each}
-      </div>
-
-      <!-- Skeleton мобіль -->
-      <div class="grid grid-cols-2 gap-3 lg:hidden">
+    <!-- Сетка карточек (иконка выше и крупнее) -->
+    <div
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+    >
+      {#if !loaded}
         {#each Array(10) as _}
-          <Skeleton class="rounded-2xl" style="height: 110px" />
+          <Skeleton class="h-[180px] rounded-[1.5rem]" />
         {/each}
-      </div>
-    {:else}
-      <!-- МОБІЛЬ: один grid 2 колонки -->
-      <div class="grid grid-cols-2 gap-3 lg:hidden">
+      {:else}
         {#each mainCategories as cat}
           <a
-            href="/gigs?category={encodeURIComponent(
-              cat.name.replace('\n', ' '),
-            )}"
-            class="group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-200"
-            style={cardBase}
-            onmouseenter={(e) =>
-              ((e.currentTarget as HTMLElement).style.cssText = cardHover)}
-            onmouseleave={(e) =>
-              ((e.currentTarget as HTMLElement).style.cssText = cardBase)}
+            href="/gigs?category={encodeURIComponent(cat.name)}"
+            class="group flex flex-col items-center p-8 h-[180px] rounded-[1.5rem] border transition-all duration-300 hover:bg-[var(--accent)]"
+            style="background-color: var(--card); border-color: var(--border);"
           >
-            <p
-              class="text-[12px] font-semibold px-3 pt-3 leading-snug whitespace-pre-line"
+            <!-- Иконка выше и крупнее, как в image_62c322.png -->
+            <div
+              class="flex-1 flex items-start justify-center pt-2 transition-transform duration-300 group-hover:scale-110"
+            >
+              <cat.icon
+                size={55}
+                strokeWidth={1}
+                style="color: var(--foreground)"
+              />
+            </div>
+
+            <span
+              class="text-[17px] font-bold tracking-tight text-center"
               style="color: var(--foreground)"
             >
               {cat.name}
-            </p>
-            <img
-              src={cat.img}
-              alt={cat.name}
-              loading="lazy"
-              class="absolute bottom-0 right-0 w-20 h-20 object-contain transition-transform duration-300 group-hover:scale-105"
-              style="transform-origin: bottom right"
-            />
+            </span>
           </a>
         {/each}
 
-        <!-- Всі категорії -->
+        <!-- Кнопка "Всі категорії" -->
         <a
           href="/services"
-          class="flex flex-col justify-end rounded-2xl border cursor-pointer transition-all duration-200 p-3"
-          style={cardBase}
-          onmouseenter={(e) =>
-            ((e.currentTarget as HTMLElement).style.cssText = cardHover)}
-          onmouseleave={(e) =>
-            ((e.currentTarget as HTMLElement).style.cssText = cardBase)}
+          class="group flex flex-col items-center p-8 h-[180px] rounded-[1.5rem] border transition-all duration-300 hover:bg-[var(--accent)]"
+          style="background-color: var(--card); border-color: var(--border);"
         >
-          <p
-            class="text-[13px] font-semibold leading-tight"
+          <div
+            class="flex-1 flex items-start justify-center pt-2 transition-transform duration-300 group-hover:translate-x-2"
+          >
+            <ArrowRight
+              size={52}
+              strokeWidth={1}
+              style="color: var(--foreground)"
+            />
+          </div>
+          <span
+            class="text-[15px] font-bold tracking-tight text-center"
             style="color: var(--foreground)"
           >
-            Всі<br />категорії →
-          </p>
+            Всі категорії
+          </span>
         </a>
-      </div>
-
-      <!-- ДЕСКТОП: рядок 1 — 5 карток -->
-      <div class="hidden lg:grid grid-cols-5 gap-3 mb-3">
-        {#each mainCategories.slice(0, 5) as cat}
-          <a
-            href="/gigs?category={encodeURIComponent(
-              cat.name.replace('\n', ' '),
-            )}"
-            class="group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-200 hover:shadow-md"
-            style={cardBase}
-            onmouseenter={(e) =>
-              ((e.currentTarget as HTMLElement).style.cssText = cardHover)}
-            onmouseleave={(e) =>
-              ((e.currentTarget as HTMLElement).style.cssText = cardBase)}
-          >
-            <p
-              class="text-[13px] font-semibold px-4 pt-4 leading-snug whitespace-pre-line"
-              style="color: var(--foreground)"
-            >
-              {cat.name}
-            </p>
-            <img
-              src={cat.img}
-              alt={cat.name}
-              loading="lazy"
-              class="absolute bottom-0 right-0 w-24 h-24 object-contain transition-transform duration-300 group-hover:scale-105"
-              style="transform-origin: bottom right"
-            />
-          </a>
-        {/each}
-      </div>
-
-      <!-- ДЕСКТОП: рядок 2 — 5 карток + всі категорії -->
-      <div class="hidden lg:grid grid-cols-6 gap-3">
-        {#each mainCategories.slice(5) as cat}
-          <a
-            href="/gigs?category={encodeURIComponent(
-              cat.name.replace('\n', ' '),
-            )}"
-            class="group relative overflow-hidden rounded-2xl border cursor-pointer transition-all duration-200 hover:shadow-md"
-            style={cardBase}
-            onmouseenter={(e) =>
-              ((e.currentTarget as HTMLElement).style.cssText = cardHover)}
-            onmouseleave={(e) =>
-              ((e.currentTarget as HTMLElement).style.cssText = cardBase)}
-          >
-            <p
-              class="text-[13px] font-semibold px-4 pt-4 leading-snug whitespace-pre-line"
-              style="color: var(--foreground)"
-            >
-              {cat.name}
-            </p>
-            <img
-              src={cat.img}
-              alt={cat.name}
-              loading="lazy"
-              class="absolute bottom-0 right-0 w-24 h-24 object-contain transition-transform duration-300 group-hover:scale-105"
-              style="transform-origin: bottom right"
-            />
-          </a>
-        {/each}
-
-        <!-- Всі категорії -->
-        <a
-          href="/services"
-          class="group flex flex-col justify-end rounded-2xl border cursor-pointer transition-all duration-200 hover:shadow-md p-4"
-          style={cardBase}
-          onmouseenter={(e) =>
-            ((e.currentTarget as HTMLElement).style.cssText = cardHover)}
-          onmouseleave={(e) =>
-            ((e.currentTarget as HTMLElement).style.cssText = cardBase)}
-        >
-          <p
-            class="text-[13px] font-semibold leading-tight"
-            style="color: var(--foreground)"
-          >
-            Всі<br />категорії →
-          </p>
-        </a>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 </section>
+
+<style>
+  /* Убираем лишние тени, оставляем чистый контур Uber */
+  a {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  a:hover {
+    border-color: var(--primary) !important;
+    transform: translateY(-4px);
+  }
+
+  :global(.dark) a:hover {
+    background-color: var(--catalog-sidebar-hover) !important;
+  }
+</style>

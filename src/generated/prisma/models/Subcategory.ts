@@ -20,46 +20,138 @@ export type SubcategoryModel = runtime.Types.Result.DefaultSelection<Prisma.$Sub
 
 export type AggregateSubcategory = {
   _count: SubcategoryCountAggregateOutputType | null
+  _avg: SubcategoryAvgAggregateOutputType | null
+  _sum: SubcategorySumAggregateOutputType | null
   _min: SubcategoryMinAggregateOutputType | null
   _max: SubcategoryMaxAggregateOutputType | null
 }
 
+export type SubcategoryAvgAggregateOutputType = {
+  sortOrder: number | null
+  gigsCount: number | null
+  jobsCount: number | null
+}
+
+export type SubcategorySumAggregateOutputType = {
+  sortOrder: number | null
+  gigsCount: number | null
+  jobsCount: number | null
+}
+
 export type SubcategoryMinAggregateOutputType = {
   id: string | null
+  slug: string | null
   name: string | null
+  description: string | null
+  icon: string | null
+  status: $Enums.CategoryStatus | null
+  sortOrder: number | null
   categoryId: string | null
+  seoTitle: string | null
+  seoDescription: string | null
+  gigsCount: number | null
+  jobsCount: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SubcategoryMaxAggregateOutputType = {
   id: string | null
+  slug: string | null
   name: string | null
+  description: string | null
+  icon: string | null
+  status: $Enums.CategoryStatus | null
+  sortOrder: number | null
   categoryId: string | null
+  seoTitle: string | null
+  seoDescription: string | null
+  gigsCount: number | null
+  jobsCount: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SubcategoryCountAggregateOutputType = {
   id: number
+  slug: number
   name: number
+  description: number
+  icon: number
+  status: number
+  sortOrder: number
   categoryId: number
+  seoTitle: number
+  seoDescription: number
+  gigsCount: number
+  jobsCount: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
+export type SubcategoryAvgAggregateInputType = {
+  sortOrder?: true
+  gigsCount?: true
+  jobsCount?: true
+}
+
+export type SubcategorySumAggregateInputType = {
+  sortOrder?: true
+  gigsCount?: true
+  jobsCount?: true
+}
+
 export type SubcategoryMinAggregateInputType = {
   id?: true
+  slug?: true
   name?: true
+  description?: true
+  icon?: true
+  status?: true
+  sortOrder?: true
   categoryId?: true
+  seoTitle?: true
+  seoDescription?: true
+  gigsCount?: true
+  jobsCount?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SubcategoryMaxAggregateInputType = {
   id?: true
+  slug?: true
   name?: true
+  description?: true
+  icon?: true
+  status?: true
+  sortOrder?: true
   categoryId?: true
+  seoTitle?: true
+  seoDescription?: true
+  gigsCount?: true
+  jobsCount?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SubcategoryCountAggregateInputType = {
   id?: true
+  slug?: true
   name?: true
+  description?: true
+  icon?: true
+  status?: true
+  sortOrder?: true
   categoryId?: true
+  seoTitle?: true
+  seoDescription?: true
+  gigsCount?: true
+  jobsCount?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -101,6 +193,18 @@ export type SubcategoryAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SubcategoryAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SubcategorySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SubcategoryMinAggregateInputType
@@ -131,15 +235,30 @@ export type SubcategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: SubcategoryCountAggregateInputType | true
+  _avg?: SubcategoryAvgAggregateInputType
+  _sum?: SubcategorySumAggregateInputType
   _min?: SubcategoryMinAggregateInputType
   _max?: SubcategoryMaxAggregateInputType
 }
 
 export type SubcategoryGroupByOutputType = {
   id: string
+  slug: string
   name: string
+  description: string | null
+  icon: string | null
+  status: $Enums.CategoryStatus
+  sortOrder: number
   categoryId: string
+  seoTitle: string | null
+  seoDescription: string | null
+  gigsCount: number
+  jobsCount: number
+  createdAt: Date
+  updatedAt: Date
   _count: SubcategoryCountAggregateOutputType | null
+  _avg: SubcategoryAvgAggregateOutputType | null
+  _sum: SubcategorySumAggregateOutputType | null
   _min: SubcategoryMinAggregateOutputType | null
   _max: SubcategoryMaxAggregateOutputType | null
 }
@@ -164,36 +283,85 @@ export type SubcategoryWhereInput = {
   OR?: Prisma.SubcategoryWhereInput[]
   NOT?: Prisma.SubcategoryWhereInput | Prisma.SubcategoryWhereInput[]
   id?: Prisma.StringFilter<"Subcategory"> | string
+  slug?: Prisma.StringFilter<"Subcategory"> | string
   name?: Prisma.StringFilter<"Subcategory"> | string
+  description?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  icon?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  status?: Prisma.EnumCategoryStatusFilter<"Subcategory"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFilter<"Subcategory"> | number
   categoryId?: Prisma.StringFilter<"Subcategory"> | string
+  seoTitle?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  seoDescription?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  gigsCount?: Prisma.IntFilter<"Subcategory"> | number
+  jobsCount?: Prisma.IntFilter<"Subcategory"> | number
+  createdAt?: Prisma.DateTimeFilter<"Subcategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Subcategory"> | Date | string
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
+  services?: Prisma.ServiceListRelationFilter
 }
 
 export type SubcategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  icon?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   category?: Prisma.CategoryOrderByWithRelationInput
+  services?: Prisma.ServiceOrderByRelationAggregateInput
 }
 
 export type SubcategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name_categoryId?: Prisma.SubcategoryNameCategoryIdCompoundUniqueInput
+  categoryId_slug?: Prisma.SubcategoryCategoryIdSlugCompoundUniqueInput
   AND?: Prisma.SubcategoryWhereInput | Prisma.SubcategoryWhereInput[]
   OR?: Prisma.SubcategoryWhereInput[]
   NOT?: Prisma.SubcategoryWhereInput | Prisma.SubcategoryWhereInput[]
+  slug?: Prisma.StringFilter<"Subcategory"> | string
   name?: Prisma.StringFilter<"Subcategory"> | string
+  description?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  icon?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  status?: Prisma.EnumCategoryStatusFilter<"Subcategory"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFilter<"Subcategory"> | number
   categoryId?: Prisma.StringFilter<"Subcategory"> | string
+  seoTitle?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  seoDescription?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  gigsCount?: Prisma.IntFilter<"Subcategory"> | number
+  jobsCount?: Prisma.IntFilter<"Subcategory"> | number
+  createdAt?: Prisma.DateTimeFilter<"Subcategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Subcategory"> | Date | string
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
-}, "id" | "name_categoryId">
+  services?: Prisma.ServiceListRelationFilter
+}, "id" | "categoryId_slug">
 
 export type SubcategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  icon?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.SubcategoryCountOrderByAggregateInput
+  _avg?: Prisma.SubcategoryAvgOrderByAggregateInput
   _max?: Prisma.SubcategoryMaxOrderByAggregateInput
   _min?: Prisma.SubcategoryMinOrderByAggregateInput
+  _sum?: Prisma.SubcategorySumOrderByAggregateInput
 }
 
 export type SubcategoryScalarWhereWithAggregatesInput = {
@@ -201,49 +369,141 @@ export type SubcategoryScalarWhereWithAggregatesInput = {
   OR?: Prisma.SubcategoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SubcategoryScalarWhereWithAggregatesInput | Prisma.SubcategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Subcategory"> | string
+  slug?: Prisma.StringWithAggregatesFilter<"Subcategory"> | string
   name?: Prisma.StringWithAggregatesFilter<"Subcategory"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
+  icon?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
+  status?: Prisma.EnumCategoryStatusWithAggregatesFilter<"Subcategory"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntWithAggregatesFilter<"Subcategory"> | number
   categoryId?: Prisma.StringWithAggregatesFilter<"Subcategory"> | string
+  seoTitle?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
+  seoDescription?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
+  gigsCount?: Prisma.IntWithAggregatesFilter<"Subcategory"> | number
+  jobsCount?: Prisma.IntWithAggregatesFilter<"Subcategory"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subcategory"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Subcategory"> | Date | string
 }
 
 export type SubcategoryCreateInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutSubcategoriesInput
+  services?: Prisma.ServiceCreateNestedManyWithoutSubcategoryInput
 }
 
 export type SubcategoryUncheckedCreateInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
   categoryId: string
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  services?: Prisma.ServiceUncheckedCreateNestedManyWithoutSubcategoryInput
 }
 
 export type SubcategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutSubcategoriesNestedInput
+  services?: Prisma.ServiceUpdateManyWithoutSubcategoryNestedInput
 }
 
 export type SubcategoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  services?: Prisma.ServiceUncheckedUpdateManyWithoutSubcategoryNestedInput
 }
 
 export type SubcategoryCreateManyInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
   categoryId: string
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type SubcategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubcategoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubcategoryListRelationFilter = {
@@ -256,27 +516,77 @@ export type SubcategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SubcategoryNameCategoryIdCompoundUniqueInput = {
-  name: string
+export type SubcategoryCategoryIdSlugCompoundUniqueInput = {
   categoryId: string
+  slug: string
 }
 
 export type SubcategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  seoDescription?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type SubcategoryAvgOrderByAggregateInput = {
+  sortOrder?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
 }
 
 export type SubcategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  seoDescription?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SubcategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  seoDescription?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type SubcategorySumOrderByAggregateInput = {
+  sortOrder?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+}
+
+export type SubcategoryScalarRelationFilter = {
+  is?: Prisma.SubcategoryWhereInput
+  isNot?: Prisma.SubcategoryWhereInput
 }
 
 export type SubcategoryCreateNestedManyWithoutCategoryInput = {
@@ -321,14 +631,52 @@ export type SubcategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.SubcategoryScalarWhereInput | Prisma.SubcategoryScalarWhereInput[]
 }
 
+export type SubcategoryCreateNestedOneWithoutServicesInput = {
+  create?: Prisma.XOR<Prisma.SubcategoryCreateWithoutServicesInput, Prisma.SubcategoryUncheckedCreateWithoutServicesInput>
+  connectOrCreate?: Prisma.SubcategoryCreateOrConnectWithoutServicesInput
+  connect?: Prisma.SubcategoryWhereUniqueInput
+}
+
+export type SubcategoryUpdateOneRequiredWithoutServicesNestedInput = {
+  create?: Prisma.XOR<Prisma.SubcategoryCreateWithoutServicesInput, Prisma.SubcategoryUncheckedCreateWithoutServicesInput>
+  connectOrCreate?: Prisma.SubcategoryCreateOrConnectWithoutServicesInput
+  upsert?: Prisma.SubcategoryUpsertWithoutServicesInput
+  connect?: Prisma.SubcategoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubcategoryUpdateToOneWithWhereWithoutServicesInput, Prisma.SubcategoryUpdateWithoutServicesInput>, Prisma.SubcategoryUncheckedUpdateWithoutServicesInput>
+}
+
 export type SubcategoryCreateWithoutCategoryInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  services?: Prisma.ServiceCreateNestedManyWithoutSubcategoryInput
 }
 
 export type SubcategoryUncheckedCreateWithoutCategoryInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  services?: Prisma.ServiceUncheckedCreateNestedManyWithoutSubcategoryInput
 }
 
 export type SubcategoryCreateOrConnectWithoutCategoryInput = {
@@ -362,62 +710,280 @@ export type SubcategoryScalarWhereInput = {
   OR?: Prisma.SubcategoryScalarWhereInput[]
   NOT?: Prisma.SubcategoryScalarWhereInput | Prisma.SubcategoryScalarWhereInput[]
   id?: Prisma.StringFilter<"Subcategory"> | string
+  slug?: Prisma.StringFilter<"Subcategory"> | string
   name?: Prisma.StringFilter<"Subcategory"> | string
+  description?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  icon?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  status?: Prisma.EnumCategoryStatusFilter<"Subcategory"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFilter<"Subcategory"> | number
   categoryId?: Prisma.StringFilter<"Subcategory"> | string
+  seoTitle?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  seoDescription?: Prisma.StringNullableFilter<"Subcategory"> | string | null
+  gigsCount?: Prisma.IntFilter<"Subcategory"> | number
+  jobsCount?: Prisma.IntFilter<"Subcategory"> | number
+  createdAt?: Prisma.DateTimeFilter<"Subcategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Subcategory"> | Date | string
+}
+
+export type SubcategoryCreateWithoutServicesInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.CategoryCreateNestedOneWithoutSubcategoriesInput
+}
+
+export type SubcategoryUncheckedCreateWithoutServicesInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  categoryId: string
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SubcategoryCreateOrConnectWithoutServicesInput = {
+  where: Prisma.SubcategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubcategoryCreateWithoutServicesInput, Prisma.SubcategoryUncheckedCreateWithoutServicesInput>
+}
+
+export type SubcategoryUpsertWithoutServicesInput = {
+  update: Prisma.XOR<Prisma.SubcategoryUpdateWithoutServicesInput, Prisma.SubcategoryUncheckedUpdateWithoutServicesInput>
+  create: Prisma.XOR<Prisma.SubcategoryCreateWithoutServicesInput, Prisma.SubcategoryUncheckedCreateWithoutServicesInput>
+  where?: Prisma.SubcategoryWhereInput
+}
+
+export type SubcategoryUpdateToOneWithWhereWithoutServicesInput = {
+  where?: Prisma.SubcategoryWhereInput
+  data: Prisma.XOR<Prisma.SubcategoryUpdateWithoutServicesInput, Prisma.SubcategoryUncheckedUpdateWithoutServicesInput>
+}
+
+export type SubcategoryUpdateWithoutServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.CategoryUpdateOneRequiredWithoutSubcategoriesNestedInput
+}
+
+export type SubcategoryUncheckedUpdateWithoutServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubcategoryCreateManyCategoryInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
+  icon?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type SubcategoryUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  services?: Prisma.ServiceUpdateManyWithoutSubcategoryNestedInput
 }
 
 export type SubcategoryUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  services?: Prisma.ServiceUncheckedUpdateManyWithoutSubcategoryNestedInput
 }
 
 export type SubcategoryUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type SubcategoryCountOutputType
+ */
+
+export type SubcategoryCountOutputType = {
+  services: number
+}
+
+export type SubcategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  services?: boolean | SubcategoryCountOutputTypeCountServicesArgs
+}
+
+/**
+ * SubcategoryCountOutputType without action
+ */
+export type SubcategoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubcategoryCountOutputType
+   */
+  select?: Prisma.SubcategoryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SubcategoryCountOutputType without action
+ */
+export type SubcategoryCountOutputTypeCountServicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ServiceWhereInput
+}
 
 
 export type SubcategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
+  icon?: boolean
+  status?: boolean
+  sortOrder?: boolean
   categoryId?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
+  services?: boolean | Prisma.Subcategory$servicesArgs<ExtArgs>
+  _count?: boolean | Prisma.SubcategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subcategory"]>
 
 export type SubcategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
+  icon?: boolean
+  status?: boolean
+  sortOrder?: boolean
   categoryId?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subcategory"]>
 
 export type SubcategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
+  icon?: boolean
+  status?: boolean
+  sortOrder?: boolean
   categoryId?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subcategory"]>
 
 export type SubcategorySelectScalar = {
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
+  icon?: boolean
+  status?: boolean
+  sortOrder?: boolean
   categoryId?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type SubcategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "categoryId", ExtArgs["result"]["subcategory"]>
+export type SubcategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "status" | "sortOrder" | "categoryId" | "seoTitle" | "seoDescription" | "gigsCount" | "jobsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["subcategory"]>
 export type SubcategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
+  services?: boolean | Prisma.Subcategory$servicesArgs<ExtArgs>
+  _count?: boolean | Prisma.SubcategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubcategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -430,11 +996,23 @@ export type $SubcategoryPayload<ExtArgs extends runtime.Types.Extensions.Interna
   name: "Subcategory"
   objects: {
     category: Prisma.$CategoryPayload<ExtArgs>
+    services: Prisma.$ServicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    slug: string
     name: string
+    description: string | null
+    icon: string | null
+    status: $Enums.CategoryStatus
+    sortOrder: number
     categoryId: string
+    seoTitle: string | null
+    seoDescription: string | null
+    gigsCount: number
+    jobsCount: number
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["subcategory"]>
   composites: {}
 }
@@ -830,6 +1408,7 @@ readonly fields: SubcategoryFieldRefs;
 export interface Prisma__SubcategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   category<T extends Prisma.CategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  services<T extends Prisma.Subcategory$servicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subcategory$servicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -860,8 +1439,19 @@ export interface Prisma__SubcategoryClient<T, Null = never, ExtArgs extends runt
  */
 export interface SubcategoryFieldRefs {
   readonly id: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly slug: Prisma.FieldRef<"Subcategory", 'String'>
   readonly name: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly description: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly icon: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly status: Prisma.FieldRef<"Subcategory", 'CategoryStatus'>
+  readonly sortOrder: Prisma.FieldRef<"Subcategory", 'Int'>
   readonly categoryId: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly seoTitle: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly seoDescription: Prisma.FieldRef<"Subcategory", 'String'>
+  readonly gigsCount: Prisma.FieldRef<"Subcategory", 'Int'>
+  readonly jobsCount: Prisma.FieldRef<"Subcategory", 'Int'>
+  readonly createdAt: Prisma.FieldRef<"Subcategory", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Subcategory", 'DateTime'>
 }
     
 
@@ -1260,6 +1850,30 @@ export type SubcategoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Subcategories to delete.
    */
   limit?: number
+}
+
+/**
+ * Subcategory.services
+ */
+export type Subcategory$servicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Service
+   */
+  select?: Prisma.ServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Service
+   */
+  omit?: Prisma.ServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServiceInclude<ExtArgs> | null
+  where?: Prisma.ServiceWhereInput
+  orderBy?: Prisma.ServiceOrderByWithRelationInput | Prisma.ServiceOrderByWithRelationInput[]
+  cursor?: Prisma.ServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ServiceScalarFieldEnum | Prisma.ServiceScalarFieldEnum[]
 }
 
 /**

@@ -27,63 +27,141 @@ export type AggregateCategory = {
 }
 
 export type CategoryAvgAggregateOutputType = {
-  count: number | null
+  sortOrder: number | null
+  gigsCount: number | null
+  jobsCount: number | null
+  freelancersCount: number | null
 }
 
 export type CategorySumAggregateOutputType = {
-  count: number | null
+  sortOrder: number | null
+  gigsCount: number | null
+  jobsCount: number | null
+  freelancersCount: number | null
 }
 
 export type CategoryMinAggregateOutputType = {
   id: string | null
+  slug: string | null
   name: string | null
+  description: string | null
   icon: string | null
-  count: number | null
+  color: string | null
+  status: $Enums.CategoryStatus | null
+  sortOrder: number | null
+  seoTitle: string | null
+  seoDescription: string | null
+  gigsCount: number | null
+  jobsCount: number | null
+  freelancersCount: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type CategoryMaxAggregateOutputType = {
   id: string | null
+  slug: string | null
   name: string | null
+  description: string | null
   icon: string | null
-  count: number | null
+  color: string | null
+  status: $Enums.CategoryStatus | null
+  sortOrder: number | null
+  seoTitle: string | null
+  seoDescription: string | null
+  gigsCount: number | null
+  jobsCount: number | null
+  freelancersCount: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type CategoryCountAggregateOutputType = {
   id: number
+  slug: number
   name: number
+  description: number
   icon: number
-  count: number
+  color: number
+  status: number
+  sortOrder: number
+  seoTitle: number
+  seoDescription: number
+  gigsCount: number
+  jobsCount: number
+  freelancersCount: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type CategoryAvgAggregateInputType = {
-  count?: true
+  sortOrder?: true
+  gigsCount?: true
+  jobsCount?: true
+  freelancersCount?: true
 }
 
 export type CategorySumAggregateInputType = {
-  count?: true
+  sortOrder?: true
+  gigsCount?: true
+  jobsCount?: true
+  freelancersCount?: true
 }
 
 export type CategoryMinAggregateInputType = {
   id?: true
+  slug?: true
   name?: true
+  description?: true
   icon?: true
-  count?: true
+  color?: true
+  status?: true
+  sortOrder?: true
+  seoTitle?: true
+  seoDescription?: true
+  gigsCount?: true
+  jobsCount?: true
+  freelancersCount?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type CategoryMaxAggregateInputType = {
   id?: true
+  slug?: true
   name?: true
+  description?: true
   icon?: true
-  count?: true
+  color?: true
+  status?: true
+  sortOrder?: true
+  seoTitle?: true
+  seoDescription?: true
+  gigsCount?: true
+  jobsCount?: true
+  freelancersCount?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type CategoryCountAggregateInputType = {
   id?: true
+  slug?: true
   name?: true
+  description?: true
   icon?: true
-  count?: true
+  color?: true
+  status?: true
+  sortOrder?: true
+  seoTitle?: true
+  seoDescription?: true
+  gigsCount?: true
+  jobsCount?: true
+  freelancersCount?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -175,9 +253,20 @@ export type CategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type CategoryGroupByOutputType = {
   id: string
+  slug: string
   name: string
+  description: string | null
   icon: string | null
-  count: number
+  color: string | null
+  status: $Enums.CategoryStatus
+  sortOrder: number
+  seoTitle: string | null
+  seoDescription: string | null
+  gigsCount: number
+  jobsCount: number
+  freelancersCount: number
+  createdAt: Date
+  updatedAt: Date
   _count: CategoryCountAggregateOutputType | null
   _avg: CategoryAvgAggregateOutputType | null
   _sum: CategorySumAggregateOutputType | null
@@ -205,36 +294,80 @@ export type CategoryWhereInput = {
   OR?: Prisma.CategoryWhereInput[]
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   id?: Prisma.StringFilter<"Category"> | string
+  slug?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
   icon?: Prisma.StringNullableFilter<"Category"> | string | null
-  count?: Prisma.IntFilter<"Category"> | number
+  color?: Prisma.StringNullableFilter<"Category"> | string | null
+  status?: Prisma.EnumCategoryStatusFilter<"Category"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFilter<"Category"> | number
+  seoTitle?: Prisma.StringNullableFilter<"Category"> | string | null
+  seoDescription?: Prisma.StringNullableFilter<"Category"> | string | null
+  gigsCount?: Prisma.IntFilter<"Category"> | number
+  jobsCount?: Prisma.IntFilter<"Category"> | number
+  freelancersCount?: Prisma.IntFilter<"Category"> | number
+  createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   subcategories?: Prisma.SubcategoryListRelationFilter
 }
 
 export type CategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
-  count?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   subcategories?: Prisma.SubcategoryOrderByRelationAggregateInput
 }
 
 export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
+  slug?: string
   AND?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   OR?: Prisma.CategoryWhereInput[]
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
+  name?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
   icon?: Prisma.StringNullableFilter<"Category"> | string | null
-  count?: Prisma.IntFilter<"Category"> | number
+  color?: Prisma.StringNullableFilter<"Category"> | string | null
+  status?: Prisma.EnumCategoryStatusFilter<"Category"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFilter<"Category"> | number
+  seoTitle?: Prisma.StringNullableFilter<"Category"> | string | null
+  seoDescription?: Prisma.StringNullableFilter<"Category"> | string | null
+  gigsCount?: Prisma.IntFilter<"Category"> | number
+  jobsCount?: Prisma.IntFilter<"Category"> | number
+  freelancersCount?: Prisma.IntFilter<"Category"> | number
+  createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   subcategories?: Prisma.SubcategoryListRelationFilter
-}, "id" | "name">
+}, "id" | "slug">
 
 export type CategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
-  count?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.CategoryCountOrderByAggregateInput
   _avg?: Prisma.CategoryAvgOrderByAggregateInput
   _max?: Prisma.CategoryMaxOrderByAggregateInput
@@ -247,96 +380,227 @@ export type CategoryScalarWhereWithAggregatesInput = {
   OR?: Prisma.CategoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CategoryScalarWhereWithAggregatesInput | Prisma.CategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  slug?: Prisma.StringWithAggregatesFilter<"Category"> | string
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
   icon?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
-  count?: Prisma.IntWithAggregatesFilter<"Category"> | number
+  color?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
+  status?: Prisma.EnumCategoryStatusWithAggregatesFilter<"Category"> | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntWithAggregatesFilter<"Category"> | number
+  seoTitle?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
+  seoDescription?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
+  gigsCount?: Prisma.IntWithAggregatesFilter<"Category"> | number
+  jobsCount?: Prisma.IntWithAggregatesFilter<"Category"> | number
+  freelancersCount?: Prisma.IntWithAggregatesFilter<"Category"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
 }
 
 export type CategoryCreateInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
   icon?: string | null
-  count?: number
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   subcategories?: Prisma.SubcategoryCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
   icon?: string | null
-  count?: number
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   subcategories?: Prisma.SubcategoryUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  count?: Prisma.IntFieldUpdateOperationsInput | number
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subcategories?: Prisma.SubcategoryUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  count?: Prisma.IntFieldUpdateOperationsInput | number
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subcategories?: Prisma.SubcategoryUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryCreateManyInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
   icon?: string | null
-  count?: number
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  count?: Prisma.IntFieldUpdateOperationsInput | number
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CategoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  count?: Prisma.IntFieldUpdateOperationsInput | number
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  count?: Prisma.SortOrder
+  color?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  seoDescription?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CategoryAvgOrderByAggregateInput = {
-  count?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
 }
 
 export type CategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  count?: Prisma.SortOrder
+  color?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  seoDescription?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  count?: Prisma.SortOrder
+  color?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  seoDescription?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type CategorySumOrderByAggregateInput = {
-  count?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  gigsCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
 }
 
 export type CategoryScalarRelationFilter = {
   is?: Prisma.CategoryWhereInput
   isNot?: Prisma.CategoryWhereInput
+}
+
+export type EnumCategoryStatusFieldUpdateOperationsInput = {
+  set?: $Enums.CategoryStatus
 }
 
 export type CategoryCreateNestedOneWithoutSubcategoriesInput = {
@@ -355,16 +619,38 @@ export type CategoryUpdateOneRequiredWithoutSubcategoriesNestedInput = {
 
 export type CategoryCreateWithoutSubcategoriesInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
   icon?: string | null
-  count?: number
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CategoryUncheckedCreateWithoutSubcategoriesInput = {
   id?: string
+  slug: string
   name: string
+  description?: string | null
   icon?: string | null
-  count?: number
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type CategoryCreateOrConnectWithoutSubcategoriesInput = {
@@ -385,16 +671,38 @@ export type CategoryUpdateToOneWithWhereWithoutSubcategoriesInput = {
 
 export type CategoryUpdateWithoutSubcategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  count?: Prisma.IntFieldUpdateOperationsInput | number
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CategoryUncheckedUpdateWithoutSubcategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  count?: Prisma.IntFieldUpdateOperationsInput | number
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -430,35 +738,79 @@ export type CategoryCountOutputTypeCountSubcategoriesArgs<ExtArgs extends runtim
 
 export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
   icon?: boolean
-  count?: boolean
+  color?: boolean
+  status?: boolean
+  sortOrder?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  freelancersCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   subcategories?: boolean | Prisma.Category$subcategoriesArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
 export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
   icon?: boolean
-  count?: boolean
+  color?: boolean
+  status?: boolean
+  sortOrder?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  freelancersCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["category"]>
 
 export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
   icon?: boolean
-  count?: boolean
+  color?: boolean
+  status?: boolean
+  sortOrder?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  freelancersCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["category"]>
 
 export type CategorySelectScalar = {
   id?: boolean
+  slug?: boolean
   name?: boolean
+  description?: boolean
   icon?: boolean
-  count?: boolean
+  color?: boolean
+  status?: boolean
+  sortOrder?: boolean
+  seoTitle?: boolean
+  seoDescription?: boolean
+  gigsCount?: boolean
+  jobsCount?: boolean
+  freelancersCount?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "count", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "color" | "status" | "sortOrder" | "seoTitle" | "seoDescription" | "gigsCount" | "jobsCount" | "freelancersCount" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subcategories?: boolean | Prisma.Category$subcategoriesArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -473,9 +825,20 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    slug: string
     name: string
+    description: string | null
     icon: string | null
-    count: number
+    color: string | null
+    status: $Enums.CategoryStatus
+    sortOrder: number
+    seoTitle: string | null
+    seoDescription: string | null
+    gigsCount: number
+    jobsCount: number
+    freelancersCount: number
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["category"]>
   composites: {}
 }
@@ -901,9 +1264,20 @@ export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime
  */
 export interface CategoryFieldRefs {
   readonly id: Prisma.FieldRef<"Category", 'String'>
+  readonly slug: Prisma.FieldRef<"Category", 'String'>
   readonly name: Prisma.FieldRef<"Category", 'String'>
+  readonly description: Prisma.FieldRef<"Category", 'String'>
   readonly icon: Prisma.FieldRef<"Category", 'String'>
-  readonly count: Prisma.FieldRef<"Category", 'Int'>
+  readonly color: Prisma.FieldRef<"Category", 'String'>
+  readonly status: Prisma.FieldRef<"Category", 'CategoryStatus'>
+  readonly sortOrder: Prisma.FieldRef<"Category", 'Int'>
+  readonly seoTitle: Prisma.FieldRef<"Category", 'String'>
+  readonly seoDescription: Prisma.FieldRef<"Category", 'String'>
+  readonly gigsCount: Prisma.FieldRef<"Category", 'Int'>
+  readonly jobsCount: Prisma.FieldRef<"Category", 'Int'>
+  readonly freelancersCount: Prisma.FieldRef<"Category", 'Int'>
+  readonly createdAt: Prisma.FieldRef<"Category", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Category", 'DateTime'>
 }
     
 
