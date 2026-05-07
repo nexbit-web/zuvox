@@ -2,6 +2,13 @@
 
 export type VerificationStatus = 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
 
+// ─── Спільні типи ───────────────────────────────────────
+
+export interface ProfileSkill {
+  slug: string
+  name: string
+}
+
 // ─── Фрілансер ─────────────────────────────────────────
 
 export interface ProfileGig {
@@ -36,14 +43,14 @@ export interface FreelancerProfileData {
   avatar?: string
   bio?: string
   city?: string
-  phone?: string
+  hasPhone: boolean
   createdAt: string | Date
 
   verificationStatus: VerificationStatus
   verificationRejectReason?: string | null
 
   categories: string[]
-  skills: string[]
+  skills: ProfileSkill[] // ← було string[]
   languages: string[]
   experience?: string | null
   hourlyRate?: number | null

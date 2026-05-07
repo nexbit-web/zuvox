@@ -6,18 +6,54 @@
   import * as Field from '$lib/components/ui/field'
   import * as Select from '$lib/components/ui/select'
   import { goto, invalidateAll } from '$app/navigation'
+  import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
-  import { categories } from '$lib/data/categories'
   import ProfilePreviewCard from '$lib/components/profile-preview-card.svelte'
   import AvatarUploader from '$lib/components/avatar-uploader.svelte'
   import PortfolioUploader from '$lib/components/portfolio-uploader.svelte'
   import UsernameInput from '$lib/components/username-input.svelte'
-  import { ArrowLeft, ArrowRight, Check, X, Plus } from 'lucide-svelte'
+  import {
+    ArrowLeft,
+    ArrowRight,
+    Check,
+    X,
+    Plus,
+    LoaderCircle,
+  } from 'lucide-svelte'
   import { Spinner } from '$lib/components/ui/spinner/index.js'
 
+  // ─── Типы ───
   interface PortfolioItem {
     url: string
     publicId: string
+  }
+  interface ServiceFromApi {
+    slug: string
+    name: string
+    avgPriceCents: number | null
+  }
+  interface SubcategoryFromApi {
+    slug: string
+    name: string
+    items: ServiceFromApi[]
+  }
+  interface SkillFromApi {
+    slug: string
+    name: string
+  }
+  interface CategoryFromApi {
+    slug: string
+    name: string
+    icon?: string | null
+    description?: string | null
+    subs: SubcategoryFromApi[]
+    skills: SkillFromApi[]
+  }
+  interface CityFromApi {
+    slug: string
+    name: string
+    region: string | null
+    isCapital: boolean
   }
 
   let { data } = $props<{
@@ -33,7 +69,7 @@
         verificationStatus: 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
         isExistingFreelancer: boolean
         categories: string[]
-        skills: string[]
+        skills: string[] // тепер це slug-и
         experience: string
         languages: string[]
         hourlyRate: string
@@ -48,15 +84,13 @@
 
   let avatar = $state(data.prefill.avatar)
   let username = $state(data.prefill.username)
-  /** Якщо у юзера вже є username — не блокуємо submit, навіть якщо він не
-   *  робив повторну перевірку (бо UsernameInput викликає onvalidchange лише
-   *  при зміні). */
   let usernameValid = $state(!!data.prefill.username)
   let phone = $state(data.prefill.phone)
   let city = $state(data.prefill.city)
   let experience = $state(data.prefill.experience)
 
   let selectedCategories = $state<string[]>([...data.prefill.categories])
+  // ВАЖЛИВО: тепер тут лежать SLUG-и навичок, а не імена
   let selectedSkills = $state<string[]>([...data.prefill.skills])
   let selectedLanguages = $state<string[]>(
     data.prefill.languages.length
@@ -72,30 +106,49 @@
   let loading = $state(false)
   let error = $state('')
 
-  const cities = [
-    'Київ',
-    'Харків',
-    'Одеса',
-    'Дніпро',
-    'Запоріжжя',
-    'Львів',
-    'Кривий Ріг',
-    'Миколаїв',
-    'Вінниця',
-    'Полтава',
-    'Черкаси',
-    'Житомир',
-    'Суми',
-    'Хмельницький',
-    'Чернівці',
-    'Рівне',
-    'Кропивницький',
-    'Івано-Франківськ',
-    'Тернопіль',
-    'Луцьк',
-    'Ужгород',
-    'Інше',
-  ]
+  // ─── Дані з API ───
+  let categories = $state<CategoryFromApi[]>([])
+  let cities = $state<string[]>([])
+  let categoriesLoaded = $state(false)
+  let citiesLoaded = $state(false)
+  let dataError = $state<string | null>(null)
+
+  async function loadInitialData() {
+    categoriesLoaded = false
+    citiesLoaded = false
+    dataError = null
+
+    try {
+      const [catsRes, citiesRes] = await Promise.all([
+        fetch('/api/categories'),
+        fetch('/api/cities'),
+      ])
+
+      if (!catsRes.ok) throw new Error(`categories HTTP ${catsRes.status}`)
+      if (!citiesRes.ok) throw new Error(`cities HTTP ${citiesRes.status}`)
+
+      const catsData = await catsRes.json()
+      const citiesData = await citiesRes.json()
+
+      categories = catsData.categories ?? []
+
+      cities = (citiesData.cities ?? [])
+        .filter((c: CityFromApi) => c.slug !== 'all')
+        .map((c: CityFromApi) => c.name)
+
+      cities = [...cities, 'Інше']
+    } catch (err) {
+      console.error('Failed to load data:', err)
+      dataError = 'Не вдалося завантажити дані. Перезавантажте сторінку.'
+    } finally {
+      categoriesLoaded = true
+      citiesLoaded = true
+    }
+  }
+
+  onMount(() => {
+    loadInitialData()
+  })
 
   const experienceOptions = [
     { value: 'LT_1', label: 'Початківець', hint: 'менше 1 року' },
@@ -115,12 +168,19 @@
     'Español',
   ]
 
-  // ─── derived
+  // ─── derived ───
+  // Усі унікальні навички з обраних категорій (як обʼєкти, щоб мати і slug, і name)
   const availableSkills = $derived(
-    categories
-      .filter((c) => selectedCategories.includes(c.name))
-      .flatMap((c) => c.subs.flatMap((s) => s.items))
-      .filter((v, i, a) => a.indexOf(v) === i),
+    (() => {
+      const map = new Map<string, SkillFromApi>()
+      for (const c of categories) {
+        if (!selectedCategories.includes(c.name)) continue
+        for (const s of c.skills) {
+          if (!map.has(s.slug)) map.set(s.slug, s)
+        }
+      }
+      return Array.from(map.values())
+    })(),
   )
 
   const step1Valid = $derived(
@@ -146,29 +206,32 @@
   )
   const previewCategories = $derived(selectedCategories.slice(0, 3))
 
-  // Заголовок залежить від того, фрілансер це чи ще ні
   const isEdit = $derived(data.prefill.isExistingFreelancer)
 
-  // ─── actions
+  // ─── actions ───
   function toggleCategory(name: string) {
     if (selectedCategories.includes(name)) {
       selectedCategories = selectedCategories.filter((c) => c !== name)
-      const remaining = categories
-        .filter((c) => selectedCategories.includes(c.name))
-        .flatMap((c) => c.subs.flatMap((s) => s.items))
-      selectedSkills = selectedSkills.filter((s) => remaining.includes(s))
+      // Прибираємо навички, які належать тільки до видаленої категорії
+      const remainingSlugs = new Set(
+        categories
+          .filter((c) => selectedCategories.includes(c.name))
+          .flatMap((c) => c.skills.map((s) => s.slug)),
+      )
+      selectedSkills = selectedSkills.filter((slug) => remainingSlugs.has(slug))
     } else {
       if (selectedCategories.length >= 3) return
       selectedCategories = [...selectedCategories, name]
     }
   }
 
-  function toggleSkill(s: string) {
-    if (selectedSkills.includes(s)) {
-      selectedSkills = selectedSkills.filter((x) => x !== s)
+  // Тепер по slug-у
+  function toggleSkill(slug: string) {
+    if (selectedSkills.includes(slug)) {
+      selectedSkills = selectedSkills.filter((x) => x !== slug)
     } else {
       if (selectedSkills.length >= 10) return
-      selectedSkills = [...selectedSkills, s]
+      selectedSkills = [...selectedSkills, slug]
     }
   }
 
@@ -212,7 +275,7 @@
           portfolioUrl,
           experience,
           categories: selectedCategories,
-          skills: selectedSkills,
+          skills: selectedSkills, // slug-и, як того чекає бек
           languages: selectedLanguages,
           hourlyRate: Number(hourlyRate),
           submitForReview: true,
@@ -281,6 +344,24 @@
         ></div>
       {/each}
     </div>
+
+    <!-- ───── ERROR (загальна помилка завантаження довідників) ───── -->
+    {#if dataError}
+      <div
+        class="mb-8 px-4 py-3 rounded-xl text-sm flex items-center justify-between gap-3"
+        style="background-color: color-mix(in oklch, var(--destructive) 10%, transparent);
+               color: var(--destructive)"
+      >
+        <span>{dataError}</span>
+        <button
+          type="button"
+          onclick={loadInitialData}
+          class="text-xs font-medium underline cursor-pointer"
+        >
+          Спробувати ще
+        </button>
+      </div>
+    {/if}
 
     <div
       class="grid lg:grid-cols-[minmax(0,1fr)_340px] gap-12 lg:gap-16 items-start"
@@ -381,9 +462,23 @@
 
                 <Field.Field>
                   <Field.Label for="city">Місто</Field.Label>
-                  <Select.Root type="single" bind:value={city}>
+                  <Select.Root
+                    type="single"
+                    bind:value={city}
+                    disabled={!citiesLoaded}
+                  >
                     <Select.Trigger class="h-11 w-full">
-                      {selectedCityLabel}
+                      {#if !citiesLoaded}
+                        <span
+                          class="inline-flex items-center gap-2"
+                          style="color: var(--muted-foreground)"
+                        >
+                          <LoaderCircle class="size-4 animate-spin" />
+                          Завантаження міст…
+                        </span>
+                      {:else}
+                        {selectedCityLabel}
+                      {/if}
                     </Select.Trigger>
                     <Select.Content class="max-h-72 overflow-y-auto">
                       {#each cities as c}
@@ -468,43 +563,56 @@
                       {selectedCategories.length} / 3
                     </span>
                   </div>
-                  <div class="flex flex-wrap gap-2">
-                    {#each categories as cat}
-                      {@const active = selectedCategories.includes(cat.name)}
-                      {@const disabled =
-                        !active && selectedCategories.length >= 3}
-                      <button
-                        type="button"
-                        {disabled}
-                        onclick={() => toggleCategory(cat.name)}
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all"
-                        class:cursor-pointer={!disabled}
-                        class:opacity-40={disabled}
-                        style="background-color: {active
-                          ? 'var(--foreground)'
-                          : 'var(--card)'};
-                               border-color: {active
-                          ? 'var(--foreground)'
-                          : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
-                               color: {active
-                          ? 'var(--background)'
-                          : 'var(--foreground)'}"
-                      >
-                        {#if active}
-                          <Check class="size-3.5" />
-                        {:else}
-                          <Plus class="size-3.5 opacity-60" />
-                        {/if}
-                        {cat.name}
-                      </button>
-                    {/each}
-                  </div>
+
+                  {#if !categoriesLoaded}
+                    <div
+                      class="flex items-center gap-2 py-6 text-sm"
+                      style="color: var(--muted-foreground)"
+                    >
+                      <LoaderCircle class="size-4 animate-spin" />
+                      Завантаження категорій…
+                    </div>
+                  {:else}
+                    <div class="flex flex-wrap gap-2">
+                      {#each categories as cat (cat.slug)}
+                        {@const active = selectedCategories.includes(cat.name)}
+                        {@const disabled =
+                          !active && selectedCategories.length >= 3}
+                        <button
+                          type="button"
+                          {disabled}
+                          onclick={() => toggleCategory(cat.name)}
+                          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all"
+                          class:cursor-pointer={!disabled}
+                          class:opacity-40={disabled}
+                          style="background-color: {active
+                            ? 'var(--foreground)'
+                            : 'var(--card)'};
+                                 border-color: {active
+                            ? 'var(--foreground)'
+                            : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
+                                 color: {active
+                            ? 'var(--background)'
+                            : 'var(--foreground)'}"
+                        >
+                          {#if active}
+                            <Check class="size-3.5" />
+                          {:else}
+                            <Plus class="size-3.5 opacity-60" />
+                          {/if}
+                          {cat.name}
+                        </button>
+                      {/each}
+                    </div>
+                  {/if}
+
                   <Field.Description>
                     Усі обрані категорії будуть показані в картці профілю.
                   </Field.Description>
                 </Field.Field>
 
-                {#if availableSkills.length > 0}
+                <!-- ───── НАВИКИ ───── -->
+                {#if categoriesLoaded && selectedCategories.length > 0}
                   <Field.Field>
                     <div class="flex items-center justify-between mb-2">
                       <Field.Label>Навички</Field.Label>
@@ -515,32 +623,45 @@
                         {selectedSkills.length} / 10
                       </span>
                     </div>
-                    <div class="flex flex-wrap gap-1.5">
-                      {#each availableSkills as skill}
-                        {@const active = selectedSkills.includes(skill)}
-                        {@const disabled =
-                          !active && selectedSkills.length >= 10}
-                        <button
-                          type="button"
-                          {disabled}
-                          onclick={() => toggleSkill(skill)}
-                          class="text-xs px-3 py-1.5 rounded-xl border transition-all"
-                          class:cursor-pointer={!disabled}
-                          class:opacity-40={disabled}
-                          style="background-color: {active
-                            ? 'var(--foreground)'
-                            : 'transparent'};
-                                 border-color: {active
-                            ? 'var(--foreground)'
-                            : 'color-mix(in oklch, var(--foreground) 14%, transparent)'};
-                                 color: {active
-                            ? 'var(--background)'
-                            : 'var(--muted-foreground)'}"
-                        >
-                          {skill}
-                        </button>
-                      {/each}
-                    </div>
+
+                    {#if availableSkills.length === 0}
+                      <div
+                        class="text-xs py-3"
+                        style="color: var(--muted-foreground)"
+                      >
+                        Для обраних категорій ще не додано навичок.
+                      </div>
+                    {:else}
+                      <div class="flex flex-wrap gap-1.5">
+                        {#each availableSkills as skill (skill.slug)}
+                          {@const active = selectedSkills.includes(skill.slug)}
+                          {@const disabled =
+                            !active && selectedSkills.length >= 10}
+                          <button
+                            type="button"
+                            {disabled}
+                            onclick={() => toggleSkill(skill.slug)}
+                            class="text-xs px-3 py-1.5 rounded-xl border transition-all"
+                            class:cursor-pointer={!disabled}
+                            class:opacity-40={disabled}
+                            style="background-color: {active
+                              ? 'var(--foreground)'
+                              : 'transparent'};
+                                   border-color: {active
+                              ? 'var(--foreground)'
+                              : 'color-mix(in oklch, var(--foreground) 14%, transparent)'};
+                                   color: {active
+                              ? 'var(--background)'
+                              : 'var(--muted-foreground)'}"
+                          >
+                            {skill.name}
+                          </button>
+                        {/each}
+                      </div>
+                      <Field.Description>
+                        Оберіть до 10 навичок з обраних категорій.
+                      </Field.Description>
+                    {/if}
                   </Field.Field>
                 {/if}
 
@@ -665,7 +786,6 @@
                   </Field.Description>
                 </Field.Field>
 
-                <!-- Інфо про модерацію — тільки для нових фрілансерів -->
                 {#if !isEdit}
                   <div
                     class="p-4 rounded-xl text-sm leading-relaxed"

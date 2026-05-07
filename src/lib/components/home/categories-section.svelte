@@ -4,34 +4,26 @@
   import {
     Truck,
     Hammer,
-    Settings,
-    Eraser,
-    Factory,
-    Sparkles,
-    Construction,
-    Briefcase,
     GraduationCap,
-    Wrench,
     ArrowRight,
     BrushCleaning,
     PaintRoller,
     Drill,
     Scissors,
-    SquareTerminal,
     Monitor,
     WashingMachine,
   } from 'lucide-svelte'
 
   const mainCategories = [
-    { name: 'IT', icon: Monitor },
-    { name: 'Перевезення', icon: Truck },
-    { name: 'Ремонт', icon: PaintRoller },
-    { name: 'Техніка', icon: WashingMachine },
-    { name: 'Прибирання', icon: BrushCleaning },
-    { name: 'Краса', icon: Scissors },
-    { name: 'Будівництво', icon: Hammer },
-    { name: 'Навчання', icon: GraduationCap },
-    { name: 'Монтаж', icon: Drill },
+    { name: 'IT', slug: 'development', icon: Monitor },
+    { name: 'Перевезення', slug: '', icon: Truck },
+    { name: 'Ремонт', slug: '', icon: PaintRoller },
+    { name: 'Техніка', slug: '', icon: WashingMachine },
+    { name: 'Прибирання', slug: '', icon: BrushCleaning },
+    { name: 'Краса', slug: '', icon: Scissors },
+    { name: 'Будівництво', slug: '', icon: Hammer },
+    { name: 'Навчання', slug: 'business', icon: GraduationCap },
+    { name: 'Монтаж', slug: 'video-audio', icon: Drill },
   ]
 
   let loaded = $state(false)
@@ -64,7 +56,8 @@
       {:else}
         {#each mainCategories as cat}
           <a
-            href="/gigs?category={encodeURIComponent(cat.name)}"
+            href="/services/{cat.slug}"
+            // href="/gigs?category={encodeURIComponent(cat.name)}"
             class="group flex flex-col items-center p-8 h-[180px] rounded-[1.5rem] border transition-all duration-300 hover:bg-[var(--accent)]"
             style="background-color: var(--card); border-color: var(--border);"
           >

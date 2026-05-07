@@ -7,8 +7,8 @@
  * Рекомендований розмір: 1600×400 (4:1), формат .webp або .jpg, до 200 КБ.
  */
 export const categoryBanners: Record<string, string> = {
-  'Веб-розробка': '/banners/web-development.gif',
-  'UI/UX Дизайн': '/banners/ui-ux-design.jpg',
+  'Розробка та IT': '/banners/web-development.gif',
+  'UI/UX Дизайн': '/banners/web-development.gif',
   'Мобільні застосунки': '/banners/mobile-apps.jpg',
   'SEO та маркетинг': '/banners/seo-marketing.jpg',
   Копірайтинг: '/banners/copywriting.jpg',

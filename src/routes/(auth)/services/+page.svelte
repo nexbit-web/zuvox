@@ -8,6 +8,7 @@
     ChevronsUpDown,
     Plus,
     RotateCcw,
+    LoaderCircle,
   } from 'lucide-svelte'
   import { onMount } from 'svelte'
   import { fade, scale, fly } from 'svelte/transition'
@@ -26,100 +27,25 @@
     value: string
     label: string
   }
-  interface Category {
+  interface SubItem {
+    slug: string
     name: string
-    subs: string[]
+  }
+  interface Category {
+    slug: string
+    name: string
+    icon?: string | null
+    description?: string | null
+    subs: SubItem[]
+  }
+  interface CityFromApi {
+    slug: string
+    name: string
+    region: string | null
+    isCapital: boolean
   }
 
-  // --- ДАННЫЕ ---
-  const rawCategories: Category[] = [
-    {
-      name: 'Домашній майстер',
-      subs: [
-        'Сантехнік',
-        'Електрик',
-        'Чоловік на годину',
-        'Столяр',
-        'Слюсар',
-        'Монтажник',
-        'Дезінфектор',
-      ],
-    },
-    {
-      name: 'Ремонт техніки',
-      subs: [
-        'Ремонт побутової техніки',
-        "Комп'ютерна допомога",
-        'Ремонт цифрової техніки',
-        'Ремонт телефонів',
-        'Ремонт великої техніки',
-      ],
-    },
-    {
-      name: 'Оздоблювальні роботи',
-      subs: [
-        'Ремонт квартир',
-        'Укладання плитки',
-        'Штукатурні роботи',
-        'Утеплення',
-        'Монтаж опалення',
-      ],
-    },
-    {
-      name: 'Будівельні роботи',
-      subs: [
-        'Різноробочі',
-        'Зварювальні роботи',
-        'Токарні роботи',
-        'Металообробка',
-        'Тесляр',
-      ],
-    },
-    {
-      name: 'Меблеві роботи',
-      subs: [
-        'Виготовлення меблів',
-        'Ремонт меблів',
-        'Збірка меблів',
-        'Реставрація',
-        'Перетяжка',
-      ],
-    },
-    {
-      name: 'Клінінгові послуги',
-      subs: [
-        'Прибирання квартир',
-        'Генеральне прибирання',
-        'Прибирання після ремонту',
-        'Хімчистка',
-        'Прибирання будинків',
-      ],
-    },
-    {
-      name: 'Енергозбереження',
-      subs: [
-        'Перепаковка акумуляторів',
-        'Ремонт повербанків',
-        'Ремонт UPS',
-        'Підключення генераторів',
-      ],
-    },
-  ]
-
-  const categories = rawCategories.map((c) => ({
-    ...c,
-    subs: [...new Set(c.subs)],
-  }))
-
-  const cities: Item[] = [
-    { value: 'all', label: 'Вся Україна' },
-    { value: 'kyiv', label: 'Київ' },
-    { value: 'kharkiv', label: 'Харків' },
-    { value: 'odesa', label: 'Одеса' },
-    { value: 'dnipro', label: 'Дніпро' },
-    { value: 'lviv', label: 'Львів' },
-  ]
-
+  // --- СТАТИЧНЫЕ ДАННЫЕ ---
   const types: Item[] = [
     { value: 'all', label: 'Всі типи' },
     { value: 'online', label: 'Онлайн' },
@@ -128,6 +54,14 @@
   ]
 
   // --- СОСТОЯНИЕ (Runes) ---
+  let categories = $state<Category[]>([])
+  // Дефолтное значение пока города грузятся — чтобы Popover-кнопка не показала "undefined"
+  let cities = $state<Item[]>([{ value: 'all', label: 'Вся Україна' }])
+
+  let loaded = $state(false)
+  let citiesLoaded = $state(false)
+  let loadError = $state<string | null>(null)
+
   let search = $state('')
   let city = $state('all')
   let type = $state('all')
@@ -137,11 +71,45 @@
   let draftType = $state('all')
 
   let dialogOpen = $state(false)
-  let loaded = $state(false)
   let cityPopoverOpen = $state(false)
 
+  // --- ЗАГРУЗКА ДАННЫХ ИЗ API ---
+  async function loadData() {
+    loaded = false
+    citiesLoaded = false
+    loadError = null
+
+    try {
+      const [catsRes, citiesRes] = await Promise.all([
+        fetch('/api/categories'),
+        fetch('/api/cities'),
+      ])
+
+      if (!catsRes.ok) throw new Error(`categories HTTP ${catsRes.status}`)
+      if (!citiesRes.ok) throw new Error(`cities HTTP ${citiesRes.status}`)
+
+      const catsData = await catsRes.json()
+      const citiesData = await citiesRes.json()
+
+      categories = catsData.categories ?? []
+
+      // Маппимо City з БД у формат, який чекає UI ({ value, label })
+      cities = (citiesData.cities ?? []).map((c: CityFromApi) => ({
+        value: c.slug,
+        label: c.name,
+      }))
+    } catch (err) {
+      console.error('Failed to load data:', err)
+      loadError = 'Не вдалося завантажити дані'
+      categories = []
+    } finally {
+      loaded = true
+      citiesLoaded = true
+    }
+  }
+
   onMount(() => {
-    setTimeout(() => (loaded = true), 400)
+    loadData()
   })
 
   // --- ЛОГИКА ---
@@ -151,7 +119,6 @@
       (type !== 'all' ? 1 : 0),
   )
 
-  // Исправлено название переменной для шаблона
   const filtered = $derived(
     (() => {
       const q = search.trim().toLowerCase()
@@ -159,12 +126,25 @@
       return categories
         .map((cat) => {
           const matchName = cat.name.toLowerCase().includes(q)
-          const matchSubs = cat.subs.filter((s) => s.toLowerCase().includes(q))
+          const matchSubs = cat.subs.filter((s) =>
+            s.name.toLowerCase().includes(q),
+          )
           if (!matchName && !matchSubs.length) return null
-          return { name: cat.name, subs: matchName ? cat.subs : matchSubs }
+          return {
+            slug: cat.slug,
+            name: cat.name,
+            icon: cat.icon,
+            description: cat.description,
+            subs: matchName ? cat.subs : matchSubs,
+          }
         })
         .filter(Boolean) as Category[]
     })(),
+  )
+
+  // Лейбл для кнопки выбора города — реагирует на загрузку
+  const selectedCityLabel = $derived(
+    cities.find((c) => c.value === draftCity)?.label ?? 'Вся Україна',
   )
 
   function openFilters() {
@@ -213,7 +193,11 @@
           Всі послуги
         </h1>
         <p class="text-sm font-medium opacity-40">
-          Знайдено {filtered.length} напрямків
+          {#if !loaded}
+            Завантаження…
+          {:else}
+            Знайдено {filtered.length} напрямків
+          {/if}
         </p>
       </div>
 
@@ -251,6 +235,17 @@
           </div>
         {/each}
       </div>
+    {:else if loadError}
+      <div class="py-32 text-center" in:fade>
+        <X size={48} class="mx-auto mb-4 opacity-20 text-destructive" />
+        <h3 class="text-lg font-bold text-foreground">{loadError}</h3>
+        <button
+          onclick={loadData}
+          class="text-sm text-primary font-bold mt-2 cursor-pointer hover:underline"
+        >
+          Спробувати ще раз
+        </button>
+      </div>
     {:else if filtered.length === 0}
       <div class="py-32 text-center" in:fade>
         <Search size={48} class="mx-auto mb-4 opacity-10" />
@@ -264,13 +259,13 @@
       </div>
     {:else}
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each filtered as cat, i (cat.name)}
+        {#each filtered as cat, i (cat.slug)}
           <div
             in:fly={{ y: 20, duration: 400, delay: i * 30 }}
             class="group flex flex-col h-full p-6 rounded-2xl border border-border bg-card transition-all hover:border-foreground/20 shadow-sm"
           >
             <a
-              href="/gigs?category={encodeURIComponent(cat.name)}"
+              href="/services/{cat.slug}"
               class="flex items-start justify-between mb-5"
             >
               <h2 class="text-lg font-extrabold leading-tight text-foreground">
@@ -283,15 +278,13 @@
             </a>
 
             <ul class="flex-1 space-y-2">
-              {#each cat.subs.slice(0, 5) as sub}
+              {#each cat.subs.slice(0, 5) as sub (sub.slug)}
                 <li>
                   <a
-                    href="/gigs?category={encodeURIComponent(
-                      cat.name,
-                    )}&sub={encodeURIComponent(sub)}"
+                    href="/services/{cat.slug}?sub={sub.slug}"
                     class="text-sm font-medium opacity-50 hover:opacity-100 hover:text-primary transition-all block text-foreground"
                   >
-                    {sub}
+                    {sub.name}
                   </a>
                 </li>
               {/each}
@@ -299,7 +292,7 @@
 
             {#if cat.subs.length > 5}
               <a
-                href="/gigs?category={encodeURIComponent(cat.name)}"
+                href="/services/{cat.slug}"
                 class="mt-4 pt-4 border-t border-border flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity text-foreground"
               >
                 <Plus size={12} /> Ще {cat.subs.length - 5} категорій
@@ -359,12 +352,17 @@
               <Button
                 {...props}
                 variant="outline"
-                class="w-full h-11 justify-between bg-muted/40 border-transparent rounded-2xl px-4 hover:bg-muted/60 transition-all font-medium"
+                disabled={!citiesLoaded}
+                class="w-full h-11 justify-between bg-muted/40 border-transparent rounded-2xl px-4 hover:bg-muted/60 transition-all font-medium disabled:opacity-60"
               >
                 <span class={draftCity === 'all' ? 'opacity-40' : ''}>
-                  {cities.find((c) => c.value === draftCity)?.label}
+                  {selectedCityLabel}
                 </span>
-                <ChevronsUpDown class="w-4 h-4 opacity-30" />
+                {#if !citiesLoaded}
+                  <LoaderCircle class="w-4 h-4 opacity-50 animate-spin" />
+                {:else}
+                  <ChevronsUpDown class="w-4 h-4 opacity-30" />
+                {/if}
               </Button>
             {/snippet}
           </Popover.Trigger>
@@ -374,29 +372,39 @@
           >
             <Command.Root>
               <Command.Input placeholder="Шукати місто..." />
-              <Command.List class="max-h-40">
-                <Command.Empty>Не знайдено</Command.Empty>
-                <Command.Group>
-                  {#each cities as c}
-                    <Command.Item
-                      value={c.label}
-                      onSelect={() => {
-                        draftCity = c.value
-                        cityPopoverOpen = false
-                      }}
-                      class="flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer aria-selected:bg-accent transition-colors text-foreground"
-                    >
-                      <div class="w-4 flex items-center justify-center">
-                        {#if draftCity === c.value}
-                          <span in:scale={{ duration: 150, start: 0.5 }}
-                            ><Check class="w-4 h-4 text-primary" /></span
-                          >
-                        {/if}
-                      </div>
-                      <span class="text-sm font-medium">{c.label}</span>
-                    </Command.Item>
-                  {/each}
-                </Command.Group>
+              <Command.List class="max-h-60">
+                {#if !citiesLoaded}
+                  <div
+                    class="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground"
+                    in:fade={{ duration: 150 }}
+                  >
+                    <LoaderCircle class="w-4 h-4 animate-spin" />
+                    <span>Завантаження міст…</span>
+                  </div>
+                {:else}
+                  <Command.Empty>Не знайдено</Command.Empty>
+                  <Command.Group>
+                    {#each cities as c (c.value)}
+                      <Command.Item
+                        value={c.label}
+                        onSelect={() => {
+                          draftCity = c.value
+                          cityPopoverOpen = false
+                        }}
+                        class="flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer aria-selected:bg-accent transition-colors text-foreground"
+                      >
+                        <div class="w-4 flex items-center justify-center">
+                          {#if draftCity === c.value}
+                            <span in:scale={{ duration: 150, start: 0.5 }}
+                              ><Check class="w-4 h-4 text-primary" /></span
+                            >
+                          {/if}
+                        </div>
+                        <span class="text-sm font-medium">{c.label}</span>
+                      </Command.Item>
+                    {/each}
+                  </Command.Group>
+                {/if}
               </Command.List>
             </Command.Root>
           </Popover.Content>

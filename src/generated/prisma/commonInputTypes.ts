@@ -569,6 +569,23 @@ export type EnumCategoryStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumCategoryStatusFilter<$PrismaModel>
 }
 
+export type EnumCityStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CityStatus | Prisma.EnumCityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCityStatusFilter<$PrismaModel> | $Enums.CityStatus
+}
+
+export type EnumCityStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CityStatus | Prisma.EnumCityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCityStatusWithAggregatesFilter<$PrismaModel> | $Enums.CityStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCityStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCityStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1097,6 +1114,23 @@ export type NestedEnumCategoryStatusWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCategoryStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCategoryStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCityStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CityStatus | Prisma.EnumCityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCityStatusFilter<$PrismaModel> | $Enums.CityStatus
+}
+
+export type NestedEnumCityStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CityStatus | Prisma.EnumCityStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CityStatus[] | Prisma.ListEnumCityStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCityStatusWithAggregatesFilter<$PrismaModel> | $Enums.CityStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCityStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCityStatusFilter<$PrismaModel>
 }
 
 

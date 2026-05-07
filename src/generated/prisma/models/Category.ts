@@ -309,6 +309,7 @@ export type CategoryWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   subcategories?: Prisma.SubcategoryListRelationFilter
+  skills?: Prisma.SkillListRelationFilter
 }
 
 export type CategoryOrderByWithRelationInput = {
@@ -328,6 +329,7 @@ export type CategoryOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   subcategories?: Prisma.SubcategoryOrderByRelationAggregateInput
+  skills?: Prisma.SkillOrderByRelationAggregateInput
 }
 
 export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -350,6 +352,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   subcategories?: Prisma.SubcategoryListRelationFilter
+  skills?: Prisma.SkillListRelationFilter
 }, "id" | "slug">
 
 export type CategoryOrderByWithAggregationInput = {
@@ -413,6 +416,7 @@ export type CategoryCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subcategories?: Prisma.SubcategoryCreateNestedManyWithoutCategoryInput
+  skills?: Prisma.SkillCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateInput = {
@@ -432,6 +436,7 @@ export type CategoryUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subcategories?: Prisma.SubcategoryUncheckedCreateNestedManyWithoutCategoryInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUpdateInput = {
@@ -451,6 +456,7 @@ export type CategoryUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subcategories?: Prisma.SubcategoryUpdateManyWithoutCategoryNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateInput = {
@@ -470,6 +476,7 @@ export type CategoryUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subcategories?: Prisma.SubcategoryUncheckedUpdateManyWithoutCategoryNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryCreateManyInput = {
@@ -617,6 +624,20 @@ export type CategoryUpdateOneRequiredWithoutSubcategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutSubcategoriesInput, Prisma.CategoryUpdateWithoutSubcategoriesInput>, Prisma.CategoryUncheckedUpdateWithoutSubcategoriesInput>
 }
 
+export type CategoryCreateNestedOneWithoutSkillsInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutSkillsInput, Prisma.CategoryUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSkillsInput
+  connect?: Prisma.CategoryWhereUniqueInput
+}
+
+export type CategoryUpdateOneRequiredWithoutSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutSkillsInput, Prisma.CategoryUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSkillsInput
+  upsert?: Prisma.CategoryUpsertWithoutSkillsInput
+  connect?: Prisma.CategoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutSkillsInput, Prisma.CategoryUpdateWithoutSkillsInput>, Prisma.CategoryUncheckedUpdateWithoutSkillsInput>
+}
+
 export type CategoryCreateWithoutSubcategoriesInput = {
   id?: string
   slug: string
@@ -633,6 +654,7 @@ export type CategoryCreateWithoutSubcategoriesInput = {
   freelancersCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateWithoutSubcategoriesInput = {
@@ -651,6 +673,7 @@ export type CategoryUncheckedCreateWithoutSubcategoriesInput = {
   freelancersCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryCreateOrConnectWithoutSubcategoriesInput = {
@@ -685,6 +708,7 @@ export type CategoryUpdateWithoutSubcategoriesInput = {
   freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutSubcategoriesInput = {
@@ -703,6 +727,99 @@ export type CategoryUncheckedUpdateWithoutSubcategoriesInput = {
   freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutCategoryNestedInput
+}
+
+export type CategoryCreateWithoutSkillsInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  icon?: string | null
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subcategories?: Prisma.SubcategoryCreateNestedManyWithoutCategoryInput
+}
+
+export type CategoryUncheckedCreateWithoutSkillsInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  icon?: string | null
+  color?: string | null
+  status?: $Enums.CategoryStatus
+  sortOrder?: number
+  seoTitle?: string | null
+  seoDescription?: string | null
+  gigsCount?: number
+  jobsCount?: number
+  freelancersCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subcategories?: Prisma.SubcategoryUncheckedCreateNestedManyWithoutCategoryInput
+}
+
+export type CategoryCreateOrConnectWithoutSkillsInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutSkillsInput, Prisma.CategoryUncheckedCreateWithoutSkillsInput>
+}
+
+export type CategoryUpsertWithoutSkillsInput = {
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutSkillsInput, Prisma.CategoryUncheckedUpdateWithoutSkillsInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutSkillsInput, Prisma.CategoryUncheckedCreateWithoutSkillsInput>
+  where?: Prisma.CategoryWhereInput
+}
+
+export type CategoryUpdateToOneWithWhereWithoutSkillsInput = {
+  where?: Prisma.CategoryWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutSkillsInput, Prisma.CategoryUncheckedUpdateWithoutSkillsInput>
+}
+
+export type CategoryUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subcategories?: Prisma.SubcategoryUpdateManyWithoutCategoryNestedInput
+}
+
+export type CategoryUncheckedUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subcategories?: Prisma.SubcategoryUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 
@@ -712,10 +829,12 @@ export type CategoryUncheckedUpdateWithoutSubcategoriesInput = {
 
 export type CategoryCountOutputType = {
   subcategories: number
+  skills: number
 }
 
 export type CategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subcategories?: boolean | CategoryCountOutputTypeCountSubcategoriesArgs
+  skills?: boolean | CategoryCountOutputTypeCountSkillsArgs
 }
 
 /**
@@ -733,6 +852,13 @@ export type CategoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type CategoryCountOutputTypeCountSubcategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SubcategoryWhereInput
+}
+
+/**
+ * CategoryCountOutputType without action
+ */
+export type CategoryCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SkillWhereInput
 }
 
 
@@ -753,6 +879,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   subcategories?: boolean | Prisma.Category$subcategoriesArgs<ExtArgs>
+  skills?: boolean | Prisma.Category$skillsArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -813,6 +940,7 @@ export type CategorySelectScalar = {
 export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "color" | "status" | "sortOrder" | "seoTitle" | "seoDescription" | "gigsCount" | "jobsCount" | "freelancersCount" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subcategories?: boolean | Prisma.Category$subcategoriesArgs<ExtArgs>
+  skills?: boolean | Prisma.Category$skillsArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -822,6 +950,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Category"
   objects: {
     subcategories: Prisma.$SubcategoryPayload<ExtArgs>[]
+    skills: Prisma.$SkillPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1234,6 +1363,7 @@ readonly fields: CategoryFieldRefs;
 export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   subcategories<T extends Prisma.Category$subcategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$subcategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubcategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  skills<T extends Prisma.Category$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1692,6 +1822,30 @@ export type Category$subcategoriesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.SubcategoryScalarFieldEnum | Prisma.SubcategoryScalarFieldEnum[]
+}
+
+/**
+ * Category.skills
+ */
+export type Category$skillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Skill
+   */
+  select?: Prisma.SkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Skill
+   */
+  omit?: Prisma.SkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SkillInclude<ExtArgs> | null
+  where?: Prisma.SkillWhereInput
+  orderBy?: Prisma.SkillOrderByWithRelationInput | Prisma.SkillOrderByWithRelationInput[]
+  cursor?: Prisma.SkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SkillScalarFieldEnum | Prisma.SkillScalarFieldEnum[]
 }
 
 /**

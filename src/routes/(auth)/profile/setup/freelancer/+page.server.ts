@@ -44,11 +44,18 @@ export const load: PageServerLoad = async ({ request }) => {
       freelancerProfile: {
         select: {
           categories: true,
-          skills: true,
           experience: true,
           languages: true,
           hourlyRate: true,
           portfolioUrl: true,
+          // skills тепер це relation FreelancerSkill[] → беремо через include-логіку
+          skills: {
+            select: {
+              skill: {
+                select: { slug: true },
+              },
+            },
+          },
         },
       },
     },
@@ -67,6 +74,10 @@ export const load: PageServerLoad = async ({ request }) => {
 
   const username = user.username ?? suggestFromEmail(user.email)
 
+  // Витягуємо slug-и навичок з нової relation-структури
+  const skillSlugs =
+    user.freelancerProfile?.skills.map((fs) => fs.skill.slug) ?? []
+
   return {
     prefill: {
       name: user.name ?? session.user.name ?? '',
@@ -79,7 +90,7 @@ export const load: PageServerLoad = async ({ request }) => {
       verificationStatus: user.verificationStatus,
       isExistingFreelancer: user.role === 'FREELANCER',
       categories: user.freelancerProfile?.categories ?? [],
-      skills: user.freelancerProfile?.skills ?? [],
+      skills: skillSlugs,
       experience: user.freelancerProfile?.experience
         ? (experienceReverse[user.freelancerProfile.experience] ?? '')
         : '',

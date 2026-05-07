@@ -379,6 +379,9 @@ export type UserWhereInput = {
   freelancerProfile?: Prisma.XOR<Prisma.FreelancerProfileNullableScalarRelationFilter, Prisma.FreelancerProfileWhereInput> | null
   following?: Prisma.FollowListRelationFilter
   followers?: Prisma.FollowListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  phoneRevealsMade?: Prisma.PhoneRevealListRelationFilter
+  phoneRevealsReceived?: Prisma.PhoneRevealListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -421,6 +424,9 @@ export type UserOrderByWithRelationInput = {
   freelancerProfile?: Prisma.FreelancerProfileOrderByWithRelationInput
   following?: Prisma.FollowOrderByRelationAggregateInput
   followers?: Prisma.FollowOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  phoneRevealsMade?: Prisma.PhoneRevealOrderByRelationAggregateInput
+  phoneRevealsReceived?: Prisma.PhoneRevealOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -466,6 +472,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   freelancerProfile?: Prisma.XOR<Prisma.FreelancerProfileNullableScalarRelationFilter, Prisma.FreelancerProfileWhereInput> | null
   following?: Prisma.FollowListRelationFilter
   followers?: Prisma.FollowListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  phoneRevealsMade?: Prisma.PhoneRevealListRelationFilter
+  phoneRevealsReceived?: Prisma.PhoneRevealListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -570,6 +579,9 @@ export type UserCreateInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -612,6 +624,9 @@ export type UserUncheckedCreateInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserUpdateInput = {
@@ -654,6 +669,9 @@ export type UserUpdateInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -696,6 +714,9 @@ export type UserUncheckedUpdateInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -1158,6 +1179,48 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserCreateNestedOneWithoutPhoneRevealsMadeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsMadeInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsMadeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPhoneRevealsMadeInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutPhoneRevealsReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsReceivedInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPhoneRevealsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPhoneRevealsMadeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsMadeInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsMadeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPhoneRevealsMadeInput
+  upsert?: Prisma.UserUpsertWithoutPhoneRevealsMadeInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPhoneRevealsMadeInput, Prisma.UserUpdateWithoutPhoneRevealsMadeInput>, Prisma.UserUncheckedUpdateWithoutPhoneRevealsMadeInput>
+}
+
+export type UserUpdateOneRequiredWithoutPhoneRevealsReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsReceivedInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPhoneRevealsReceivedInput
+  upsert?: Prisma.UserUpsertWithoutPhoneRevealsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPhoneRevealsReceivedInput, Prisma.UserUpdateWithoutPhoneRevealsReceivedInput>, Prisma.UserUncheckedUpdateWithoutPhoneRevealsReceivedInput>
+}
+
 export type UserCreateWithoutFollowingInput = {
   id?: string
   email: string
@@ -1197,6 +1260,9 @@ export type UserCreateWithoutFollowingInput = {
   orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -1238,6 +1304,9 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -1284,6 +1353,9 @@ export type UserCreateWithoutFollowersInput = {
   orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -1325,6 +1397,9 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -1382,6 +1457,9 @@ export type UserUpdateWithoutFollowingInput = {
   orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -1423,6 +1501,9 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -1475,6 +1556,9 @@ export type UserUpdateWithoutFollowersInput = {
   orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -1516,6 +1600,9 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutFreelancerProfileInput = {
@@ -1557,6 +1644,9 @@ export type UserCreateWithoutFreelancerProfileInput = {
   orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutFreelancerProfileInput = {
@@ -1598,6 +1688,9 @@ export type UserUncheckedCreateWithoutFreelancerProfileInput = {
   orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutFreelancerProfileInput = {
@@ -1655,6 +1748,9 @@ export type UserUpdateWithoutFreelancerProfileInput = {
   orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
@@ -1696,6 +1792,9 @@ export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
   orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutGigsInput = {
@@ -1737,6 +1836,9 @@ export type UserCreateWithoutGigsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutGigsInput = {
@@ -1778,6 +1880,9 @@ export type UserUncheckedCreateWithoutGigsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutGigsInput = {
@@ -1835,6 +1940,9 @@ export type UserUpdateWithoutGigsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGigsInput = {
@@ -1876,6 +1984,9 @@ export type UserUncheckedUpdateWithoutGigsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -1917,6 +2028,9 @@ export type UserCreateWithoutOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -1958,6 +2072,9 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -2004,6 +2121,9 @@ export type UserCreateWithoutFreelancerOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutFreelancerOrdersInput = {
@@ -2045,6 +2165,9 @@ export type UserUncheckedCreateWithoutFreelancerOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutFreelancerOrdersInput = {
@@ -2102,6 +2225,9 @@ export type UserUpdateWithoutOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -2143,6 +2269,9 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUpsertWithoutFreelancerOrdersInput = {
@@ -2195,6 +2324,9 @@ export type UserUpdateWithoutFreelancerOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFreelancerOrdersInput = {
@@ -2236,6 +2368,9 @@ export type UserUncheckedUpdateWithoutFreelancerOrdersInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutOrderEventsInput = {
@@ -2277,6 +2412,9 @@ export type UserCreateWithoutOrderEventsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutOrderEventsInput = {
@@ -2318,6 +2456,9 @@ export type UserUncheckedCreateWithoutOrderEventsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutOrderEventsInput = {
@@ -2375,6 +2516,9 @@ export type UserUpdateWithoutOrderEventsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrderEventsInput = {
@@ -2416,6 +2560,9 @@ export type UserUncheckedUpdateWithoutOrderEventsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutJobsInput = {
@@ -2457,6 +2604,9 @@ export type UserCreateWithoutJobsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutJobsInput = {
@@ -2498,6 +2648,9 @@ export type UserUncheckedCreateWithoutJobsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutJobsInput = {
@@ -2555,6 +2708,9 @@ export type UserUpdateWithoutJobsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJobsInput = {
@@ -2596,6 +2752,9 @@ export type UserUncheckedUpdateWithoutJobsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutProposalsInput = {
@@ -2637,6 +2796,9 @@ export type UserCreateWithoutProposalsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutProposalsInput = {
@@ -2678,6 +2840,9 @@ export type UserUncheckedCreateWithoutProposalsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutProposalsInput = {
@@ -2735,6 +2900,9 @@ export type UserUpdateWithoutProposalsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProposalsInput = {
@@ -2776,6 +2944,9 @@ export type UserUncheckedUpdateWithoutProposalsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutWalletInput = {
@@ -2817,6 +2988,9 @@ export type UserCreateWithoutWalletInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutWalletInput = {
@@ -2858,6 +3032,9 @@ export type UserUncheckedCreateWithoutWalletInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutWalletInput = {
@@ -2915,6 +3092,9 @@ export type UserUpdateWithoutWalletInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWalletInput = {
@@ -2956,6 +3136,9 @@ export type UserUncheckedUpdateWithoutWalletInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutReviewsInput = {
@@ -2997,6 +3180,9 @@ export type UserCreateWithoutReviewsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutReviewsInput = {
@@ -3038,6 +3224,9 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutReviewsInput = {
@@ -3095,6 +3284,9 @@ export type UserUpdateWithoutReviewsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -3136,6 +3328,9 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutChatsInput = {
@@ -3177,6 +3372,9 @@ export type UserCreateWithoutChatsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutChatsInput = {
@@ -3218,6 +3416,9 @@ export type UserUncheckedCreateWithoutChatsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutChatsInput = {
@@ -3275,6 +3476,9 @@ export type UserUpdateWithoutChatsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatsInput = {
@@ -3316,6 +3520,9 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -3357,6 +3564,9 @@ export type UserCreateWithoutSentMessagesInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -3398,6 +3608,9 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -3455,6 +3668,9 @@ export type UserUpdateWithoutSentMessagesInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -3496,6 +3712,9 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -3537,6 +3756,9 @@ export type UserCreateWithoutSessionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -3578,6 +3800,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -3635,6 +3860,9 @@ export type UserUpdateWithoutSessionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -3676,6 +3904,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -3717,6 +3948,9 @@ export type UserCreateWithoutAccountsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -3758,6 +3992,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -3815,6 +4052,9 @@ export type UserUpdateWithoutAccountsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -3856,6 +4096,585 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
+}
+
+export type UserCreateWithoutPhoneRevealsMadeInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsReceived?: Prisma.PhoneRevealCreateNestedManyWithoutTargetInput
+}
+
+export type UserUncheckedCreateWithoutPhoneRevealsMadeInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutTargetInput
+}
+
+export type UserCreateOrConnectWithoutPhoneRevealsMadeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsMadeInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsMadeInput>
+}
+
+export type UserCreateWithoutPhoneRevealsReceivedInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
+  gigs?: Prisma.GigCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealCreateNestedManyWithoutViewerInput
+}
+
+export type UserUncheckedCreateWithoutPhoneRevealsReceivedInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  username?: string | null
+  bio?: string | null
+  phone?: string | null
+  city?: string | null
+  avatar?: string | null
+  avatarPublicId?: string | null
+  banner?: string | null
+  bannerPublicId?: string | null
+  portfolioImages?: Prisma.UserCreateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserCreateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: $Enums.VerificationStatus
+  verificationRejectReason?: string | null
+  verifiedAt?: Date | string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  lastSeen?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientAvgRating?: number
+  clientReviewsCount?: number
+  gigs?: Prisma.GigUncheckedCreateNestedManyWithoutSellerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  freelancerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutFreelancerInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
+  proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  chats?: Prisma.ChatMemberUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  orderEvents?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedCreateNestedManyWithoutViewerInput
+}
+
+export type UserCreateOrConnectWithoutPhoneRevealsReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsReceivedInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsReceivedInput>
+}
+
+export type UserUpsertWithoutPhoneRevealsMadeInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPhoneRevealsMadeInput, Prisma.UserUncheckedUpdateWithoutPhoneRevealsMadeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsMadeInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsMadeInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPhoneRevealsMadeInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPhoneRevealsMadeInput, Prisma.UserUncheckedUpdateWithoutPhoneRevealsMadeInput>
+}
+
+export type UserUpdateWithoutPhoneRevealsMadeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUpdateManyWithoutTargetNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPhoneRevealsMadeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsReceived?: Prisma.PhoneRevealUncheckedUpdateManyWithoutTargetNestedInput
+}
+
+export type UserUpsertWithoutPhoneRevealsReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPhoneRevealsReceivedInput, Prisma.UserUncheckedUpdateWithoutPhoneRevealsReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPhoneRevealsReceivedInput, Prisma.UserUncheckedCreateWithoutPhoneRevealsReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPhoneRevealsReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPhoneRevealsReceivedInput, Prisma.UserUncheckedUpdateWithoutPhoneRevealsReceivedInput>
+}
+
+export type UserUpdateWithoutPhoneRevealsReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  gigs?: Prisma.GigUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUpdateManyWithoutViewerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPhoneRevealsReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolioImages?: Prisma.UserUpdateportfolioImagesInput | string[]
+  portfolioImagesPublicIds?: Prisma.UserUpdateportfolioImagesPublicIdsInput | string[]
+  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  verificationRejectReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientAvgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  clientReviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  gigs?: Prisma.GigUncheckedUpdateManyWithoutSellerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  freelancerOrders?: Prisma.OrderUncheckedUpdateManyWithoutFreelancerNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
+  proposals?: Prisma.ProposalUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  chats?: Prisma.ChatMemberUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  orderEvents?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  phoneRevealsMade?: Prisma.PhoneRevealUncheckedUpdateManyWithoutViewerNestedInput
 }
 
 
@@ -3877,6 +4696,9 @@ export type UserCountOutputType = {
   orderEvents: number
   following: number
   followers: number
+  notifications: number
+  phoneRevealsMade: number
+  phoneRevealsReceived: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3893,6 +4715,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   orderEvents?: boolean | UserCountOutputTypeCountOrderEventsArgs
   following?: boolean | UserCountOutputTypeCountFollowingArgs
   followers?: boolean | UserCountOutputTypeCountFollowersArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  phoneRevealsMade?: boolean | UserCountOutputTypeCountPhoneRevealsMadeArgs
+  phoneRevealsReceived?: boolean | UserCountOutputTypeCountPhoneRevealsReceivedArgs
 }
 
 /**
@@ -3996,6 +4821,27 @@ export type UserCountOutputTypeCountFollowersArgs<ExtArgs extends runtime.Types.
   where?: Prisma.FollowWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPhoneRevealsMadeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PhoneRevealWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPhoneRevealsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PhoneRevealWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4037,6 +4883,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  phoneRevealsMade?: boolean | Prisma.User$phoneRevealsMadeArgs<ExtArgs>
+  phoneRevealsReceived?: boolean | Prisma.User$phoneRevealsReceivedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4138,6 +4987,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   freelancerProfile?: boolean | Prisma.User$freelancerProfileArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  phoneRevealsMade?: boolean | Prisma.User$phoneRevealsMadeArgs<ExtArgs>
+  phoneRevealsReceived?: boolean | Prisma.User$phoneRevealsReceivedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4161,6 +5013,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     freelancerProfile: Prisma.$FreelancerProfilePayload<ExtArgs> | null
     following: Prisma.$FollowPayload<ExtArgs>[]
     followers: Prisma.$FollowPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    phoneRevealsMade: Prisma.$PhoneRevealPayload<ExtArgs>[]
+    phoneRevealsReceived: Prisma.$PhoneRevealPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4596,6 +5451,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   freelancerProfile<T extends Prisma.User$freelancerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$freelancerProfileArgs<ExtArgs>>): Prisma.Prisma__FreelancerProfileClient<runtime.Types.Result.GetResult<Prisma.$FreelancerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  phoneRevealsMade<T extends Prisma.User$phoneRevealsMadeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$phoneRevealsMadeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PhoneRevealPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  phoneRevealsReceived<T extends Prisma.User$phoneRevealsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$phoneRevealsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PhoneRevealPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5389,6 +6247,78 @@ export type User$followersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.FollowScalarFieldEnum | Prisma.FollowScalarFieldEnum[]
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.phoneRevealsMade
+ */
+export type User$phoneRevealsMadeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PhoneReveal
+   */
+  select?: Prisma.PhoneRevealSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PhoneReveal
+   */
+  omit?: Prisma.PhoneRevealOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PhoneRevealInclude<ExtArgs> | null
+  where?: Prisma.PhoneRevealWhereInput
+  orderBy?: Prisma.PhoneRevealOrderByWithRelationInput | Prisma.PhoneRevealOrderByWithRelationInput[]
+  cursor?: Prisma.PhoneRevealWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PhoneRevealScalarFieldEnum | Prisma.PhoneRevealScalarFieldEnum[]
+}
+
+/**
+ * User.phoneRevealsReceived
+ */
+export type User$phoneRevealsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PhoneReveal
+   */
+  select?: Prisma.PhoneRevealSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PhoneReveal
+   */
+  omit?: Prisma.PhoneRevealOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PhoneRevealInclude<ExtArgs> | null
+  where?: Prisma.PhoneRevealWhereInput
+  orderBy?: Prisma.PhoneRevealOrderByWithRelationInput | Prisma.PhoneRevealOrderByWithRelationInput[]
+  cursor?: Prisma.PhoneRevealWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PhoneRevealScalarFieldEnum | Prisma.PhoneRevealScalarFieldEnum[]
 }
 
 /**

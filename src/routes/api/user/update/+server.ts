@@ -1,6 +1,11 @@
 // src/routes/api/user/update/+server.ts
 import { json } from '@sveltejs/kit'
-import { Prisma, ExperienceLevel, VerificationStatus, Role } from '../../../../generated/prisma/client'
+import {
+  Prisma,
+  ExperienceLevel,
+  VerificationStatus,
+  Role,
+} from '../../../../generated/prisma/client'
 import { prisma } from '$lib/prisma'
 import { auth } from '$lib/auth'
 import type { RequestHandler } from './$types'
@@ -14,7 +19,7 @@ interface UpdatePayload {
   bio?: string
 
   categories?: string[]
-  skills?: string[]
+  skills?: string[] // ← тепер це slug-и навичок, не імена
   hourlyRate?: number
   experience?: string
   languages?: string[]
@@ -31,20 +36,34 @@ const experienceMap: Record<string, ExperienceLevel> = {
   '10_PLUS': ExperienceLevel.Y_10_PLUS,
 }
 
-// Повторна перевірка username на сервері — не довіряємо клієнту
 const USERNAME_RE = /^[a-z][a-z0-9_]{2,19}$/
 
 const RESERVED = new Set([
-  'admin', 'root', 'api', 'support', 'help', 'zunor', 'system',
-  'user', 'users', 'profile', 'dashboard', 'settings', 'login',
-  'register', 'signup', 'logout', 'moderation', 'verified',
-  'null', 'undefined', 'anonymous',
+  'admin',
+  'root',
+  'api',
+  'support',
+  'help',
+  'zunor',
+  'system',
+  'user',
+  'users',
+  'profile',
+  'dashboard',
+  'settings',
+  'login',
+  'register',
+  'signup',
+  'logout',
+  'moderation',
+  'verified',
+  'null',
+  'undefined',
+  'anonymous',
 ])
 
-// Валідація phone: тільки цифри, +, пробіли, дужки, дефіси; 8-20 символів
 const PHONE_RE = /^[\d\s+()-]{8,20}$/
 
-// Валідація URL: https:// тільки (щоб не пропустити javascript: URI)
 function isValidUrl(url: string): boolean {
   try {
     const u = new URL(url)
@@ -84,7 +103,10 @@ export const POST: RequestHandler = async ({ request }) => {
   if (body.bio !== undefined && body.bio.length > 500) {
     return json({ error: 'Bio too long' }, { status: 400 })
   }
-  if (body.name !== undefined && (body.name.length < 1 || body.name.length > 80)) {
+  if (
+    body.name !== undefined &&
+    (body.name.length < 1 || body.name.length > 80)
+  ) {
     return json({ error: 'Invalid name length' }, { status: 400 })
   }
   if (body.city !== undefined && body.city.length > 60) {
@@ -112,6 +134,11 @@ export const POST: RequestHandler = async ({ request }) => {
     if (!Array.isArray(body.skills) || body.skills.length > 10) {
       return json({ error: 'Invalid skills' }, { status: 400 })
     }
+    // Перевірка формату slug
+    const validSlug = /^[a-z0-9-]{1,80}$/
+    if (!body.skills.every((s) => typeof s === 'string' && validSlug.test(s))) {
+      return json({ error: 'Invalid skill slugs' }, { status: 400 })
+    }
   }
   if (body.languages !== undefined) {
     if (!Array.isArray(body.languages) || body.languages.length > 10) {
@@ -119,7 +146,7 @@ export const POST: RequestHandler = async ({ request }) => {
     }
   }
 
-  // ─── Username — окрема валідація ───
+  // ─── Username ───
   if (body.username !== undefined) {
     const u = body.username.trim().toLowerCase()
     if (!USERNAME_RE.test(u)) {
@@ -134,8 +161,32 @@ export const POST: RequestHandler = async ({ request }) => {
         { status: 400 },
       )
     }
-    // нормалізуємо
     body.username = u
+  }
+
+  // ─── Якщо прийшли skills — заздалегідь резолвимо slug → id,
+  //     щоб не валити решту операцій якщо щось не так
+  let resolvedSkillIds: string[] | null = null
+  if (body.skills !== undefined) {
+    if (body.skills.length === 0) {
+      resolvedSkillIds = []
+    } else {
+      const skills = await prisma.skill.findMany({
+        where: { slug: { in: body.skills } },
+        select: { id: true, slug: true },
+      })
+
+      if (skills.length !== body.skills.length) {
+        const found = new Set(skills.map((s) => s.slug))
+        const missing = body.skills.filter((s) => !found.has(s))
+        return json(
+          { error: 'Some skills not found', missing },
+          { status: 400 },
+        )
+      }
+
+      resolvedSkillIds = skills.map((s) => s.id)
+    }
   }
 
   // ─── Оновлення User ───
@@ -159,7 +210,6 @@ export const POST: RequestHandler = async ({ request }) => {
         data: userData,
       })
     } catch (err) {
-      // P2002 — unique constraint (username вже зайнято)
       if (
         err instanceof Prisma.PrismaClientKnownRequestError &&
         err.code === 'P2002'
@@ -183,31 +233,54 @@ export const POST: RequestHandler = async ({ request }) => {
     body.portfolioUrl !== undefined
 
   if (isFreelancerData) {
-    // UPDATE — часткове оновлення
-    const updateData: Prisma.FreelancerProfileUpdateInput = {}
-    if (body.categories !== undefined) updateData.categories = body.categories
-    if (body.skills !== undefined) updateData.skills = body.skills
-    if (body.hourlyRate !== undefined) updateData.hourlyRate = body.hourlyRate
-    if (body.languages !== undefined) updateData.languages = body.languages
-    if (body.portfolioUrl !== undefined) updateData.portfolioUrl = body.portfolioUrl
-    if (body.experience !== undefined) updateData.experience = experienceMap[body.experience]
+    // Скаляри FreelancerProfile (без skills — вони тепер relation)
+    const scalarUpdate: Prisma.FreelancerProfileUpdateInput = {}
+    if (body.categories !== undefined) scalarUpdate.categories = body.categories
+    if (body.hourlyRate !== undefined) scalarUpdate.hourlyRate = body.hourlyRate
+    if (body.languages !== undefined) scalarUpdate.languages = body.languages
+    if (body.portfolioUrl !== undefined)
+      scalarUpdate.portfolioUrl = body.portfolioUrl
+    if (body.experience !== undefined)
+      scalarUpdate.experience = experienceMap[body.experience]
 
-    // CREATE — використовуємо UncheckedCreateInput, бо він дозволяє userId
-    // напряму (без connect-syntax). Дефолти ([], null) виставить Prisma.
-    const createData: Prisma.FreelancerProfileUncheckedCreateInput = {
+    const scalarCreate: Prisma.FreelancerProfileUncheckedCreateInput = {
       userId,
       ...(body.categories !== undefined && { categories: body.categories }),
-      ...(body.skills !== undefined && { skills: body.skills }),
       ...(body.hourlyRate !== undefined && { hourlyRate: body.hourlyRate }),
       ...(body.languages !== undefined && { languages: body.languages }),
-      ...(body.portfolioUrl !== undefined && { portfolioUrl: body.portfolioUrl }),
-      ...(body.experience !== undefined && { experience: experienceMap[body.experience] }),
+      ...(body.portfolioUrl !== undefined && {
+        portfolioUrl: body.portfolioUrl,
+      }),
+      ...(body.experience !== undefined && {
+        experience: experienceMap[body.experience],
+      }),
     }
 
-    await prisma.freelancerProfile.upsert({
-      where: { userId },
-      create: createData,
-      update: updateData,
+    // Транзакція: upsert профілю + перезапис скілів
+    await prisma.$transaction(async (tx) => {
+      const profile = await tx.freelancerProfile.upsert({
+        where: { userId },
+        create: scalarCreate,
+        update: scalarUpdate,
+        select: { id: true },
+      })
+
+      // Якщо прийшли skills — повністю перезаписуємо звʼязки
+      if (resolvedSkillIds !== null) {
+        await tx.freelancerSkill.deleteMany({
+          where: { freelancerId: profile.id },
+        })
+
+        if (resolvedSkillIds.length > 0) {
+          await tx.freelancerSkill.createMany({
+            data: resolvedSkillIds.map((skillId) => ({
+              freelancerId: profile.id,
+              skillId,
+            })),
+            skipDuplicates: true,
+          })
+        }
+      }
     })
   }
 

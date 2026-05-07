@@ -7,6 +7,7 @@
   } from '$lib/components/ui/avatar'
   import { Button } from '$lib/components/ui/button'
   import { Badge } from '$lib/components/ui/badge'
+  import { Skeleton } from '$lib/components/ui/skeleton'
   import {
     BadgeCheck,
     Copy,
@@ -35,28 +36,58 @@
 
   let { user, isOwner, onMessage }: Props = $props()
 
-  const memberSince = $derived(
+  // ─── Derived (memoized) ───
+  const memberSinceLabel = $derived(
     new Date(user.createdAt).toLocaleDateString('uk-UA', {
       month: 'short',
       year: 'numeric',
     }),
   )
 
+  const memberSinceISO = $derived(new Date(user.createdAt).toISOString())
+
   const avgRating = $derived(
     user.reviews.length > 0
-      ? (
-          user.reviews.reduce((sum, r) => sum + r.rating, 0) /
-          user.reviews.length
-        ).toFixed(1)
-      : '0.0',
+      ? user.reviews.reduce((sum, r) => sum + r.rating, 0) / user.reviews.length
+      : 0,
   )
 
+  const avgRatingLabel = $derived(avgRating.toFixed(1))
+
+  const initials = $derived(
+    (user.name ?? '?')
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0]?.toUpperCase() ?? '')
+      .join('') || '?',
+  )
+
+  // Безпечне відмінювання
+  function reviewsLabel(n: number): string {
+    const mod10 = n % 10
+    const mod100 = n % 100
+    if (mod10 === 1 && mod100 !== 11) return 'відгук'
+    if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100))
+      return 'відгуки'
+    return 'відгуків'
+  }
+
+  const reviewsLabelStr = $derived(reviewsLabel(user.reviews.length))
+
+  // ─── State ───
+  let avatarLoaded = $state(false)
   let copied = $state(false)
-  function copyUsername() {
+
+  async function copyUsername() {
     if (!user.username) return
-    navigator.clipboard.writeText('@' + user.username)
-    copied = true
-    setTimeout(() => (copied = false), 1200)
+    try {
+      await navigator.clipboard.writeText('@' + user.username)
+      copied = true
+      setTimeout(() => (copied = false), 1200)
+    } catch {
+      // clipboard заблокований у iframe — silently fail
+    }
   }
 
   function goEdit() {
@@ -68,78 +99,56 @@
   }
 </script>
 
-<!-- CEO -->
-<svelte:head>
-  <!-- TITLE -->
-  <title>
-    {`${user.name || 'Користувач'} — замовник ${
-      user.city ? `з ${user.city}` : ''
-    } | Zunor`}
-  </title>
+<!--
+  Клієнтський профіль — приватна сторінка.
+  • Доступ обмежений у server loader (тільки фрілансери з спільним чатом).
+  • <noindex> у обгортці +page.svelte (через robots meta).
+  • Тут НЕ робимо JSON-LD і не публічних og-тегів — це приватна сторінка.
+  • Жодних чутливих даних окрім тих, що прийшли з server loader.
+-->
 
-  <!-- DESCRIPTION -->
-  <meta
-    name="description"
-    content={`${user.name || 'Користувач'} — замовник послуг на Zunor. ${
-      user.city ? `Місто: ${user.city}.` : ''
-    } ${user.totalOrders} замовлень, ${
-      user.reviews.length
-    } відгуків від виконавців.`}
-  />
-
-  <!-- OPEN GRAPH -->
-  <meta
-    property="og:title"
-    content={`${user.name || 'Користувач'} — замовник | Zunor`}
-  />
-  <meta
-    property="og:description"
-    content={`Профіль замовника на Zunor. ${user.totalOrders} замовлень.`}
-  />
-  <meta property="og:type" content="profile" />
-  <meta property="og:image" content={user.avatar || '/default-avatar.png'} />
-
-  <!-- CANONICAL -->
-  <link rel="canonical" href={`https://zunor.com/profile/${user.id}`} />
-
-  <!-- JSON-LD -->
-  <script type="application/ld+json">
-    {JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: user.name,
-      image: user.avatar,
-      url: `https://zunor.com/profile/${user.id}`,
-      address: user.city
-        ? {
-            "@type": "PostalAddress",
-            addressLocality: user.city,
-            addressCountry: "UA"
-          }
-        : undefined,
-      description: `Замовник на платформі Zunor`,
-    })}
-  </script>
-</svelte:head>
-
-<div class="bg-background min-h-screen pb-24 sm:pb-12">
+<article
+  class="bg-background min-h-screen pb-24 sm:pb-12"
+  itemscope
+  itemtype="https://schema.org/Person"
+>
   <div class="max-w-2xl mx-auto px-4 sm:px-8 pt-8 sm:pt-12">
-    <!-- Аватар + CTA -->
-    <div class="flex items-start justify-between mb-4 mt-1">
-      <Avatar class="h-20 w-20 sm:h-24 sm:w-24 border-2 border-background">
-        <AvatarImage src={user.avatar} alt={user.name} />
-        <AvatarFallback
-          class="text-2xl sm:text-3xl font-semibold cursor-default"
-          style="background-color: var(--secondary); color: var(--secondary-foreground)"
-        >
-          {user.name?.[0]?.toUpperCase() ?? '?'}
-        </AvatarFallback>
-      </Avatar>
+    <!-- ═══════ Аватар + CTA ═══════ -->
+    <header class="flex items-start justify-between mb-4 mt-1">
+      <div class="relative">
+        {#if user.avatar && !avatarLoaded}
+          <div
+            class="absolute inset-0 size-20 sm:size-24 rounded-full overflow-hidden z-10"
+          >
+            <Skeleton class="w-full h-full rounded-full" />
+          </div>
+        {/if}
+        <Avatar class="size-20 sm:size-24 border-2 border-background">
+          {#if user.avatar}
+            <AvatarImage
+              src={user.avatar}
+              alt="Аватар {user.name}"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              onload={() => (avatarLoaded = true)}
+              onerror={() => (avatarLoaded = true)}
+            />
+            <meta itemprop="image" content={user.avatar} />
+          {/if}
+          <AvatarFallback
+            class="text-2xl sm:text-3xl font-semibold cursor-default"
+            style="background-color: var(--secondary); color: var(--secondary-foreground)"
+          >
+            {initials}
+          </AvatarFallback>
+        </Avatar>
+      </div>
 
-      <div class="hidden sm:flex gap-2 mt-2">
+      <nav aria-label="Дії з профілем" class="hidden sm:flex gap-2 mt-2">
         {#if isOwner}
           <Button onclick={goEdit} class="h-9 rounded-full gap-1.5 text-sm">
-            <Pencil class="size-3.5" />
+            <Pencil class="size-3.5" aria-hidden="true" />
             Редагувати профіль
           </Button>
         {:else}
@@ -148,20 +157,21 @@
             variant="outline"
             class="h-9 rounded-full gap-1.5 text-sm"
           >
-            <MessageCircle class="size-3.5" />
+            <MessageCircle class="size-3.5" aria-hidden="true" />
             Написати
           </Button>
         {/if}
-      </div>
-    </div>
+      </nav>
+    </header>
 
-    <!-- Імʼя + статус -->
-    <div class="mb-6">
+    <!-- ═══════ Імʼя + статус ═══════ -->
+    <section aria-label="Основна інформація" class="mb-6">
       <div class="flex items-start justify-between gap-2 mb-1">
         <div class="flex items-center gap-1.5 min-w-0">
           <h1
             class="text-[18px] font-semibold truncate"
             style="color: var(--foreground)"
+            itemprop="name"
           >
             {user.name || 'Без імені'}
           </h1>
@@ -169,6 +179,7 @@
             <BadgeCheck
               class="size-[18px] shrink-0"
               style="color: var(--primary); fill: var(--primary); stroke: var(--primary-foreground)"
+              aria-label="Верифікований"
             />
           {/if}
         </div>
@@ -179,8 +190,9 @@
             style="background-color: color-mix(in oklch, #10b981 12%, transparent);
                    color: #059669;
                    border: 1px solid color-mix(in oklch, #10b981 30%, transparent)"
+            role="status"
           >
-            <BadgeCheck class="size-3" />
+            <BadgeCheck class="size-3" aria-hidden="true" />
             VERIFIED
           </span>
         {/if}
@@ -191,17 +203,17 @@
           class="text-xs flex items-center gap-1 mb-2"
           style="color: var(--muted-foreground)"
         >
-          <span>@{user.username}</span>
+          <span itemprop="alternateName">@{user.username}</span>
           <button
             type="button"
             onclick={copyUsername}
             class="cursor-pointer transition-colors hover:opacity-70"
-            aria-label="Копіювати"
+            aria-label="Скопіювати нікнейм"
           >
             {#if copied}
-              <Check class="size-3" style="color: #10b981" />
+              <Check class="size-3" style="color: #10b981" aria-hidden="true" />
             {:else}
-              <Copy class="size-3" />
+              <Copy class="size-3" aria-hidden="true" />
             {/if}
           </button>
         </p>
@@ -212,21 +224,24 @@
           class="flex items-center gap-1 text-xs"
           style="color: var(--muted-foreground)"
         >
-          <Calendar class="size-3" />
-          З {memberSince}
+          <Calendar class="size-3" aria-hidden="true" />
+          З <time datetime={memberSinceISO}>{memberSinceLabel}</time>
         </span>
         {#if user.city}
           <span
             class="text-xs"
             style="color: color-mix(in oklch, var(--muted-foreground) 40%, transparent)"
-            >·</span
+            aria-hidden="true">·</span
           >
           <span
             class="flex items-center gap-1 text-xs"
             style="color: var(--muted-foreground)"
+            itemprop="address"
+            itemscope
+            itemtype="https://schema.org/PostalAddress"
           >
-            <MapPin class="size-3" />
-            {user.city}
+            <MapPin class="size-3" aria-hidden="true" />
+            <span itemprop="addressLocality">{user.city}</span>
           </span>
         {/if}
       </div>
@@ -239,10 +254,13 @@
         {#if user.reviews.length > 0}
           ·
           <span class="font-medium" style="color: var(--primary)">
-            {user.reviews.length} відгуків
+            {user.reviews.length}
+            {reviewsLabelStr}
           </span>
           ·
-          <span style="color: #f5a623; font-weight: 500">★ {avgRating}</span>
+          <span style="color: #f5a623; font-weight: 500">
+            ★ {avgRatingLabel}
+          </span>
         {/if}
       </p>
 
@@ -252,7 +270,7 @@
           variant="outline"
           class="rounded-full text-xs font-normal px-3 py-1 cursor-default gap-1.5"
         >
-          <ShoppingBag class="size-3" />
+          <ShoppingBag class="size-3" aria-hidden="true" />
           Клієнт
         </Badge>
         {#if user.completedOrders >= 10}
@@ -260,7 +278,7 @@
             variant="outline"
             class="rounded-full text-xs font-normal px-3 py-1 cursor-default gap-1.5"
           >
-            <Repeat class="size-3" />
+            <Repeat class="size-3" aria-hidden="true" />
             Постійний клієнт
           </Badge>
         {/if}
@@ -270,31 +288,33 @@
       {#if isOwner}
         <div class="flex sm:hidden mt-4">
           <Button onclick={goEdit} class="w-full h-11 rounded-full gap-2">
-            <Pencil class="size-4" />
+            <Pencil class="size-4" aria-hidden="true" />
             Редагувати профіль
           </Button>
         </div>
       {/if}
-    </div>
+    </section>
 
     <div
       class="border-t"
       style="border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
     ></div>
 
-    <!-- Про себе -->
+    <!-- ═══════ Про себе ═══════ -->
     {#if user.bio || isOwner}
-      <div class="py-5 space-y-3">
-        <p
+      <section aria-labelledby="about-heading" class="py-5 space-y-3">
+        <h2
+          id="about-heading"
           class="text-[11px] font-medium tracking-widest uppercase flex items-center gap-1.5"
           style="color: var(--muted-foreground)"
         >
-          <User class="size-3.5" /> Про себе
-        </p>
+          <User class="size-3.5" aria-hidden="true" /> Про себе
+        </h2>
         {#if user.bio}
           <p
             class="text-sm leading-relaxed"
             style="color: var(--muted-foreground); overflow-wrap: anywhere"
+            itemprop="description"
           >
             {user.bio}
           </p>
@@ -306,38 +326,43 @@
             Ви ще не додали опис.
           </p>
         {/if}
-      </div>
+      </section>
       <div
         class="border-t"
         style="border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
       ></div>
     {/if}
 
-    <!-- Відгуки -->
-    <div class="py-5">
+    <!-- ═══════ Відгуки ═══════ -->
+    <section aria-labelledby="reviews-heading" class="py-5">
       <div class="flex items-center justify-between mb-6">
-        <p
+        <h2
+          id="reviews-heading"
           class="text-[11px] font-medium tracking-widest uppercase flex items-center gap-1.5"
           style="color: var(--muted-foreground)"
         >
-          <MessageSquare class="size-3.5" /> Відгуки від майстрів
-        </p>
+          <MessageSquare class="size-3.5" aria-hidden="true" /> Відгуки від майстрів
+        </h2>
         {#if user.reviews.length > 0}
           <span
             class="text-xs flex items-center gap-1"
             style="color: var(--muted-foreground)"
           >
-            <Star class="size-3" style="color: #f5a623; fill: #f5a623" />
-            {avgRating} · {user.reviews.length}
-            {user.reviews.length === 1 ? 'відгук' : 'відгуків'}
+            <Star
+              class="size-3"
+              style="color: #f5a623; fill: #f5a623"
+              aria-hidden="true"
+            />
+            {avgRatingLabel} · {user.reviews.length}
+            {reviewsLabelStr}
           </span>
         {/if}
       </div>
 
       {#if user.reviews.length > 0}
-        <div>
-          {#each user.reviews as review, i}
-            <div
+        <ul class="list-none p-0 m-0">
+          {#each user.reviews as review, i (review.id ?? i)}
+            <li
               class="py-5 first:pt-0"
               style="border-top: {i === 0
                 ? 'none'
@@ -347,28 +372,35 @@
                 <div
                   class="size-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
                   style="background-color: var(--muted); color: var(--muted-foreground)"
+                  aria-hidden="true"
                 >
                   {review.masterInitials}
                 </div>
                 <div class="flex-1 min-w-0">
                   <p
-                    class="text-sm font-medium"
+                    class="text-sm font-medium truncate"
                     style="color: var(--foreground)"
                   >
                     {review.masterName}
                   </p>
-                  <p
-                    class="text-xs truncate"
-                    style="color: var(--muted-foreground)"
-                  >
-                    {review.gig}
-                  </p>
+                  {#if review.gig}
+                    <p
+                      class="text-xs truncate"
+                      style="color: var(--muted-foreground)"
+                    >
+                      {review.gig}
+                    </p>
+                  {/if}
                 </div>
-                <div class="flex gap-0.5 shrink-0">
+                <div
+                  class="flex gap-0.5 shrink-0"
+                  aria-label="Рейтинг: {review.rating} з 5"
+                >
                   {#each Array(review.rating) as _}
                     <Star
                       class="size-3"
                       style="color: #f5a623; fill: #f5a623"
+                      aria-hidden="true"
                     />
                   {/each}
                 </div>
@@ -383,15 +415,17 @@
                 class="text-[11px] mt-2 pl-10"
                 style="color: color-mix(in oklch, var(--muted-foreground) 60%, transparent)"
               >
-                {new Date(review.createdAt).toLocaleDateString('uk-UA', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
+                <time datetime={new Date(review.createdAt).toISOString()}>
+                  {new Date(review.createdAt).toLocaleDateString('uk-UA', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </time>
               </p>
-            </div>
+            </li>
           {/each}
-        </div>
+        </ul>
       {:else}
         <div
           class="text-center py-8 rounded-xl"
@@ -416,15 +450,15 @@
           {/if}
         </div>
       {/if}
-    </div>
+    </section>
 
-    <!-- ═══════ Стати майстром (тільки owner, на сторінці клієнта) ═══════ -->
+    <!-- ═══════ Стати майстром (тільки owner) ═══════ -->
     {#if isOwner}
       <div
         class="border-t"
         style="border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
       ></div>
-      <div class="py-6">
+      <aside class="py-6">
         <button
           type="button"
           onclick={becomeFreelancer}
@@ -437,7 +471,11 @@
               class="size-11 rounded-full flex items-center justify-center shrink-0"
               style="background-color: color-mix(in oklch, var(--primary) 12%, transparent)"
             >
-              <Sparkles class="size-5" style="color: var(--primary)" />
+              <Sparkles
+                class="size-5"
+                style="color: var(--primary)"
+                aria-hidden="true"
+              />
             </div>
             <div class="min-w-0">
               <p class="text-sm font-semibold" style="color: var(--foreground)">
@@ -448,9 +486,13 @@
               </p>
             </div>
           </div>
-          <ArrowRight class="size-5 shrink-0" style="color: var(--primary)" />
+          <ArrowRight
+            class="size-5 shrink-0"
+            style="color: var(--primary)"
+            aria-hidden="true"
+          />
         </button>
-      </div>
+      </aside>
     {/if}
   </div>
 
@@ -467,9 +509,9 @@
         variant="outline"
         class="w-full h-11 rounded-full gap-2 text-sm"
       >
-        <MessageCircle class="size-4" />
+        <MessageCircle class="size-4" aria-hidden="true" />
         Написати
       </Button>
     </div>
   {/if}
-</div>
+</article>

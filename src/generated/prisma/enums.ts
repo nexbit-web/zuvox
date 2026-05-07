@@ -180,3 +180,11 @@ export const CategoryStatus = {
 } as const
 
 export type CategoryStatus = (typeof CategoryStatus)[keyof typeof CategoryStatus]
+
+
+export const CityStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type CityStatus = (typeof CityStatus)[keyof typeof CityStatus]

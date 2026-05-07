@@ -71,7 +71,12 @@ export const ModelName = {
   Service: 'Service',
   Session: 'Session',
   Account: 'Account',
-  OtpCode: 'OtpCode'
+  OtpCode: 'OtpCode',
+  City: 'City',
+  Skill: 'Skill',
+  FreelancerSkill: 'FreelancerSkill',
+  Notification: 'Notification',
+  PhoneReveal: 'PhoneReveal'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -134,7 +139,6 @@ export const FreelancerProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   categories: 'categories',
-  skills: 'skills',
   experience: 'experience',
   languages: 'languages',
   hourlyRate: 'hourlyRate',
@@ -476,6 +480,72 @@ export const OtpCodeScalarFieldEnum = {
 } as const
 
 export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
+
+
+export const CityScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  region: 'region',
+  isCapital: 'isCapital',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CityScalarFieldEnum = (typeof CityScalarFieldEnum)[keyof typeof CityScalarFieldEnum]
+
+
+export const SkillScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  categoryId: 'categoryId',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof SkillScalarFieldEnum]
+
+
+export const FreelancerSkillScalarFieldEnum = {
+  freelancerId: 'freelancerId',
+  skillId: 'skillId',
+  createdAt: 'createdAt'
+} as const
+
+export type FreelancerSkillScalarFieldEnum = (typeof FreelancerSkillScalarFieldEnum)[keyof typeof FreelancerSkillScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  orderId: 'orderId',
+  proposalId: 'proposalId',
+  jobId: 'jobId',
+  chatId: 'chatId',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const PhoneRevealScalarFieldEnum = {
+  id: 'id',
+  viewerId: 'viewerId',
+  targetId: 'targetId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type PhoneRevealScalarFieldEnum = (typeof PhoneRevealScalarFieldEnum)[keyof typeof PhoneRevealScalarFieldEnum]
 
 
 export const SortOrder = {

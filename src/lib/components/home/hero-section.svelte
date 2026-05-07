@@ -76,7 +76,7 @@
 </script>
 
 <section
-  class="relative flex flex-col justify-center items-center overflow-visible z-50 select-none px-4"
+  class="relative flex flex-col justify-center items-center overflow-visible z-40 select-none px-4"
   style="background-color: var(--background); height: 90vh;"
 >
   <!-- Быстрое появление фона -->

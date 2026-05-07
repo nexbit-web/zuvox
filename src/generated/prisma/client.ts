@@ -146,3 +146,28 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type OtpCode = Prisma.OtpCodeModel
+/**
+ * Model City
+ * 
+ */
+export type City = Prisma.CityModel
+/**
+ * Model Skill
+ * 
+ */
+export type Skill = Prisma.SkillModel
+/**
+ * Model FreelancerSkill
+ * 
+ */
+export type FreelancerSkill = Prisma.FreelancerSkillModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model PhoneReveal
+ * 
+ */
+export type PhoneReveal = Prisma.PhoneRevealModel

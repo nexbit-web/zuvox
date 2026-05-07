@@ -89,9 +89,6 @@ async function loadFollowing(userId: string): Promise<FollowingFreelancer[]> {
   }))
 }
 
-/**
- * Завантажує відгуки про фрілансера (CLIENT_TO_FREELANCER).
- */
 async function loadFreelancerReviews(freelancerId: string) {
   const reviews = await prisma.review.findMany({
     where: {
@@ -127,10 +124,6 @@ async function loadFreelancerReviews(freelancerId: string) {
   })
 }
 
-/**
- * Завантажує відгуки про клієнта (FREELANCER_TO_CLIENT).
- * Автор — фрілансер (master).
- */
 async function loadClientReviews(clientId: string) {
   const reviews = await prisma.review.findMany({
     where: {
@@ -204,7 +197,14 @@ export const load: PageServerLoad = async ({
       freelancerProfile: {
         select: {
           categories: true,
-          skills: true,
+          // ─── ВАЖЛИВО: розгортаємо relation FreelancerSkill → Skill ───
+          skills: {
+            select: {
+              skill: {
+                select: { slug: true, name: true },
+              },
+            },
+          },
           languages: true,
           experience: true,
           hourlyRate: true,
@@ -289,6 +289,13 @@ export const load: PageServerLoad = async ({
 
   const reviews = await loadFreelancerReviews(user.id)
 
+  // ─── Маппимо relation FreelancerSkill → плоский { slug, name } ───
+  const skillsForUi =
+    fp?.skills.map((fs) => ({
+      slug: fs.skill.slug,
+      name: fs.skill.name,
+    })) ?? []
+
   const freelancerUser: FreelancerProfileData = {
     id: user.id,
     name: user.name ?? '',
@@ -296,14 +303,14 @@ export const load: PageServerLoad = async ({
     avatar: user.avatar ?? undefined,
     bio: user.bio ?? undefined,
     city: user.city ?? undefined,
-    phone: user.phone ?? undefined,
+    hasPhone: !!user.phone,
     createdAt: user.createdAt.toISOString(),
 
     verificationStatus: user.verificationStatus,
     verificationRejectReason: user.verificationRejectReason,
 
     categories: fp?.categories ?? [],
-    skills: fp?.skills ?? [],
+    skills: skillsForUi,
     languages: fp?.languages ?? [],
     experience: fp?.experience ? experienceLabels[fp.experience] : null,
     hourlyRate: fp?.hourlyRate ?? null,
