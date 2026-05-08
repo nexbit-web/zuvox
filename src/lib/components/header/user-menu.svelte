@@ -43,9 +43,6 @@
       : null,
   )
 
-  // ─── Реальні лічильники з chatStore ───
-  const messageCount = $derived(chatStore.totalUnread)
-
   // ─── Notifications ───
   interface Notification {
     id: string
@@ -60,15 +57,43 @@
     createdAt: string
   }
 
-  let notifications = $state<Notification[]>([])
+  // ─── Бейджі: швидкі лічильники для іконок ───
+  // Завантажуємо ОДНИМ легким запитом - тільки числа.
+  let messageCount = $state(0)
   let notifUnreadCount = $state(0)
+
+  let notifications = $state<Notification[]>([])
   let notifPopoverOpen = $state(false)
   let notifLoading = $state(false)
   let notifInitialized = $state(false)
   let pusherChannel: any = null
+  let pusherTimeout: ReturnType<typeof setTimeout> | null = null
+  let chatStoreLoaded = $state(false)
 
-  async function loadNotifications() {
+  // chatStore синхронізує messageCount коли він активний
+  $effect(() => {
+    if (chatStoreLoaded) {
+      messageCount = chatStore.totalUnread
+    }
+  })
+
+  /** ─── Бейджі: ОДИН легкий запит для лічильників ─── */
+  async function loadBadges() {
     if (!session?.user?.id) return
+    try {
+      const res = await fetch('/api/me/badges')
+      if (!res.ok) return
+      const data = await res.json()
+      messageCount = data.unreadMessages ?? 0
+      notifUnreadCount = data.unreadNotifications ?? 0
+    } catch {
+      // silent fail — бейджі не критичні
+    }
+  }
+
+  /** ─── Повний список notifications: ЛЕНІВО при відкритті popover ─── */
+  async function loadNotifications() {
+    if (!session?.user?.id || notifInitialized) return
     notifLoading = true
     try {
       const res = await fetch('/api/notifications?limit=20')
@@ -84,15 +109,27 @@
     }
   }
 
+  /** ─── ChatStore: ЛЕНІВО коли юзер кліпнув на іконку чату ─── */
+  async function loadChatStoreIfNeeded() {
+    if (chatStoreLoaded || !session?.user?.id) return
+    try {
+      const res = await fetch('/api/chats')
+      if (res.ok) {
+        const json = await res.json()
+        if (json?.chats) chatStore.setChats(json.chats)
+      }
+      chatStore.subscribeToUserEvents(session.user.id)
+      chatStoreLoaded = true
+    } catch {
+      // ignore
+    }
+  }
+
   async function markNotifRead(id: string) {
     notifications = notifications.map((n) =>
       n.id === id ? { ...n, isRead: true } : n,
     )
-    if (notifications.find((n) => n.id === id && n.isRead)) {
-      // вже відмічений — нічого
-    } else {
-      notifUnreadCount = Math.max(0, notifUnreadCount - 1)
-    }
+    notifUnreadCount = Math.max(0, notifUnreadCount - 1)
     await fetch('/api/notifications', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -112,9 +149,7 @@
 
   function notifLink(n: Notification): string {
     if (n.orderId) return `/orders/${n.orderId}`
-    // PROPOSAL_NEW — клієнт отримує сповіщення → ведемо на свою job-сторінку
     if (n.type === 'PROPOSAL_NEW' && n.jobId) return `/jobs/${n.jobId}`
-    // PROPOSAL_ACCEPTED/REJECTED — фрілансер отримує → у dashboard
     if (n.proposalId) return '/dashboard/proposals'
     if (n.jobId) return `/jobs/${n.jobId}`
     if (n.chatId) return `/messages/${n.chatId}`
@@ -125,6 +160,11 @@
     if (!n.isRead) await markNotifRead(n.id)
     notifPopoverOpen = false
     goto(notifLink(n))
+  }
+
+  function handleChatClick() {
+    loadChatStoreIfNeeded() // не блокуючий — fire and forget
+    onnavigate('/messages')
   }
 
   function notifIconFor(type: string): typeof Briefcase {
@@ -147,31 +187,16 @@
     return `${diffDays} д`
   }
 
-  // ─── Підписка на Pusher для real-time оновлення notifications ───
-  onMount(() => {
-    if (session?.user.id && !chatStore.initialized) {
-      // Прелоадимо список чатів щоб бейдж був точним
-      fetch('/api/chats')
-        .then((r) => (r.ok ? r.json() : null))
-        .then((j) => {
-          if (j?.chats) chatStore.setChats(j.chats)
-        })
-        .catch(() => {})
-      chatStore.subscribeToUserEvents(session.user.id)
-    }
-
-    if (session?.user?.id) {
-      // Завантажуємо notifications
-      loadNotifications()
-
-      // Підписка на real-time notifications
+  /** ─── Pusher: ВІДКЛАДЕНА підписка через 2 секунди ─── */
+  function setupPusherDelayed() {
+    if (!session?.user?.id) return
+    pusherTimeout = setTimeout(() => {
       try {
         const pusher = getPusher()
         pusherChannel = pusher.subscribe(`private-user-${session.user.id}`)
         pusherChannel.bind('notification', (data: Notification) => {
           notifications = [data, ...notifications].slice(0, 50)
           notifUnreadCount++
-          // Опційний звук
           try {
             const audio = new Audio('/notification.mp3')
             audio.volume = 0.3
@@ -183,21 +208,31 @@
       } catch {
         // Pusher може бути недоступний
       }
-    }
+    }, 2000) // 2 секунди — TTI вже відбувся, юзер вже бачить контент
+  }
+
+  onMount(() => {
+    if (!session?.user?.id) return
+
+    // 1. Швидкі бейджі — ОДИН запит, не блокує LCP бо він async
+    loadBadges()
+
+    // 2. Pusher — через 2 секунди (не блокує перший рендер)
+    setupPusherDelayed()
   })
 
   onDestroy(() => {
+    if (pusherTimeout) clearTimeout(pusherTimeout)
     if (pusherChannel) {
       try {
         pusherChannel.unbind('notification')
-        // Не unsubscribe — інші компоненти теж слухають private-user-*
       } catch {
         // ignore
       }
     }
   })
 
-  // Перезавантажити при відкритті popover (якщо ще не ініціалізовано)
+  // ─── Завантаження notifications при відкритті popover ───
   $effect(() => {
     if (notifPopoverOpen && !notifInitialized) {
       loadNotifications()
@@ -205,7 +240,7 @@
   })
 
   async function handleSignOut() {
-    chatStore.unsubscribeAll()
+    if (chatStoreLoaded) chatStore.unsubscribeAll()
     if (pusherChannel) {
       try {
         pusherChannel.unbind('notification')
@@ -223,6 +258,7 @@
   }
 </script>
 
+<!-- ═══════ UI повністю незмінний ═══════ -->
 <div class="flex items-center gap-1 shrink-0">
   {#if !isLoggedIn}
     <button
@@ -255,7 +291,7 @@
     <!-- Повідомлення -->
     <button
       type="button"
-      onclick={() => onnavigate('/messages')}
+      onclick={handleChatClick}
       class="group relative flex flex-col items-center justify-center h-16 w-16 rounded-xl cursor-pointer transition-colors"
       aria-label="Повідомлення"
       onmouseenter={(e) =>
@@ -478,7 +514,7 @@
 
           <DropdownMenu.Item
             class="gap-2 cursor-pointer"
-            onclick={() => goto('/messages')}
+            onclick={handleChatClick}
           >
             <MessageSquare class="size-3.5 text-muted-foreground" />
             <span>Повідомлення</span>

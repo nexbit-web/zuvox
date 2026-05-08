@@ -2,32 +2,16 @@ import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { PrismaClient } from '../generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
-import nodemailer from 'nodemailer'
 import {
   BETTER_AUTH_URL,
   BETTER_AUTH_SECRET,
   DATABASE_URL,
-  SMTP_HOST,
-  SMTP_PORT,
-  SMTP_USER,
-  SMTP_PASS,
-  SMTP_FROM,
 } from '$env/static/private'
+import { dev } from '$app/environment'
+import { sendResetPasswordEmail } from './email'
 
 const adapter = new PrismaPg({ connectionString: DATABASE_URL })
 const prisma = new PrismaClient({ adapter })
-
-export const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port: Number(SMTP_PORT),
-  secure: false,
-  auth: {
-    user: SMTP_USER,
-    pass: SMTP_PASS,
-  },
-})
-
-export { SMTP_FROM }
 
 export const auth = betterAuth({
   baseURL: BETTER_AUTH_URL,
@@ -39,7 +23,25 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
+    // ─── Верифікація email лише на продакшені ───
+    // На dev — вимкнено, щоб швидко тестувати реєстрацію без OTP-flow.
+    // На прод — вимагаємо верифікацію (наш OTP-flow має позначати юзера як verified).
+    requireEmailVerification: !dev,
+
+    sendResetPassword: async ({ user, url }) => {
+      console.log('🔵 sendResetPassword викликано:', { email: user.email, url })
+      try {
+        await sendResetPasswordEmail({
+          to: user.email,
+          name: user.name,
+          resetUrl: url,
+        })
+        console.log('✅ Лист відправлено на:', user.email)
+      } catch (err) {
+        console.error('❌ Помилка відправки:', err)
+      }
+    },
+    resetPasswordTokenExpiresIn: 3600, // 1 година
   },
 
   user: {

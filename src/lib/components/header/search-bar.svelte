@@ -1,8 +1,34 @@
 <!-- src/lib/components/header/search-bar.svelte -->
+<script lang="ts" module>
+  interface SearchResult {
+    type: 'category' | 'subcategory'
+    slug: string
+    name: string
+    parentSlug?: string
+    parentName?: string
+    icon?: string | null
+  }
+
+  const cache = new Map<string, SearchResult[]>()
+  const CACHE_MAX_SIZE = 100
+
+  function cacheGet(key: string): SearchResult[] | undefined {
+    return cache.get(key)
+  }
+
+  function cacheSet(key: string, value: SearchResult[]) {
+    if (cache.size >= CACHE_MAX_SIZE) {
+      const firstKey = cache.keys().next().value
+      if (firstKey) cache.delete(firstKey)
+    }
+    cache.set(key, value)
+  }
+</script>
+
 <script lang="ts">
-  import { Search, X } from 'lucide-svelte'
+  import { Search, X, LoaderCircle, Layers, Folder } from 'lucide-svelte'
   import { fly } from 'svelte/transition'
-  import { allServices, type Service } from '$lib/data/categories'
+  import { onMount, onDestroy } from 'svelte'
 
   let {
     onnavigate,
@@ -12,109 +38,286 @@
     isOpen: boolean
   } = $props()
 
+  // ─── State ───
   let searchValue = $state('')
-  let searchQuery = $state('')
-  let searchFocused = $state(false)
   let searchRef = $state<HTMLInputElement | undefined>(undefined)
-  let searchTimer: ReturnType<typeof setTimeout> | null = null
+  let containerEl = $state<HTMLDivElement | undefined>(undefined)
 
-  function handleInput() {
-    if (searchValue.trim()) searchFocused = true
-    if (searchTimer) clearTimeout(searchTimer)
-    searchTimer = setTimeout(() => {
-      searchQuery = searchValue
-    }, 120)
+  let results = $state<SearchResult[]>([])
+  let loading = $state(false)
+  let highlightedIndex = $state(-1)
+
+  let menuOpen = $state(false)
+  let focused = $state(false)
+
+  // ─── Debounce + Abort + Race protection ───
+  let searchTimer: ReturnType<typeof setTimeout> | null = null
+  let abortController: AbortController | null = null
+  let activeRequestId = 0
+
+  const DEBOUNCE_MS = 400
+  const QUERY_MIN = 2
+  const QUERY_MAX = 50
+
+  async function performSearch(query: string) {
+    const q = query.trim()
+
+    if (q.length < QUERY_MIN) {
+      results = []
+      loading = false
+      menuOpen = false
+      highlightedIndex = -1
+      return
+    }
+
+    const cached = cacheGet(q.toLowerCase())
+    if (cached) {
+      results = cached
+      loading = false
+      menuOpen = true
+      highlightedIndex = -1
+      return
+    }
+
+    const requestId = ++activeRequestId
+
+    if (abortController) abortController.abort()
+    abortController = new AbortController()
+
+    loading = true
+    menuOpen = true
+
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, {
+        signal: abortController.signal,
+      })
+
+      if (requestId !== activeRequestId) return
+
+      if (!res.ok) {
+        console.error('[search-bar] HTTP error:', res.status)
+        results = []
+        return
+      }
+
+      const data: { results: SearchResult[] } = await res.json()
+
+      if (requestId !== activeRequestId) return
+
+      results = data.results ?? []
+      cacheSet(q.toLowerCase(), results)
+      highlightedIndex = -1
+    } catch (err) {
+      if ((err as Error).name === 'AbortError') return
+      console.error('[search-bar] failed:', err)
+      if (requestId === activeRequestId) {
+        results = []
+      }
+    } finally {
+      if (requestId === activeRequestId) {
+        loading = false
+      }
+    }
   }
 
-  const suggestions: Service[] = $derived(
-    (() => {
-      const q = searchQuery.trim().toLowerCase()
-      if (!q) return []
-      return allServices
-        .filter(
-          (s: Service) =>
-            s.text.toLowerCase().includes(q) ||
-            s.category.toLowerCase().includes(q),
-        )
-        .slice(0, 7)
-    })(),
-  )
+  function handleInput() {
+    if (searchTimer) clearTimeout(searchTimer)
 
-  const showSuggestions = $derived(
-    searchFocused && searchValue.trim().length > 0,
-  )
-  const hasResults = $derived(suggestions.length > 0)
+    const q = searchValue.trim()
+    if (q.length < QUERY_MIN) {
+      results = []
+      loading = false
+      menuOpen = false
+      highlightedIndex = -1
+      if (abortController) abortController.abort()
+      activeRequestId++
+      return
+    }
 
-  $effect(() => {
-    isOpen = showSuggestions
-  })
+    menuOpen = true
+
+    searchTimer = setTimeout(() => {
+      performSearch(searchValue)
+    }, DEBOUNCE_MS)
+  }
 
   function clear() {
     searchValue = ''
-    searchQuery = ''
+    results = []
+    highlightedIndex = -1
+    menuOpen = false
+    if (searchTimer) clearTimeout(searchTimer)
+    if (abortController) abortController.abort()
+    activeRequestId++
     searchRef?.focus()
   }
 
-  function submit() {
-    if (searchValue.trim())
-      onnavigate(`/gigs?q=${encodeURIComponent(searchValue)}`)
+  function closeMenu() {
+    menuOpen = false
+    highlightedIndex = -1
   }
+
+  /** Повне очищення стану — викликається після переходу */
+  function resetAfterNavigate() {
+    searchValue = ''
+    results = []
+    highlightedIndex = -1
+    menuOpen = false
+    focused = false
+    if (searchTimer) clearTimeout(searchTimer)
+    if (abortController) abortController.abort()
+    activeRequestId++
+    searchRef?.blur()
+  }
+
+  function reopenMenuIfNeeded() {
+    if (searchValue.trim().length >= QUERY_MIN && results.length > 0) {
+      menuOpen = true
+    } else if (searchValue.trim().length >= QUERY_MIN) {
+      performSearch(searchValue)
+    }
+  }
+
+  function handleClickOutside(e: MouseEvent) {
+    if (!containerEl) return
+    const target = e.target as Node
+    if (!containerEl.contains(target)) {
+      closeMenu()
+    }
+  }
+
+  function onKeydown(e: KeyboardEvent) {
+    if (document.activeElement !== searchRef) return
+
+    if (e.key === 'ArrowDown' && results.length > 0) {
+      e.preventDefault()
+      if (!menuOpen) {
+        menuOpen = true
+        return
+      }
+      highlightedIndex = (highlightedIndex + 1) % results.length
+    } else if (e.key === 'ArrowUp' && results.length > 0 && menuOpen) {
+      e.preventDefault()
+      highlightedIndex =
+        highlightedIndex <= 0 ? results.length - 1 : highlightedIndex - 1
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (highlightedIndex >= 0 && results[highlightedIndex]) {
+        navigateToResult(results[highlightedIndex])
+      } else if (searchValue.trim()) {
+        navigateToFallback(searchValue.trim())
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      closeMenu()
+      searchRef?.blur()
+    }
+  }
+
+  function navigateToResult(r: SearchResult) {
+    const url =
+      r.type === 'category'
+        ? `/services/${r.slug}`
+        : `/services/${r.parentSlug}?sub=${r.slug}`
+
+    resetAfterNavigate() // ← чистимо стан ДО переходу
+    onnavigate(url)
+  }
+
+  function navigateToFallback(query: string) {
+    const url = `/services?q=${encodeURIComponent(query)}`
+    resetAfterNavigate()
+    onnavigate(url)
+  }
+
+  // ─── Computed ───
+  const showLoading = $derived(menuOpen && loading && results.length === 0)
+  const showResultsList = $derived(menuOpen && !loading && results.length > 0)
+  const showEmpty = $derived(
+    menuOpen &&
+      !loading &&
+      results.length === 0 &&
+      searchValue.trim().length >= QUERY_MIN,
+  )
+
+  $effect(() => {
+    isOpen = menuOpen
+  })
+
+  onMount(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  })
+
+  onDestroy(() => {
+    if (searchTimer) clearTimeout(searchTimer)
+    if (abortController) abortController.abort()
+  })
 </script>
 
+<svelte:window onkeydown={onKeydown} />
+
 <div data-search class="flex justify-center w-full">
-  <div class="relative w-full max-w-xl">
-    <!-- Інпут: pill з тонкою білою рамкою на чорному фоні -->
+  <div bind:this={containerEl} class="relative w-full max-w-xl">
+    <!-- Інпут -->
     <div
       class="flex items-center h-11 rounded-xl overflow-hidden transition-all"
-      class:rounded-b-none={showSuggestions}
-      class:border-b-transparent={showSuggestions}
+      class:rounded-b-none={menuOpen}
+      class:border-b-transparent={menuOpen}
       style="background-color: rgba(255,255,255,0.06);
-             border: 1px solid {searchFocused
+             border: 1px solid {focused
         ? 'rgba(255,255,255,0.22)'
         : 'rgba(255,255,255,0.14)'};"
     >
-      <!-- Іконка пошуку зліва -->
       <div class="flex items-center justify-center pl-4 pr-2.5 shrink-0">
-        <Search
-          class="size-4"
-          strokeWidth={2}
-          style="color: rgba(255,255,255,0.7)"
-        />
+        {#if loading}
+          <LoaderCircle
+            class="size-4 animate-spin"
+            strokeWidth={2}
+            style="color: rgba(255,255,255,0.7)"
+          />
+        {:else}
+          <Search
+            class="size-4"
+            strokeWidth={2}
+            style="color: rgba(255,255,255,0.7)"
+          />
+        {/if}
       </div>
 
-      <!-- Інпут -->
       <input
         bind:this={searchRef}
         type="text"
         placeholder="Що потрібно зробити?"
         bind:value={searchValue}
-        onfocus={() => (searchFocused = true)}
-        onblur={() => setTimeout(() => (searchFocused = false), 200)}
-        oninput={handleInput}
-        onkeydown={(e) => {
-          if (e.key === 'Enter') submit()
-          if (e.key === 'Escape') {
-            searchFocused = false
-            searchRef?.blur()
-          }
+        autocomplete="off"
+        spellcheck="false"
+        maxlength={QUERY_MAX}
+        role="combobox"
+        aria-expanded={menuOpen}
+        aria-autocomplete="list"
+        aria-controls="header-search-results"
+        aria-activedescendant={highlightedIndex >= 0
+          ? `header-result-${highlightedIndex}`
+          : undefined}
+        onfocus={() => {
+          focused = true
+          reopenMenuIfNeeded()
         }}
+        onblur={() => (focused = false)}
+        oninput={handleInput}
         class="flex-1 h-11 pr-3 text-sm bg-transparent border-none outline-none"
         style="color: white;"
       />
 
-      <!-- Хрестик -->
       {#if searchValue}
         <button
           type="button"
           onclick={clear}
-          class="size-8 mr-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer shrink-0"
+          class="size-8 mr-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer shrink-0 hover-clear"
           style="color: rgba(255,255,255,0.55)"
-          onmouseenter={(e) =>
-            ((e.currentTarget as HTMLElement).style.backgroundColor =
-              'rgba(255,255,255,0.08)')}
-          onmouseleave={(e) =>
-            ((e.currentTarget as HTMLElement).style.backgroundColor =
-              'transparent')}
           aria-label="Очистити"
         >
           <X class="size-3.5" strokeWidth={2} />
@@ -122,63 +325,129 @@
       {/if}
     </div>
 
-    <!-- Підказки -->
-    {#if showSuggestions}
+    <!-- ═══════ Меню результатів ═══════ -->
+    {#if showLoading || showResultsList || showEmpty}
       <div
+        id="header-search-results"
+        role="listbox"
         transition:fly={{ y: -4, duration: 150 }}
-        class="absolute top-full left-0 right-0 z-50 overflow-hidden"
+        onmouseleave={() => (highlightedIndex = -1)}
+        class="absolute top-full left-0 right-0 z-50 overflow-y-auto overflow-x-hidden header-search-scroll"
         style="background-color: #0a0a0a;
                border: 1px solid rgba(255,255,255,0.14);
                border-top: none;
                border-radius: 0 0 1.5rem 1.5rem;
-               box-shadow: 0 24px 48px rgba(0,0,0,0.5);"
+               box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+               max-height: min(420px, 70vh);"
       >
-        {#if hasResults}
-          {#each suggestions as s (s.text + s.category)}
+        {#if showLoading}
+          <div class="flex items-center justify-center py-10">
+            <LoaderCircle
+              class="size-5 animate-spin"
+              style="color: rgba(255,255,255,0.4)"
+            />
+          </div>
+        {:else if showResultsList}
+          {#each results as r, i (r.type + ':' + r.slug + ':' + (r.parentSlug ?? ''))}
             <button
+              id="header-result-{i}"
               type="button"
-              onclick={() => onnavigate(`/gigs?q=${encodeURIComponent(s.text)}`)}
-              class="w-full flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer text-left"
-              onmouseenter={(e) =>
-                ((e.currentTarget as HTMLElement).style.backgroundColor =
-                  'rgba(255,255,255,0.05)')}
-              onmouseleave={(e) =>
-                ((e.currentTarget as HTMLElement).style.backgroundColor =
-                  'transparent')}
+              role="option"
+              aria-selected={i === highlightedIndex}
+              onmouseenter={() => (highlightedIndex = i)}
+              onmousedown={(e) => {
+                e.preventDefault()
+                navigateToResult(r)
+              }}
+              class="result-item w-full flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer text-left"
+              class:active={i === highlightedIndex}
             >
-              <Search
-                class="size-4 shrink-0"
-                style="color: rgba(255,255,255,0.4)"
-              />
+              <div
+                class="size-7 rounded-md flex items-center justify-center shrink-0"
+                style="background-color: rgba(255,255,255,0.05)"
+              >
+                {#if r.type === 'category'}
+                  <Layers
+                    class="size-3.5"
+                    style="color: rgba(255,255,255,0.5)"
+                  />
+                {:else}
+                  <Folder
+                    class="size-3.5"
+                    style="color: rgba(255,255,255,0.5)"
+                  />
+                {/if}
+              </div>
+
               <div class="min-w-0 flex-1">
-                <p class="text-sm font-medium leading-snug" style="color: white">
-                  {s.text}
+                <p
+                  class="text-sm font-medium leading-snug truncate"
+                  style="color: white"
+                >
+                  {r.name}
                 </p>
-                {#if s.category}
+                {#if r.parentName}
                   <p
                     class="text-xs truncate mt-0.5"
                     style="color: rgba(255,255,255,0.5)"
                   >
-                    {s.category}
+                    у {r.parentName}
                   </p>
                 {/if}
               </div>
             </button>
           {/each}
-        {:else}
+        {:else if showEmpty}
           <div class="flex flex-col items-center py-10 gap-2">
             <Search class="size-8" style="color: rgba(255,255,255,0.2)" />
             <p class="text-sm text-center" style="color: rgba(255,255,255,0.6)">
               Нічого не знайдено для
-              <span class="font-medium" style="color: white">«{searchValue}»</span>
+              <span class="font-medium" style="color: white"
+                >«{searchValue}»</span
+              >
             </p>
             <p class="text-xs" style="color: rgba(255,255,255,0.4)">
               Спробуйте інший запит
             </p>
           </div>
         {/if}
-        <div class="h-2"></div>
       </div>
     {/if}
   </div>
 </div>
+
+<style>
+  /* ─── Hover на результат ─── */
+  .result-item {
+    background-color: transparent;
+  }
+  .result-item:hover,
+  .result-item.active {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ─── Hover на хрестик ─── */
+  .hover-clear:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* ─── Скрол ─── */
+  .header-search-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    overscroll-behavior: contain;
+  }
+  .header-search-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .header-search-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .header-search-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+  }
+  .header-search-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+</style>

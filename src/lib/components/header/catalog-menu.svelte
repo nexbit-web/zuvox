@@ -68,11 +68,21 @@
   }
 
   // ─── Mount ───
+  // ─── НЕ грузимо категорії на mount ───
+  // Завантажуємо тільки коли юзер відкриває каталог.
   onMount(() => {
-    loadCategories()
+    // тільки keyboard listener, БЕЗ loadCategories
     window.addEventListener('keydown', onKeydown)
     return () => {
       window.removeEventListener('keydown', onKeydown)
+      if (hoverTimeout) clearTimeout(hoverTimeout)
+    }
+  })
+
+  // Завантажуємо при першому відкритті
+  $effect(() => {
+    if (!categoriesState.loaded && !categoriesState.loading) {
+      loadCategories()
     }
   })
 
