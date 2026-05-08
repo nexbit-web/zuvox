@@ -76,7 +76,8 @@ export const ModelName = {
   Skill: 'Skill',
   FreelancerSkill: 'FreelancerSkill',
   Notification: 'Notification',
-  PhoneReveal: 'PhoneReveal'
+  PhoneReveal: 'PhoneReveal',
+  Verification: 'Verification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -546,6 +547,18 @@ export const PhoneRevealScalarFieldEnum = {
 } as const
 
 export type PhoneRevealScalarFieldEnum = (typeof PhoneRevealScalarFieldEnum)[keyof typeof PhoneRevealScalarFieldEnum]
+
+
+export const VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
 export const SortOrder = {

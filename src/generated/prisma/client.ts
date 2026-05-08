@@ -171,3 +171,8 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type PhoneReveal = Prisma.PhoneRevealModel
+/**
+ * Model Verification
+ * 
+ */
+export type Verification = Prisma.VerificationModel

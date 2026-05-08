@@ -149,3 +149,9 @@ html #nprogress .bar {
   background: rgb(36, 255, 25);
   height: 3px;
 }
+
+@media (max-width: 1023px) {
+  main {
+    padding-bottom: 40px; /* высота bottom nav + запас */
+  }
+}

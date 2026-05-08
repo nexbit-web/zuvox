@@ -874,3 +874,15 @@ model PhoneReveal {
   @@index([viewerId, targetId]) // швидкий пошук "чи дивився цей юзер цей номер"
   @@index([targetId, createdAt]) // для аудиту "хто дивився мій номер"
 }
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+  @@index([identifier])
+}
