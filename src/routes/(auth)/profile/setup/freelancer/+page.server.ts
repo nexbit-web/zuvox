@@ -48,7 +48,27 @@ export const load: PageServerLoad = async ({ request }) => {
           languages: true,
           hourlyRate: true,
           portfolioUrl: true,
-          // skills тепер це relation FreelancerSkill[] → беремо через include-логіку
+
+          // ─── НОВЕ: формат роботи ───
+          worksOnline: true,
+          worksOffline: true,
+          worksOnSite: true,
+
+          // ─── НОВЕ: географія ───
+          primaryCity: true,
+          serviceCities: true,
+          willTravel: true,
+          travelRadiusKm: true,
+          travelFeeCents: true,
+
+          // ─── НОВЕ: доступність ───
+          isAvailable: true,
+          unavailableUntil: true,
+
+          // ─── НОВЕ: розклад ───
+          workingHours: true,
+
+          // skills через relation
           skills: {
             select: {
               skill: {
@@ -64,8 +84,7 @@ export const load: PageServerLoad = async ({ request }) => {
   if (!user) throw redirect(302, '/user/login')
 
   // ⚠️ НЕ блокуємо доступ за статусом — юзер має право редагувати свій
-  // профіль у будь-якому стані. Захист від спам-надсилання модерації робиться
-  // в API: rate-limit + "не змінювати verifiedAt" замість redirect.
+  // профіль у будь-якому стані.
 
   const portfolio = (user.portfolioImages ?? []).map((url, i) => ({
     url,
@@ -74,12 +93,14 @@ export const load: PageServerLoad = async ({ request }) => {
 
   const username = user.username ?? suggestFromEmail(user.email)
 
-  // Витягуємо slug-и навичок з нової relation-структури
   const skillSlugs =
     user.freelancerProfile?.skills.map((fs) => fs.skill.slug) ?? []
 
+  const profile = user.freelancerProfile
+
   return {
     prefill: {
+      // ─── User fields ───
       name: user.name ?? session.user.name ?? '',
       username,
       phone: user.phone ?? '',
@@ -89,14 +110,35 @@ export const load: PageServerLoad = async ({ request }) => {
       portfolio,
       verificationStatus: user.verificationStatus,
       isExistingFreelancer: user.role === 'FREELANCER',
-      categories: user.freelancerProfile?.categories ?? [],
+
+      // ─── Profile fields ───
+      categories: profile?.categories ?? [],
       skills: skillSlugs,
-      experience: user.freelancerProfile?.experience
-        ? (experienceReverse[user.freelancerProfile.experience] ?? '')
+      experience: profile?.experience
+        ? (experienceReverse[profile.experience] ?? '')
         : '',
-      languages: user.freelancerProfile?.languages ?? [],
-      hourlyRate: user.freelancerProfile?.hourlyRate?.toString() ?? '',
-      portfolioUrl: user.freelancerProfile?.portfolioUrl ?? '',
+      languages: profile?.languages ?? [],
+      hourlyRate: profile?.hourlyRate?.toString() ?? '',
+      portfolioUrl: profile?.portfolioUrl ?? '',
+
+      // ─── НОВЕ: формат роботи (boolean → string для UI) ───
+      worksOnline: profile?.worksOnline ?? true, // по дефолту онлайн
+      worksOffline: profile?.worksOffline ?? false,
+      worksOnSite: profile?.worksOnSite ?? false,
+
+      // ─── НОВЕ: географія ───
+      primaryCity: profile?.primaryCity ?? user.city ?? '',
+      serviceCities: profile?.serviceCities ?? [],
+      willTravel: profile?.willTravel ?? false,
+      travelRadiusKm: profile?.travelRadiusKm?.toString() ?? '',
+      travelFeeCents: profile?.travelFeeCents ?? null,
+
+      // ─── НОВЕ: доступність ───
+      isAvailable: profile?.isAvailable ?? true,
+      unavailableUntil: profile?.unavailableUntil?.toISOString() ?? null,
+
+      // ─── НОВЕ: розклад ───
+      workingHours: profile?.workingHours ?? null,
     },
   }
 }

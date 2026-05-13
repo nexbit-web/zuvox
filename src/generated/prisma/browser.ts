@@ -123,6 +123,11 @@ export type Account = Prisma.AccountModel
  */
 export type OtpCode = Prisma.OtpCodeModel
 /**
+ * Model Verification
+ * 
+ */
+export type Verification = Prisma.VerificationModel
+/**
  * Model City
  * 
  */
@@ -147,8 +152,3 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type PhoneReveal = Prisma.PhoneRevealModel
-/**
- * Model Verification
- * 
- */
-export type Verification = Prisma.VerificationModel

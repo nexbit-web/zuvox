@@ -103,6 +103,16 @@ export const ProposalStatus = {
 export type ProposalStatus = (typeof ProposalStatus)[keyof typeof ProposalStatus]
 
 
+export const ServiceFormat = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
+  VISIT: 'VISIT',
+  HYBRID: 'HYBRID'
+} as const
+
+export type ServiceFormat = (typeof ServiceFormat)[keyof typeof ServiceFormat]
+
+
 export const ServiceType = {
   ONLINE: 'ONLINE',
   OFFLINE: 'OFFLINE',
@@ -111,6 +121,26 @@ export const ServiceType = {
 } as const
 
 export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
+
+
+export const PriceType = {
+  FIXED: 'FIXED',
+  FROM: 'FROM',
+  HOURLY: 'HOURLY',
+  NEGOTIABLE: 'NEGOTIABLE'
+} as const
+
+export type PriceType = (typeof PriceType)[keyof typeof PriceType]
+
+
+export const Urgency = {
+  ASAP: 'ASAP',
+  TODAY: 'TODAY',
+  THIS_WEEK: 'THIS_WEEK',
+  FLEXIBLE: 'FLEXIBLE'
+} as const
+
+export type Urgency = (typeof Urgency)[keyof typeof Urgency]
 
 
 export const MessageType = {
@@ -180,6 +210,15 @@ export const CategoryStatus = {
 } as const
 
 export type CategoryStatus = (typeof CategoryStatus)[keyof typeof CategoryStatus]
+
+
+export const CategoryDomain = {
+  ONLINE_ONLY: 'ONLINE_ONLY',
+  OFFLINE_ONLY: 'OFFLINE_ONLY',
+  BOTH: 'BOTH'
+} as const
+
+export type CategoryDomain = (typeof CategoryDomain)[keyof typeof CategoryDomain]
 
 
 export const CityStatus = {

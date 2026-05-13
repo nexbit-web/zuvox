@@ -50,6 +50,10 @@ export type OrderMinAggregateOutputType = {
   currency: string | null
   deliveryDays: number | null
   deadlineAt: Date | null
+  format: $Enums.ServiceFormat | null
+  city: string | null
+  address: string | null
+  scheduledFor: Date | null
   status: $Enums.OrderStatus | null
   acceptedAt: Date | null
   deliveredAt: Date | null
@@ -77,6 +81,10 @@ export type OrderMaxAggregateOutputType = {
   currency: string | null
   deliveryDays: number | null
   deadlineAt: Date | null
+  format: $Enums.ServiceFormat | null
+  city: string | null
+  address: string | null
+  scheduledFor: Date | null
   status: $Enums.OrderStatus | null
   acceptedAt: Date | null
   deliveredAt: Date | null
@@ -104,6 +112,10 @@ export type OrderCountAggregateOutputType = {
   currency: number
   deliveryDays: number
   deadlineAt: number
+  format: number
+  city: number
+  address: number
+  scheduledFor: number
   status: number
   acceptedAt: number
   deliveredAt: number
@@ -146,6 +158,10 @@ export type OrderMinAggregateInputType = {
   currency?: true
   deliveryDays?: true
   deadlineAt?: true
+  format?: true
+  city?: true
+  address?: true
+  scheduledFor?: true
   status?: true
   acceptedAt?: true
   deliveredAt?: true
@@ -173,6 +189,10 @@ export type OrderMaxAggregateInputType = {
   currency?: true
   deliveryDays?: true
   deadlineAt?: true
+  format?: true
+  city?: true
+  address?: true
+  scheduledFor?: true
   status?: true
   acceptedAt?: true
   deliveredAt?: true
@@ -200,6 +220,10 @@ export type OrderCountAggregateInputType = {
   currency?: true
   deliveryDays?: true
   deadlineAt?: true
+  format?: true
+  city?: true
+  address?: true
+  scheduledFor?: true
   status?: true
   acceptedAt?: true
   deliveredAt?: true
@@ -315,6 +339,10 @@ export type OrderGroupByOutputType = {
   currency: string
   deliveryDays: number | null
   deadlineAt: Date | null
+  format: $Enums.ServiceFormat | null
+  city: string | null
+  address: string | null
+  scheduledFor: Date | null
   status: $Enums.OrderStatus
   acceptedAt: Date | null
   deliveredAt: Date | null
@@ -366,6 +394,10 @@ export type OrderWhereInput = {
   currency?: Prisma.StringFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableFilter<"Order"> | number | null
   deadlineAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  format?: Prisma.EnumServiceFormatNullableFilter<"Order"> | $Enums.ServiceFormat | null
+  city?: Prisma.StringNullableFilter<"Order"> | string | null
+  address?: Prisma.StringNullableFilter<"Order"> | string | null
+  scheduledFor?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   acceptedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
@@ -401,6 +433,10 @@ export type OrderOrderByWithRelationInput = {
   currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrderInput | Prisma.SortOrder
   deadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -439,6 +475,10 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   currency?: Prisma.StringFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableFilter<"Order"> | number | null
   deadlineAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  format?: Prisma.EnumServiceFormatNullableFilter<"Order"> | $Enums.ServiceFormat | null
+  city?: Prisma.StringNullableFilter<"Order"> | string | null
+  address?: Prisma.StringNullableFilter<"Order"> | string | null
+  scheduledFor?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   acceptedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
@@ -474,6 +514,10 @@ export type OrderOrderByWithAggregationInput = {
   currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrderInput | Prisma.SortOrder
   deadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -510,6 +554,10 @@ export type OrderScalarWhereWithAggregatesInput = {
   currency?: Prisma.StringWithAggregatesFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
   deadlineAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  format?: Prisma.EnumServiceFormatNullableWithAggregatesFilter<"Order"> | $Enums.ServiceFormat | null
+  city?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  address?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  scheduledFor?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   acceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
@@ -535,6 +583,10 @@ export type OrderCreateInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -569,6 +621,10 @@ export type OrderUncheckedCreateInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -597,6 +653,10 @@ export type OrderUpdateInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -631,6 +691,10 @@ export type OrderUncheckedUpdateInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -662,6 +726,10 @@ export type OrderCreateManyInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -687,6 +755,10 @@ export type OrderUpdateManyMutationInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -714,6 +786,10 @@ export type OrderUncheckedUpdateManyInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -752,6 +828,10 @@ export type OrderCountOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   deadlineAt?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
@@ -786,6 +866,10 @@ export type OrderMaxOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   deadlineAt?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
@@ -813,6 +897,10 @@ export type OrderMinOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   deliveryDays?: Prisma.SortOrder
   deadlineAt?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
@@ -978,6 +1066,10 @@ export type EnumOrderSourceFieldUpdateOperationsInput = {
   set?: $Enums.OrderSource
 }
 
+export type NullableEnumServiceFormatFieldUpdateOperationsInput = {
+  set?: $Enums.ServiceFormat | null
+}
+
 export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
 }
@@ -1082,6 +1174,10 @@ export type OrderCreateWithoutClientInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1114,6 +1210,10 @@ export type OrderUncheckedCreateWithoutClientInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1152,6 +1252,10 @@ export type OrderCreateWithoutFreelancerInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1184,6 +1288,10 @@ export type OrderUncheckedCreateWithoutFreelancerInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1244,6 +1352,10 @@ export type OrderScalarWhereInput = {
   currency?: Prisma.StringFilter<"Order"> | string
   deliveryDays?: Prisma.IntNullableFilter<"Order"> | number | null
   deadlineAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  format?: Prisma.EnumServiceFormatNullableFilter<"Order"> | $Enums.ServiceFormat | null
+  city?: Prisma.StringNullableFilter<"Order"> | string | null
+  address?: Prisma.StringNullableFilter<"Order"> | string | null
+  scheduledFor?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   acceptedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
@@ -1285,6 +1397,10 @@ export type OrderCreateWithoutGigInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1317,6 +1433,10 @@ export type OrderUncheckedCreateWithoutGigInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1371,6 +1491,10 @@ export type OrderCreateWithoutEventsInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1404,6 +1528,10 @@ export type OrderUncheckedCreateWithoutEventsInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1447,6 +1575,10 @@ export type OrderUpdateWithoutEventsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1480,6 +1612,10 @@ export type OrderUncheckedUpdateWithoutEventsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1507,6 +1643,10 @@ export type OrderCreateWithoutFromJobInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1540,6 +1680,10 @@ export type OrderUncheckedCreateWithoutFromJobInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1583,6 +1727,10 @@ export type OrderUpdateWithoutFromJobInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1616,6 +1764,10 @@ export type OrderUncheckedUpdateWithoutFromJobInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1643,6 +1795,10 @@ export type OrderCreateWithoutReviewsInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1676,6 +1832,10 @@ export type OrderUncheckedCreateWithoutReviewsInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1719,6 +1879,10 @@ export type OrderUpdateWithoutReviewsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1752,6 +1916,10 @@ export type OrderUncheckedUpdateWithoutReviewsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1779,6 +1947,10 @@ export type OrderCreateWithoutChatInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1812,6 +1984,10 @@ export type OrderUncheckedCreateWithoutChatInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1867,6 +2043,10 @@ export type OrderCreateManyClientInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1894,6 +2074,10 @@ export type OrderCreateManyFreelancerInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -1919,6 +2103,10 @@ export type OrderUpdateWithoutClientInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1951,6 +2139,10 @@ export type OrderUncheckedUpdateWithoutClientInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1981,6 +2173,10 @@ export type OrderUncheckedUpdateManyWithoutClientInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2006,6 +2202,10 @@ export type OrderUpdateWithoutFreelancerInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2038,6 +2238,10 @@ export type OrderUncheckedUpdateWithoutFreelancerInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2068,6 +2272,10 @@ export type OrderUncheckedUpdateManyWithoutFreelancerInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2095,6 +2303,10 @@ export type OrderCreateManyGigInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -2120,6 +2332,10 @@ export type OrderUpdateWithoutGigInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2152,6 +2368,10 @@ export type OrderUncheckedUpdateWithoutGigInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2182,6 +2402,10 @@ export type OrderUncheckedUpdateManyWithoutGigInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2210,6 +2434,10 @@ export type OrderCreateManyChatInput = {
   currency?: string
   deliveryDays?: number | null
   deadlineAt?: Date | string | null
+  format?: $Enums.ServiceFormat | null
+  city?: string | null
+  address?: string | null
+  scheduledFor?: Date | string | null
   status?: $Enums.OrderStatus
   acceptedAt?: Date | string | null
   deliveredAt?: Date | string | null
@@ -2234,6 +2462,10 @@ export type OrderUpdateWithoutChatInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2267,6 +2499,10 @@ export type OrderUncheckedUpdateWithoutChatInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2297,6 +2533,10 @@ export type OrderUncheckedUpdateManyWithoutChatInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2364,6 +2604,10 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   currency?: boolean
   deliveryDays?: boolean
   deadlineAt?: boolean
+  format?: boolean
+  city?: boolean
+  address?: boolean
+  scheduledFor?: boolean
   status?: boolean
   acceptedAt?: boolean
   deliveredAt?: boolean
@@ -2400,6 +2644,10 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   currency?: boolean
   deliveryDays?: boolean
   deadlineAt?: boolean
+  format?: boolean
+  city?: boolean
+  address?: boolean
+  scheduledFor?: boolean
   status?: boolean
   acceptedAt?: boolean
   deliveredAt?: boolean
@@ -2432,6 +2680,10 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   currency?: boolean
   deliveryDays?: boolean
   deadlineAt?: boolean
+  format?: boolean
+  city?: boolean
+  address?: boolean
+  scheduledFor?: boolean
   status?: boolean
   acceptedAt?: boolean
   deliveredAt?: boolean
@@ -2464,6 +2716,10 @@ export type OrderSelectScalar = {
   currency?: boolean
   deliveryDays?: boolean
   deadlineAt?: boolean
+  format?: boolean
+  city?: boolean
+  address?: boolean
+  scheduledFor?: boolean
   status?: boolean
   acceptedAt?: boolean
   deliveredAt?: boolean
@@ -2480,7 +2736,7 @@ export type OrderSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "freelancerId" | "gigId" | "source" | "title" | "description" | "priceCents" | "currency" | "deliveryDays" | "deadlineAt" | "status" | "acceptedAt" | "deliveredAt" | "completedAt" | "cancelledAt" | "cancelledById" | "cancelReason" | "deliverables" | "deliveryNote" | "chatId" | "leadFeeCents" | "autoCompleteAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "freelancerId" | "gigId" | "source" | "title" | "description" | "priceCents" | "currency" | "deliveryDays" | "deadlineAt" | "format" | "city" | "address" | "scheduledFor" | "status" | "acceptedAt" | "deliveredAt" | "completedAt" | "cancelledAt" | "cancelledById" | "cancelReason" | "deliverables" | "deliveryNote" | "chatId" | "leadFeeCents" | "autoCompleteAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   freelancer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2527,6 +2783,10 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     currency: string
     deliveryDays: number | null
     deadlineAt: Date | null
+    format: $Enums.ServiceFormat | null
+    city: string | null
+    address: string | null
+    scheduledFor: Date | null
     status: $Enums.OrderStatus
     acceptedAt: Date | null
     deliveredAt: Date | null
@@ -2982,6 +3242,10 @@ export interface OrderFieldRefs {
   readonly currency: Prisma.FieldRef<"Order", 'String'>
   readonly deliveryDays: Prisma.FieldRef<"Order", 'Int'>
   readonly deadlineAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly format: Prisma.FieldRef<"Order", 'ServiceFormat'>
+  readonly city: Prisma.FieldRef<"Order", 'String'>
+  readonly address: Prisma.FieldRef<"Order", 'String'>
+  readonly scheduledFor: Prisma.FieldRef<"Order", 'DateTime'>
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly acceptedAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly deliveredAt: Prisma.FieldRef<"Order", 'DateTime'>

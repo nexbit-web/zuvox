@@ -72,12 +72,12 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   OtpCode: 'OtpCode',
+  Verification: 'Verification',
   City: 'City',
   Skill: 'Skill',
   FreelancerSkill: 'FreelancerSkill',
   Notification: 'Notification',
-  PhoneReveal: 'PhoneReveal',
-  Verification: 'Verification'
+  PhoneReveal: 'PhoneReveal'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -144,6 +144,17 @@ export const FreelancerProfileScalarFieldEnum = {
   languages: 'languages',
   hourlyRate: 'hourlyRate',
   portfolioUrl: 'portfolioUrl',
+  primaryCity: 'primaryCity',
+  serviceCities: 'serviceCities',
+  willTravel: 'willTravel',
+  travelRadiusKm: 'travelRadiusKm',
+  travelFeeCents: 'travelFeeCents',
+  worksOnline: 'worksOnline',
+  worksOffline: 'worksOffline',
+  worksOnSite: 'worksOnSite',
+  workingHours: 'workingHours',
+  isAvailable: 'isAvailable',
+  unavailableUntil: 'unavailableUntil',
   avgRating: 'avgRating',
   reviewsCount: 'reviewsCount',
   totalOrders: 'totalOrders',
@@ -170,6 +181,14 @@ export const GigScalarFieldEnum = {
   images: 'images',
   imagesPublicIds: 'imagesPublicIds',
   videoUrl: 'videoUrl',
+  format: 'format',
+  priceType: 'priceType',
+  priceCents: 'priceCents',
+  currency: 'currency',
+  durationMinutes: 'durationMinutes',
+  city: 'city',
+  serviceCities: 'serviceCities',
+  travelFeeCents: 'travelFeeCents',
   status: 'status',
   isActive: 'isActive',
   viewCount: 'viewCount',
@@ -214,6 +233,10 @@ export const OrderScalarFieldEnum = {
   currency: 'currency',
   deliveryDays: 'deliveryDays',
   deadlineAt: 'deadlineAt',
+  format: 'format',
+  city: 'city',
+  address: 'address',
+  scheduledFor: 'scheduledFor',
   status: 'status',
   acceptedAt: 'acceptedAt',
   deliveredAt: 'deliveredAt',
@@ -260,7 +283,13 @@ export const JobScalarFieldEnum = {
   deadlineAt: 'deadlineAt',
   expiresAt: 'expiresAt',
   type: 'type',
+  format: 'format',
   city: 'city',
+  address: 'address',
+  urgency: 'urgency',
+  scheduledFor: 'scheduledFor',
+  attachments: 'attachments',
+  attachmentsPublicIds: 'attachmentsPublicIds',
   status: 'status',
   proposalsCount: 'proposalsCount',
   viewsCount: 'viewsCount',
@@ -389,6 +418,7 @@ export const CategoryScalarFieldEnum = {
   icon: 'icon',
   color: 'color',
   status: 'status',
+  domain: 'domain',
   sortOrder: 'sortOrder',
   seoTitle: 'seoTitle',
   seoDescription: 'seoDescription',
@@ -410,6 +440,7 @@ export const SubcategoryScalarFieldEnum = {
   icon: 'icon',
   status: 'status',
   sortOrder: 'sortOrder',
+  domain: 'domain',
   categoryId: 'categoryId',
   seoTitle: 'seoTitle',
   seoDescription: 'seoDescription',
@@ -430,6 +461,7 @@ export const ServiceScalarFieldEnum = {
   status: 'status',
   sortOrder: 'sortOrder',
   avgPriceCents: 'avgPriceCents',
+  typicalFormat: 'typicalFormat',
   subcategoryId: 'subcategoryId',
   seoTitle: 'seoTitle',
   seoDescription: 'seoDescription',
@@ -483,6 +515,18 @@ export const OtpCodeScalarFieldEnum = {
 export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
 
 
+export const VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
 export const CityScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -491,6 +535,10 @@ export const CityScalarFieldEnum = {
   isCapital: 'isCapital',
   sortOrder: 'sortOrder',
   status: 'status',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  freelancersCount: 'freelancersCount',
+  jobsCount: 'jobsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -547,18 +595,6 @@ export const PhoneRevealScalarFieldEnum = {
 } as const
 
 export type PhoneRevealScalarFieldEnum = (typeof PhoneRevealScalarFieldEnum)[keyof typeof PhoneRevealScalarFieldEnum]
-
-
-export const VerificationScalarFieldEnum = {
-  id: 'id',
-  identifier: 'identifier',
-  value: 'value',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
 export const SortOrder = {

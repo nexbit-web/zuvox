@@ -362,72 +362,34 @@ interface SeedSkill {
 // }
 
 const SKILLS_BY_CATEGORY: Record<string, SeedSkill[]> = {
-  'it-development': [
+  volunteering: [
     // ─────────────────────────────
-    // БАЗОВА РОЗРОБКА САЙТІВ
+    // СОЦІАЛЬНА ДОПОМОГА
     // ─────────────────────────────
-    { slug: 'website-development', name: 'Розробка сайтів (з нуля)' },
-    { slug: 'website-redesign', name: 'Редизайн сайту' },
-    { slug: 'website-fix', name: 'Доробка та виправлення сайту' },
-    { slug: 'website-speed-opt', name: 'Оптимізація швидкості сайту' },
-    { slug: 'website-seo-basic', name: 'Базова SEO-оптимізація' },
-    { slug: 'website-support', name: 'Технічна підтримка сайту' },
+    { slug: 'elderly-help', name: 'Допомога літнім людям' },
+    { slug: 'psychological-help', name: 'Психологічна допомога' },
 
     // ─────────────────────────────
-    // LANDING / BUSINESS
+    // ТРАНСПОРТ І ЛОГІСТИКА
     // ─────────────────────────────
-    { slug: 'landing-page-dev', name: 'Розробка Landing Page' },
-    { slug: 'business-site-dev', name: 'Розробка бізнес-сайту' },
-    { slug: 'portfolio-site', name: 'Створення портфоліо сайту' },
-    { slug: 'blog-site', name: 'Створення блогу / медіа сайту' },
+    { slug: 'volunteer-transport', name: 'Транспортні перевезення' },
+    { slug: 'fuel-delivery', name: 'Доставка пального' },
 
     // ─────────────────────────────
-    // E-COMMERCE
+    // ГУМАНІТАРНА ДОПОМОГА
     // ─────────────────────────────
-    { slug: 'ecommerce-dev', name: 'Розробка інтернет-магазину' },
-    { slug: 'ecommerce-fix', name: 'Доробка інтернет-магазину' },
-    { slug: 'payment-integration', name: 'Інтеграція платіжних систем' },
-    { slug: 'product-catalog', name: 'Налаштування каталогу товарів' },
-    { slug: 'cart-checkout', name: 'Кошик та оформлення замовлення' },
+    { slug: 'food-delivery', name: 'Доставка їжі' },
+    { slug: 'medicine-delivery', name: 'Доставка медикаментів' },
 
     // ─────────────────────────────
-    // CRM / SYSTEMS
+    // ЖИТЛО
     // ─────────────────────────────
-    { slug: 'crm-dev', name: 'Розробка CRM системи' },
-    { slug: 'crm-customization', name: 'Налаштування CRM' },
-    { slug: 'business-automation', name: 'Автоматизація бізнес-процесів' },
-    { slug: 'admin-panel', name: 'Розробка адмін-панелі' },
+    { slug: 'housing-search', name: 'Надання або пошук житла' },
 
     // ─────────────────────────────
-    // FRONTEND
+    // ДОПОМОГА ТВАРИНАМ
     // ─────────────────────────────
-    { slug: 'html-css-layout', name: 'Верстка HTML/CSS' },
-    { slug: 'responsive-design', name: 'Адаптивна верстка' },
-    { slug: 'react-dev', name: 'Розробка на React' },
-    { slug: 'ui-implementation', name: 'Інтеграція UI дизайну' },
-
-    // ─────────────────────────────
-    // BACKEND
-    // ─────────────────────────────
-    { slug: 'api-dev', name: 'Розробка API' },
-    { slug: 'database-design', name: 'Проєктування баз даних' },
-    { slug: 'backend-dev', name: 'Backend розробка' },
-    { slug: 'auth-system', name: 'Система авторизації та безпеки' },
-
-    // ─────────────────────────────
-    // DEVOPS / INFRASTRUCTURE
-    // ─────────────────────────────
-    { slug: 'hosting-setup', name: 'Налаштування хостингу' },
-    { slug: 'server-deploy', name: 'Деплой сайту на сервер' },
-    { slug: 'ssl-setup', name: 'Налаштування SSL сертифіката' },
-    { slug: 'domain-setup', name: 'Підключення домену' },
-
-    // ─────────────────────────────
-    // ANALYTICS / MARKETING TECH
-    // ─────────────────────────────
-    { slug: 'google-analytics', name: 'Налаштування Google Analytics' },
-    { slug: 'pixel-setup', name: 'Facebook / TikTok Pixel' },
-    { slug: 'conversion-tracking', name: 'Трекінг конверсій' },
+    { slug: 'animal-rescue', name: 'Допомога тваринам' },
   ],
 }
 async function seed() {

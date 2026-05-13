@@ -56,7 +56,11 @@ export type JobMinAggregateOutputType = {
   deadlineAt: Date | null
   expiresAt: Date | null
   type: $Enums.ServiceType | null
+  format: $Enums.ServiceFormat | null
   city: string | null
+  address: string | null
+  urgency: $Enums.Urgency | null
+  scheduledFor: Date | null
   status: $Enums.JobStatus | null
   proposalsCount: number | null
   viewsCount: number | null
@@ -81,7 +85,11 @@ export type JobMaxAggregateOutputType = {
   deadlineAt: Date | null
   expiresAt: Date | null
   type: $Enums.ServiceType | null
+  format: $Enums.ServiceFormat | null
   city: string | null
+  address: string | null
+  urgency: $Enums.Urgency | null
+  scheduledFor: Date | null
   status: $Enums.JobStatus | null
   proposalsCount: number | null
   viewsCount: number | null
@@ -107,7 +115,13 @@ export type JobCountAggregateOutputType = {
   deadlineAt: number
   expiresAt: number
   type: number
+  format: number
   city: number
+  address: number
+  urgency: number
+  scheduledFor: number
+  attachments: number
+  attachmentsPublicIds: number
   status: number
   proposalsCount: number
   viewsCount: number
@@ -150,7 +164,11 @@ export type JobMinAggregateInputType = {
   deadlineAt?: true
   expiresAt?: true
   type?: true
+  format?: true
   city?: true
+  address?: true
+  urgency?: true
+  scheduledFor?: true
   status?: true
   proposalsCount?: true
   viewsCount?: true
@@ -175,7 +193,11 @@ export type JobMaxAggregateInputType = {
   deadlineAt?: true
   expiresAt?: true
   type?: true
+  format?: true
   city?: true
+  address?: true
+  urgency?: true
+  scheduledFor?: true
   status?: true
   proposalsCount?: true
   viewsCount?: true
@@ -201,7 +223,13 @@ export type JobCountAggregateInputType = {
   deadlineAt?: true
   expiresAt?: true
   type?: true
+  format?: true
   city?: true
+  address?: true
+  urgency?: true
+  scheduledFor?: true
+  attachments?: true
+  attachmentsPublicIds?: true
   status?: true
   proposalsCount?: true
   viewsCount?: true
@@ -314,7 +342,13 @@ export type JobGroupByOutputType = {
   deadlineAt: Date | null
   expiresAt: Date
   type: $Enums.ServiceType
+  format: $Enums.ServiceFormat | null
   city: string | null
+  address: string | null
+  urgency: $Enums.Urgency
+  scheduledFor: Date | null
+  attachments: string[]
+  attachmentsPublicIds: string[]
   status: $Enums.JobStatus
   proposalsCount: number
   viewsCount: number
@@ -363,7 +397,13 @@ export type JobWhereInput = {
   deadlineAt?: Prisma.DateTimeNullableFilter<"Job"> | Date | string | null
   expiresAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   type?: Prisma.EnumServiceTypeFilter<"Job"> | $Enums.ServiceType
+  format?: Prisma.EnumServiceFormatNullableFilter<"Job"> | $Enums.ServiceFormat | null
   city?: Prisma.StringNullableFilter<"Job"> | string | null
+  address?: Prisma.StringNullableFilter<"Job"> | string | null
+  urgency?: Prisma.EnumUrgencyFilter<"Job"> | $Enums.Urgency
+  scheduledFor?: Prisma.DateTimeNullableFilter<"Job"> | Date | string | null
+  attachments?: Prisma.StringNullableListFilter<"Job">
+  attachmentsPublicIds?: Prisma.StringNullableListFilter<"Job">
   status?: Prisma.EnumJobStatusFilter<"Job"> | $Enums.JobStatus
   proposalsCount?: Prisma.IntFilter<"Job"> | number
   viewsCount?: Prisma.IntFilter<"Job"> | number
@@ -392,7 +432,13 @@ export type JobOrderByWithRelationInput = {
   deadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  format?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  urgency?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachments?: Prisma.SortOrder
+  attachmentsPublicIds?: Prisma.SortOrder
   status?: Prisma.SortOrder
   proposalsCount?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -425,7 +471,13 @@ export type JobWhereUniqueInput = Prisma.AtLeast<{
   deadlineAt?: Prisma.DateTimeNullableFilter<"Job"> | Date | string | null
   expiresAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   type?: Prisma.EnumServiceTypeFilter<"Job"> | $Enums.ServiceType
+  format?: Prisma.EnumServiceFormatNullableFilter<"Job"> | $Enums.ServiceFormat | null
   city?: Prisma.StringNullableFilter<"Job"> | string | null
+  address?: Prisma.StringNullableFilter<"Job"> | string | null
+  urgency?: Prisma.EnumUrgencyFilter<"Job"> | $Enums.Urgency
+  scheduledFor?: Prisma.DateTimeNullableFilter<"Job"> | Date | string | null
+  attachments?: Prisma.StringNullableListFilter<"Job">
+  attachmentsPublicIds?: Prisma.StringNullableListFilter<"Job">
   status?: Prisma.EnumJobStatusFilter<"Job"> | $Enums.JobStatus
   proposalsCount?: Prisma.IntFilter<"Job"> | number
   viewsCount?: Prisma.IntFilter<"Job"> | number
@@ -453,7 +505,13 @@ export type JobOrderByWithAggregationInput = {
   deadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  format?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  urgency?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachments?: Prisma.SortOrder
+  attachmentsPublicIds?: Prisma.SortOrder
   status?: Prisma.SortOrder
   proposalsCount?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -487,7 +545,13 @@ export type JobScalarWhereWithAggregatesInput = {
   deadlineAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Job"> | Date | string | null
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"Job"> | Date | string
   type?: Prisma.EnumServiceTypeWithAggregatesFilter<"Job"> | $Enums.ServiceType
+  format?: Prisma.EnumServiceFormatNullableWithAggregatesFilter<"Job"> | $Enums.ServiceFormat | null
   city?: Prisma.StringNullableWithAggregatesFilter<"Job"> | string | null
+  address?: Prisma.StringNullableWithAggregatesFilter<"Job"> | string | null
+  urgency?: Prisma.EnumUrgencyWithAggregatesFilter<"Job"> | $Enums.Urgency
+  scheduledFor?: Prisma.DateTimeNullableWithAggregatesFilter<"Job"> | Date | string | null
+  attachments?: Prisma.StringNullableListFilter<"Job">
+  attachmentsPublicIds?: Prisma.StringNullableListFilter<"Job">
   status?: Prisma.EnumJobStatusWithAggregatesFilter<"Job"> | $Enums.JobStatus
   proposalsCount?: Prisma.IntWithAggregatesFilter<"Job"> | number
   viewsCount?: Prisma.IntWithAggregatesFilter<"Job"> | number
@@ -513,7 +577,13 @@ export type JobCreateInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -540,7 +610,13 @@ export type JobUncheckedCreateInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -567,7 +643,13 @@ export type JobUpdateInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -594,7 +676,13 @@ export type JobUncheckedUpdateInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -621,7 +709,13 @@ export type JobCreateManyInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -647,7 +741,13 @@ export type JobUpdateManyMutationInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -671,7 +771,13 @@ export type JobUncheckedUpdateManyInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -712,7 +818,13 @@ export type JobCountOrderByAggregateInput = {
   deadlineAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  format?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  urgency?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrder
+  attachments?: Prisma.SortOrder
+  attachmentsPublicIds?: Prisma.SortOrder
   status?: Prisma.SortOrder
   proposalsCount?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -745,7 +857,11 @@ export type JobMaxOrderByAggregateInput = {
   deadlineAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  format?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  urgency?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
   proposalsCount?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -770,7 +886,11 @@ export type JobMinOrderByAggregateInput = {
   deadlineAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  format?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  urgency?: Prisma.SortOrder
+  scheduledFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
   proposalsCount?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -872,6 +992,14 @@ export type JobCreatetagsInput = {
   set: string[]
 }
 
+export type JobCreateattachmentsInput = {
+  set: string[]
+}
+
+export type JobCreateattachmentsPublicIdsInput = {
+  set: string[]
+}
+
 export type JobUpdatetagsInput = {
   set?: string[]
   push?: string | string[]
@@ -883,6 +1011,20 @@ export type EnumJobBudgetTypeFieldUpdateOperationsInput = {
 
 export type EnumServiceTypeFieldUpdateOperationsInput = {
   set?: $Enums.ServiceType
+}
+
+export type EnumUrgencyFieldUpdateOperationsInput = {
+  set?: $Enums.Urgency
+}
+
+export type JobUpdateattachmentsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type JobUpdateattachmentsPublicIdsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type EnumJobStatusFieldUpdateOperationsInput = {
@@ -918,7 +1060,13 @@ export type JobCreateWithoutClientInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -944,7 +1092,13 @@ export type JobUncheckedCreateWithoutClientInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -999,7 +1153,13 @@ export type JobScalarWhereInput = {
   deadlineAt?: Prisma.DateTimeNullableFilter<"Job"> | Date | string | null
   expiresAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   type?: Prisma.EnumServiceTypeFilter<"Job"> | $Enums.ServiceType
+  format?: Prisma.EnumServiceFormatNullableFilter<"Job"> | $Enums.ServiceFormat | null
   city?: Prisma.StringNullableFilter<"Job"> | string | null
+  address?: Prisma.StringNullableFilter<"Job"> | string | null
+  urgency?: Prisma.EnumUrgencyFilter<"Job"> | $Enums.Urgency
+  scheduledFor?: Prisma.DateTimeNullableFilter<"Job"> | Date | string | null
+  attachments?: Prisma.StringNullableListFilter<"Job">
+  attachmentsPublicIds?: Prisma.StringNullableListFilter<"Job">
   status?: Prisma.EnumJobStatusFilter<"Job"> | $Enums.JobStatus
   proposalsCount?: Prisma.IntFilter<"Job"> | number
   viewsCount?: Prisma.IntFilter<"Job"> | number
@@ -1025,7 +1185,13 @@ export type JobCreateWithoutSelectedOrderInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -1051,7 +1217,13 @@ export type JobUncheckedCreateWithoutSelectedOrderInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -1093,7 +1265,13 @@ export type JobUpdateWithoutSelectedOrderInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1119,7 +1297,13 @@ export type JobUncheckedUpdateWithoutSelectedOrderInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1145,7 +1329,13 @@ export type JobCreateWithoutProposalsInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -1171,7 +1361,13 @@ export type JobUncheckedCreateWithoutProposalsInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -1213,7 +1409,13 @@ export type JobUpdateWithoutProposalsInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1239,7 +1441,13 @@ export type JobUncheckedUpdateWithoutProposalsInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1265,7 +1473,13 @@ export type JobCreateManyClientInput = {
   deadlineAt?: Date | string | null
   expiresAt: Date | string
   type?: $Enums.ServiceType
+  format?: $Enums.ServiceFormat | null
   city?: string | null
+  address?: string | null
+  urgency?: $Enums.Urgency
+  scheduledFor?: Date | string | null
+  attachments?: Prisma.JobCreateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobCreateattachmentsPublicIdsInput | string[]
   status?: $Enums.JobStatus
   proposalsCount?: number
   viewsCount?: number
@@ -1290,7 +1504,13 @@ export type JobUpdateWithoutClientInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1316,7 +1536,13 @@ export type JobUncheckedUpdateWithoutClientInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1342,7 +1568,13 @@ export type JobUncheckedUpdateManyWithoutClientInput = {
   deadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+  format?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgency?: Prisma.EnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency
+  scheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.JobUpdateattachmentsInput | string[]
+  attachmentsPublicIds?: Prisma.JobUpdateattachmentsPublicIdsInput | string[]
   status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
   proposalsCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1398,7 +1630,13 @@ export type JobSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   deadlineAt?: boolean
   expiresAt?: boolean
   type?: boolean
+  format?: boolean
   city?: boolean
+  address?: boolean
+  urgency?: boolean
+  scheduledFor?: boolean
+  attachments?: boolean
+  attachmentsPublicIds?: boolean
   status?: boolean
   proposalsCount?: boolean
   viewsCount?: boolean
@@ -1428,7 +1666,13 @@ export type JobSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   deadlineAt?: boolean
   expiresAt?: boolean
   type?: boolean
+  format?: boolean
   city?: boolean
+  address?: boolean
+  urgency?: boolean
+  scheduledFor?: boolean
+  attachments?: boolean
+  attachmentsPublicIds?: boolean
   status?: boolean
   proposalsCount?: boolean
   viewsCount?: boolean
@@ -1456,7 +1700,13 @@ export type JobSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   deadlineAt?: boolean
   expiresAt?: boolean
   type?: boolean
+  format?: boolean
   city?: boolean
+  address?: boolean
+  urgency?: boolean
+  scheduledFor?: boolean
+  attachments?: boolean
+  attachmentsPublicIds?: boolean
   status?: boolean
   proposalsCount?: boolean
   viewsCount?: boolean
@@ -1484,7 +1734,13 @@ export type JobSelectScalar = {
   deadlineAt?: boolean
   expiresAt?: boolean
   type?: boolean
+  format?: boolean
   city?: boolean
+  address?: boolean
+  urgency?: boolean
+  scheduledFor?: boolean
+  attachments?: boolean
+  attachmentsPublicIds?: boolean
   status?: boolean
   proposalsCount?: boolean
   viewsCount?: boolean
@@ -1495,7 +1751,7 @@ export type JobSelectScalar = {
   selectedOrderId?: boolean
 }
 
-export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "category" | "subcategory" | "tags" | "budgetType" | "budgetMinCents" | "budgetMaxCents" | "currency" | "deliveryDays" | "deadlineAt" | "expiresAt" | "type" | "city" | "status" | "proposalsCount" | "viewsCount" | "createdAt" | "updatedAt" | "closedAt" | "clientId" | "selectedOrderId", ExtArgs["result"]["job"]>
+export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "category" | "subcategory" | "tags" | "budgetType" | "budgetMinCents" | "budgetMaxCents" | "currency" | "deliveryDays" | "deadlineAt" | "expiresAt" | "type" | "format" | "city" | "address" | "urgency" | "scheduledFor" | "attachments" | "attachmentsPublicIds" | "status" | "proposalsCount" | "viewsCount" | "createdAt" | "updatedAt" | "closedAt" | "clientId" | "selectedOrderId", ExtArgs["result"]["job"]>
 export type JobInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   proposals?: boolean | Prisma.Job$proposalsArgs<ExtArgs>
@@ -1533,7 +1789,13 @@ export type $JobPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     deadlineAt: Date | null
     expiresAt: Date
     type: $Enums.ServiceType
+    format: $Enums.ServiceFormat | null
     city: string | null
+    address: string | null
+    urgency: $Enums.Urgency
+    scheduledFor: Date | null
+    attachments: string[]
+    attachmentsPublicIds: string[]
     status: $Enums.JobStatus
     proposalsCount: number
     viewsCount: number
@@ -1982,7 +2244,13 @@ export interface JobFieldRefs {
   readonly deadlineAt: Prisma.FieldRef<"Job", 'DateTime'>
   readonly expiresAt: Prisma.FieldRef<"Job", 'DateTime'>
   readonly type: Prisma.FieldRef<"Job", 'ServiceType'>
+  readonly format: Prisma.FieldRef<"Job", 'ServiceFormat'>
   readonly city: Prisma.FieldRef<"Job", 'String'>
+  readonly address: Prisma.FieldRef<"Job", 'String'>
+  readonly urgency: Prisma.FieldRef<"Job", 'Urgency'>
+  readonly scheduledFor: Prisma.FieldRef<"Job", 'DateTime'>
+  readonly attachments: Prisma.FieldRef<"Job", 'String[]'>
+  readonly attachmentsPublicIds: Prisma.FieldRef<"Job", 'String[]'>
   readonly status: Prisma.FieldRef<"Job", 'JobStatus'>
   readonly proposalsCount: Prisma.FieldRef<"Job", 'Int'>
   readonly viewsCount: Prisma.FieldRef<"Job", 'Int'>

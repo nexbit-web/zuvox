@@ -7,10 +7,8 @@ datasource db {
   provider = "postgresql"
 }
 
-// # 1. Створити міграцію і запушити в БД
-// npx prisma migrate dev --name jobs_proposals_v3
-//
-// # 2. Згенерувати клієнт
+// # Міграція:
+// npx prisma migrate dev --name unified_services_v4
 // npx prisma generate
 
 // ═══════════════════════════════════════════════════════
@@ -24,33 +22,33 @@ enum Role {
 }
 
 enum VerificationStatus {
-  NONE // щойно зареєстровані клієнти
-  PENDING // фрілансер завершив онбординг, чекає модерації
-  VERIFIED // модерація пройдена — синя галочка
-  REJECTED // модерація не пройдена — червоний бейдж
+  NONE
+  PENDING
+  VERIFIED
+  REJECTED
 }
 
 enum ExperienceLevel {
-  LT_1 // менше 1 року
-  Y_1_2 // 1–2 роки
-  Y_3_5 // 3–5 років
-  Y_5_10 // 5–10 років
-  Y_10_PLUS // 10+ років
+  LT_1
+  Y_1_2
+  Y_3_5
+  Y_5_10
+  Y_10_PLUS
 }
 
 enum OrderSource {
-  DIRECT // створено напряму з чату
-  GIG_PURCHASE // куплено зі сторінки гіга
-  JOB_PROPOSAL // створено через відгук на заявку клієнта
+  DIRECT
+  GIG_PURCHASE
+  JOB_PROPOSAL
 }
 
 enum OrderStatus {
-  NEGOTIATING // створено, узгоджуємо умови
-  ACCEPTED // фрілансер прийняв
-  DELIVERED // фрілансер здав роботу
-  COMPLETED // клієнт прийняв
-  CANCELLED // скасовано
-  DISPUTED // спір
+  NEGOTIATING
+  ACCEPTED
+  DELIVERED
+  COMPLETED
+  CANCELLED
+  DISPUTED
 }
 
 enum OrderEventType {
@@ -65,30 +63,55 @@ enum OrderEventType {
 }
 
 enum JobStatus {
-  OPEN // приймаємо відгуки
-  CLOSED // клієнт обрав фрілансера, замовлення створено
-  EXPIRED // 30 днів без вибору
-  CANCELLED // клієнт скасував до вибору
+  OPEN
+  CLOSED
+  EXPIRED
+  CANCELLED
 }
 
 enum JobBudgetType {
-  FIXED // одна сума (budgetMaxCents)
-  RANGE // діапазон (budgetMinCents - budgetMaxCents)
-  NEGOTIABLE // договірна (обидва null)
+  FIXED
+  RANGE
+  NEGOTIABLE
 }
 
 enum ProposalStatus {
-  SUBMITTED // надіслано
-  ACCEPTED // клієнт обрав цей proposal → створено Order
-  REJECTED // клієнт обрав іншого
-  WITHDRAWN // фрілансер сам відкликав (lead fee НЕ повертається)
+  SUBMITTED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
 }
 
+// ─── НОВЕ: формат послуги (де і як виконується) ───
+enum ServiceFormat {
+  ONLINE     // повністю віддалено: логотип, копірайтинг, переклад, консультація
+  OFFLINE    // в офісі/салоні майстра: стрижка, манікюр, масаж, ремонт техніки в сервісі
+  VISIT      // майстер їде до клієнта: сантехнік, електрик, прибирання, фотограф на свято
+  HYBRID     // онлайн консультація + офлайн виконання (дизайнер інтер'єру, юрист)
+}
+
+// ─── Старий ServiceType залишаємо для Job (мала зворотна сумісність) ───
 enum ServiceType {
-  ONLINE // онлайн
-  OFFLINE // офлайн
-  VISIT // виїзд до клієнта
-  ANY // будь-який
+  ONLINE
+  OFFLINE
+  VISIT
+  ANY
+}
+
+// ─── НОВЕ: тип ціни ───
+enum PriceType {
+  FIXED        // фіксована: 500 ₴
+  FROM         // від 500 ₴ (мінімум, точна — за домовленістю)
+  HOURLY       // 300 ₴/година
+  NEGOTIABLE   // договірна
+}
+
+// ─── НОВЕ: терміновість заявки ───
+enum Urgency {
+  ASAP         // негайно (терміновий ремонт, аварія)
+  TODAY        // сьогодні
+  THIS_WEEK    // цього тижня
+  FLEXIBLE     // не горить, можу почекати
 }
 
 enum MessageType {
@@ -99,27 +122,27 @@ enum MessageType {
 }
 
 enum TxType {
-  TOPUP // поповнення з картки
-  LEAD_FEE // списання за лід (відгук на заявку)
-  GIG_COMMISSION // комісія з покупки гіга
-  REFUND // повернення (наприклад, заявка скасована до відгуків)
-  WITHDRAWAL // виведення (на майбутнє)
-  ADJUSTMENT // ручне коригування адміном
+  TOPUP
+  LEAD_FEE
+  GIG_COMMISSION
+  REFUND
+  WITHDRAWAL
+  ADJUSTMENT
 }
 
 enum TxStatus {
-  PENDING // очікує підтвердження від LiqPay
+  PENDING
   SUCCESS
   FAILED
   REVERSED
 }
 
 enum GigStatus {
-  DRAFT // створено, ще не опубліковано
-  ACTIVE // опубліковано і доступне
-  PAUSED // фрілансер тимчасово вимкнув (відпустка)
-  REJECTED // не пройшло модерацію (на майбутнє)
-  ARCHIVED // архівовано (видалено soft-delete)
+  DRAFT
+  ACTIVE
+  PAUSED
+  REJECTED
+  ARCHIVED
 }
 
 enum GigPackageTier {
@@ -129,14 +152,26 @@ enum GigPackageTier {
 }
 
 enum ReviewDirection {
-  CLIENT_TO_FREELANCER // клієнт оцінює фрілансера (стандартний кейс)
-  FREELANCER_TO_CLIENT // фрілансер оцінює клієнта
+  CLIENT_TO_FREELANCER
+  FREELANCER_TO_CLIENT
 }
 
 enum CategoryStatus {
   DRAFT
   ACTIVE
   ARCHIVED
+}
+
+// ─── НОВЕ: домен категорії (онлайн/офлайн/обидва) ───
+enum CategoryDomain {
+  ONLINE_ONLY     // тільки онлайн: Розробка, Тексти, SMM
+  OFFLINE_ONLY    // тільки офлайн: Сантехніка, Електрика, Прибирання, Краса
+  BOTH            // обидва: Дизайн (логотип онлайн, оформлення кафе офлайн), Фото
+}
+
+enum CityStatus {
+  ACTIVE
+  INACTIVE
 }
 
 // ═══════════════════════════════════════════════════════
@@ -154,7 +189,6 @@ model User {
   phone String?
   city  String?
 
-  // Медіа
   avatar                   String?
   avatarPublicId           String?
   banner                   String?
@@ -162,7 +196,6 @@ model User {
   portfolioImages          String[] @default([])
   portfolioImagesPublicIds String[] @default([])
 
-  // Модерація
   verificationStatus       VerificationStatus @default(NONE)
   verificationRejectReason String?
   verifiedAt               DateTime?
@@ -177,7 +210,6 @@ model User {
   clientAvgRating    Float @default(0)
   clientReviewsCount Int   @default(0)
 
-  // Зв'язки
   gigs                 Gig[]
   orders               Order[]            @relation("ClientOrders")
   freelancerOrders     Order[]            @relation("FreelancerOrders")
@@ -230,7 +262,28 @@ model FreelancerProfile {
   hourlyRate   Int?
   portfolioUrl String?
 
-  // Денормалізовані (оновлюються джобами/тригерами)
+  // ─── НОВЕ: географія роботи ───
+  primaryCity     String?   // основне місто (slug)
+  serviceCities   String[]  @default([])  // інші міста де працює
+  willTravel      Boolean   @default(false) // готовий до виїзду
+  travelRadiusKm  Int?      // на яку відстань готовий їхати (км)
+  travelFeeCents  Int?      // плата за виїзд (опційно)
+
+  // ─── НОВЕ: формати в яких працює ───
+  worksOnline   Boolean @default(true)   // приймає онлайн-замовлення
+  worksOffline  Boolean @default(false)  // приймає у себе
+  worksOnSite   Boolean @default(false)  // їде до клієнта
+
+  // ─── НОВЕ: розклад роботи (JSON для гнучкості) ───
+  // Формат: { "mon": "09:00-18:00", "tue": "09:00-18:00", "sat": "off", ... }
+  workingHours Json?
+
+  // ─── НОВЕ: чи доступний приймати замовлення зараз ───
+  // (toggle "Зайнятий до X числа" / "Доступний")
+  isAvailable    Boolean   @default(true)
+  unavailableUntil DateTime?
+
+  // Денормалізовані метрики
   avgRating        Float @default(0)
   reviewsCount     Int   @default(0)
   totalOrders      Int   @default(0)
@@ -245,47 +298,59 @@ model FreelancerProfile {
   @@index([userId])
   @@index([avgRating])
   @@index([hourlyRate])
+  @@index([primaryCity])
+  @@index([isAvailable])
 }
 
 // ═══════════════════════════════════════════════════════
-// 3. ГІГИ (послуги фрілансера — Fiverr-style)
+// 3. ПОСЛУГИ (Gig — у UI "Послуга")
 // ═══════════════════════════════════════════════════════
 
 model Gig {
   id String @id @default(cuid())
 
-  // ─── Базова інформація ───
   title            String
   slug             String  @unique
   description      String  @db.Text
   shortDescription String? @db.VarChar(280)
 
-  // ─── Категоризація ───
   category    String
   subcategory String?
   tags        String[] @default([])
 
-  // ─── Медіа ───
   images          String[] @default([])
   imagesPublicIds String[] @default([])
   videoUrl        String?
 
-  // ─── Стан ───
+  // ─── НОВЕ: формат послуги ───
+  format ServiceFormat @default(ONLINE)
+
+  // ─── НОВЕ: ціна (для офлайн послуг — простіша модель ніж packages) ───
+  priceType   PriceType @default(FIXED)
+  priceCents  Int?      // для FIXED, FROM, HOURLY
+  currency    String    @default("UAH")
+
+  // ─── НОВЕ: тривалість (важливо для офлайн: "стрижка 30 хв") ───
+  durationMinutes Int?
+
+  // ─── НОВЕ: географія (для OFFLINE/VISIT) ───
+  // Майстер каже "я працюю у Києві і Києво-Святошинському районі"
+  city          String?    // основне місто (slug City)
+  serviceCities String[] @default([])  // інші міста де надається послуга
+  travelFeeCents Int?     // окрема плата за виїзд (поверх priceCents)
+
   status   GigStatus @default(DRAFT)
   isActive Boolean   @default(false)
 
-  // ─── Метрики (denormalized) ───
   viewCount    Int   @default(0)
   ordersCount  Int   @default(0)
   avgRating    Float @default(0)
   reviewsCount Int   @default(0)
 
-  // ─── Часові мітки ───
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   publishedAt DateTime?
 
-  // ─── Зв'язки ───
   sellerId String
   seller   User         @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   packages GigPackage[]
@@ -298,6 +363,9 @@ model Gig {
   @@index([slug])
   @@index([avgRating])
   @@index([ordersCount])
+  @@index([format])
+  @@index([city])
+  @@index([format, city, status])
 }
 
 model GigPackage {
@@ -310,11 +378,10 @@ model GigPackage {
   name        String  @default("")
   description String? @db.Text
 
-  // Ціна у копійках
   priceCents Int
 
   deliveryDays Int
-  revisions    Int      @default(1) // -1 = unlimited
+  revisions    Int      @default(1)
   features     String[] @default([])
 
   createdAt DateTime @default(now())
@@ -331,18 +398,15 @@ model GigPackage {
 model Order {
   id String @id @default(cuid())
 
-  // Учасники
   clientId     String
   client       User   @relation("ClientOrders", fields: [clientId], references: [id])
   freelancerId String
   freelancer   User   @relation("FreelancerOrders", fields: [freelancerId], references: [id])
 
-  // Джерело
   gigId  String?
   gig    Gig?        @relation(fields: [gigId], references: [id])
   source OrderSource @default(DIRECT)
 
-  // Деталі
   title        String
   description  String    @db.Text
   priceCents   Int
@@ -350,10 +414,16 @@ model Order {
   deliveryDays Int?
   deadlineAt   DateTime?
 
-  // Стан
+  // ─── НОВЕ: формат і географія (для офлайн замовлень) ───
+  format       ServiceFormat?
+  city         String?
+  // Адреса видна лише після ACCEPTED — захист приватності клієнта
+  address      String?
+  // Точна дата/час зустрічі (для виїзних)
+  scheduledFor DateTime?
+
   status OrderStatus @default(NEGOTIATING)
 
-  // Часові мітки переходів
   acceptedAt    DateTime?
   deliveredAt   DateTime?
   completedAt   DateTime?
@@ -361,21 +431,16 @@ model Order {
   cancelledById String?
   cancelReason  String?   @db.Text
 
-  // Здані роботи
   deliverables String[] @default([])
   deliveryNote String?  @db.Text
 
-  // Чат
   chatId String?
   chat   Chat?   @relation(fields: [chatId], references: [id], onDelete: SetNull)
 
-  // Lead fee у копійках (для GIG_PURCHASE — комісія, для JOB_PROPOSAL — 0)
   leadFeeCents Int @default(0)
 
-  // Автозавершення (cron через 7 днів після DELIVERED)
   autoCompleteAt DateTime?
 
-  // ─── Зв'язки ───
   reviews Review[]
   events  OrderEvent[]
   fromJob Job?         @relation("JobToOrder")
@@ -387,6 +452,7 @@ model Order {
   @@index([freelancerId, status])
   @@index([chatId])
   @@index([status, createdAt])
+  @@index([scheduledFor])
 }
 
 model OrderEvent {
@@ -395,7 +461,7 @@ model OrderEvent {
   order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   type    OrderEventType
-  actorId String? // null = системна подія
+  actorId String?
   actor   User?          @relation(fields: [actorId], references: [id])
   payload Json?
 
@@ -405,53 +471,63 @@ model OrderEvent {
 }
 
 // ═══════════════════════════════════════════════════════
-// 5. ЗАЯВКИ КЛІЄНТІВ (Upwork-style Jobs)
+// 5. ЗАЯВКИ КЛІЄНТІВ — головна фішка платформи
 // ═══════════════════════════════════════════════════════
 
 model Job {
   id String @id @default(cuid())
 
-  // ─── Базова інформація ───
   title       String
   description String   @db.Text
   category    String
   subcategory String?
   tags        String[] @default([])
 
-  // ─── Бюджет (у копійках) ───
   budgetType     JobBudgetType @default(FIXED)
   budgetMinCents Int?
   budgetMaxCents Int?
   currency       String        @default("UAH")
 
-  // ─── Терміни ───
   deliveryDays Int?
   deadlineAt   DateTime?
-  expiresAt    DateTime // коли закривається прийом proposals
+  expiresAt    DateTime
 
-  // ─── Локація / тип роботи ───
+  // ─── ЗМІНА: явний формат замість type ───
+  // type залишаємо для зворотної сумісності
   type ServiceType @default(ANY)
+
+  // ─── НОВЕ: формат послуги (більш чітко) ───
+  format ServiceFormat? // null = клієнту байдуже, підійдуть всі
+
   city String?
 
-  // ─── Стан ───
+  // ─── НОВЕ: точна адреса (приватна, видима тільки прийнятому майстру) ───
+  address String?
+
+  // ─── НОВЕ: терміновість ───
+  urgency Urgency @default(FLEXIBLE)
+
+  // ─── НОВЕ: бажаний час виконання (опційно) ───
+  scheduledFor DateTime?
+
+  // ─── НОВЕ: фото проблеми (важливо для офлайн: фото зламаної техніки) ───
+  attachments          String[] @default([])
+  attachmentsPublicIds String[] @default([])
+
   status JobStatus @default(OPEN)
 
-  // ─── Метрики ───
   proposalsCount Int @default(0)
   viewsCount     Int @default(0)
 
-  // ─── Часові мітки ───
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   closedAt  DateTime?
 
-  // ─── Зв'язки ───
   clientId String
   client   User   @relation("ClientJobs", fields: [clientId], references: [id], onDelete: Cascade)
 
   proposals Proposal[]
 
-  // Якщо клієнт обрав фрілансера — посилання на створений Order
   selectedOrderId String? @unique
   selectedOrder   Order?  @relation("JobToOrder", fields: [selectedOrderId], references: [id])
 
@@ -459,6 +535,10 @@ model Job {
   @@index([category])
   @@index([clientId])
   @@index([expiresAt])
+  @@index([format])
+  @@index([city])
+  @@index([format, city, status])
+  @@index([urgency, status])
 }
 
 model Proposal {
@@ -469,14 +549,12 @@ model Proposal {
   freelancerId String
   freelancer   User   @relation("FreelancerProposals", fields: [freelancerId], references: [id], onDelete: Cascade)
 
-  // Контент
   coverLetter        String @db.Text
   proposedPriceCents Int
   proposedDays       Int
 
   status ProposalStatus @default(SUBMITTED)
 
-  // Lead fee
   leadFeeCents Int     @default(0)
   refunded     Boolean @default(false)
 
@@ -484,7 +562,6 @@ model Proposal {
   updatedAt   DateTime  @updatedAt
   withdrawnAt DateTime?
 
-  // Один фрілансер = один proposal на job
   @@unique([jobId, freelancerId])
   @@index([jobId, status])
   @@index([freelancerId, status])
@@ -514,15 +591,14 @@ model WalletTransaction {
   walletId String
   wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
 
-  amountCents Int // від'ємне = списання, додатне = поповнення
+  amountCents Int
   type        TxType
   description String?
 
-  // Прив'язки до related entity (опційно)
   orderId    String?
   proposalId String?
 
-  externalRef String? @unique // ID транзакції LiqPay/Fondy
+  externalRef String? @unique
 
   status TxStatus @default(SUCCESS)
 
@@ -539,29 +615,23 @@ model WalletTransaction {
 
 model Review {
   id      String  @id @default(cuid())
-  rating  Int // 1–5
+  rating  Int
   comment String?
 
-  // ─── НОВЕ: напрямок відгука ───
   direction ReviewDirection
 
-  // gigId опціональний — пов'язується тільки якщо це CLIENT_TO_FREELANCER
-  // і замовлення з gig (бо це впливає на рейтинг гіга)
   gigId String?
   gig   Gig?    @relation(fields: [gigId], references: [id])
 
   authorId String
   author   User   @relation("AuthorReviews", fields: [authorId], references: [id])
 
-  // ─── ЗМІНА: orderId БЕЗ @unique ───
   orderId String
   order   Order  @relation(fields: [orderId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // ─── НОВЕ: 1 review per (order, direction) ───
-  // Тобто: один order — максимум 2 review (по одному з кожної сторони)
   @@unique([orderId, direction])
   @@index([gigId])
   @@index([authorId])
@@ -578,7 +648,6 @@ model Chat {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Кеш останнього повідомлення
   lastMessageText String?
   lastMessageAt   DateTime?
   lastSenderId    String?
@@ -613,7 +682,6 @@ model Message {
   type MessageType @default(TEXT)
   text String      @default("")
 
-  // Вкладення
   attachmentUrl      String?
   attachmentPublicId String?
   attachmentMimeType String?
@@ -622,7 +690,7 @@ model Message {
 
   isRead    Boolean   @default(false)
   editedAt  DateTime?
-  deletedAt DateTime? // soft delete
+  deletedAt DateTime?
 
   chatId   String
   chat     Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
@@ -645,53 +713,57 @@ model Message {
 
 model Category {
   id          String         @id @default(cuid())
-  slug        String         @unique // 'design', 'web-development'
-  name        String // 'Дизайн'
+  slug        String         @unique
+  name        String
   description String?        @db.Text
-  icon        String? // emoji або lucide icon name (напр. 'Palette')
-  color       String? // hex для UI акценту (опційно)
+  icon        String?
+  color       String?
   status      CategoryStatus @default(ACTIVE)
 
-  // Сортування — менше число = вище в списку
+  // ─── НОВЕ: домен (онлайн/офлайн/обидва) ───
+  // Впливає на UI: показуємо чи приховуємо фільтр "місто"
+  domain CategoryDomain @default(BOTH)
+
   sortOrder Int @default(0)
 
-  // SEO
   seoTitle       String?
   seoDescription String?
 
-  // Лічильники (денормалізовано для швидкого UI)
   gigsCount        Int @default(0)
   jobsCount        Int @default(0)
   freelancersCount Int @default(0)
 
   subcategories Subcategory[]
+  skills        Skill[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  skills    Skill[]
 
   @@index([status, sortOrder])
+  @@index([domain])
 }
 
 model Subcategory {
   id          String         @id @default(cuid())
-  slug        String // 'web-design' (унікальний у межах категорії)
-  name        String // 'Веб-дизайн'
+  slug        String
+  name        String
   description String?        @db.Text
   icon        String?
   status      CategoryStatus @default(ACTIVE)
   sortOrder   Int            @default(0)
+
+  // ─── НОВЕ: домен підкатегорії може відрізнятись від батьківської ───
+  // Наприклад: Дизайн (BOTH) → Веб-дизайн (ONLINE_ONLY), Оформлення інтерʼєру (OFFLINE_ONLY)
+  domain CategoryDomain?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   services Service[]
 
-  // SEO
   seoTitle       String?
   seoDescription String?
 
-  // Лічильники
   gigsCount Int @default(0)
   jobsCount Int @default(0)
 
@@ -701,27 +773,29 @@ model Subcategory {
   @@unique([categoryId, slug])
   @@index([status, sortOrder])
   @@index([categoryId])
+  @@index([domain])
 }
 
 model Service {
   id          String         @id @default(cuid())
-  slug        String // 'landing-page'
-  name        String // 'Лендінг'
+  slug        String
+  name        String
   description String?        @db.Text
   status      CategoryStatus @default(ACTIVE)
   sortOrder   Int            @default(0)
 
-  // Орієнтовна ціна для placeholder'ів у UI
   avgPriceCents Int?
+
+  // ─── НОВЕ: типовий формат для цієї довідкової послуги ───
+  // Допомагає UI підказати майстру при створенні Gig: "Цю послугу зазвичай надають онлайн"
+  typicalFormat ServiceFormat?
 
   subcategoryId String
   subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
 
-  // SEO
   seoTitle       String?
   seoDescription String?
 
-  // Лічильники
   gigsCount Int @default(0)
 
   createdAt DateTime @default(now())
@@ -775,10 +849,21 @@ model OtpCode {
   @@index([email])
 }
 
-enum CityStatus {
-  ACTIVE
-  INACTIVE
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+  @@index([identifier])
 }
+
+// ═══════════════════════════════════════════════════════
+// 11. МІСТА
+// ═══════════════════════════════════════════════════════
 
 model City {
   id        String     @id @default(cuid())
@@ -788,23 +873,37 @@ model City {
   isCapital Boolean    @default(false)
   sortOrder Int        @default(0)
   status    CityStatus @default(ACTIVE)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+
+  // ─── НОВЕ: координати для радіусу пошуку ───
+  // Майстер каже "їжджу в радіусі 15 км від Києва" — рахуємо за цими координатами
+  latitude  Float?
+  longitude Float?
+
+  // ─── НОВЕ: денормалізовані лічильники для UI ───
+  freelancersCount Int @default(0)
+  jobsCount        Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([region])
   @@index([sortOrder])
+  @@index([status, sortOrder])
 }
+
+// ═══════════════════════════════════════════════════════
+// 12. НАВИЧКИ
+// ═══════════════════════════════════════════════════════
 
 model Skill {
   id         String   @id @default(cuid())
   slug       String   @unique
-  name       String // "Установка сантехніки", "Зварювання MIG/MAG"
+  name       String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String
   sortOrder  Int      @default(0)
   createdAt  DateTime @default(now())
 
-  // Зворотна звʼязка з фрілансерами через join-таблицю
   freelancers FreelancerSkill[]
 
   @@index([categoryId])
@@ -818,10 +917,6 @@ model FreelancerSkill {
   skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
   skillId String
 
-  // Опційні корисні поля на майбутнє:
-  // level      Int?      // 1-5 рівень володіння
-  // yearsOfExp Int?      // років досвіду саме з цією навичкою
-
   createdAt DateTime @default(now())
 
   @@id([freelancerId, skillId])
@@ -829,16 +924,19 @@ model FreelancerSkill {
   @@index([freelancerId])
 }
 
+// ═══════════════════════════════════════════════════════
+// 13. ІНШЕ
+// ═══════════════════════════════════════════════════════
+
 model Notification {
   id     String @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type  String // 'NEW_ORDER', 'ORDER_ACCEPTED', 'NEW_MESSAGE', 'PROPOSAL_RECEIVED' тощо
+  type  String
   title String
   body  String?
 
-  // Опційні звʼязки з обʼєктами (для deep-link при кліку)
   orderId    String?
   proposalId String?
   jobId      String?
@@ -856,33 +954,18 @@ model Notification {
 model PhoneReveal {
   id String @id @default(cuid())
 
-  // Хто переглянув
   viewerId String
   viewer   User   @relation("PhoneRevealsByViewer", fields: [viewerId], references: [id], onDelete: Cascade)
 
-  // Чий номер переглянули
   targetId String
   target   User   @relation("PhoneRevealsOfTarget", fields: [targetId], references: [id], onDelete: Cascade)
 
-  // IP та user-agent на момент перегляду — для аудиту скрапінгу
   ipAddress String?
   userAgent String? @db.VarChar(500)
 
   createdAt DateTime @default(now())
 
-  @@index([viewerId, createdAt]) // швидкий counter "скільки сьогодні"
-  @@index([viewerId, targetId]) // швидкий пошук "чи дивився цей юзер цей номер"
-  @@index([targetId, createdAt]) // для аудиту "хто дивився мій номер"
-}
-
-model Verification {
-  id         String   @id
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
-
-  @@map("verification")
-  @@index([identifier])
+  @@index([viewerId, createdAt])
+  @@index([viewerId, targetId])
+  @@index([targetId, createdAt])
 }

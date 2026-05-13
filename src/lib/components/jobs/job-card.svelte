@@ -5,7 +5,7 @@
     AvatarFallback,
     AvatarImage,
   } from '$lib/components/ui/avatar'
-  import { MapPin, Users, Clock, ArrowRight } from 'lucide-svelte'
+  import { Users, Clock, ArrowRight, MapPin, Tag } from 'lucide-svelte'
   import BudgetDisplay from './budget-display.svelte'
 
   interface Props {
@@ -38,8 +38,23 @@
 
   let { job, showClient = true, statusBadge = null }: Props = $props()
 
-  function formatRelativeTime(iso: string): string {
-    const date = new Date(iso)
+  // ═══════════════════════════════════════════════════════════
+  // Derived (мемоізовані обчислення)
+  // ═══════════════════════════════════════════════════════════
+
+  const typeLabel = $derived.by(() => {
+    if (job.type === 'ONLINE') return 'Онлайн'
+    if (job.type === 'OFFLINE') return 'Офлайн'
+    if (job.type === 'VISIT') return 'Виїзд'
+    return null
+  })
+
+  const showLocationIcon = $derived(
+    job.type === 'VISIT' || job.type === 'OFFLINE',
+  )
+
+  const relativeTime = $derived.by(() => {
+    const date = new Date(job.createdAt)
     const diffMs = Date.now() - date.getTime()
     const diffMin = Math.floor(diffMs / 60000)
     const diffHr = Math.floor(diffMin / 60)
@@ -54,152 +69,276 @@
       day: 'numeric',
       month: 'short',
     })
-  }
+  })
 
-  const typeLabel = $derived(
-    job.type === 'ONLINE'
-      ? 'Онлайн'
-      : job.type === 'OFFLINE'
-        ? 'Офлайн'
-        : job.type === 'VISIT'
-          ? 'Виїзд'
-          : null,
-  )
+  const visibleTags = $derived(job.tags.slice(0, 3))
+  const extraTagsCount = $derived(Math.max(0, job.tags.length - 3))
+  const clientInitial = $derived(job.client?.name?.[0]?.toUpperCase() ?? '?')
 </script>
 
-<a
-  href={`/jobs/${job.id}`}
-  class="group block rounded-xl p-5 transition-colors cursor-pointer"
-  style="background-color: var(--card); border: 1px solid var(--border)"
-  onmouseenter={(e) =>
-    ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-      'color-mix(in srgb, var(--card) 70%, var(--muted))')}
-  onmouseleave={(e) =>
-    ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-      'var(--card)')}
->
-  <!-- Top row: title + budget -->
-  <div class="flex items-start justify-between gap-4 mb-2">
-    <h3
-      class="text-[15px] sm:text-base font-semibold leading-snug line-clamp-2 flex-1"
-      style="color: var(--foreground)"
-    >
-      {job.title}
-    </h3>
-    <div class="text-right shrink-0">
-      <BudgetDisplay
-        budgetType={job.budgetType}
-        budgetMinCents={job.budgetMinCents}
-        budgetMaxCents={job.budgetMaxCents}
-        currency={job.currency}
-        size="sm"
-      />
-      <p
-        class="text-[10px] uppercase tracking-wider mt-0.5"
-        style="color: var(--muted-foreground)"
+<a href={`/jobs/${job.id}`} class="ios-card-link group block">
+  <!-- ━━━ Top zone (white) — content ━━━ -->
+  <div class="px-5 pt-5 pb-4">
+    <!-- Title + budget -->
+    <div class="flex items-start justify-between gap-4 mb-2.5">
+      <h3
+        class="text-[15.5px] sm:text-base font-semibold leading-snug line-clamp-2 flex-1 tracking-[-0.01em]"
+        style="color: var(--foreground)"
       >
-        бюджет
-      </p>
+        {job.title}
+      </h3>
+      <div class="text-right shrink-0">
+        <BudgetDisplay
+          budgetType={job.budgetType}
+          budgetMinCents={job.budgetMinCents}
+          budgetMaxCents={job.budgetMaxCents}
+          currency={job.currency}
+          size="sm"
+        />
+        <p
+          class="text-[10px] uppercase tracking-[0.06em] mt-0.5 font-medium"
+          style="color: var(--muted-foreground)"
+        >
+          бюджет
+        </p>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p
+      class="text-[13.5px] leading-[1.55] line-clamp-2 mb-3.5"
+      style="color: var(--muted-foreground)"
+    >
+      {job.description}
+    </p>
+
+    <!-- Tags -->
+    <div class="flex flex-wrap items-center gap-1.5">
+      <span class="ios-tag ios-tag-primary">
+        <Tag class="size-3 opacity-70" strokeWidth={2} />
+        {job.category}
+      </span>
+
+      {#each visibleTags as tag, i (tag || i)}
+        <span class="ios-tag">#{tag}</span>
+      {/each}
+
+      {#if extraTagsCount > 0}
+        <span
+          class="text-[11px] font-medium"
+          style="color: var(--muted-foreground)"
+        >
+          +{extraTagsCount}
+        </span>
+      {/if}
     </div>
   </div>
 
-  <!-- Description -->
-  <p
-    class="text-[13px] leading-relaxed line-clamp-2 mb-3"
-    style="color: var(--muted-foreground)"
-  >
-    {job.description}
-  </p>
-
-  <!-- Tags + category -->
-  <div class="flex flex-wrap items-center gap-1.5 mb-4">
-    <span
-      class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium"
-      style="background-color: var(--muted); color: var(--foreground)"
-    >
-      {job.category}
-    </span>
-    {#each job.tags.slice(0, 3) as tag}
-      <span
-        class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px]"
-        style="background-color: var(--muted); color: var(--muted-foreground)"
-      >
-        #{tag}
-      </span>
-    {/each}
-    {#if job.tags.length > 3}
-      <span
-        class="text-[11px]"
-        style="color: var(--muted-foreground)"
-      >
-        +{job.tags.length - 3}
-      </span>
-    {/if}
-  </div>
-
-  <!-- Bottom: meta -->
+  <!-- ━━━ Bottom zone (gray) — meta + arrow ━━━ -->
   <div
-    class="flex items-center justify-between gap-3 pt-3"
-    style="border-top: 1px solid var(--border)"
+    class="ios-card-footer flex items-center justify-between gap-3 px-5 py-3"
   >
-    <div class="flex items-center gap-3 min-w-0 flex-1">
+    <div class="flex items-center gap-2.5 min-w-0 flex-1">
       {#if showClient && job.client}
-        <Avatar class="size-6 shrink-0">
+        <Avatar class="size-7 shrink-0">
           <AvatarImage
             src={job.client.avatar ?? ''}
             alt={job.client.name ?? ''}
           />
-          <AvatarFallback
-            class="text-[10px] font-semibold"
-            style="background-color: var(--muted); color: var(--foreground)"
-          >
-            {job.client.name?.[0]?.toUpperCase() ?? '?'}
+          <AvatarFallback class="text-[11px] font-semibold ios-avatar-fallback">
+            {clientInitial}
           </AvatarFallback>
         </Avatar>
         <span
-          class="text-xs font-medium truncate"
+          class="text-[12.5px] font-medium truncate max-w-[140px]"
           style="color: var(--foreground)"
         >
           {job.client.name}
         </span>
-        <span
-          class="text-xs shrink-0"
-          style="color: color-mix(in srgb, var(--muted-foreground) 50%, transparent)"
-        >
-          ·
-        </span>
+        <span class="ios-meta-divider"></span>
       {/if}
 
       <div
-        class="flex items-center gap-3 text-[11px] min-w-0"
+        class="flex items-center gap-2.5 text-[11.5px] min-w-0 overflow-hidden"
         style="color: var(--muted-foreground)"
       >
-        <span class="inline-flex items-center gap-1 shrink-0">
-          <Users class="size-3" />
+        <span class="inline-flex items-center gap-1 shrink-0 tabular-nums">
+          <Users class="size-3" strokeWidth={2} />
           {job.proposalsCount}
         </span>
+
         {#if typeLabel}
+          <span class="ios-meta-divider"></span>
           <span class="inline-flex items-center gap-1 shrink-0">
-            {typeLabel}{#if job.city}<span class="hidden sm:inline">, {job.city}</span>{/if}
+            {#if showLocationIcon}
+              <MapPin class="size-3" strokeWidth={2} />
+            {/if}
+            {typeLabel}{#if job.city}<span class="hidden sm:inline"
+                >, {job.city}</span
+              >{/if}
           </span>
         {/if}
-        <span class="shrink-0 truncate">{formatRelativeTime(job.createdAt)}</span>
+
+        <span class="ios-meta-divider hidden sm:inline-block"></span>
+        <span class="hidden sm:inline-flex items-center gap-1 shrink-0">
+          <Clock class="size-3" strokeWidth={2} />
+          {relativeTime}
+        </span>
       </div>
     </div>
 
     <div class="flex items-center gap-2 shrink-0">
       {#if statusBadge}
-        <span
-          class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded"
-          style="background-color: var(--muted); color: var(--foreground)"
-        >
-          {statusBadge}
-        </span>
+        <span class="ios-status-badge">{statusBadge}</span>
       {/if}
-      <ArrowRight
-        class="size-4 transition-transform group-hover:translate-x-0.5"
-        style="color: var(--muted-foreground)"
-      />
+      <span class="ios-arrow-circle">
+        <ArrowRight class="size-3.5" strokeWidth={2.5} />
+      </span>
     </div>
   </div>
 </a>
+
+<style>
+  /* ─── Card ─── */
+  :global(.ios-card-link) {
+    background-color: var(--card, #ffffff);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+    transition:
+      border-color 180ms ease,
+      box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    will-change: transform;
+  }
+  :global(.ios-card-link:hover) {
+    border-color: rgba(0, 0, 0, 0.24);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  :global(.ios-card-link:active) {
+    transform: scale(0.997);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(.ios-card-link) {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+    :global(.ios-card-link:hover) {
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  /* ─── Footer (gray zone) ─── */
+  :global(.ios-card-footer) {
+    background-color: #f5f5f7;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(.ios-card-footer) {
+      background-color: color-mix(in srgb, var(--muted) 60%, transparent);
+      border-top-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  /* ─── Avatar fallback ─── */
+  :global(.ios-avatar-fallback) {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: var(--foreground);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(.ios-avatar-fallback) {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  /* ─── Tags ─── */
+  :global(.ios-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 11.5px;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--muted-foreground);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  :global(.ios-tag-primary) {
+    background-color: rgba(0, 122, 255, 0.1);
+    color: #007aff;
+    font-weight: 600;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(.ios-tag) {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+    :global(.ios-tag-primary) {
+      background-color: rgba(0, 122, 255, 0.18);
+      color: #5ea7ff;
+    }
+  }
+
+  /* ─── Meta divider ─── */
+  :global(.ios-meta-divider) {
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.4;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  /* ─── Status badge ─── */
+  :global(.ios-status-badge) {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 11px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background-color: #111111;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  /* ─── Arrow circle ─── */
+  :global(.ios-arrow-circle) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.06);
+    color: var(--muted-foreground);
+    transition:
+      background-color 150ms ease,
+      transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 150ms ease;
+    flex-shrink: 0;
+  }
+  :global(.group:hover .ios-arrow-circle) {
+    background-color: #111111;
+    color: #ffffff;
+    transform: translateX(2px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(.ios-arrow-circle) {
+      background-color: rgba(255, 255, 255, 0.07);
+    }
+    :global(.group:hover .ios-arrow-circle) {
+      background-color: #ffffff;
+      color: #111111;
+    }
+  }
+</style>

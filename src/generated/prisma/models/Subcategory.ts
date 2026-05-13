@@ -46,6 +46,7 @@ export type SubcategoryMinAggregateOutputType = {
   icon: string | null
   status: $Enums.CategoryStatus | null
   sortOrder: number | null
+  domain: $Enums.CategoryDomain | null
   categoryId: string | null
   seoTitle: string | null
   seoDescription: string | null
@@ -63,6 +64,7 @@ export type SubcategoryMaxAggregateOutputType = {
   icon: string | null
   status: $Enums.CategoryStatus | null
   sortOrder: number | null
+  domain: $Enums.CategoryDomain | null
   categoryId: string | null
   seoTitle: string | null
   seoDescription: string | null
@@ -80,6 +82,7 @@ export type SubcategoryCountAggregateOutputType = {
   icon: number
   status: number
   sortOrder: number
+  domain: number
   categoryId: number
   seoTitle: number
   seoDescription: number
@@ -111,6 +114,7 @@ export type SubcategoryMinAggregateInputType = {
   icon?: true
   status?: true
   sortOrder?: true
+  domain?: true
   categoryId?: true
   seoTitle?: true
   seoDescription?: true
@@ -128,6 +132,7 @@ export type SubcategoryMaxAggregateInputType = {
   icon?: true
   status?: true
   sortOrder?: true
+  domain?: true
   categoryId?: true
   seoTitle?: true
   seoDescription?: true
@@ -145,6 +150,7 @@ export type SubcategoryCountAggregateInputType = {
   icon?: true
   status?: true
   sortOrder?: true
+  domain?: true
   categoryId?: true
   seoTitle?: true
   seoDescription?: true
@@ -249,6 +255,7 @@ export type SubcategoryGroupByOutputType = {
   icon: string | null
   status: $Enums.CategoryStatus
   sortOrder: number
+  domain: $Enums.CategoryDomain | null
   categoryId: string
   seoTitle: string | null
   seoDescription: string | null
@@ -289,6 +296,7 @@ export type SubcategoryWhereInput = {
   icon?: Prisma.StringNullableFilter<"Subcategory"> | string | null
   status?: Prisma.EnumCategoryStatusFilter<"Subcategory"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFilter<"Subcategory"> | number
+  domain?: Prisma.EnumCategoryDomainNullableFilter<"Subcategory"> | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringFilter<"Subcategory"> | string
   seoTitle?: Prisma.StringNullableFilter<"Subcategory"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Subcategory"> | string | null
@@ -308,6 +316,7 @@ export type SubcategoryOrderByWithRelationInput = {
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  domain?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -331,6 +340,7 @@ export type SubcategoryWhereUniqueInput = Prisma.AtLeast<{
   icon?: Prisma.StringNullableFilter<"Subcategory"> | string | null
   status?: Prisma.EnumCategoryStatusFilter<"Subcategory"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFilter<"Subcategory"> | number
+  domain?: Prisma.EnumCategoryDomainNullableFilter<"Subcategory"> | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringFilter<"Subcategory"> | string
   seoTitle?: Prisma.StringNullableFilter<"Subcategory"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Subcategory"> | string | null
@@ -350,6 +360,7 @@ export type SubcategoryOrderByWithAggregationInput = {
   icon?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  domain?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -375,6 +386,7 @@ export type SubcategoryScalarWhereWithAggregatesInput = {
   icon?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
   status?: Prisma.EnumCategoryStatusWithAggregatesFilter<"Subcategory"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntWithAggregatesFilter<"Subcategory"> | number
+  domain?: Prisma.EnumCategoryDomainNullableWithAggregatesFilter<"Subcategory"> | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringWithAggregatesFilter<"Subcategory"> | string
   seoTitle?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
   seoDescription?: Prisma.StringNullableWithAggregatesFilter<"Subcategory"> | string | null
@@ -392,6 +404,7 @@ export type SubcategoryCreateInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -410,6 +423,7 @@ export type SubcategoryUncheckedCreateInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   categoryId: string
   seoTitle?: string | null
   seoDescription?: string | null
@@ -428,6 +442,7 @@ export type SubcategoryUpdateInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -446,6 +461,7 @@ export type SubcategoryUncheckedUpdateInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -464,6 +480,7 @@ export type SubcategoryCreateManyInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   categoryId: string
   seoTitle?: string | null
   seoDescription?: string | null
@@ -481,6 +498,7 @@ export type SubcategoryUpdateManyMutationInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -497,6 +515,7 @@ export type SubcategoryUncheckedUpdateManyInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -529,6 +548,7 @@ export type SubcategoryCountOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
@@ -552,6 +572,7 @@ export type SubcategoryMaxOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
@@ -569,6 +590,7 @@ export type SubcategoryMinOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
@@ -631,6 +653,10 @@ export type SubcategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.SubcategoryScalarWhereInput | Prisma.SubcategoryScalarWhereInput[]
 }
 
+export type NullableEnumCategoryDomainFieldUpdateOperationsInput = {
+  set?: $Enums.CategoryDomain | null
+}
+
 export type SubcategoryCreateNestedOneWithoutServicesInput = {
   create?: Prisma.XOR<Prisma.SubcategoryCreateWithoutServicesInput, Prisma.SubcategoryUncheckedCreateWithoutServicesInput>
   connectOrCreate?: Prisma.SubcategoryCreateOrConnectWithoutServicesInput
@@ -653,6 +679,7 @@ export type SubcategoryCreateWithoutCategoryInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -670,6 +697,7 @@ export type SubcategoryUncheckedCreateWithoutCategoryInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -716,6 +744,7 @@ export type SubcategoryScalarWhereInput = {
   icon?: Prisma.StringNullableFilter<"Subcategory"> | string | null
   status?: Prisma.EnumCategoryStatusFilter<"Subcategory"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFilter<"Subcategory"> | number
+  domain?: Prisma.EnumCategoryDomainNullableFilter<"Subcategory"> | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringFilter<"Subcategory"> | string
   seoTitle?: Prisma.StringNullableFilter<"Subcategory"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Subcategory"> | string | null
@@ -733,6 +762,7 @@ export type SubcategoryCreateWithoutServicesInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -750,6 +780,7 @@ export type SubcategoryUncheckedCreateWithoutServicesInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   categoryId: string
   seoTitle?: string | null
   seoDescription?: string | null
@@ -783,6 +814,7 @@ export type SubcategoryUpdateWithoutServicesInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -800,6 +832,7 @@ export type SubcategoryUncheckedUpdateWithoutServicesInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -817,6 +850,7 @@ export type SubcategoryCreateManyCategoryInput = {
   icon?: string | null
   status?: $Enums.CategoryStatus
   sortOrder?: number
+  domain?: $Enums.CategoryDomain | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -833,6 +867,7 @@ export type SubcategoryUpdateWithoutCategoryInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -850,6 +885,7 @@ export type SubcategoryUncheckedUpdateWithoutCategoryInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -867,6 +903,7 @@ export type SubcategoryUncheckedUpdateManyWithoutCategoryInput = {
   icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  domain?: Prisma.NullableEnumCategoryDomainFieldUpdateOperationsInput | $Enums.CategoryDomain | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -914,6 +951,7 @@ export type SubcategorySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   icon?: boolean
   status?: boolean
   sortOrder?: boolean
+  domain?: boolean
   categoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -934,6 +972,7 @@ export type SubcategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   icon?: boolean
   status?: boolean
   sortOrder?: boolean
+  domain?: boolean
   categoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -952,6 +991,7 @@ export type SubcategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   icon?: boolean
   status?: boolean
   sortOrder?: boolean
+  domain?: boolean
   categoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -970,6 +1010,7 @@ export type SubcategorySelectScalar = {
   icon?: boolean
   status?: boolean
   sortOrder?: boolean
+  domain?: boolean
   categoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -979,7 +1020,7 @@ export type SubcategorySelectScalar = {
   updatedAt?: boolean
 }
 
-export type SubcategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "status" | "sortOrder" | "categoryId" | "seoTitle" | "seoDescription" | "gigsCount" | "jobsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["subcategory"]>
+export type SubcategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "icon" | "status" | "sortOrder" | "domain" | "categoryId" | "seoTitle" | "seoDescription" | "gigsCount" | "jobsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["subcategory"]>
 export type SubcategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   services?: boolean | Prisma.Subcategory$servicesArgs<ExtArgs>
@@ -1006,6 +1047,7 @@ export type $SubcategoryPayload<ExtArgs extends runtime.Types.Extensions.Interna
     icon: string | null
     status: $Enums.CategoryStatus
     sortOrder: number
+    domain: $Enums.CategoryDomain | null
     categoryId: string
     seoTitle: string | null
     seoDescription: string | null
@@ -1445,6 +1487,7 @@ export interface SubcategoryFieldRefs {
   readonly icon: Prisma.FieldRef<"Subcategory", 'String'>
   readonly status: Prisma.FieldRef<"Subcategory", 'CategoryStatus'>
   readonly sortOrder: Prisma.FieldRef<"Subcategory", 'Int'>
+  readonly domain: Prisma.FieldRef<"Subcategory", 'CategoryDomain'>
   readonly categoryId: Prisma.FieldRef<"Subcategory", 'String'>
   readonly seoTitle: Prisma.FieldRef<"Subcategory", 'String'>
   readonly seoDescription: Prisma.FieldRef<"Subcategory", 'String'>

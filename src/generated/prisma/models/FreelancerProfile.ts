@@ -28,6 +28,8 @@ export type AggregateFreelancerProfile = {
 
 export type FreelancerProfileAvgAggregateOutputType = {
   hourlyRate: number | null
+  travelRadiusKm: number | null
+  travelFeeCents: number | null
   avgRating: number | null
   reviewsCount: number | null
   totalOrders: number | null
@@ -39,6 +41,8 @@ export type FreelancerProfileAvgAggregateOutputType = {
 
 export type FreelancerProfileSumAggregateOutputType = {
   hourlyRate: number | null
+  travelRadiusKm: number | null
+  travelFeeCents: number | null
   avgRating: number | null
   reviewsCount: number | null
   totalOrders: number | null
@@ -54,6 +58,15 @@ export type FreelancerProfileMinAggregateOutputType = {
   experience: $Enums.ExperienceLevel | null
   hourlyRate: number | null
   portfolioUrl: string | null
+  primaryCity: string | null
+  willTravel: boolean | null
+  travelRadiusKm: number | null
+  travelFeeCents: number | null
+  worksOnline: boolean | null
+  worksOffline: boolean | null
+  worksOnSite: boolean | null
+  isAvailable: boolean | null
+  unavailableUntil: Date | null
   avgRating: number | null
   reviewsCount: number | null
   totalOrders: number | null
@@ -71,6 +84,15 @@ export type FreelancerProfileMaxAggregateOutputType = {
   experience: $Enums.ExperienceLevel | null
   hourlyRate: number | null
   portfolioUrl: string | null
+  primaryCity: string | null
+  willTravel: boolean | null
+  travelRadiusKm: number | null
+  travelFeeCents: number | null
+  worksOnline: boolean | null
+  worksOffline: boolean | null
+  worksOnSite: boolean | null
+  isAvailable: boolean | null
+  unavailableUntil: Date | null
   avgRating: number | null
   reviewsCount: number | null
   totalOrders: number | null
@@ -90,6 +112,17 @@ export type FreelancerProfileCountAggregateOutputType = {
   languages: number
   hourlyRate: number
   portfolioUrl: number
+  primaryCity: number
+  serviceCities: number
+  willTravel: number
+  travelRadiusKm: number
+  travelFeeCents: number
+  worksOnline: number
+  worksOffline: number
+  worksOnSite: number
+  workingHours: number
+  isAvailable: number
+  unavailableUntil: number
   avgRating: number
   reviewsCount: number
   totalOrders: number
@@ -105,6 +138,8 @@ export type FreelancerProfileCountAggregateOutputType = {
 
 export type FreelancerProfileAvgAggregateInputType = {
   hourlyRate?: true
+  travelRadiusKm?: true
+  travelFeeCents?: true
   avgRating?: true
   reviewsCount?: true
   totalOrders?: true
@@ -116,6 +151,8 @@ export type FreelancerProfileAvgAggregateInputType = {
 
 export type FreelancerProfileSumAggregateInputType = {
   hourlyRate?: true
+  travelRadiusKm?: true
+  travelFeeCents?: true
   avgRating?: true
   reviewsCount?: true
   totalOrders?: true
@@ -131,6 +168,15 @@ export type FreelancerProfileMinAggregateInputType = {
   experience?: true
   hourlyRate?: true
   portfolioUrl?: true
+  primaryCity?: true
+  willTravel?: true
+  travelRadiusKm?: true
+  travelFeeCents?: true
+  worksOnline?: true
+  worksOffline?: true
+  worksOnSite?: true
+  isAvailable?: true
+  unavailableUntil?: true
   avgRating?: true
   reviewsCount?: true
   totalOrders?: true
@@ -148,6 +194,15 @@ export type FreelancerProfileMaxAggregateInputType = {
   experience?: true
   hourlyRate?: true
   portfolioUrl?: true
+  primaryCity?: true
+  willTravel?: true
+  travelRadiusKm?: true
+  travelFeeCents?: true
+  worksOnline?: true
+  worksOffline?: true
+  worksOnSite?: true
+  isAvailable?: true
+  unavailableUntil?: true
   avgRating?: true
   reviewsCount?: true
   totalOrders?: true
@@ -167,6 +222,17 @@ export type FreelancerProfileCountAggregateInputType = {
   languages?: true
   hourlyRate?: true
   portfolioUrl?: true
+  primaryCity?: true
+  serviceCities?: true
+  willTravel?: true
+  travelRadiusKm?: true
+  travelFeeCents?: true
+  worksOnline?: true
+  worksOffline?: true
+  worksOnSite?: true
+  workingHours?: true
+  isAvailable?: true
+  unavailableUntil?: true
   avgRating?: true
   reviewsCount?: true
   totalOrders?: true
@@ -273,6 +339,17 @@ export type FreelancerProfileGroupByOutputType = {
   languages: string[]
   hourlyRate: number | null
   portfolioUrl: string | null
+  primaryCity: string | null
+  serviceCities: string[]
+  willTravel: boolean
+  travelRadiusKm: number | null
+  travelFeeCents: number | null
+  worksOnline: boolean
+  worksOffline: boolean
+  worksOnSite: boolean
+  workingHours: runtime.JsonValue | null
+  isAvailable: boolean
+  unavailableUntil: Date | null
   avgRating: number
   reviewsCount: number
   totalOrders: number
@@ -315,6 +392,17 @@ export type FreelancerProfileWhereInput = {
   languages?: Prisma.StringNullableListFilter<"FreelancerProfile">
   hourlyRate?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
   portfolioUrl?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  primaryCity?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"FreelancerProfile">
+  willTravel?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  travelRadiusKm?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
+  travelFeeCents?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
+  worksOnline?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  worksOffline?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  worksOnSite?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  workingHours?: Prisma.JsonNullableFilter<"FreelancerProfile">
+  isAvailable?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  unavailableUntil?: Prisma.DateTimeNullableFilter<"FreelancerProfile"> | Date | string | null
   avgRating?: Prisma.FloatFilter<"FreelancerProfile"> | number
   reviewsCount?: Prisma.IntFilter<"FreelancerProfile"> | number
   totalOrders?: Prisma.IntFilter<"FreelancerProfile"> | number
@@ -336,6 +424,17 @@ export type FreelancerProfileOrderByWithRelationInput = {
   languages?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrderInput | Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  primaryCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  serviceCities?: Prisma.SortOrder
+  willTravel?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  worksOnline?: Prisma.SortOrder
+  worksOffline?: Prisma.SortOrder
+  worksOnSite?: Prisma.SortOrder
+  workingHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
+  unavailableUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -360,6 +459,17 @@ export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<{
   languages?: Prisma.StringNullableListFilter<"FreelancerProfile">
   hourlyRate?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
   portfolioUrl?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  primaryCity?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"FreelancerProfile">
+  willTravel?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  travelRadiusKm?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
+  travelFeeCents?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
+  worksOnline?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  worksOffline?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  worksOnSite?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  workingHours?: Prisma.JsonNullableFilter<"FreelancerProfile">
+  isAvailable?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
+  unavailableUntil?: Prisma.DateTimeNullableFilter<"FreelancerProfile"> | Date | string | null
   avgRating?: Prisma.FloatFilter<"FreelancerProfile"> | number
   reviewsCount?: Prisma.IntFilter<"FreelancerProfile"> | number
   totalOrders?: Prisma.IntFilter<"FreelancerProfile"> | number
@@ -381,6 +491,17 @@ export type FreelancerProfileOrderByWithAggregationInput = {
   languages?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrderInput | Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  primaryCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  serviceCities?: Prisma.SortOrder
+  willTravel?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrderInput | Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  worksOnline?: Prisma.SortOrder
+  worksOffline?: Prisma.SortOrder
+  worksOnSite?: Prisma.SortOrder
+  workingHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
+  unavailableUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -408,6 +529,17 @@ export type FreelancerProfileScalarWhereWithAggregatesInput = {
   languages?: Prisma.StringNullableListFilter<"FreelancerProfile">
   hourlyRate?: Prisma.IntNullableWithAggregatesFilter<"FreelancerProfile"> | number | null
   portfolioUrl?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+  primaryCity?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"FreelancerProfile">
+  willTravel?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
+  travelRadiusKm?: Prisma.IntNullableWithAggregatesFilter<"FreelancerProfile"> | number | null
+  travelFeeCents?: Prisma.IntNullableWithAggregatesFilter<"FreelancerProfile"> | number | null
+  worksOnline?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
+  worksOffline?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
+  worksOnSite?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
+  workingHours?: Prisma.JsonNullableWithAggregatesFilter<"FreelancerProfile">
+  isAvailable?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
+  unavailableUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"FreelancerProfile"> | Date | string | null
   avgRating?: Prisma.FloatWithAggregatesFilter<"FreelancerProfile"> | number
   reviewsCount?: Prisma.IntWithAggregatesFilter<"FreelancerProfile"> | number
   totalOrders?: Prisma.IntWithAggregatesFilter<"FreelancerProfile"> | number
@@ -426,6 +558,17 @@ export type FreelancerProfileCreateInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -447,6 +590,17 @@ export type FreelancerProfileUncheckedCreateInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -466,6 +620,17 @@ export type FreelancerProfileUpdateInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -487,6 +652,17 @@ export type FreelancerProfileUncheckedUpdateInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -507,6 +683,17 @@ export type FreelancerProfileCreateManyInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -525,6 +712,17 @@ export type FreelancerProfileUpdateManyMutationInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -544,6 +742,17 @@ export type FreelancerProfileUncheckedUpdateManyInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -568,6 +777,17 @@ export type FreelancerProfileCountOrderByAggregateInput = {
   languages?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
+  primaryCity?: Prisma.SortOrder
+  serviceCities?: Prisma.SortOrder
+  willTravel?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
+  worksOnline?: Prisma.SortOrder
+  worksOffline?: Prisma.SortOrder
+  worksOnSite?: Prisma.SortOrder
+  workingHours?: Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
+  unavailableUntil?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -581,6 +801,8 @@ export type FreelancerProfileCountOrderByAggregateInput = {
 
 export type FreelancerProfileAvgOrderByAggregateInput = {
   hourlyRate?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -596,6 +818,15 @@ export type FreelancerProfileMaxOrderByAggregateInput = {
   experience?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
+  primaryCity?: Prisma.SortOrder
+  willTravel?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
+  worksOnline?: Prisma.SortOrder
+  worksOffline?: Prisma.SortOrder
+  worksOnSite?: Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
+  unavailableUntil?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -613,6 +844,15 @@ export type FreelancerProfileMinOrderByAggregateInput = {
   experience?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
+  primaryCity?: Prisma.SortOrder
+  willTravel?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
+  worksOnline?: Prisma.SortOrder
+  worksOffline?: Prisma.SortOrder
+  worksOnSite?: Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
+  unavailableUntil?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -626,6 +866,8 @@ export type FreelancerProfileMinOrderByAggregateInput = {
 
 export type FreelancerProfileSumOrderByAggregateInput = {
   hourlyRate?: Prisma.SortOrder
+  travelRadiusKm?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   reviewsCount?: Prisma.SortOrder
   totalOrders?: Prisma.SortOrder
@@ -680,6 +922,10 @@ export type FreelancerProfileCreatelanguagesInput = {
   set: string[]
 }
 
+export type FreelancerProfileCreateserviceCitiesInput = {
+  set: string[]
+}
+
 export type FreelancerProfileUpdatecategoriesInput = {
   set?: string[]
   push?: string | string[]
@@ -700,6 +946,11 @@ export type NullableIntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type FreelancerProfileUpdateserviceCitiesInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type FreelancerProfileCreateNestedOneWithoutSkillsInput = {
@@ -723,6 +974,17 @@ export type FreelancerProfileCreateWithoutUserInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -742,6 +1004,17 @@ export type FreelancerProfileUncheckedCreateWithoutUserInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -777,6 +1050,17 @@ export type FreelancerProfileUpdateWithoutUserInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -796,6 +1080,17 @@ export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -815,6 +1110,17 @@ export type FreelancerProfileCreateWithoutSkillsInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -835,6 +1141,17 @@ export type FreelancerProfileUncheckedCreateWithoutSkillsInput = {
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
   portfolioUrl?: string | null
+  primaryCity?: string | null
+  serviceCities?: Prisma.FreelancerProfileCreateserviceCitiesInput | string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
+  travelFeeCents?: number | null
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: boolean
+  unavailableUntil?: Date | string | null
   avgRating?: number
   reviewsCount?: number
   totalOrders?: number
@@ -869,6 +1186,17 @@ export type FreelancerProfileUpdateWithoutSkillsInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -889,6 +1217,17 @@ export type FreelancerProfileUncheckedUpdateWithoutSkillsInput = {
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   portfolioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.FreelancerProfileUpdateserviceCitiesInput | string[]
+  willTravel?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  travelRadiusKm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  worksOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  worksOnSite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unavailableUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   totalOrders?: Prisma.IntFieldUpdateOperationsInput | number
@@ -939,6 +1278,17 @@ export type FreelancerProfileSelect<ExtArgs extends runtime.Types.Extensions.Int
   languages?: boolean
   hourlyRate?: boolean
   portfolioUrl?: boolean
+  primaryCity?: boolean
+  serviceCities?: boolean
+  willTravel?: boolean
+  travelRadiusKm?: boolean
+  travelFeeCents?: boolean
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: boolean
+  isAvailable?: boolean
+  unavailableUntil?: boolean
   avgRating?: boolean
   reviewsCount?: boolean
   totalOrders?: boolean
@@ -961,6 +1311,17 @@ export type FreelancerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.T
   languages?: boolean
   hourlyRate?: boolean
   portfolioUrl?: boolean
+  primaryCity?: boolean
+  serviceCities?: boolean
+  willTravel?: boolean
+  travelRadiusKm?: boolean
+  travelFeeCents?: boolean
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: boolean
+  isAvailable?: boolean
+  unavailableUntil?: boolean
   avgRating?: boolean
   reviewsCount?: boolean
   totalOrders?: boolean
@@ -981,6 +1342,17 @@ export type FreelancerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   languages?: boolean
   hourlyRate?: boolean
   portfolioUrl?: boolean
+  primaryCity?: boolean
+  serviceCities?: boolean
+  willTravel?: boolean
+  travelRadiusKm?: boolean
+  travelFeeCents?: boolean
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: boolean
+  isAvailable?: boolean
+  unavailableUntil?: boolean
   avgRating?: boolean
   reviewsCount?: boolean
   totalOrders?: boolean
@@ -1001,6 +1373,17 @@ export type FreelancerProfileSelectScalar = {
   languages?: boolean
   hourlyRate?: boolean
   portfolioUrl?: boolean
+  primaryCity?: boolean
+  serviceCities?: boolean
+  willTravel?: boolean
+  travelRadiusKm?: boolean
+  travelFeeCents?: boolean
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+  workingHours?: boolean
+  isAvailable?: boolean
+  unavailableUntil?: boolean
   avgRating?: boolean
   reviewsCount?: boolean
   totalOrders?: boolean
@@ -1012,7 +1395,7 @@ export type FreelancerProfileSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "categories" | "experience" | "languages" | "hourlyRate" | "portfolioUrl" | "avgRating" | "reviewsCount" | "totalOrders" | "completedOrders" | "responseTimeHrs" | "repeatClientsPct" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
+export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "categories" | "experience" | "languages" | "hourlyRate" | "portfolioUrl" | "primaryCity" | "serviceCities" | "willTravel" | "travelRadiusKm" | "travelFeeCents" | "worksOnline" | "worksOffline" | "worksOnSite" | "workingHours" | "isAvailable" | "unavailableUntil" | "avgRating" | "reviewsCount" | "totalOrders" | "completedOrders" | "responseTimeHrs" | "repeatClientsPct" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
 export type FreelancerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.FreelancerProfile$skillsArgs<ExtArgs>
@@ -1039,6 +1422,17 @@ export type $FreelancerProfilePayload<ExtArgs extends runtime.Types.Extensions.I
     languages: string[]
     hourlyRate: number | null
     portfolioUrl: string | null
+    primaryCity: string | null
+    serviceCities: string[]
+    willTravel: boolean
+    travelRadiusKm: number | null
+    travelFeeCents: number | null
+    worksOnline: boolean
+    worksOffline: boolean
+    worksOnSite: boolean
+    workingHours: runtime.JsonValue | null
+    isAvailable: boolean
+    unavailableUntil: Date | null
     avgRating: number
     reviewsCount: number
     totalOrders: number
@@ -1480,6 +1874,17 @@ export interface FreelancerProfileFieldRefs {
   readonly languages: Prisma.FieldRef<"FreelancerProfile", 'String[]'>
   readonly hourlyRate: Prisma.FieldRef<"FreelancerProfile", 'Int'>
   readonly portfolioUrl: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly primaryCity: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly serviceCities: Prisma.FieldRef<"FreelancerProfile", 'String[]'>
+  readonly willTravel: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
+  readonly travelRadiusKm: Prisma.FieldRef<"FreelancerProfile", 'Int'>
+  readonly travelFeeCents: Prisma.FieldRef<"FreelancerProfile", 'Int'>
+  readonly worksOnline: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
+  readonly worksOffline: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
+  readonly worksOnSite: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
+  readonly workingHours: Prisma.FieldRef<"FreelancerProfile", 'Json'>
+  readonly isAvailable: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
+  readonly unavailableUntil: Prisma.FieldRef<"FreelancerProfile", 'DateTime'>
   readonly avgRating: Prisma.FieldRef<"FreelancerProfile", 'Float'>
   readonly reviewsCount: Prisma.FieldRef<"FreelancerProfile", 'Int'>
   readonly totalOrders: Prisma.FieldRef<"FreelancerProfile", 'Int'>

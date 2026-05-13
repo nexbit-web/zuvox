@@ -46,6 +46,7 @@ export type ServiceMinAggregateOutputType = {
   status: $Enums.CategoryStatus | null
   sortOrder: number | null
   avgPriceCents: number | null
+  typicalFormat: $Enums.ServiceFormat | null
   subcategoryId: string | null
   seoTitle: string | null
   seoDescription: string | null
@@ -62,6 +63,7 @@ export type ServiceMaxAggregateOutputType = {
   status: $Enums.CategoryStatus | null
   sortOrder: number | null
   avgPriceCents: number | null
+  typicalFormat: $Enums.ServiceFormat | null
   subcategoryId: string | null
   seoTitle: string | null
   seoDescription: string | null
@@ -78,6 +80,7 @@ export type ServiceCountAggregateOutputType = {
   status: number
   sortOrder: number
   avgPriceCents: number
+  typicalFormat: number
   subcategoryId: number
   seoTitle: number
   seoDescription: number
@@ -108,6 +111,7 @@ export type ServiceMinAggregateInputType = {
   status?: true
   sortOrder?: true
   avgPriceCents?: true
+  typicalFormat?: true
   subcategoryId?: true
   seoTitle?: true
   seoDescription?: true
@@ -124,6 +128,7 @@ export type ServiceMaxAggregateInputType = {
   status?: true
   sortOrder?: true
   avgPriceCents?: true
+  typicalFormat?: true
   subcategoryId?: true
   seoTitle?: true
   seoDescription?: true
@@ -140,6 +145,7 @@ export type ServiceCountAggregateInputType = {
   status?: true
   sortOrder?: true
   avgPriceCents?: true
+  typicalFormat?: true
   subcategoryId?: true
   seoTitle?: true
   seoDescription?: true
@@ -243,6 +249,7 @@ export type ServiceGroupByOutputType = {
   status: $Enums.CategoryStatus
   sortOrder: number
   avgPriceCents: number | null
+  typicalFormat: $Enums.ServiceFormat | null
   subcategoryId: string
   seoTitle: string | null
   seoDescription: string | null
@@ -282,6 +289,7 @@ export type ServiceWhereInput = {
   status?: Prisma.EnumCategoryStatusFilter<"Service"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFilter<"Service"> | number
   avgPriceCents?: Prisma.IntNullableFilter<"Service"> | number | null
+  typicalFormat?: Prisma.EnumServiceFormatNullableFilter<"Service"> | $Enums.ServiceFormat | null
   subcategoryId?: Prisma.StringFilter<"Service"> | string
   seoTitle?: Prisma.StringNullableFilter<"Service"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Service"> | string | null
@@ -299,6 +307,7 @@ export type ServiceOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   avgPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  typicalFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -320,6 +329,7 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumCategoryStatusFilter<"Service"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFilter<"Service"> | number
   avgPriceCents?: Prisma.IntNullableFilter<"Service"> | number | null
+  typicalFormat?: Prisma.EnumServiceFormatNullableFilter<"Service"> | $Enums.ServiceFormat | null
   subcategoryId?: Prisma.StringFilter<"Service"> | string
   seoTitle?: Prisma.StringNullableFilter<"Service"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Service"> | string | null
@@ -337,6 +347,7 @@ export type ServiceOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   avgPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  typicalFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   seoDescription?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -361,6 +372,7 @@ export type ServiceScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumCategoryStatusWithAggregatesFilter<"Service"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntWithAggregatesFilter<"Service"> | number
   avgPriceCents?: Prisma.IntNullableWithAggregatesFilter<"Service"> | number | null
+  typicalFormat?: Prisma.EnumServiceFormatNullableWithAggregatesFilter<"Service"> | $Enums.ServiceFormat | null
   subcategoryId?: Prisma.StringWithAggregatesFilter<"Service"> | string
   seoTitle?: Prisma.StringNullableWithAggregatesFilter<"Service"> | string | null
   seoDescription?: Prisma.StringNullableWithAggregatesFilter<"Service"> | string | null
@@ -377,6 +389,7 @@ export type ServiceCreateInput = {
   status?: $Enums.CategoryStatus
   sortOrder?: number
   avgPriceCents?: number | null
+  typicalFormat?: $Enums.ServiceFormat | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -393,6 +406,7 @@ export type ServiceUncheckedCreateInput = {
   status?: $Enums.CategoryStatus
   sortOrder?: number
   avgPriceCents?: number | null
+  typicalFormat?: $Enums.ServiceFormat | null
   subcategoryId: string
   seoTitle?: string | null
   seoDescription?: string | null
@@ -409,6 +423,7 @@ export type ServiceUpdateInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -425,6 +440,7 @@ export type ServiceUncheckedUpdateInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   subcategoryId?: Prisma.StringFieldUpdateOperationsInput | string
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -441,6 +457,7 @@ export type ServiceCreateManyInput = {
   status?: $Enums.CategoryStatus
   sortOrder?: number
   avgPriceCents?: number | null
+  typicalFormat?: $Enums.ServiceFormat | null
   subcategoryId: string
   seoTitle?: string | null
   seoDescription?: string | null
@@ -457,6 +474,7 @@ export type ServiceUpdateManyMutationInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -472,6 +490,7 @@ export type ServiceUncheckedUpdateManyInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   subcategoryId?: Prisma.StringFieldUpdateOperationsInput | string
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -503,6 +522,7 @@ export type ServiceCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   avgPriceCents?: Prisma.SortOrder
+  typicalFormat?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
@@ -525,6 +545,7 @@ export type ServiceMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   avgPriceCents?: Prisma.SortOrder
+  typicalFormat?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
@@ -541,6 +562,7 @@ export type ServiceMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   avgPriceCents?: Prisma.SortOrder
+  typicalFormat?: Prisma.SortOrder
   subcategoryId?: Prisma.SortOrder
   seoTitle?: Prisma.SortOrder
   seoDescription?: Prisma.SortOrder
@@ -605,6 +627,7 @@ export type ServiceCreateWithoutSubcategoryInput = {
   status?: $Enums.CategoryStatus
   sortOrder?: number
   avgPriceCents?: number | null
+  typicalFormat?: $Enums.ServiceFormat | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -620,6 +643,7 @@ export type ServiceUncheckedCreateWithoutSubcategoryInput = {
   status?: $Enums.CategoryStatus
   sortOrder?: number
   avgPriceCents?: number | null
+  typicalFormat?: $Enums.ServiceFormat | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -664,6 +688,7 @@ export type ServiceScalarWhereInput = {
   status?: Prisma.EnumCategoryStatusFilter<"Service"> | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFilter<"Service"> | number
   avgPriceCents?: Prisma.IntNullableFilter<"Service"> | number | null
+  typicalFormat?: Prisma.EnumServiceFormatNullableFilter<"Service"> | $Enums.ServiceFormat | null
   subcategoryId?: Prisma.StringFilter<"Service"> | string
   seoTitle?: Prisma.StringNullableFilter<"Service"> | string | null
   seoDescription?: Prisma.StringNullableFilter<"Service"> | string | null
@@ -680,6 +705,7 @@ export type ServiceCreateManySubcategoryInput = {
   status?: $Enums.CategoryStatus
   sortOrder?: number
   avgPriceCents?: number | null
+  typicalFormat?: $Enums.ServiceFormat | null
   seoTitle?: string | null
   seoDescription?: string | null
   gigsCount?: number
@@ -695,6 +721,7 @@ export type ServiceUpdateWithoutSubcategoryInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -710,6 +737,7 @@ export type ServiceUncheckedUpdateWithoutSubcategoryInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -725,6 +753,7 @@ export type ServiceUncheckedUpdateManyWithoutSubcategoryInput = {
   status?: Prisma.EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   avgPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  typicalFormat?: Prisma.NullableEnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat | null
   seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gigsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -742,6 +771,7 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   sortOrder?: boolean
   avgPriceCents?: boolean
+  typicalFormat?: boolean
   subcategoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -759,6 +789,7 @@ export type ServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   sortOrder?: boolean
   avgPriceCents?: boolean
+  typicalFormat?: boolean
   subcategoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -776,6 +807,7 @@ export type ServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   sortOrder?: boolean
   avgPriceCents?: boolean
+  typicalFormat?: boolean
   subcategoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -793,6 +825,7 @@ export type ServiceSelectScalar = {
   status?: boolean
   sortOrder?: boolean
   avgPriceCents?: boolean
+  typicalFormat?: boolean
   subcategoryId?: boolean
   seoTitle?: boolean
   seoDescription?: boolean
@@ -801,7 +834,7 @@ export type ServiceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "status" | "sortOrder" | "avgPriceCents" | "subcategoryId" | "seoTitle" | "seoDescription" | "gigsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
+export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "description" | "status" | "sortOrder" | "avgPriceCents" | "typicalFormat" | "subcategoryId" | "seoTitle" | "seoDescription" | "gigsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
 export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subcategory?: boolean | Prisma.SubcategoryDefaultArgs<ExtArgs>
 }
@@ -825,6 +858,7 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     status: $Enums.CategoryStatus
     sortOrder: number
     avgPriceCents: number | null
+    typicalFormat: $Enums.ServiceFormat | null
     subcategoryId: string
     seoTitle: string | null
     seoDescription: string | null
@@ -1262,6 +1296,7 @@ export interface ServiceFieldRefs {
   readonly status: Prisma.FieldRef<"Service", 'CategoryStatus'>
   readonly sortOrder: Prisma.FieldRef<"Service", 'Int'>
   readonly avgPriceCents: Prisma.FieldRef<"Service", 'Int'>
+  readonly typicalFormat: Prisma.FieldRef<"Service", 'ServiceFormat'>
   readonly subcategoryId: Prisma.FieldRef<"Service", 'String'>
   readonly seoTitle: Prisma.FieldRef<"Service", 'String'>
   readonly seoDescription: Prisma.FieldRef<"Service", 'String'>

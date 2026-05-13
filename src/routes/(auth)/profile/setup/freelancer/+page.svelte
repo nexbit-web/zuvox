@@ -19,10 +19,21 @@
     X,
     Plus,
     LoaderCircle,
+    Globe,
+    Home,
+    MapPin,
+    Map,
   } from 'lucide-svelte'
   import { Spinner } from '$lib/components/ui/spinner/index.js'
 
-  // ─── Типы ───
+  // ═══════════════════════════════════════════════════════════
+  // Types
+  // ═══════════════════════════════════════════════════════════
+
+  type CategoryDomain = 'ONLINE_ONLY' | 'OFFLINE_ONLY' | 'BOTH'
+  type WorkFormat = 'ONLINE' | 'OFFLINE' | 'VISIT'
+  type GeographyMode = 'ONE_CITY' | 'MULTI_CITY' | 'ALL_UKRAINE'
+
   interface PortfolioItem {
     url: string
     publicId: string
@@ -46,6 +57,7 @@
     name: string
     icon?: string | null
     description?: string | null
+    domain?: CategoryDomain
     subs: SubcategoryFromApi[]
     skills: SkillFromApi[]
   }
@@ -69,28 +81,66 @@
         verificationStatus: 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
         isExistingFreelancer: boolean
         categories: string[]
-        skills: string[] // тепер це slug-и
+        skills: string[]
         experience: string
         languages: string[]
         hourlyRate: string
         portfolioUrl: string
+
+        // ─── НОВЕ (опційно з беку) ───
+        worksOnline?: boolean
+        worksOffline?: boolean
+        worksOnSite?: boolean
+        serviceCities?: string[]
+        willTravel?: boolean
+        travelRadiusKm?: string
       }
     }
   }>()
 
-  // ─── state ───
+  // ═══════════════════════════════════════════════════════════
+  // State
+  // ═══════════════════════════════════════════════════════════
+
   let step = $state(1)
   const totalSteps = 3
 
   let avatar = $state(data.prefill.avatar)
+  let name = $state(data.prefill.name ?? '')
   let username = $state(data.prefill.username)
   let usernameValid = $state(!!data.prefill.username)
   let phone = $state(data.prefill.phone)
   let city = $state(data.prefill.city)
   let experience = $state(data.prefill.experience)
 
+  // ─── НОВЕ: формат роботи (можна обрати кілька) ───
+  let workFormats = $state<WorkFormat[]>(
+    [
+      data.prefill.worksOnline ? 'ONLINE' : null,
+      data.prefill.worksOffline ? 'OFFLINE' : null,
+      data.prefill.worksOnSite ? 'VISIT' : null,
+    ].filter(Boolean) as WorkFormat[],
+  )
+
+  // Якщо у prefill нічого немає — по дефолту тільки онлайн
+  if (workFormats.length === 0) workFormats = ['ONLINE']
+
+  // ─── НОВЕ: режим географії ───
+  let geographyMode = $state<GeographyMode>(
+    data.prefill.serviceCities && data.prefill.serviceCities.length > 1
+      ? 'MULTI_CITY'
+      : data.prefill.serviceCities?.[0] === 'all-ukraine'
+        ? 'ALL_UKRAINE'
+        : 'ONE_CITY',
+  )
+  let serviceCities: string[] = $state(
+    (data.prefill.serviceCities ?? []).filter(
+      (c: string) => c !== 'all-ukraine',
+    ),
+  )
+  let travelRadiusKm = $state(data.prefill.travelRadiusKm ?? '')
+
   let selectedCategories = $state<string[]>([...data.prefill.categories])
-  // ВАЖЛИВО: тепер тут лежать SLUG-и навичок, а не імена
   let selectedSkills = $state<string[]>([...data.prefill.skills])
   let selectedLanguages = $state<string[]>(
     data.prefill.languages.length
@@ -106,12 +156,18 @@
   let loading = $state(false)
   let error = $state('')
 
-  // ─── Дані з API ───
+  // ═══════════════════════════════════════════════════════════
+  // API data
+  // ═══════════════════════════════════════════════════════════
+
   let categories = $state<CategoryFromApi[]>([])
-  let cities = $state<string[]>([])
+  let citiesList = $state<CityFromApi[]>([])
   let categoriesLoaded = $state(false)
   let citiesLoaded = $state(false)
   let dataError = $state<string | null>(null)
+
+  // City search (для multi-city)
+  let citySearchQuery = $state('')
 
   async function loadInitialData() {
     categoriesLoaded = false
@@ -131,12 +187,9 @@
       const citiesData = await citiesRes.json()
 
       categories = catsData.categories ?? []
-
-      cities = (citiesData.cities ?? [])
-        .filter((c: CityFromApi) => c.slug !== 'all')
-        .map((c: CityFromApi) => c.name)
-
-      cities = [...cities, 'Інше']
+      citiesList = (citiesData.cities ?? []).filter(
+        (c: CityFromApi) => c.slug !== 'all',
+      )
     } catch (err) {
       console.error('Failed to load data:', err)
       dataError = 'Не вдалося завантажити дані. Перезавантажте сторінку.'
@@ -149,6 +202,10 @@
   onMount(() => {
     loadInitialData()
   })
+
+  // ═══════════════════════════════════════════════════════════
+  // Options
+  // ═══════════════════════════════════════════════════════════
 
   const experienceOptions = [
     { value: 'LT_1', label: 'Початківець', hint: 'менше 1 року' },
@@ -168,24 +225,143 @@
     'Español',
   ]
 
-  // ─── derived ───
-  // Усі унікальні навички з обраних категорій (як обʼєкти, щоб мати і slug, і name)
-  const availableSkills = $derived(
-    (() => {
-      const map = new Map<string, SkillFromApi>()
-      for (const c of categories) {
-        if (!selectedCategories.includes(c.name)) continue
-        for (const s of c.skills) {
-          if (!map.has(s.slug)) map.set(s.slug, s)
-        }
-      }
-      return Array.from(map.values())
-    })(),
+  const workFormatOptions: Array<{
+    value: WorkFormat
+    label: string
+    hint: string
+    icon: typeof Globe
+  }> = [
+    {
+      value: 'ONLINE',
+      label: 'Онлайн',
+      hint: 'Дистанційно: логотипи, розробка, тексти',
+      icon: Globe,
+    },
+    {
+      value: 'OFFLINE',
+      label: 'У мене (офіс/салон)',
+      hint: 'Клієнт приходить до мене: стрижка, манікюр',
+      icon: Home,
+    },
+    {
+      value: 'VISIT',
+      label: 'Виїзд до клієнта',
+      hint: 'Я їжджу до клієнта: сантехнік, електрик',
+      icon: MapPin,
+    },
+  ]
+
+  const geographyOptions: Array<{
+    value: GeographyMode
+    label: string
+    hint: string
+    icon: typeof MapPin
+  }> = [
+    {
+      value: 'ONE_CITY',
+      label: 'Одне місто',
+      hint: 'Працюю тільки у своєму місті',
+      icon: MapPin,
+    },
+    {
+      value: 'MULTI_CITY',
+      label: 'Кілька міст',
+      hint: 'Готовий працювати у кількох містах',
+      icon: Map,
+    },
+    {
+      value: 'ALL_UKRAINE',
+      label: 'Вся Україна',
+      hint: 'Працюю по всій країні',
+      icon: Globe,
+    },
+  ]
+
+  // ═══════════════════════════════════════════════════════════
+  // Derived
+  // ═══════════════════════════════════════════════════════════
+
+  const needsLocation = $derived(
+    workFormats.includes('OFFLINE') || workFormats.includes('VISIT'),
   )
 
-  const step1Valid = $derived(
-    !!phone.trim() && !!city && !!experience && usernameValid,
+  const isFullyOnline = $derived(
+    workFormats.length === 1 && workFormats[0] === 'ONLINE',
   )
+
+  // Якщо ВСІ формати — онлайн, географія не потрібна
+  const showGeography = $derived(needsLocation)
+
+  // Фільтруємо категорії за обраними форматами
+  // ONLINE → показуємо ONLINE_ONLY + BOTH
+  // OFFLINE/VISIT → показуємо OFFLINE_ONLY + BOTH
+  const filteredCategories = $derived.by(() => {
+    if (workFormats.length === 0) return categories
+
+    const hasOnline = workFormats.includes('ONLINE')
+    const hasOffline =
+      workFormats.includes('OFFLINE') || workFormats.includes('VISIT')
+
+    return categories.filter((c) => {
+      const domain = c.domain ?? 'BOTH'
+      if (domain === 'BOTH') return true
+      if (domain === 'ONLINE_ONLY' && hasOnline) return true
+      if (domain === 'OFFLINE_ONLY' && hasOffline) return true
+      return false
+    })
+  })
+
+  // Усі унікальні навички з обраних категорій
+  // Усі унікальні навички з обраних категорій
+  const availableSkills: SkillFromApi[] = $derived.by(() => {
+    const seen = new Set<string>()
+    const result: SkillFromApi[] = []
+    for (const c of categories) {
+      if (!selectedCategories.includes(c.name)) continue
+      for (const s of c.skills) {
+        if (seen.has(s.slug)) continue
+        seen.add(s.slug)
+        result.push(s)
+      }
+    }
+    return result
+  })
+
+  // Cities — фільтр по пошуку
+  const filteredCitiesList = $derived.by(() => {
+    const q = citySearchQuery.trim().toLowerCase()
+    if (!q) return citiesList
+    return citiesList.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) || c.region?.toLowerCase().includes(q),
+    )
+  })
+
+  // Очищуємо категорії що більше не підходять при зміні форматів
+  $effect(() => {
+    if (!categoriesLoaded || workFormats.length === 0) return
+    const validNames = new Set(filteredCategories.map((c) => c.name))
+    const filtered = selectedCategories.filter((n) => validNames.has(n))
+    if (filtered.length !== selectedCategories.length) {
+      selectedCategories = filtered
+    }
+  })
+
+  // ─── Validation ───
+  const step1Valid = $derived(
+    !!name.trim() &&
+      name.trim().length >= 2 &&
+      !!phone.trim() &&
+      !!city &&
+      !!experience &&
+      usernameValid &&
+      workFormats.length > 0 &&
+      (!showGeography ||
+        geographyMode === 'ALL_UKRAINE' ||
+        (geographyMode === 'ONE_CITY' && !!city) ||
+        (geographyMode === 'MULTI_CITY' && serviceCities.length > 0)),
+  )
+
   const step2Valid = $derived(
     selectedCategories.length > 0 &&
       selectedSkills.length > 0 &&
@@ -193,7 +369,9 @@
       !!hourlyRate &&
       Number(hourlyRate) > 0,
   )
+
   const step3Valid = $derived(bio.trim().length >= 40)
+
   const canNext = $derived(
     step === 1 ? step1Valid : step === 2 ? step2Valid : step3Valid,
   )
@@ -208,11 +386,44 @@
 
   const isEdit = $derived(data.prefill.isExistingFreelancer)
 
-  // ─── actions ───
-  function toggleCategory(name: string) {
-    if (selectedCategories.includes(name)) {
-      selectedCategories = selectedCategories.filter((c) => c !== name)
-      // Прибираємо навички, які належать тільки до видаленої категорії
+  // ═══════════════════════════════════════════════════════════
+  // Actions
+  // ═══════════════════════════════════════════════════════════
+
+  function toggleWorkFormat(format: WorkFormat) {
+    if (workFormats.includes(format)) {
+      if (workFormats.length === 1) return // мінімум один має бути
+      workFormats = workFormats.filter((f) => f !== format)
+    } else {
+      workFormats = [...workFormats, format]
+    }
+  }
+
+  function setGeographyMode(mode: GeographyMode) {
+    geographyMode = mode
+    if (mode === 'ONE_CITY') {
+      serviceCities = []
+    } else if (mode === 'ALL_UKRAINE') {
+      serviceCities = []
+    }
+  }
+
+  function toggleServiceCity(cityName: string) {
+    if (serviceCities.includes(cityName)) {
+      serviceCities = serviceCities.filter((c) => c !== cityName)
+    } else {
+      if (serviceCities.length >= 20) return
+      serviceCities = [...serviceCities, cityName]
+    }
+  }
+
+  function removeServiceCity(cityName: string) {
+    serviceCities = serviceCities.filter((c) => c !== cityName)
+  }
+
+  function toggleCategory(catName: string) {
+    if (selectedCategories.includes(catName)) {
+      selectedCategories = selectedCategories.filter((c) => c !== catName)
       const remainingSlugs = new Set(
         categories
           .filter((c) => selectedCategories.includes(c.name))
@@ -221,11 +432,10 @@
       selectedSkills = selectedSkills.filter((slug) => remainingSlugs.has(slug))
     } else {
       if (selectedCategories.length >= 3) return
-      selectedCategories = [...selectedCategories, name]
+      selectedCategories = [...selectedCategories, catName]
     }
   }
 
-  // Тепер по slug-у
   function toggleSkill(slug: string) {
     if (selectedSkills.includes(slug)) {
       selectedSkills = selectedSkills.filter((x) => x !== slug)
@@ -263,11 +473,22 @@
     error = ''
     loading = true
     try {
+      // Готуємо географію
+      let finalServiceCities: string[]
+      if (geographyMode === 'ALL_UKRAINE') {
+        finalServiceCities = ['all-ukraine']
+      } else if (geographyMode === 'MULTI_CITY') {
+        finalServiceCities = serviceCities
+      } else {
+        finalServiceCities = []
+      }
+
       const res = await fetch('/api/user/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           role: 'FREELANCER',
+          name: name.trim(),
           username,
           phone,
           city,
@@ -275,9 +496,18 @@
           portfolioUrl,
           experience,
           categories: selectedCategories,
-          skills: selectedSkills, // slug-и, як того чекає бек
+          skills: selectedSkills,
           languages: selectedLanguages,
           hourlyRate: Number(hourlyRate),
+
+          // ─── НОВЕ ───
+          worksOnline: workFormats.includes('ONLINE'),
+          worksOffline: workFormats.includes('OFFLINE'),
+          worksOnSite: workFormats.includes('VISIT'),
+          serviceCities: finalServiceCities,
+          willTravel: workFormats.includes('VISIT'),
+          travelRadiusKm: travelRadiusKm ? Number(travelRadiusKm) : null,
+
           submitForReview: true,
         }),
       })
@@ -299,16 +529,14 @@
       await invalidateAll()
       goto('/dashboard')
     } catch {
-      error = 'Немає з’єднання з сервером'
+      error = 'Немає зʼєднання з сервером'
     } finally {
       loading = false
     }
   }
 
   const selectedCityLabel = $derived(city || 'Оберіть місто')
-  const firstInitial = $derived(
-    data.prefill.name?.charAt(0).toUpperCase() || '?',
-  )
+  const firstInitial = $derived(name?.charAt(0).toUpperCase() || '?')
 </script>
 
 <div
@@ -345,7 +573,6 @@
       {/each}
     </div>
 
-    <!-- ───── ERROR (загальна помилка завантаження довідників) ───── -->
     {#if dataError}
       <div
         class="mb-8 px-4 py-3 rounded-xl text-sm flex items-center justify-between gap-3"
@@ -370,7 +597,9 @@
       <div>
         {#key step}
           <div in:fly={{ y: 6, duration: 200 }}>
-            <!-- ───── STEP 1 ───── -->
+            <!-- ═══════════════════════════════════════════════════ -->
+            <!-- STEP 1 — Основне -->
+            <!-- ═══════════════════════════════════════════════════ -->
             {#if step === 1}
               <header class="mb-10">
                 <p
@@ -386,11 +615,11 @@
                   {isEdit ? 'Редагуйте свій профіль' : 'Розкажіть про себе'}
                 </h1>
                 <p class="text-base" style="color: var(--muted-foreground)">
-                  Фото профілю, контакти та досвід роботи.
+                  Контакти, формат роботи та географія.
                 </p>
               </header>
 
-              <!-- ───── USERNAME ───── -->
+              <!-- ─── USERNAME ─── -->
               <div
                 class="mb-6 p-5 rounded-xl border"
                 style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
@@ -415,7 +644,7 @@
                 />
               </div>
 
-              <!-- ───── AVATAR ───── -->
+              <!-- ─── AVATAR ─── -->
               <div
                 class="flex items-center gap-5 mb-10 p-5 rounded-xl border"
                 style="background-color: var(--card); border-color: color-mix(in oklch, var(--foreground) 8%, transparent)"
@@ -437,13 +666,29 @@
                     class="text-xs mt-1 leading-relaxed"
                     style="color: var(--muted-foreground)"
                   >
-                    Клікніть на коло щоб завантажити. Якщо замінити — попереднє
-                    видалиться автоматично.
+                    Клікніть на коло щоб завантажити.
                   </p>
                 </div>
               </div>
 
               <Field.Group class="gap-7">
+                <!-- ─── НАЗВА ─── -->
+                <Field.Field>
+                  <Field.Label for="name">Імʼя</Field.Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Іван Петренко"
+                    bind:value={name}
+                    maxlength={80}
+                    class="h-11"
+                  />
+                  <Field.Description>
+                    Це імʼя побачать клієнти у вашій картці.
+                  </Field.Description>
+                </Field.Field>
+
+                <!-- ─── PHONE ─── -->
                 <Field.Field>
                   <Field.Label for="phone">Телефон</Field.Label>
                   <Input
@@ -460,8 +705,9 @@
                   {/if}
                 </Field.Field>
 
+                <!-- ─── CITY (основне місто) ─── -->
                 <Field.Field>
-                  <Field.Label for="city">Місто</Field.Label>
+                  <Field.Label for="city">Ваше місто</Field.Label>
                   <Select.Root
                     type="single"
                     bind:value={city}
@@ -481,20 +727,271 @@
                       {/if}
                     </Select.Trigger>
                     <Select.Content class="max-h-72 overflow-y-auto">
-                      {#each cities as c}
-                        <Select.Item value={c}>{c}</Select.Item>
+                      {#each citiesList as c (c.slug)}
+                        <Select.Item value={c.name}>{c.name}</Select.Item>
                       {/each}
                     </Select.Content>
                   </Select.Root>
                 </Field.Field>
 
+                <!-- ═══════════════════════════════════════════════ -->
+                <!-- ─── НОВЕ: Формат роботи ─── -->
+                <!-- ═══════════════════════════════════════════════ -->
+                <Field.Field>
+                  <Field.Label>Як ви працюєте?</Field.Label>
+                  <Field.Description>
+                    Можна обрати кілька варіантів — наприклад, онлайн + виїзд.
+                  </Field.Description>
+
+                  <div class="grid grid-cols-1 gap-2 mt-2">
+                    {#each workFormatOptions as opt (opt.value)}
+                      {@const active = workFormats.includes(opt.value)}
+                      {@const Icon = opt.icon}
+                      <button
+                        type="button"
+                        onclick={() => toggleWorkFormat(opt.value)}
+                        class="flex items-start gap-3 px-4 py-3.5 rounded-xl border text-left transition-all cursor-pointer"
+                        style="background-color: {active
+                          ? 'var(--foreground)'
+                          : 'var(--card)'};
+                               border-color: {active
+                          ? 'var(--foreground)'
+                          : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
+                               color: {active
+                          ? 'var(--background)'
+                          : 'var(--foreground)'}"
+                      >
+                        <div
+                          class="size-9 rounded-lg flex items-center justify-center shrink-0"
+                          style="background-color: {active
+                            ? 'color-mix(in oklch, var(--background) 18%, transparent)'
+                            : 'color-mix(in oklch, var(--foreground) 6%, transparent)'}"
+                        >
+                          <Icon class="size-4" strokeWidth={2} />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="text-sm font-medium">{opt.label}</div>
+                          <div
+                            class="text-xs mt-0.5 leading-snug"
+                            style="color: {active
+                              ? 'color-mix(in oklch, var(--background) 70%, var(--foreground))'
+                              : 'var(--muted-foreground)'}"
+                          >
+                            {opt.hint}
+                          </div>
+                        </div>
+                        {#if active}
+                          <Check class="size-4 mt-0.5 shrink-0" />
+                        {/if}
+                      </button>
+                    {/each}
+                  </div>
+                </Field.Field>
+
+                <!-- ═══════════════════════════════════════════════ -->
+                <!-- ─── Географія (тільки якщо є OFFLINE/VISIT) ─── -->
+                <!-- ═══════════════════════════════════════════════ -->
+                {#if showGeography}
+                  <Field.Field>
+                    <Field.Label>Де ви працюєте?</Field.Label>
+                    <Field.Description>
+                      Регіон обслуговування. Клієнти у цих місцях побачать вас у
+                      пошуку.
+                    </Field.Description>
+
+                    <!-- Mode picker -->
+                    <div class="grid grid-cols-3 gap-2 mt-2 mb-3">
+                      {#each geographyOptions as opt (opt.value)}
+                        {@const active = geographyMode === opt.value}
+                        {@const Icon = opt.icon}
+                        <button
+                          type="button"
+                          onclick={() => setGeographyMode(opt.value)}
+                          class="flex flex-col items-center text-center px-3 py-3 rounded-xl border transition-all cursor-pointer gap-1.5"
+                          style="background-color: {active
+                            ? 'var(--foreground)'
+                            : 'var(--card)'};
+                                 border-color: {active
+                            ? 'var(--foreground)'
+                            : 'color-mix(in oklch, var(--foreground) 10%, transparent)'};
+                                 color: {active
+                            ? 'var(--background)'
+                            : 'var(--foreground)'}"
+                        >
+                          <Icon class="size-4" strokeWidth={2} />
+                          <span class="text-xs font-medium leading-tight">
+                            {opt.label}
+                          </span>
+                        </button>
+                      {/each}
+                    </div>
+
+                    <!-- Mode hint -->
+                    <p
+                      class="text-xs mb-3"
+                      style="color: var(--muted-foreground)"
+                    >
+                      {geographyOptions.find((o) => o.value === geographyMode)
+                        ?.hint}
+                    </p>
+
+                    <!-- ONE_CITY: тільки нагадування -->
+                    {#if geographyMode === 'ONE_CITY'}
+                      <div
+                        class="p-3.5 rounded-xl text-xs leading-relaxed"
+                        style="background-color: color-mix(in oklch, var(--primary) 6%, transparent);
+                               color: var(--muted-foreground)"
+                      >
+                        <strong style="color: var(--foreground)">
+                          {city || '— оберіть місто вище —'}
+                        </strong>
+                        <br />
+                        Клієнти з цього міста будуть бачити вас у пошуку.
+                      </div>
+
+                      <!-- ALL_UKRAINE: тільки нагадування -->
+                    {:else if geographyMode === 'ALL_UKRAINE'}
+                      <div
+                        class="p-3.5 rounded-xl text-xs leading-relaxed"
+                        style="background-color: color-mix(in oklch, var(--primary) 6%, transparent);
+                               color: var(--muted-foreground)"
+                      >
+                        <strong style="color: var(--foreground)">
+                          Вся Україна
+                        </strong>
+                        <br />
+                        Ваш профіль показуватиметься клієнтам в усіх містах.
+                      </div>
+
+                      <!-- MULTI_CITY: список міст -->
+                    {:else}
+                      <!-- Вибрані міста -->
+                      {#if serviceCities.length > 0}
+                        <div class="flex flex-wrap gap-1.5 mb-3">
+                          {#each serviceCities as cn (cn)}
+                            <span
+                              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                              style="background-color: var(--foreground); color: var(--background)"
+                            >
+                              {cn}
+                              <button
+                                type="button"
+                                onclick={() => removeServiceCity(cn)}
+                                class="opacity-70 hover:opacity-100 cursor-pointer"
+                                aria-label="Прибрати"
+                              >
+                                <X class="size-3" />
+                              </button>
+                            </span>
+                          {/each}
+                        </div>
+                      {/if}
+
+                      <!-- Search -->
+                      <Input
+                        type="text"
+                        bind:value={citySearchQuery}
+                        placeholder="Пошук міста"
+                        class="h-10 mb-2"
+                      />
+
+                      <!-- City list -->
+                      <div
+                        class="max-h-56 overflow-y-auto rounded-xl border p-1"
+                        style="border-color: color-mix(in oklch, var(--foreground) 10%, transparent)"
+                      >
+                        {#if filteredCitiesList.length === 0}
+                          <p
+                            class="text-xs text-center py-4"
+                            style="color: var(--muted-foreground)"
+                          >
+                            Нічого не знайдено
+                          </p>
+                        {:else}
+                          {#each filteredCitiesList.slice(0, 50) as c (c.slug)}
+                            {@const sel = serviceCities.includes(c.name)}
+                            <button
+                              type="button"
+                              onclick={() => toggleServiceCity(c.name)}
+                              class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm cursor-pointer transition-colors"
+                              style="background-color: {sel
+                                ? 'color-mix(in oklch, var(--primary) 8%, transparent)'
+                                : 'transparent'};
+                                     color: var(--foreground)"
+                            >
+                              <span class="flex items-center gap-2">
+                                {c.name}
+                                {#if c.region}
+                                  <span
+                                    class="text-xs"
+                                    style="color: var(--muted-foreground)"
+                                    >· {c.region}</span
+                                  >
+                                {/if}
+                              </span>
+                              {#if sel}
+                                <Check
+                                  class="size-3.5"
+                                  style="color: var(--primary)"
+                                />
+                              {/if}
+                            </button>
+                          {/each}
+                        {/if}
+                      </div>
+
+                      <p
+                        class="text-xs mt-2"
+                        style="color: var(--muted-foreground)"
+                      >
+                        Обрано {serviceCities.length} / 20
+                      </p>
+                    {/if}
+
+                    <!-- Travel radius — тільки для VISIT -->
+                    {#if workFormats.includes('VISIT')}
+                      <div class="mt-4">
+                        <p
+                          class="text-sm font-medium mb-2"
+                          style="color: var(--foreground)"
+                        >
+                          Радіус виїзду (опційно)
+                        </p>
+                        <div class="relative">
+                          <Input
+                            type="number"
+                            min="1"
+                            max="500"
+                            placeholder="20"
+                            bind:value={travelRadiusKm}
+                            class="h-10 pr-12 tabular-nums"
+                          />
+                          <span
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-xs pointer-events-none"
+                            style="color: var(--muted-foreground)"
+                          >
+                            км
+                          </span>
+                        </div>
+                        <p
+                          class="text-xs mt-1"
+                          style="color: var(--muted-foreground)"
+                        >
+                          На яку відстань готові виїхати від основного міста.
+                        </p>
+                      </div>
+                    {/if}
+                  </Field.Field>
+                {/if}
+
+                <!-- ─── EXPERIENCE ─── -->
                 <Field.Field>
                   <Field.Label>Досвід роботи</Field.Label>
                   <div
                     class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1"
                     role="radiogroup"
                   >
-                    {#each experienceOptions as opt}
+                    {#each experienceOptions as opt (opt.value)}
                       {@const active = experience === opt.value}
                       <button
                         type="button"
@@ -532,7 +1029,9 @@
                 </Field.Field>
               </Field.Group>
 
-              <!-- ───── STEP 2 ───── -->
+              <!-- ═══════════════════════════════════════════════════ -->
+              <!-- STEP 2 — Експертиза -->
+              <!-- ═══════════════════════════════════════════════════ -->
             {:else if step === 2}
               <header class="mb-10">
                 <p
@@ -564,6 +1063,21 @@
                     </span>
                   </div>
 
+                  <!-- Hint про фільтр -->
+                  {#if workFormats.length > 0 && workFormats.length < 3}
+                    <p
+                      class="text-xs mb-3"
+                      style="color: var(--muted-foreground)"
+                    >
+                      Показано {filteredCategories.length} категорій під ваш формат
+                      роботи.
+                      {#if isFullyOnline}
+                        Для офлайн-послуг увімкніть «У мене» чи «Виїзд» на кроці
+                        1.
+                      {/if}
+                    </p>
+                  {/if}
+
                   {#if !categoriesLoaded}
                     <div
                       class="flex items-center gap-2 py-6 text-sm"
@@ -572,9 +1086,16 @@
                       <LoaderCircle class="size-4 animate-spin" />
                       Завантаження категорій…
                     </div>
+                  {:else if filteredCategories.length === 0}
+                    <p
+                      class="text-xs py-3"
+                      style="color: var(--muted-foreground)"
+                    >
+                      Немає категорій для обраних форматів.
+                    </p>
                   {:else}
                     <div class="flex flex-wrap gap-2">
-                      {#each categories as cat (cat.slug)}
+                      {#each filteredCategories as cat (cat.slug)}
                         {@const active = selectedCategories.includes(cat.name)}
                         {@const disabled =
                           !active && selectedCategories.length >= 3}
@@ -611,7 +1132,7 @@
                   </Field.Description>
                 </Field.Field>
 
-                <!-- ───── НАВИКИ ───── -->
+                <!-- ─── НАВИКИ ─── -->
                 {#if categoriesLoaded && selectedCategories.length > 0}
                   <Field.Field>
                     <div class="flex items-center justify-between mb-2">
@@ -668,7 +1189,7 @@
                 <Field.Field>
                   <Field.Label>Мови спілкування</Field.Label>
                   <div class="flex flex-wrap gap-1.5">
-                    {#each languageOptions as lang}
+                    {#each languageOptions as lang (lang)}
                       {@const active = selectedLanguages.includes(lang)}
                       <button
                         type="button"
@@ -692,7 +1213,9 @@
 
                 <Field.Field>
                   <Field.Label for="rate">
-                    Мінімальна ставка за годину
+                    {isFullyOnline
+                      ? 'Мінімальна ставка за годину'
+                      : 'Орієнтовна ставка за годину'}
                   </Field.Label>
                   <div class="relative">
                     <Input
@@ -711,12 +1234,14 @@
                     </span>
                   </div>
                   <Field.Description>
-                    Типова ставка — 300–800 грн/год.
+                    Конкретні ціни ви додасте при створенні послуг.
                   </Field.Description>
                 </Field.Field>
               </Field.Group>
 
-              <!-- ───── STEP 3 ───── -->
+              <!-- ═══════════════════════════════════════════════════ -->
+              <!-- STEP 3 — Презентація -->
+              <!-- ═══════════════════════════════════════════════════ -->
             {:else}
               <header class="mb-10">
                 <p
@@ -754,7 +1279,7 @@
                     bind:value={bio}
                     maxlength={500}
                     rows={6}
-                    placeholder="Наприклад: Full-stack розробник з 5 роками досвіду. Спеціалізуюсь на SvelteKit та Node.js."
+                    placeholder="Розкажіть про досвід, підхід до роботи та що відрізняє вас від інших…"
                     class="resize-none"
                   />
                   <Field.Description>
@@ -782,7 +1307,7 @@
                     class="h-11"
                   />
                   <Field.Description>
-                    Необов’язково. Посилання на зовнішнє портфоліо.
+                    Необовʼязково. Посилання на зовнішнє портфоліо.
                   </Field.Description>
                 </Field.Field>
 
@@ -800,8 +1325,7 @@
                     </p>
                     <p style="color: var(--muted-foreground)">
                       Ваш профіль отримає статус «На модерації». Зазвичай
-                      перевірка займає до 24 годин. Після схвалення у картці
-                      з’явиться синя галочка верифікації.
+                      перевірка займає до 24 годин.
                     </p>
                   </div>
                 {:else if data.prefill.verificationStatus === 'VERIFIED'}
@@ -815,7 +1339,7 @@
                     </p>
                     <p style="color: var(--muted-foreground)">
                       Після збереження ваш VERIFIED статус буде тимчасово
-                      замінено на «На модерації» поки ми перевіримо оновлення.
+                      замінено на «На модерації».
                     </p>
                   </div>
                 {/if}
@@ -874,11 +1398,11 @@
           class="text-xs uppercase tracking-[0.14em] font-medium mb-4"
           style="color: var(--muted-foreground)"
         >
-          Прев’ю картки
+          Превʼю картки
         </p>
 
         <ProfilePreviewCard
-          name={data.prefill.name}
+          {name}
           {bio}
           photoUrl={avatar}
           categories={previewCategories}
@@ -893,7 +1417,7 @@
           class="text-xs mt-4 leading-relaxed"
           style="color: var(--muted-foreground)"
         >
-          Так ваша картка з’явиться у пошуку та рекомендаціях після проходження
+          Так ваша картка зʼявиться у пошуку та рекомендаціях після проходження
           модерації.
         </p>
       </aside>

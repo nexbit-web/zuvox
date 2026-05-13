@@ -27,6 +27,9 @@ export type AggregateGig = {
 }
 
 export type GigAvgAggregateOutputType = {
+  priceCents: number | null
+  durationMinutes: number | null
+  travelFeeCents: number | null
   viewCount: number | null
   ordersCount: number | null
   avgRating: number | null
@@ -34,6 +37,9 @@ export type GigAvgAggregateOutputType = {
 }
 
 export type GigSumAggregateOutputType = {
+  priceCents: number | null
+  durationMinutes: number | null
+  travelFeeCents: number | null
   viewCount: number | null
   ordersCount: number | null
   avgRating: number | null
@@ -49,6 +55,13 @@ export type GigMinAggregateOutputType = {
   category: string | null
   subcategory: string | null
   videoUrl: string | null
+  format: $Enums.ServiceFormat | null
+  priceType: $Enums.PriceType | null
+  priceCents: number | null
+  currency: string | null
+  durationMinutes: number | null
+  city: string | null
+  travelFeeCents: number | null
   status: $Enums.GigStatus | null
   isActive: boolean | null
   viewCount: number | null
@@ -70,6 +83,13 @@ export type GigMaxAggregateOutputType = {
   category: string | null
   subcategory: string | null
   videoUrl: string | null
+  format: $Enums.ServiceFormat | null
+  priceType: $Enums.PriceType | null
+  priceCents: number | null
+  currency: string | null
+  durationMinutes: number | null
+  city: string | null
+  travelFeeCents: number | null
   status: $Enums.GigStatus | null
   isActive: boolean | null
   viewCount: number | null
@@ -94,6 +114,14 @@ export type GigCountAggregateOutputType = {
   images: number
   imagesPublicIds: number
   videoUrl: number
+  format: number
+  priceType: number
+  priceCents: number
+  currency: number
+  durationMinutes: number
+  city: number
+  serviceCities: number
+  travelFeeCents: number
   status: number
   isActive: number
   viewCount: number
@@ -109,6 +137,9 @@ export type GigCountAggregateOutputType = {
 
 
 export type GigAvgAggregateInputType = {
+  priceCents?: true
+  durationMinutes?: true
+  travelFeeCents?: true
   viewCount?: true
   ordersCount?: true
   avgRating?: true
@@ -116,6 +147,9 @@ export type GigAvgAggregateInputType = {
 }
 
 export type GigSumAggregateInputType = {
+  priceCents?: true
+  durationMinutes?: true
+  travelFeeCents?: true
   viewCount?: true
   ordersCount?: true
   avgRating?: true
@@ -131,6 +165,13 @@ export type GigMinAggregateInputType = {
   category?: true
   subcategory?: true
   videoUrl?: true
+  format?: true
+  priceType?: true
+  priceCents?: true
+  currency?: true
+  durationMinutes?: true
+  city?: true
+  travelFeeCents?: true
   status?: true
   isActive?: true
   viewCount?: true
@@ -152,6 +193,13 @@ export type GigMaxAggregateInputType = {
   category?: true
   subcategory?: true
   videoUrl?: true
+  format?: true
+  priceType?: true
+  priceCents?: true
+  currency?: true
+  durationMinutes?: true
+  city?: true
+  travelFeeCents?: true
   status?: true
   isActive?: true
   viewCount?: true
@@ -176,6 +224,14 @@ export type GigCountAggregateInputType = {
   images?: true
   imagesPublicIds?: true
   videoUrl?: true
+  format?: true
+  priceType?: true
+  priceCents?: true
+  currency?: true
+  durationMinutes?: true
+  city?: true
+  serviceCities?: true
+  travelFeeCents?: true
   status?: true
   isActive?: true
   viewCount?: true
@@ -287,6 +343,14 @@ export type GigGroupByOutputType = {
   images: string[]
   imagesPublicIds: string[]
   videoUrl: string | null
+  format: $Enums.ServiceFormat
+  priceType: $Enums.PriceType
+  priceCents: number | null
+  currency: string
+  durationMinutes: number | null
+  city: string | null
+  serviceCities: string[]
+  travelFeeCents: number | null
   status: $Enums.GigStatus
   isActive: boolean
   viewCount: number
@@ -334,6 +398,14 @@ export type GigWhereInput = {
   images?: Prisma.StringNullableListFilter<"Gig">
   imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
   videoUrl?: Prisma.StringNullableFilter<"Gig"> | string | null
+  format?: Prisma.EnumServiceFormatFilter<"Gig"> | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFilter<"Gig"> | $Enums.PriceType
+  priceCents?: Prisma.IntNullableFilter<"Gig"> | number | null
+  currency?: Prisma.StringFilter<"Gig"> | string
+  durationMinutes?: Prisma.IntNullableFilter<"Gig"> | number | null
+  city?: Prisma.StringNullableFilter<"Gig"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"Gig">
+  travelFeeCents?: Prisma.IntNullableFilter<"Gig"> | number | null
   status?: Prisma.EnumGigStatusFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolFilter<"Gig"> | boolean
   viewCount?: Prisma.IntFilter<"Gig"> | number
@@ -362,6 +434,14 @@ export type GigOrderByWithRelationInput = {
   images?: Prisma.SortOrder
   imagesPublicIds?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrder
+  priceType?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  serviceCities?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -393,6 +473,14 @@ export type GigWhereUniqueInput = Prisma.AtLeast<{
   images?: Prisma.StringNullableListFilter<"Gig">
   imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
   videoUrl?: Prisma.StringNullableFilter<"Gig"> | string | null
+  format?: Prisma.EnumServiceFormatFilter<"Gig"> | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFilter<"Gig"> | $Enums.PriceType
+  priceCents?: Prisma.IntNullableFilter<"Gig"> | number | null
+  currency?: Prisma.StringFilter<"Gig"> | string
+  durationMinutes?: Prisma.IntNullableFilter<"Gig"> | number | null
+  city?: Prisma.StringNullableFilter<"Gig"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"Gig">
+  travelFeeCents?: Prisma.IntNullableFilter<"Gig"> | number | null
   status?: Prisma.EnumGigStatusFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolFilter<"Gig"> | boolean
   viewCount?: Prisma.IntFilter<"Gig"> | number
@@ -421,6 +509,14 @@ export type GigOrderByWithAggregationInput = {
   images?: Prisma.SortOrder
   imagesPublicIds?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrder
+  priceType?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  serviceCities?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -453,6 +549,14 @@ export type GigScalarWhereWithAggregatesInput = {
   images?: Prisma.StringNullableListFilter<"Gig">
   imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
   videoUrl?: Prisma.StringNullableWithAggregatesFilter<"Gig"> | string | null
+  format?: Prisma.EnumServiceFormatWithAggregatesFilter<"Gig"> | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeWithAggregatesFilter<"Gig"> | $Enums.PriceType
+  priceCents?: Prisma.IntNullableWithAggregatesFilter<"Gig"> | number | null
+  currency?: Prisma.StringWithAggregatesFilter<"Gig"> | string
+  durationMinutes?: Prisma.IntNullableWithAggregatesFilter<"Gig"> | number | null
+  city?: Prisma.StringNullableWithAggregatesFilter<"Gig"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"Gig">
+  travelFeeCents?: Prisma.IntNullableWithAggregatesFilter<"Gig"> | number | null
   status?: Prisma.EnumGigStatusWithAggregatesFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolWithAggregatesFilter<"Gig"> | boolean
   viewCount?: Prisma.IntWithAggregatesFilter<"Gig"> | number
@@ -477,6 +581,14 @@ export type GigCreateInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -504,6 +616,14 @@ export type GigUncheckedCreateInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -531,6 +651,14 @@ export type GigUpdateInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -558,6 +686,14 @@ export type GigUncheckedUpdateInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -585,6 +721,14 @@ export type GigCreateManyInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -609,6 +753,14 @@ export type GigUpdateManyMutationInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -632,6 +784,14 @@ export type GigUncheckedUpdateManyInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -666,6 +826,14 @@ export type GigCountOrderByAggregateInput = {
   images?: Prisma.SortOrder
   imagesPublicIds?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  priceType?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  serviceCities?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -679,6 +847,9 @@ export type GigCountOrderByAggregateInput = {
 }
 
 export type GigAvgOrderByAggregateInput = {
+  priceCents?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -694,6 +865,13 @@ export type GigMaxOrderByAggregateInput = {
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  priceType?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -715,6 +893,13 @@ export type GigMinOrderByAggregateInput = {
   category?: Prisma.SortOrder
   subcategory?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  priceType?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -728,6 +913,9 @@ export type GigMinOrderByAggregateInput = {
 }
 
 export type GigSumOrderByAggregateInput = {
+  priceCents?: Prisma.SortOrder
+  durationMinutes?: Prisma.SortOrder
+  travelFeeCents?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -798,6 +986,10 @@ export type GigCreateimagesPublicIdsInput = {
   set: string[]
 }
 
+export type GigCreateserviceCitiesInput = {
+  set: string[]
+}
+
 export type GigUpdatetagsInput = {
   set?: string[]
   push?: string | string[]
@@ -809,6 +1001,19 @@ export type GigUpdateimagesInput = {
 }
 
 export type GigUpdateimagesPublicIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type EnumServiceFormatFieldUpdateOperationsInput = {
+  set?: $Enums.ServiceFormat
+}
+
+export type EnumPriceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.PriceType
+}
+
+export type GigUpdateserviceCitiesInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -875,6 +1080,14 @@ export type GigCreateWithoutSellerInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -901,6 +1114,14 @@ export type GigUncheckedCreateWithoutSellerInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -956,6 +1177,14 @@ export type GigScalarWhereInput = {
   images?: Prisma.StringNullableListFilter<"Gig">
   imagesPublicIds?: Prisma.StringNullableListFilter<"Gig">
   videoUrl?: Prisma.StringNullableFilter<"Gig"> | string | null
+  format?: Prisma.EnumServiceFormatFilter<"Gig"> | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFilter<"Gig"> | $Enums.PriceType
+  priceCents?: Prisma.IntNullableFilter<"Gig"> | number | null
+  currency?: Prisma.StringFilter<"Gig"> | string
+  durationMinutes?: Prisma.IntNullableFilter<"Gig"> | number | null
+  city?: Prisma.StringNullableFilter<"Gig"> | string | null
+  serviceCities?: Prisma.StringNullableListFilter<"Gig">
+  travelFeeCents?: Prisma.IntNullableFilter<"Gig"> | number | null
   status?: Prisma.EnumGigStatusFilter<"Gig"> | $Enums.GigStatus
   isActive?: Prisma.BoolFilter<"Gig"> | boolean
   viewCount?: Prisma.IntFilter<"Gig"> | number
@@ -980,6 +1209,14 @@ export type GigCreateWithoutPackagesInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1006,6 +1243,14 @@ export type GigUncheckedCreateWithoutPackagesInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1048,6 +1293,14 @@ export type GigUpdateWithoutPackagesInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1074,6 +1327,14 @@ export type GigUncheckedUpdateWithoutPackagesInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1100,6 +1361,14 @@ export type GigCreateWithoutOrdersInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1126,6 +1395,14 @@ export type GigUncheckedCreateWithoutOrdersInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1168,6 +1445,14 @@ export type GigUpdateWithoutOrdersInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1194,6 +1479,14 @@ export type GigUncheckedUpdateWithoutOrdersInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1220,6 +1513,14 @@ export type GigCreateWithoutReviewsInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1246,6 +1547,14 @@ export type GigUncheckedCreateWithoutReviewsInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1288,6 +1597,14 @@ export type GigUpdateWithoutReviewsInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1314,6 +1631,14 @@ export type GigUncheckedUpdateWithoutReviewsInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1340,6 +1665,14 @@ export type GigCreateManySellerInput = {
   images?: Prisma.GigCreateimagesInput | string[]
   imagesPublicIds?: Prisma.GigCreateimagesPublicIdsInput | string[]
   videoUrl?: string | null
+  format?: $Enums.ServiceFormat
+  priceType?: $Enums.PriceType
+  priceCents?: number | null
+  currency?: string
+  durationMinutes?: number | null
+  city?: string | null
+  serviceCities?: Prisma.GigCreateserviceCitiesInput | string[]
+  travelFeeCents?: number | null
   status?: $Enums.GigStatus
   isActive?: boolean
   viewCount?: number
@@ -1363,6 +1696,14 @@ export type GigUpdateWithoutSellerInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1389,6 +1730,14 @@ export type GigUncheckedUpdateWithoutSellerInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1415,6 +1764,14 @@ export type GigUncheckedUpdateManyWithoutSellerInput = {
   images?: Prisma.GigUpdateimagesInput | string[]
   imagesPublicIds?: Prisma.GigUpdateimagesPublicIdsInput | string[]
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.EnumServiceFormatFieldUpdateOperationsInput | $Enums.ServiceFormat
+  priceType?: Prisma.EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceCities?: Prisma.GigUpdateserviceCitiesInput | string[]
+  travelFeeCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumGigStatusFieldUpdateOperationsInput | $Enums.GigStatus
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1487,6 +1844,14 @@ export type GigSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   images?: boolean
   imagesPublicIds?: boolean
   videoUrl?: boolean
+  format?: boolean
+  priceType?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  durationMinutes?: boolean
+  city?: boolean
+  serviceCities?: boolean
+  travelFeeCents?: boolean
   status?: boolean
   isActive?: boolean
   viewCount?: boolean
@@ -1516,6 +1881,14 @@ export type GigSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   images?: boolean
   imagesPublicIds?: boolean
   videoUrl?: boolean
+  format?: boolean
+  priceType?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  durationMinutes?: boolean
+  city?: boolean
+  serviceCities?: boolean
+  travelFeeCents?: boolean
   status?: boolean
   isActive?: boolean
   viewCount?: boolean
@@ -1541,6 +1914,14 @@ export type GigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   images?: boolean
   imagesPublicIds?: boolean
   videoUrl?: boolean
+  format?: boolean
+  priceType?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  durationMinutes?: boolean
+  city?: boolean
+  serviceCities?: boolean
+  travelFeeCents?: boolean
   status?: boolean
   isActive?: boolean
   viewCount?: boolean
@@ -1566,6 +1947,14 @@ export type GigSelectScalar = {
   images?: boolean
   imagesPublicIds?: boolean
   videoUrl?: boolean
+  format?: boolean
+  priceType?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  durationMinutes?: boolean
+  city?: boolean
+  serviceCities?: boolean
+  travelFeeCents?: boolean
   status?: boolean
   isActive?: boolean
   viewCount?: boolean
@@ -1578,7 +1967,7 @@ export type GigSelectScalar = {
   sellerId?: boolean
 }
 
-export type GigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "category" | "subcategory" | "tags" | "images" | "imagesPublicIds" | "videoUrl" | "status" | "isActive" | "viewCount" | "ordersCount" | "avgRating" | "reviewsCount" | "createdAt" | "updatedAt" | "publishedAt" | "sellerId", ExtArgs["result"]["gig"]>
+export type GigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "description" | "shortDescription" | "category" | "subcategory" | "tags" | "images" | "imagesPublicIds" | "videoUrl" | "format" | "priceType" | "priceCents" | "currency" | "durationMinutes" | "city" | "serviceCities" | "travelFeeCents" | "status" | "isActive" | "viewCount" | "ordersCount" | "avgRating" | "reviewsCount" | "createdAt" | "updatedAt" | "publishedAt" | "sellerId", ExtArgs["result"]["gig"]>
 export type GigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   packages?: boolean | Prisma.Gig$packagesArgs<ExtArgs>
@@ -1613,6 +2002,14 @@ export type $GigPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     images: string[]
     imagesPublicIds: string[]
     videoUrl: string | null
+    format: $Enums.ServiceFormat
+    priceType: $Enums.PriceType
+    priceCents: number | null
+    currency: string
+    durationMinutes: number | null
+    city: string | null
+    serviceCities: string[]
+    travelFeeCents: number | null
     status: $Enums.GigStatus
     isActive: boolean
     viewCount: number
@@ -2061,6 +2458,14 @@ export interface GigFieldRefs {
   readonly images: Prisma.FieldRef<"Gig", 'String[]'>
   readonly imagesPublicIds: Prisma.FieldRef<"Gig", 'String[]'>
   readonly videoUrl: Prisma.FieldRef<"Gig", 'String'>
+  readonly format: Prisma.FieldRef<"Gig", 'ServiceFormat'>
+  readonly priceType: Prisma.FieldRef<"Gig", 'PriceType'>
+  readonly priceCents: Prisma.FieldRef<"Gig", 'Int'>
+  readonly currency: Prisma.FieldRef<"Gig", 'String'>
+  readonly durationMinutes: Prisma.FieldRef<"Gig", 'Int'>
+  readonly city: Prisma.FieldRef<"Gig", 'String'>
+  readonly serviceCities: Prisma.FieldRef<"Gig", 'String[]'>
+  readonly travelFeeCents: Prisma.FieldRef<"Gig", 'Int'>
   readonly status: Prisma.FieldRef<"Gig", 'GigStatus'>
   readonly isActive: Prisma.FieldRef<"Gig", 'Boolean'>
   readonly viewCount: Prisma.FieldRef<"Gig", 'Int'>

@@ -28,10 +28,18 @@ export type AggregateCity = {
 
 export type CityAvgAggregateOutputType = {
   sortOrder: number | null
+  latitude: number | null
+  longitude: number | null
+  freelancersCount: number | null
+  jobsCount: number | null
 }
 
 export type CitySumAggregateOutputType = {
   sortOrder: number | null
+  latitude: number | null
+  longitude: number | null
+  freelancersCount: number | null
+  jobsCount: number | null
 }
 
 export type CityMinAggregateOutputType = {
@@ -42,6 +50,10 @@ export type CityMinAggregateOutputType = {
   isCapital: boolean | null
   sortOrder: number | null
   status: $Enums.CityStatus | null
+  latitude: number | null
+  longitude: number | null
+  freelancersCount: number | null
+  jobsCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +66,10 @@ export type CityMaxAggregateOutputType = {
   isCapital: boolean | null
   sortOrder: number | null
   status: $Enums.CityStatus | null
+  latitude: number | null
+  longitude: number | null
+  freelancersCount: number | null
+  jobsCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +82,10 @@ export type CityCountAggregateOutputType = {
   isCapital: number
   sortOrder: number
   status: number
+  latitude: number
+  longitude: number
+  freelancersCount: number
+  jobsCount: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,10 +94,18 @@ export type CityCountAggregateOutputType = {
 
 export type CityAvgAggregateInputType = {
   sortOrder?: true
+  latitude?: true
+  longitude?: true
+  freelancersCount?: true
+  jobsCount?: true
 }
 
 export type CitySumAggregateInputType = {
   sortOrder?: true
+  latitude?: true
+  longitude?: true
+  freelancersCount?: true
+  jobsCount?: true
 }
 
 export type CityMinAggregateInputType = {
@@ -88,6 +116,10 @@ export type CityMinAggregateInputType = {
   isCapital?: true
   sortOrder?: true
   status?: true
+  latitude?: true
+  longitude?: true
+  freelancersCount?: true
+  jobsCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +132,10 @@ export type CityMaxAggregateInputType = {
   isCapital?: true
   sortOrder?: true
   status?: true
+  latitude?: true
+  longitude?: true
+  freelancersCount?: true
+  jobsCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -112,6 +148,10 @@ export type CityCountAggregateInputType = {
   isCapital?: true
   sortOrder?: true
   status?: true
+  latitude?: true
+  longitude?: true
+  freelancersCount?: true
+  jobsCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -211,6 +251,10 @@ export type CityGroupByOutputType = {
   isCapital: boolean
   sortOrder: number
   status: $Enums.CityStatus
+  latitude: number | null
+  longitude: number | null
+  freelancersCount: number
+  jobsCount: number
   createdAt: Date
   updatedAt: Date
   _count: CityCountAggregateOutputType | null
@@ -246,6 +290,10 @@ export type CityWhereInput = {
   isCapital?: Prisma.BoolFilter<"City"> | boolean
   sortOrder?: Prisma.IntFilter<"City"> | number
   status?: Prisma.EnumCityStatusFilter<"City"> | $Enums.CityStatus
+  latitude?: Prisma.FloatNullableFilter<"City"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"City"> | number | null
+  freelancersCount?: Prisma.IntFilter<"City"> | number
+  jobsCount?: Prisma.IntFilter<"City"> | number
   createdAt?: Prisma.DateTimeFilter<"City"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"City"> | Date | string
 }
@@ -258,6 +306,10 @@ export type CityOrderByWithRelationInput = {
   isCapital?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -273,6 +325,10 @@ export type CityWhereUniqueInput = Prisma.AtLeast<{
   isCapital?: Prisma.BoolFilter<"City"> | boolean
   sortOrder?: Prisma.IntFilter<"City"> | number
   status?: Prisma.EnumCityStatusFilter<"City"> | $Enums.CityStatus
+  latitude?: Prisma.FloatNullableFilter<"City"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"City"> | number | null
+  freelancersCount?: Prisma.IntFilter<"City"> | number
+  jobsCount?: Prisma.IntFilter<"City"> | number
   createdAt?: Prisma.DateTimeFilter<"City"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"City"> | Date | string
 }, "id" | "slug">
@@ -285,6 +341,10 @@ export type CityOrderByWithAggregationInput = {
   isCapital?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CityCountOrderByAggregateInput
@@ -305,6 +365,10 @@ export type CityScalarWhereWithAggregatesInput = {
   isCapital?: Prisma.BoolWithAggregatesFilter<"City"> | boolean
   sortOrder?: Prisma.IntWithAggregatesFilter<"City"> | number
   status?: Prisma.EnumCityStatusWithAggregatesFilter<"City"> | $Enums.CityStatus
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"City"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"City"> | number | null
+  freelancersCount?: Prisma.IntWithAggregatesFilter<"City"> | number
+  jobsCount?: Prisma.IntWithAggregatesFilter<"City"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"City"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"City"> | Date | string
 }
@@ -317,6 +381,10 @@ export type CityCreateInput = {
   isCapital?: boolean
   sortOrder?: number
   status?: $Enums.CityStatus
+  latitude?: number | null
+  longitude?: number | null
+  freelancersCount?: number
+  jobsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -329,6 +397,10 @@ export type CityUncheckedCreateInput = {
   isCapital?: boolean
   sortOrder?: number
   status?: $Enums.CityStatus
+  latitude?: number | null
+  longitude?: number | null
+  freelancersCount?: number
+  jobsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -341,6 +413,10 @@ export type CityUpdateInput = {
   isCapital?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCityStatusFieldUpdateOperationsInput | $Enums.CityStatus
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -353,6 +429,10 @@ export type CityUncheckedUpdateInput = {
   isCapital?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCityStatusFieldUpdateOperationsInput | $Enums.CityStatus
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -365,6 +445,10 @@ export type CityCreateManyInput = {
   isCapital?: boolean
   sortOrder?: number
   status?: $Enums.CityStatus
+  latitude?: number | null
+  longitude?: number | null
+  freelancersCount?: number
+  jobsCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -377,6 +461,10 @@ export type CityUpdateManyMutationInput = {
   isCapital?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCityStatusFieldUpdateOperationsInput | $Enums.CityStatus
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -389,6 +477,10 @@ export type CityUncheckedUpdateManyInput = {
   isCapital?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCityStatusFieldUpdateOperationsInput | $Enums.CityStatus
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  freelancersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  jobsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -401,12 +493,20 @@ export type CityCountOrderByAggregateInput = {
   isCapital?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CityAvgOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
 }
 
 export type CityMaxOrderByAggregateInput = {
@@ -417,6 +517,10 @@ export type CityMaxOrderByAggregateInput = {
   isCapital?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -429,16 +533,32 @@ export type CityMinOrderByAggregateInput = {
   isCapital?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CitySumOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  freelancersCount?: Prisma.SortOrder
+  jobsCount?: Prisma.SortOrder
 }
 
 export type EnumCityStatusFieldUpdateOperationsInput = {
   set?: $Enums.CityStatus
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 
@@ -451,6 +571,10 @@ export type CitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isCapital?: boolean
   sortOrder?: boolean
   status?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  freelancersCount?: boolean
+  jobsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["city"]>
@@ -463,6 +587,10 @@ export type CitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isCapital?: boolean
   sortOrder?: boolean
   status?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  freelancersCount?: boolean
+  jobsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["city"]>
@@ -475,6 +603,10 @@ export type CitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isCapital?: boolean
   sortOrder?: boolean
   status?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  freelancersCount?: boolean
+  jobsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["city"]>
@@ -487,11 +619,15 @@ export type CitySelectScalar = {
   isCapital?: boolean
   sortOrder?: boolean
   status?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  freelancersCount?: boolean
+  jobsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "region" | "isCapital" | "sortOrder" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["city"]>
+export type CityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "region" | "isCapital" | "sortOrder" | "status" | "latitude" | "longitude" | "freelancersCount" | "jobsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["city"]>
 
 export type $CityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "City"
@@ -504,6 +640,10 @@ export type $CityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isCapital: boolean
     sortOrder: number
     status: $Enums.CityStatus
+    latitude: number | null
+    longitude: number | null
+    freelancersCount: number
+    jobsCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["city"]>
@@ -936,6 +1076,10 @@ export interface CityFieldRefs {
   readonly isCapital: Prisma.FieldRef<"City", 'Boolean'>
   readonly sortOrder: Prisma.FieldRef<"City", 'Int'>
   readonly status: Prisma.FieldRef<"City", 'CityStatus'>
+  readonly latitude: Prisma.FieldRef<"City", 'Float'>
+  readonly longitude: Prisma.FieldRef<"City", 'Float'>
+  readonly freelancersCount: Prisma.FieldRef<"City", 'Int'>
+  readonly jobsCount: Prisma.FieldRef<"City", 'Int'>
   readonly createdAt: Prisma.FieldRef<"City", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"City", 'DateTime'>
 }
