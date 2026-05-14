@@ -255,6 +255,7 @@ model FreelancerProfile {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   categories String[]          @default([])
+  subcategory String?
   skills     FreelancerSkill[]
   experience ExperienceLevel?
   languages  String[]          @default([])
@@ -300,6 +301,7 @@ model FreelancerProfile {
   @@index([hourlyRate])
   @@index([primaryCity])
   @@index([isAvailable])
+  @@index([subcategory]) 
 }
 
 // ═══════════════════════════════════════════════════════

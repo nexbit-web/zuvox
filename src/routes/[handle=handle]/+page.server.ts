@@ -16,9 +16,6 @@ const experienceLabels: Record<string, string> = {
   Y_10_PLUS: '10+ років',
 }
 
-// Білий список символів для username — узгоджений з валідацією на /api/user/update.
-// Захист від SQL-injection (Prisma і так захищає, але як defense-in-depth)
-// та від спроб дотягнутися до службових ендпоінтів через дивні URL.
 const USERNAME_RE = /^[a-z][a-z0-9_]{2,19}$/
 
 interface FreelancerHandleData {
@@ -106,27 +103,64 @@ async function loadClientReviews(clientId: string) {
   })
 }
 
+/**
+ * Резолвить slug категорії та підкатегорії у читані назви.
+ * Робиться в одному запиті: дістаємо категорію разом із її підкатегоріями
+ * і потім шукаємо потрібну підкатегорію локально. Це швидше ніж два окремі
+ * запити, бо ходимо в БД один раз.
+ */
+async function resolveCategoryNames(
+  categorySlug: string | undefined,
+  subcategorySlug: string | null | undefined,
+): Promise<{ categoryName: string | null; subcategoryName: string | null }> {
+  if (!categorySlug) {
+    return { categoryName: null, subcategoryName: null }
+  }
+
+  const cat = await prisma.category.findUnique({
+    where: { slug: categorySlug },
+    select: {
+      name: true,
+      subcategories: subcategorySlug
+        ? {
+            where: { slug: subcategorySlug },
+            select: { name: true },
+            take: 1,
+          }
+        : false,
+    },
+  })
+
+  if (!cat) {
+    return { categoryName: null, subcategoryName: null }
+  }
+
+  return {
+    categoryName: cat.name,
+    subcategoryName:
+      subcategorySlug && Array.isArray(cat.subcategories)
+        ? (cat.subcategories[0]?.name ?? null)
+        : null,
+  }
+}
+
 export const load: PageServerLoad = async ({
   params,
   request,
   setHeaders,
 }): Promise<HandleData> => {
   // ─── 1. Парсинг і валідація username ───
-  // params.handle приходить як "@nickname" (matcher гарантує @-префікс)
   const raw = params.handle.startsWith('@')
     ? params.handle.slice(1)
     : params.handle
 
   const username = raw.trim().toLowerCase()
 
-  // Якщо формат не валідний — 404 без походу в БД (захист від мусорних URL,
-  // sql probes, спроб ентерпрайзу через ../../ і т.п.)
   if (!USERNAME_RE.test(username)) {
     throw error(404, 'Користувача не знайдено')
   }
 
   // ─── 2. Сесія + основний запит — ПАРАЛЕЛЬНО ───
-  // Сесія читається з cookies, profile — з БД. Незалежні I/O = можна паралельно.
   const [session, user] = await Promise.all([
     auth.api.getSession({ headers: request.headers }),
     prisma.user.findUnique({
@@ -148,6 +182,7 @@ export const load: PageServerLoad = async ({
         freelancerProfile: {
           select: {
             categories: true,
+            subcategory: true, // ← ДОДАНО
             skills: {
               select: {
                 skill: { select: { slug: true, name: true } },
@@ -157,6 +192,18 @@ export const load: PageServerLoad = async ({
             experience: true,
             hourlyRate: true,
             portfolioUrl: true,
+
+            // ─── ДОДАНО: формат роботи ───
+            worksOnline: true,
+            worksOffline: true,
+            worksOnSite: true,
+
+            // ─── ДОДАНО: географія ───
+            serviceCities: true,
+            willTravel: true,
+            travelRadiusKm: true,
+            primaryCity: true,
+
             avgRating: true,
             reviewsCount: true,
             totalOrders: true,
@@ -189,19 +236,17 @@ export const load: PageServerLoad = async ({
 
   if (!user) throw error(404, 'Користувача не знайдено')
 
-  // Власник — редірект на dashboard, не показуємо чужий публічний URL
   if (session && user.id === session.user.id) {
     throw redirect(302, '/dashboard')
   }
 
-  // ─── 3. CLIENT: приватність (без змін у логіці) ───
+  // ─── 3. CLIENT ───
   if (user.role === 'CLIENT') {
     if (!session) throw error(404, 'Користувача не знайдено')
     if (session.user.role !== 'FREELANCER') {
       throw error(404, 'Користувача не знайдено')
     }
 
-    // Перевірка спільного чату + завантаження відгуків — паралельно
     const [sharedChat, reviews] = await Promise.all([
       prisma.chat.findFirst({
         where: {
@@ -217,7 +262,6 @@ export const load: PageServerLoad = async ({
 
     if (!sharedChat) throw error(404, 'Користувача не знайдено')
 
-    // Клієнтські профілі — приватні, забороняємо кешування у CDN/проксі.
     setHeaders({
       'cache-control': 'private, no-store',
       'x-robots-tag': 'noindex, nofollow',
@@ -246,8 +290,13 @@ export const load: PageServerLoad = async ({
   }
 
   // ─── 4. FREELANCER ───
-  // isFollowing + reviews — теж паралельно
-  const [followRow, reviews] = await Promise.all([
+  const fp = user.freelancerProfile
+
+  // Резолв категорії/підкатегорії — паралельно з рештою запитів
+  const categorySlug = fp?.categories?.[0]
+  const subcategorySlug = fp?.subcategory ?? null
+
+  const [followRow, reviews, categoryNames] = await Promise.all([
     session
       ? prisma.follow.findUnique({
           where: {
@@ -260,11 +309,11 @@ export const load: PageServerLoad = async ({
         })
       : Promise.resolve(null),
     loadFreelancerReviews(user.id),
+    resolveCategoryNames(categorySlug, subcategorySlug),
   ])
 
   const isFollowing = !!followRow
 
-  const fp = user.freelancerProfile
   const totalOrders = fp?.totalOrders ?? 0
   const completedOrders = fp?.completedOrders ?? 0
   const successRate =
@@ -275,9 +324,6 @@ export const load: PageServerLoad = async ({
     imageUrl: url,
   }))
 
-  // ─── ВАЖЛИВО: phone більше НЕ передається у HTML.
-  // Юзер запитує його окремо через GET /api/user/[id]/phone з лімітами.
-  // Тут лише прапор "має телефон чи ні" — щоб UI знав, чи показувати кнопку.
   const hasPhone =
     isAuthenticated && user.verificationStatus === 'VERIFIED' && !!user.phone
 
@@ -295,10 +341,6 @@ export const load: PageServerLoad = async ({
       name: fs.skill.name,
     })) ?? []
 
-  // ─── Кеш-заголовки для фрілансерів ───
-  // VERIFIED + публічна сторінка → дозволяємо CDN короткий public-кеш (60с).
-  // SWR ще 5 хвилин — швидкі повторні візити.
-  // Для невиверифікованих — приватно, бо інакше CDN може кешувати "сирий" профіль.
   if (user.verificationStatus === 'VERIFIED') {
     setHeaders({
       'cache-control':
@@ -322,15 +364,29 @@ export const load: PageServerLoad = async ({
     createdAt: user.createdAt.toISOString(),
 
     verificationStatus: user.verificationStatus,
-    // Причину відмови НЕ показуємо чужим — це конфіденційна інформація.
     verificationRejectReason: null,
 
+    // ─── Категорія + підкатегорія: slug + name ───
     categories: fp?.categories ?? [],
+    categoryName: categoryNames.categoryName,
+    subcategory: fp?.subcategory ?? null,
+    subcategoryName: categoryNames.subcategoryName,
+
     skills: skillsForUi,
     languages: fp?.languages ?? [],
     experience: fp?.experience ? experienceLabels[fp.experience] : null,
     hourlyRate: fp?.hourlyRate ?? null,
     portfolioUrl: fp?.portfolioUrl ?? null,
+
+    // ─── Формат роботи ───
+    worksOnline: fp?.worksOnline ?? false,
+    worksOffline: fp?.worksOffline ?? false,
+    worksOnSite: fp?.worksOnSite ?? false,
+
+    // ─── Географія ───
+    serviceCities: fp?.serviceCities ?? [],
+    willTravel: fp?.willTravel ?? false,
+    travelRadiusKm: fp?.travelRadiusKm ?? null,
 
     avgRating: fp?.avgRating ?? 0,
     reviewsCount: fp?.reviewsCount ?? 0,

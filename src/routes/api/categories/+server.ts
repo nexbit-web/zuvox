@@ -20,6 +20,7 @@ export const GET: RequestHandler = async ({ setHeaders }) => {
         name: true,
         icon: true,
         description: true,
+        domain: true, 
 
         skills: {
           orderBy: {
@@ -70,6 +71,7 @@ export const GET: RequestHandler = async ({ setHeaders }) => {
       name: category.name,
       icon: category.icon,
       description: category.description,
+      domain: category.domain, // ← ДОДАНО
 
       skills: category.skills.map((skill) => ({
         slug: skill.slug,

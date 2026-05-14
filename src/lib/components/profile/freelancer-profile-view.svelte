@@ -38,6 +38,8 @@
     Sparkles,
     Expand,
     LoaderCircle,
+    Home,
+    Navigation,
   } from 'lucide-svelte'
 
   import type { FreelancerProfileData as ProfileData } from '$lib/components/profile/types'
@@ -62,7 +64,6 @@
   }: Props = $props()
 
   // ─── Production-safe defaults для зворотної сумісності ───
-  // Якщо backend ще не змігрував skills у обʼєкти — захищаємо UI
   const safeSkills = $derived(
     Array.isArray(user.skills)
       ? user.skills
@@ -95,9 +96,39 @@
       : null,
   )
 
-  // Канонічний URL профілю (для JSON-LD)
   const profileUrl = $derived(
     user.username ? `/@${user.username}` : `/profile/${user.id}`,
+  )
+
+  // ─── НОВЕ #1: Формат роботи (чипси) ───
+  const workFormats = $derived.by(() => {
+    const list: Array<{ key: string; label: string; icon: typeof Globe }> = []
+    if (user.worksOnline)
+      list.push({ key: 'online', label: 'Онлайн', icon: Globe })
+    if (user.worksOffline)
+      list.push({ key: 'offline', label: 'У майстра', icon: Home })
+    if (user.worksOnSite)
+      list.push({ key: 'onsite', label: 'Виїзд', icon: Navigation })
+    return list
+  })
+
+  // ─── НОВЕ #2: Міста роботи ───
+  const isAllUkraine = $derived(
+    Array.isArray(user.serviceCities) &&
+      user.serviceCities.includes('all-ukraine'),
+  )
+  const serviceCitiesList = $derived(
+    Array.isArray(user.serviceCities)
+      ? user.serviceCities.filter((c) => c !== 'all-ukraine')
+      : [],
+  )
+
+  // ─── НОВЕ #3: Назва категорії (name а не slug) ───
+  const categoryDisplay = $derived(
+    user.categoryName ?? user.categories?.[0] ?? null,
+  )
+  const subcategoryDisplay = $derived(
+    user.subcategoryName ?? user.subcategory ?? null,
   )
 
   // SEO: JSON-LD Person schema
@@ -155,13 +186,11 @@
       return
     }
 
-    // Якщо вже відкрито — приховуємо (ваша логіка)
     if (phoneRevealed) {
       phoneRevealed = false
       return
     }
 
-    // Якщо номер вже завантажений — просто показуємо (ваша логіка)
     if (revealedPhone) {
       phoneRevealed = true
       return
@@ -172,22 +201,17 @@
 
     try {
       const res = await fetch(`/api/user/${user.id}/phone`)
-
-      // Отримуємо JSON один раз
       const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        // Ваша мапа помилок
         const errorMap: Record<string, string> = {
           UNAUTHORIZED: 'Увійдіть, щоб побачити номер',
           DAILY_LIMIT: 'Денний ліміт вичерпано',
           SELF_LOOKUP: 'Це ваш власний профіль',
           NOT_AVAILABLE: 'Номер недоступний для перегляду',
-          NOT_VERIFIED: 'Фрілансер ще не пройшов модерацію', // Додано для нового бекенду
+          NOT_VERIFIED: 'Фрілансер ще не пройшов модерацію',
           NO_PHONE: 'Номер не вказано',
         }
-
-        // Виводимо або конкретне повідомлення з сервера, або з мапи, або стандартне
         phoneError = data.message || errorMap[data.error] || 'Помилка доступу'
         return
       }
@@ -209,7 +233,7 @@
       copiedLabel = label
       setTimeout(() => (copiedLabel = null), 1200)
     } catch {
-      // clipboard може бути заблокований у iframe — silently fail
+      // silent fail
     }
   }
 
@@ -256,7 +280,6 @@
       .join('') || '?',
   )
 
-  // Безпечне відображення кількості відгуків з відмінками
   function reviewsLabel(n: number): string {
     const mod10 = n % 10
     const mod100 = n % 100
@@ -272,7 +295,6 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/photoswipe@5/dist/photoswipe.css"
   />
-  <!-- Person JSON-LD для SEO. Інші meta теги (title, description, og:*) — у +page.svelte -->
   {@html `<script type="application/ld+json">${personJsonLd}</script>`}
 </svelte:head>
 
@@ -693,25 +715,86 @@
         </p>
       {/if}
 
-      {#if user.categories.length > 0}
+      <!-- ═══════ НОВЕ #1: Формат роботи ═══════ -->
+      {#if workFormats.length > 0}
         <div class="flex items-start justify-between gap-4">
           <span class="text-sm shrink-0" style="color: var(--muted-foreground)">
-            Категорії
+            Формат
           </span>
-          <ul class="flex flex-wrap gap-1.5 justify-end list-none p-0 m-0">
-            {#each user.categories as cat (cat)}
-              <li>
-                <Badge
-                  class="rounded-full text-xs font-normal"
-                  style="background-color: color-mix(in oklch, var(--primary) 12%, transparent);
-                         color: var(--primary);
-                         border: 1px solid color-mix(in oklch, var(--primary) 25%, transparent)"
-                >
-                  {cat}
-                </Badge>
-              </li>
+          <div class="flex flex-wrap gap-1.5 justify-end">
+            {#each workFormats as fmt (fmt.key)}
+              {@const Icon = fmt.icon}
+              <span
+                class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full"
+                style="background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+                       color: var(--primary);
+                       border: 1px solid color-mix(in oklch, var(--primary) 25%, transparent)"
+              >
+                <Icon class="size-3" aria-hidden="true" />
+                {fmt.label}
+              </span>
             {/each}
-          </ul>
+          </div>
+        </div>
+      {/if}
+
+      <!-- ═══════ Категорія (одна, name а не slug) ═══════ -->
+      {#if categoryDisplay}
+        <div class="flex items-start justify-between gap-4">
+          <span class="text-sm shrink-0" style="color: var(--muted-foreground)">
+            Категорія
+          </span>
+          <div class="flex flex-col items-end gap-1">
+            <Badge
+              class="rounded-full text-xs font-normal"
+              style="background-color: color-mix(in oklch, var(--primary) 12%, transparent);
+                     color: var(--primary);
+                     border: 1px solid color-mix(in oklch, var(--primary) 25%, transparent)"
+            >
+              {categoryDisplay}
+            </Badge>
+            {#if subcategoryDisplay}
+              <span class="text-xs" style="color: var(--muted-foreground)">
+                {subcategoryDisplay}
+              </span>
+            {/if}
+          </div>
+        </div>
+      {/if}
+
+      <!-- ═══════ НОВЕ #2: Міста роботи ═══════ -->
+      {#if isAllUkraine}
+        <div class="flex items-center justify-between gap-4">
+          <span class="text-sm shrink-0" style="color: var(--muted-foreground)">
+            Географія
+          </span>
+          <span
+            class="text-sm text-right inline-flex items-center gap-1"
+            style="color: var(--foreground)"
+          >
+            <Globe class="size-3" aria-hidden="true" />
+            Вся Україна
+          </span>
+        </div>
+      {:else if serviceCitiesList.length > 0}
+        <div class="flex items-start justify-between gap-4">
+          <span class="text-sm shrink-0" style="color: var(--muted-foreground)">
+            Міста роботи
+          </span>
+          <span class="text-sm text-right" style="color: var(--foreground)">
+            {serviceCitiesList.join(', ')}
+          </span>
+        </div>
+      {/if}
+
+      {#if user.worksOnSite && user.travelRadiusKm}
+        <div class="flex items-center justify-between gap-4">
+          <span class="text-sm shrink-0" style="color: var(--muted-foreground)">
+            Радіус виїзду
+          </span>
+          <span class="text-sm text-right" style="color: var(--foreground)">
+            до {user.travelRadiusKm} км
+          </span>
         </div>
       {/if}
 

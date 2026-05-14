@@ -19,7 +19,7 @@ export const categoryBanners: Record<string, string> = {
   'Аудіо та музика': '/banners/audio-music.gif',
 }
 
-export const defaultBanner = '/banners/default.jpg'
+export const defaultBanner = '/banners/web-development.gif'
 
 export function getBannerForCategories(
   categories: string[] | undefined | null,

@@ -55,6 +55,7 @@ export type FreelancerProfileSumAggregateOutputType = {
 export type FreelancerProfileMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  subcategory: string | null
   experience: $Enums.ExperienceLevel | null
   hourlyRate: number | null
   portfolioUrl: string | null
@@ -81,6 +82,7 @@ export type FreelancerProfileMinAggregateOutputType = {
 export type FreelancerProfileMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  subcategory: string | null
   experience: $Enums.ExperienceLevel | null
   hourlyRate: number | null
   portfolioUrl: string | null
@@ -108,6 +110,7 @@ export type FreelancerProfileCountAggregateOutputType = {
   id: number
   userId: number
   categories: number
+  subcategory: number
   experience: number
   languages: number
   hourlyRate: number
@@ -165,6 +168,7 @@ export type FreelancerProfileSumAggregateInputType = {
 export type FreelancerProfileMinAggregateInputType = {
   id?: true
   userId?: true
+  subcategory?: true
   experience?: true
   hourlyRate?: true
   portfolioUrl?: true
@@ -191,6 +195,7 @@ export type FreelancerProfileMinAggregateInputType = {
 export type FreelancerProfileMaxAggregateInputType = {
   id?: true
   userId?: true
+  subcategory?: true
   experience?: true
   hourlyRate?: true
   portfolioUrl?: true
@@ -218,6 +223,7 @@ export type FreelancerProfileCountAggregateInputType = {
   id?: true
   userId?: true
   categories?: true
+  subcategory?: true
   experience?: true
   languages?: true
   hourlyRate?: true
@@ -335,6 +341,7 @@ export type FreelancerProfileGroupByOutputType = {
   id: string
   userId: string
   categories: string[]
+  subcategory: string | null
   experience: $Enums.ExperienceLevel | null
   languages: string[]
   hourlyRate: number | null
@@ -388,6 +395,7 @@ export type FreelancerProfileWhereInput = {
   id?: Prisma.StringFilter<"FreelancerProfile"> | string
   userId?: Prisma.StringFilter<"FreelancerProfile"> | string
   categories?: Prisma.StringNullableListFilter<"FreelancerProfile">
+  subcategory?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   experience?: Prisma.EnumExperienceLevelNullableFilter<"FreelancerProfile"> | $Enums.ExperienceLevel | null
   languages?: Prisma.StringNullableListFilter<"FreelancerProfile">
   hourlyRate?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
@@ -420,6 +428,7 @@ export type FreelancerProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categories?: Prisma.SortOrder
+  subcategory?: Prisma.SortOrderInput | Prisma.SortOrder
   experience?: Prisma.SortOrderInput | Prisma.SortOrder
   languages?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -455,6 +464,7 @@ export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.FreelancerProfileWhereInput[]
   NOT?: Prisma.FreelancerProfileWhereInput | Prisma.FreelancerProfileWhereInput[]
   categories?: Prisma.StringNullableListFilter<"FreelancerProfile">
+  subcategory?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   experience?: Prisma.EnumExperienceLevelNullableFilter<"FreelancerProfile"> | $Enums.ExperienceLevel | null
   languages?: Prisma.StringNullableListFilter<"FreelancerProfile">
   hourlyRate?: Prisma.IntNullableFilter<"FreelancerProfile"> | number | null
@@ -487,6 +497,7 @@ export type FreelancerProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categories?: Prisma.SortOrder
+  subcategory?: Prisma.SortOrderInput | Prisma.SortOrder
   experience?: Prisma.SortOrderInput | Prisma.SortOrder
   languages?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -525,6 +536,7 @@ export type FreelancerProfileScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"FreelancerProfile"> | string
   userId?: Prisma.StringWithAggregatesFilter<"FreelancerProfile"> | string
   categories?: Prisma.StringNullableListFilter<"FreelancerProfile">
+  subcategory?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
   experience?: Prisma.EnumExperienceLevelNullableWithAggregatesFilter<"FreelancerProfile"> | $Enums.ExperienceLevel | null
   languages?: Prisma.StringNullableListFilter<"FreelancerProfile">
   hourlyRate?: Prisma.IntNullableWithAggregatesFilter<"FreelancerProfile"> | number | null
@@ -554,6 +566,7 @@ export type FreelancerProfileScalarWhereWithAggregatesInput = {
 export type FreelancerProfileCreateInput = {
   id?: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -586,6 +599,7 @@ export type FreelancerProfileUncheckedCreateInput = {
   id?: string
   userId: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -616,6 +630,7 @@ export type FreelancerProfileUncheckedCreateInput = {
 export type FreelancerProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -648,6 +663,7 @@ export type FreelancerProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -679,6 +695,7 @@ export type FreelancerProfileCreateManyInput = {
   id?: string
   userId: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -708,6 +725,7 @@ export type FreelancerProfileCreateManyInput = {
 export type FreelancerProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -738,6 +756,7 @@ export type FreelancerProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -773,6 +792,7 @@ export type FreelancerProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categories?: Prisma.SortOrder
+  subcategory?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   languages?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -815,6 +835,7 @@ export type FreelancerProfileAvgOrderByAggregateInput = {
 export type FreelancerProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  subcategory?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
@@ -841,6 +862,7 @@ export type FreelancerProfileMaxOrderByAggregateInput = {
 export type FreelancerProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  subcategory?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   portfolioUrl?: Prisma.SortOrder
@@ -970,6 +992,7 @@ export type FreelancerProfileUpdateOneRequiredWithoutSkillsNestedInput = {
 export type FreelancerProfileCreateWithoutUserInput = {
   id?: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -1000,6 +1023,7 @@ export type FreelancerProfileCreateWithoutUserInput = {
 export type FreelancerProfileUncheckedCreateWithoutUserInput = {
   id?: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -1046,6 +1070,7 @@ export type FreelancerProfileUpdateToOneWithWhereWithoutUserInput = {
 export type FreelancerProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1076,6 +1101,7 @@ export type FreelancerProfileUpdateWithoutUserInput = {
 export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1106,6 +1132,7 @@ export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
 export type FreelancerProfileCreateWithoutSkillsInput = {
   id?: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -1137,6 +1164,7 @@ export type FreelancerProfileUncheckedCreateWithoutSkillsInput = {
   id?: string
   userId: string
   categories?: Prisma.FreelancerProfileCreatecategoriesInput | string[]
+  subcategory?: string | null
   experience?: $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileCreatelanguagesInput | string[]
   hourlyRate?: number | null
@@ -1182,6 +1210,7 @@ export type FreelancerProfileUpdateToOneWithWhereWithoutSkillsInput = {
 export type FreelancerProfileUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1213,6 +1242,7 @@ export type FreelancerProfileUncheckedUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   categories?: Prisma.FreelancerProfileUpdatecategoriesInput | string[]
+  subcategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableEnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel | null
   languages?: Prisma.FreelancerProfileUpdatelanguagesInput | string[]
   hourlyRate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1274,6 +1304,7 @@ export type FreelancerProfileSelect<ExtArgs extends runtime.Types.Extensions.Int
   id?: boolean
   userId?: boolean
   categories?: boolean
+  subcategory?: boolean
   experience?: boolean
   languages?: boolean
   hourlyRate?: boolean
@@ -1307,6 +1338,7 @@ export type FreelancerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.T
   id?: boolean
   userId?: boolean
   categories?: boolean
+  subcategory?: boolean
   experience?: boolean
   languages?: boolean
   hourlyRate?: boolean
@@ -1338,6 +1370,7 @@ export type FreelancerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   id?: boolean
   userId?: boolean
   categories?: boolean
+  subcategory?: boolean
   experience?: boolean
   languages?: boolean
   hourlyRate?: boolean
@@ -1369,6 +1402,7 @@ export type FreelancerProfileSelectScalar = {
   id?: boolean
   userId?: boolean
   categories?: boolean
+  subcategory?: boolean
   experience?: boolean
   languages?: boolean
   hourlyRate?: boolean
@@ -1395,7 +1429,7 @@ export type FreelancerProfileSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "categories" | "experience" | "languages" | "hourlyRate" | "portfolioUrl" | "primaryCity" | "serviceCities" | "willTravel" | "travelRadiusKm" | "travelFeeCents" | "worksOnline" | "worksOffline" | "worksOnSite" | "workingHours" | "isAvailable" | "unavailableUntil" | "avgRating" | "reviewsCount" | "totalOrders" | "completedOrders" | "responseTimeHrs" | "repeatClientsPct" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
+export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "categories" | "subcategory" | "experience" | "languages" | "hourlyRate" | "portfolioUrl" | "primaryCity" | "serviceCities" | "willTravel" | "travelRadiusKm" | "travelFeeCents" | "worksOnline" | "worksOffline" | "worksOnSite" | "workingHours" | "isAvailable" | "unavailableUntil" | "avgRating" | "reviewsCount" | "totalOrders" | "completedOrders" | "responseTimeHrs" | "repeatClientsPct" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
 export type FreelancerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.FreelancerProfile$skillsArgs<ExtArgs>
@@ -1418,6 +1452,7 @@ export type $FreelancerProfilePayload<ExtArgs extends runtime.Types.Extensions.I
     id: string
     userId: string
     categories: string[]
+    subcategory: string | null
     experience: $Enums.ExperienceLevel | null
     languages: string[]
     hourlyRate: number | null
@@ -1870,6 +1905,7 @@ export interface FreelancerProfileFieldRefs {
   readonly id: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly userId: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly categories: Prisma.FieldRef<"FreelancerProfile", 'String[]'>
+  readonly subcategory: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly experience: Prisma.FieldRef<"FreelancerProfile", 'ExperienceLevel'>
   readonly languages: Prisma.FieldRef<"FreelancerProfile", 'String[]'>
   readonly hourlyRate: Prisma.FieldRef<"FreelancerProfile", 'Int'>

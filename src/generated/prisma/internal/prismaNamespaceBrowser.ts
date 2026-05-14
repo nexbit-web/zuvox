@@ -140,6 +140,7 @@ export const FreelancerProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   categories: 'categories',
+  subcategory: 'subcategory',
   experience: 'experience',
   languages: 'languages',
   hourlyRate: 'hourlyRate',

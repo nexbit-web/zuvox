@@ -2,14 +2,10 @@
 
 export type VerificationStatus = 'NONE' | 'PENDING' | 'VERIFIED' | 'REJECTED'
 
-// ─── Спільні типи ───────────────────────────────────────
-
 export interface ProfileSkill {
   slug: string
   name: string
 }
-
-// ─── Фрілансер ─────────────────────────────────────────
 
 export interface ProfileGig {
   id: string
@@ -49,12 +45,30 @@ export interface FreelancerProfileData {
   verificationStatus: VerificationStatus
   verificationRejectReason?: string | null
 
+  // ─── Категорія + підкатегорія ───
+  // categories: масив slug-ів (зворотна сумісність, зазвичай 1 елемент)
+  // categoryName / subcategoryName — людиночитані назви, резолвить бек із БД.
+  // Якщо бек ще не резолвить — виводимо slug як fallback.
   categories: string[]
-  skills: ProfileSkill[] // ← було string[]
+  categoryName?: string | null
+  subcategory?: string | null
+  subcategoryName?: string | null
+
+  skills: ProfileSkill[]
   languages: string[]
   experience?: string | null
   hourlyRate?: number | null
   portfolioUrl?: string | null
+
+  // ─── Формат роботи ───
+  worksOnline?: boolean
+  worksOffline?: boolean
+  worksOnSite?: boolean
+
+  // ─── Географія ───
+  serviceCities?: string[]
+  willTravel?: boolean
+  travelRadiusKm?: number | null
 
   avgRating: number
   reviewsCount: number
@@ -95,8 +109,6 @@ export interface ClientProfileData {
   completedOrders: number
   reviews: ClientReview[]
 }
-
-// ─── Список підписок (для dashboard) ───────────────────
 
 export interface FollowingFreelancer {
   id: string
